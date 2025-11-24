@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36705.20
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobPortalProject.AdminMvc", "JobPortalProject.AdminMvc\JobPortalProject.AdminMvc.csproj", "{9F6E9ECB-7897-447D-934A-D0D433AB5E6F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{042C4CBE-F603-44D6-8FDC-2F1F601DC11F} = {042C4CBE-F603-44D6-8FDC-2F1F601DC11F}
+		{3BFF6311-E008-44FF-9F85-F1E08A84D94B} = {3BFF6311-E008-44FF-9F85-F1E08A84D94B}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobPortalProject.UserMvc", "JobPortalProject.UserMvc\JobPortalProject.UserMvc.csproj", "{2A0ECFE8-7556-4111-BB2F-1996F7683279}"
+	ProjectSection(ProjectDependencies) = postProject
+		{042C4CBE-F603-44D6-8FDC-2F1F601DC11F} = {042C4CBE-F603-44D6-8FDC-2F1F601DC11F}
+		{3BFF6311-E008-44FF-9F85-F1E08A84D94B} = {3BFF6311-E008-44FF-9F85-F1E08A84D94B}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobPortalProject.DA", "JobPortalProject.DA\JobPortalProject.DA.csproj", "{3BFF6311-E008-44FF-9F85-F1E08A84D94B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobPortalProject.BL", "JobPortalProject.BL\JobPortalProject.BL.csproj", "{042C4CBE-F603-44D6-8FDC-2F1F601DC11F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9F6E9ECB-7897-447D-934A-D0D433AB5E6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F6E9ECB-7897-447D-934A-D0D433AB5E6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F6E9ECB-7897-447D-934A-D0D433AB5E6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F6E9ECB-7897-447D-934A-D0D433AB5E6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A0ECFE8-7556-4111-BB2F-1996F7683279}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A0ECFE8-7556-4111-BB2F-1996F7683279}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A0ECFE8-7556-4111-BB2F-1996F7683279}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A0ECFE8-7556-4111-BB2F-1996F7683279}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BFF6311-E008-44FF-9F85-F1E08A84D94B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BFF6311-E008-44FF-9F85-F1E08A84D94B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BFF6311-E008-44FF-9F85-F1E08A84D94B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BFF6311-E008-44FF-9F85-F1E08A84D94B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{042C4CBE-F603-44D6-8FDC-2F1F601DC11F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{042C4CBE-F603-44D6-8FDC-2F1F601DC11F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{042C4CBE-F603-44D6-8FDC-2F1F601DC11F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{042C4CBE-F603-44D6-8FDC-2F1F601DC11F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {17BE2869-9BA9-49FC-9E5D-AE0106D32BA7}
+	EndGlobalSection
+EndGlobal

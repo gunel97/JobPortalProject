@@ -120,8 +120,8 @@ namespace JobPortalProject.DA.DataContext.Entities
     public class CompanyTypeTranslation : TimeStample
     {
         public string Name { get; set; } = null!;
-        public int CompanyId { get; set; }
-        public Company? Company { get; set; }
+        public int CompanyTypeId { get; set; }
+        public Company? CompanyType { get; set; }
         public int LanguageId { get; set; }
         public Language? Language { get; set; }
     }

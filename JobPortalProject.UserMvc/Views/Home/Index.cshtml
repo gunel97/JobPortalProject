@@ -462,7 +462,7 @@
     </div>
 </div>
 <!-- ========== Home1 Work Process end============= -->
-<!-- ========== Home1 Locatoin Start============= -->
+<!-- ========== Home1 Location Start============= -->
 <div class="home1-location-area mb-120">
     <div class="container">
         <div class="row mb-60">
@@ -484,50 +484,21 @@
         <div class="row">
             <div class="swiper location-slider">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <div class="location-card">
-                            <div class="location-img">
-                                <img class="img-fluid" src="assets/images/bg/dhaka1.png" alt="">
-                            </div>
-                            <div class="location-content text-center">
-                                <h5><a href="job-listing1.html"><img src="assets/images/icon/location.svg" alt="">Dhaka, Bangladesh</a></h5>
-                                <p>Job Available: <span>2934</span></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="location-card">
-                            <div class="location-img">
-                                <img class="img-fluid" src="assets/images/bg/newyork1.png" alt="">
-                            </div>
-                            <div class="location-content text-center">
-                                <h5><a href="job-listing1.html"><img src="assets/images/icon/location.svg" alt="">NewYork, USA</a></h5>
-                                <p>Job Available: <span>2186</span></p>
+                    @foreach (var address in Model.Addresses ?? [])
+                    {
+                        <div class="swiper-slide">
+                            <div class="location-card">
+                                <div class="location-img">
+                                    <img class="img-fluid" src="assets/images/bg/dhaka1.png" alt="">
+                                </div>
+                                <div class="location-content text-center">
+                                    <h5><a href="job-listing1.html"><img src="assets/images/icon/location.svg" alt="">@address.City!.Name, @address.City.Country!.Name</a></h5>
+                                 @*    <h5><a href="job-listing1.html"><img src="assets/images/icon/location.svg" alt="">@city.Name, @city.Country!.Name</a></h5> *@
+                                    <p>Job Available: <span>2934</span></p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="location-card">
-                            <div class="location-img">
-                                <img class="img-fluid" src="assets/images/bg/chicago.png" alt="">
-                            </div>
-                            <div class="location-content text-center">
-                                <h5><a href="job-listing1.html"><img src="assets/images/icon/location.svg" alt="">Chicago, Australia</a></h5>
-                                <p>Job Available: <span>5678</span></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="location-card">
-                            <div class="location-img">
-                                <img class="img-fluid" src="assets/images/bg/sylhet.png" alt="">
-                            </div>
-                            <div class="location-content text-center">
-                                <h5><a href="job-listing1.html"><img src="assets/images/icon/location.svg" alt="">Sylhet, Bangladesh</a></h5>
-                                <p>Job Available: <span>1234</span></p>
-                            </div>
-                        </div>
-                    </div>
+                    }
                 </div>
             </div>
         </div>

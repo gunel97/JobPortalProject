@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JobPortalProject.BL.ViewModels.CountryViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,14 +11,16 @@ namespace JobPortalProject.BL.ViewModels.CityViewModels
     {
         public int Id { get; set; }
         public string? Name { get; set; }
-        public string? CountryName {  get; set; }
+        public CountryViewModel? Country {  get; set; }
     }
 
     public class CityCreateViewModel { }
 
     public class CityUpdateViewModel { }
 
-    public class CityTranslationViewModel { }
+    public class CityTranslationViewModel
+    {
+    }
 
     public class CityTranslationCreateViewModel { }
 

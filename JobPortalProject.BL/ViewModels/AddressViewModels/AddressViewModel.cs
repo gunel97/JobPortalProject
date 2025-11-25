@@ -1,4 +1,6 @@
-﻿using System;
+﻿using JobPortalProject.BL.ViewModels.CityViewModels;
+using JobPortalProject.BL.ViewModels.CountryViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +13,7 @@ namespace JobPortalProject.BL.ViewModels.AddressViewModels
         public int Id { get; set; }
         public List<int> CompanyAddresses { get; set; } = [];
         public string? Street { get; set; }
+        public CityViewModel? City { get; set; }
     }
 
     public class AddressCreateViewModel { }

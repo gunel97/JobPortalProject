@@ -191,6 +191,7 @@ namespace JobPortalProject.DA.DataContext.Entities
         public Language? Language { get; set; }
     }
 
+
     public class Address : TimeStample
     {
         public int CityId { get; set; }

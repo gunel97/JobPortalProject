@@ -1,4 +1,5 @@
-﻿using JobPortalProject.BL.ViewModels.JobCategoryViewModels;
+﻿using JobPortalProject.BL.ViewModels.CityViewModels;
+using JobPortalProject.BL.ViewModels.JobCategoryViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,6 @@ namespace JobPortalProject.BL.UI.ViewModels
     public class HomeViewModel
     {
         public List<JobCategoryViewModel>? JobCategories { get; set; }
+        public List<CityViewModel>? Cities { get; set; }
     }
 }

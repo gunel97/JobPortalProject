@@ -11,4 +11,6 @@ namespace JobPortalProject.BL.Services.Implementations
     {
         public JobCategoryManager(IRepositoryAsync<JobCategory> repository, IMapper mapper) : base(repository, mapper) { }
     }
+
+
 }

@@ -13,3 +13,4 @@ C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.BL\obj\Debug\net8
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.BL\obj\Debug\net8.0\refint\JobPortalProject.BL.dll
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.BL\obj\Debug\net8.0\JobPortalProject.BL.pdb
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.BL\obj\Debug\net8.0\ref\JobPortalProject.BL.dll
+C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.BL\obj\Debug\net8.0\JobPortalProject.BL.sourcelink.json

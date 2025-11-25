@@ -92,3 +92,4 @@ C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.AdminMvc\obj\Debu
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.AdminMvc\obj\Debug\net8.0\JobPortalProject.AdminMvc.pdb
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.AdminMvc\obj\Debug\net8.0\JobPortalProject.AdminMvc.genruntimeconfig.cache
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.AdminMvc\obj\Debug\net8.0\ref\JobPortalProject.AdminMvc.dll
+C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.AdminMvc\obj\Debug\net8.0\JobPortalProject.AdminMvc.sourcelink.json

@@ -28,6 +28,12 @@ namespace JobPortalProject.DA
             services.AddScoped<ILanguageRepository, LanguageRepository>();
             services.AddScoped<IJobCategoryRepository, JobCategoryRepository>();
             services.AddScoped<IJobCategoryTranslationRepository, JobCategoryTranslationRepository>();
+            services.AddScoped<ICountryTranslationRepository, CountryTranslationRepository>();
+            services.AddScoped<ICityTranslationRepository, CityTranslationRepository>();
+            services.AddScoped<IAddressTranslationRepository, AddressTranslationRepository>();
+            services.AddScoped<ICountryRepository, CountryRepository>();
+            services.AddScoped<ICityRepository, CityRepository>();
+            services.AddScoped<IAddressRepository, AddressRepository>();
 
             return services;
         }

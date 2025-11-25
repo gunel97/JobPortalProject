@@ -43,6 +43,12 @@ namespace JobPortalProject.BL
             services.AddScoped<ILanguageService, LanguageManager>();
             services.AddScoped<IJobCategoryService, JobCategoryManager>();
             services.AddScoped<IJobCategoryTranslationService, JobCategoryTranslationManager>();
+            services.AddScoped<ICountryTranslationService, CountryTranslationManager>();
+            services.AddScoped<ICityTranslationService, CityTranslationManager>();
+            services.AddScoped<IAddressTranslationService, AddressTranslationManager>();
+            services.AddScoped<ICountryService, CountryManager>();
+            services.AddScoped<ICityService, CityManager>();
+            services.AddScoped<IAddressService, AddressManager>();
 
             services.AddScoped<IHomeService, HomeManager>();
             services.AddScoped<ITopHeaderService, TopHeaderManager>();

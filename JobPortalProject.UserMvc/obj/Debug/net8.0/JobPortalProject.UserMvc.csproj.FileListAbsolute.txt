@@ -168,3 +168,4 @@ C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\obj\Debug
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\obj\Debug\net8.0\JobPortalProject.UserMvc.pdb
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\obj\Debug\net8.0\JobPortalProject.UserMvc.genruntimeconfig.cache
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\obj\Debug\net8.0\ref\JobPortalProject.UserMvc.dll
+C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\obj\Debug\net8.0\JobPortalProject.UserMvc.sourcelink.json

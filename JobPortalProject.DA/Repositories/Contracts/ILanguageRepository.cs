@@ -6,4 +6,6 @@ namespace JobPortalProject.DA.Repositories.Contracts
     {
 
     }
+
+
 }

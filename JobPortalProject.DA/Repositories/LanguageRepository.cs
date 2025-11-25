@@ -13,14 +13,4 @@ namespace JobPortalProject.DA.Repositories
     {
         public LanguageRepository(AppDbContext context) : base(context) { }
     }
-
-    public class JobCategoryRepository : EfCoreRepositoryAsync<JobCategory>, IJobCategoryRepository
-    {
-        public JobCategoryRepository(AppDbContext context) : base(context) { }
-    }
-
-    public class JobCategoryTranslationRepository : EfCoreRepositoryAsync<JobCategoryTranslation>, IJobCategoryTranslationRepository
-    {
-        public JobCategoryTranslationRepository(AppDbContext context) : base(context) { }
-    }
 }

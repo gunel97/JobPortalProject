@@ -14,11 +14,13 @@ namespace JobPortalProject.BL.UI.Services.Implementations
     {
         private readonly IJobCategoryService _jobCategoryService;
         private readonly ICookieService _cookieService;
+        private readonly IAddressService _addressService;
 
-        public HomeManager(IJobCategoryService jobCategoryService, ICookieService cookieService)
+        public HomeManager(IJobCategoryService jobCategoryService, ICookieService cookieService, IAddressService addressService)
         {
             _jobCategoryService = jobCategoryService;
             _cookieService = cookieService;
+            _addressService = addressService;
         }
 
         public async Task<HomeViewModel> GetHomeViewModelAsync()
@@ -30,11 +32,18 @@ namespace JobPortalProject.BL.UI.Services.Implementations
                                                .Include(ct => ct.JobCategoryTranslations!
                                                .Where(j => j.LanguageId == language.Id)));
 
+            var addresses = await _addressService.GetAllAsync(
+                                            predicate: x => !x.IsDeleted && x.CompanyAddresses.Any(),
+                                            include: x => x
+                                            .Include(c => c.City!).ThenInclude(ci => ci.CityTranslations)
+                                            .Include(c => c.City!).ThenInclude(o=>o.Country).ThenInclude(ct=>ct.Translations!
+                                            .Where(a=>a.LanguageId==language.Id)));
+
             var homeViewModel = new HomeViewModel
             {
-                JobCategories = jobCategories.ToList()
+                JobCategories = jobCategories.ToList(),
             };
-
+                
             return homeViewModel;
         }
 

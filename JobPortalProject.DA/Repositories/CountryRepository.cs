@@ -8,4 +8,5 @@ namespace JobPortalProject.DA.Repositories
     {
         public CountryRepository(AppDbContext context) : base(context) { }
     }
+
 }

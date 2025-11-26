@@ -34,6 +34,12 @@ namespace JobPortalProject.DA
             services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<ICityRepository, CityRepository>();
             services.AddScoped<IAddressRepository, AddressRepository>();
+            services.AddScoped<ICompanyTypeRepository, CompanyTypeRepository>();
+            services.AddScoped<ICompanyTypeTranslationRepository, CompanyTypeTranslationRepository>();
+            services.AddScoped<ICompanyRepository, CompanyRepository>();
+            services.AddScoped<ICompanyTranslationRepository, CompanyTranslationRepository>();
+            services.AddScoped<IWorkingFieldRepository, WorkingFieldRepository>();
+            services.AddScoped<IWorkingFieldTranslationRepository, WorkingFieldTranslationRepository>();
 
             return services;
         }

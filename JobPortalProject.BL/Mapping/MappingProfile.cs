@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using JobPortalProject.BL.ViewModels.AddressViewModels;
 using JobPortalProject.BL.ViewModels.CityViewModels;
+using JobPortalProject.BL.ViewModels.CompanyViewModels;
 using JobPortalProject.BL.ViewModels.CountryViewModels;
 using JobPortalProject.BL.ViewModels.JobCategoryViewModels;
 using JobPortalProject.BL.ViewModels.LanguageViewModels;
+using JobPortalProject.BL.ViewModels.WorkingFieldViewModels;
 using JobPortalProject.DA.DataContext.Entities;
 using System;
 using System.Collections.Generic;
@@ -48,8 +50,6 @@ namespace JobPortalProject.BL.Mapping
                 .ForMember(x=>x.Name, opt => opt
                 .MapFrom(src=>src.CityTranslations!.FirstOrDefault()==null ? "" : 
                 src.CityTranslations!.FirstOrDefault()!.Name))
-                //.ForMember(x=>x.CountryName, opt=>opt.MapFrom(src=>src.Country == null ? "" :
-                //src.Country.Translations.FirstOrDefault() ==null ? "" : src.Country.Translations.FirstOrDefault()!.Name))
                 .ReverseMap();
             CreateMap<City, CityCreateViewModel>().ReverseMap();
             CreateMap<City, CityUpdateViewModel>().ReverseMap();
@@ -62,6 +62,8 @@ namespace JobPortalProject.BL.Mapping
                 .ForMember(x=>x.Street, opt=>opt
                 .MapFrom(src=>src.AddressTranslations!.FirstOrDefault()==null ? "" :
                 src.AddressTranslations!.FirstOrDefault()!.Street))
+                .ForMember(x=>x.CompanyIds, opt=>opt
+                .MapFrom(src=>src.CompanyAddresses.Select(at=>at.CompanyId).ToList()))
                 .ReverseMap();
             CreateMap<Address, AddressCreateViewModel>().ReverseMap();
             CreateMap<Address, AddressUpdateViewModel>().ReverseMap();
@@ -69,6 +71,38 @@ namespace JobPortalProject.BL.Mapping
             CreateMap<AddressTranslation, AddressTranslationViewModel>().ReverseMap();
             CreateMap<AddressTranslation, AddressTranslationCreateViewModel>().ReverseMap();
             CreateMap<AddressTranslation, AddressTranslationUpdateViewModel>().ReverseMap();
+
+            CreateMap<Company, CompanyViewModel>()
+                .ForMember(x => x.Name, opt => opt
+                .MapFrom(src => src.CompanyTranslations!.FirstOrDefault() == null ? "" :
+                src.CompanyTranslations!.FirstOrDefault()!.Name))
+                .ForMember(src => src.MainAddress, opt => opt
+                .MapFrom(src => src.CompanyAddresses == null ? null :
+                src.CompanyAddresses.FirstOrDefault(a => a.IsMain)!.Address))
+                .ForMember(x => x.CompanyAddresses, opt => opt.MapFrom(src => src.CompanyAddresses
+                .Select(a => a.Address != null ? a.Address : null).ToList()))
+                .ReverseMap();
+            CreateMap<Company, CompanyCreateViewModel>().ReverseMap();
+            CreateMap<Company, CompanyUpdateViewModel>().ReverseMap();
+
+            CreateMap<CompanyTranslation, CompanyTranslationViewModel>().ReverseMap();
+            CreateMap<CompanyTranslation, CompanyTranslationCreateViewModel>().ReverseMap();
+            CreateMap<CompanyTranslation, CompanyTranslationUpdateViewModel>().ReverseMap();
+
+            CreateMap<WorkingFieldTranslation, WorkingFieldTranslationViewModel>().ReverseMap();
+            CreateMap<WorkingFieldTranslation, WorkingFieldTranslationCreateViewModel>().ReverseMap();
+            CreateMap<WorkingFieldTranslation, WorkingFieldTranslationUpdateViewModel>().ReverseMap();
+
+            CreateMap<WorkingField, WorkingFieldViewModel>()
+                .ForMember(x => x.Name, opt => opt
+                .MapFrom(src => src.Translations.FirstOrDefault()==null ? "" :
+                src.Translations!.FirstOrDefault()!.Name))
+                .ForMember(x=>x.Description, opt=> opt
+                .MapFrom(src => src.Translations.FirstOrDefault() == null ? "" :
+                src.Translations!.FirstOrDefault()!.Description))
+                .ReverseMap();
+            CreateMap<WorkingField, WorkingFieldCreateViewModel>().ReverseMap();
+            CreateMap<WorkingField, WorkingFieldUpdateViewModel>().ReverseMap();
 
 
 

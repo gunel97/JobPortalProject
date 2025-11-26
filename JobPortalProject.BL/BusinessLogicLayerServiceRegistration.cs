@@ -3,6 +3,7 @@ using JobPortalProject.BL.Services.Contracts;
 using JobPortalProject.BL.Services.Implementations;
 using JobPortalProject.BL.UI.Services.Abstracts;
 using JobPortalProject.BL.UI.Services.Implementations;
+using JobPortalProject.DA.DataContext.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.DependencyInjection;
@@ -49,6 +50,13 @@ namespace JobPortalProject.BL
             services.AddScoped<ICountryService, CountryManager>();
             services.AddScoped<ICityService, CityManager>();
             services.AddScoped<IAddressService, AddressManager>();
+
+            services.AddScoped<ICompanyService, CompanyManager>();
+            services.AddScoped<ICompanyTranslationService, CompanyTranslationManager>();
+            services.AddScoped<ICompanyTypeService, CompanyTypeManager>();
+            services.AddScoped<ICompanyTypeTranslationService, CompanyTypeTranslationManager>();
+            services.AddScoped<IWorkingFieldTranslationService, WorkingFieldTranslationManager>();
+            services.AddScoped<IWorkingFieldService, WorkingFieldManager>();
 
             services.AddScoped<IHomeService, HomeManager>();
             services.AddScoped<ITopHeaderService, TopHeaderManager>();

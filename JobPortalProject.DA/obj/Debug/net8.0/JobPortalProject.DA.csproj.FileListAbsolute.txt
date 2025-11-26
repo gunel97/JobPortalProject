@@ -6,8 +6,8 @@ C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.DA\obj\Debug\net8
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.DA\obj\Debug\net8.0\JobPortalProject.DA.AssemblyInfoInputs.cache
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.DA\obj\Debug\net8.0\JobPortalProject.DA.AssemblyInfo.cs
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.DA\obj\Debug\net8.0\JobPortalProject.DA.csproj.CoreCompileInputs.cache
+C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.DA\obj\Debug\net8.0\JobPortalProject.DA.sourcelink.json
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.DA\obj\Debug\net8.0\JobPortalProject.DA.dll
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.DA\obj\Debug\net8.0\refint\JobPortalProject.DA.dll
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.DA\obj\Debug\net8.0\JobPortalProject.DA.pdb
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.DA\obj\Debug\net8.0\ref\JobPortalProject.DA.dll
-C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.DA\obj\Debug\net8.0\JobPortalProject.DA.sourcelink.json

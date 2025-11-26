@@ -15,14 +15,14 @@ namespace JobPortalProject.BL.UI.Services.Implementations
         private readonly IJobCategoryService _jobCategoryService;
         private readonly ICookieService _cookieService;
         private readonly IAddressService _addressService;
-        private readonly ICityService _cityService;
+        private readonly ICompanyService _companyService;
 
-        public HomeManager(IJobCategoryService jobCategoryService, ICookieService cookieService, IAddressService addressService, ICityService cityService)
+        public HomeManager(IJobCategoryService jobCategoryService, ICookieService cookieService, IAddressService addressService, ICompanyService companyService)
         {
             _jobCategoryService = jobCategoryService;
             _cookieService = cookieService;
             _addressService = addressService;
-            _cityService = cityService;
+            _companyService = companyService;
         }
 
         public async Task<HomeViewModel> GetHomeViewModelAsync()
@@ -38,6 +38,8 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             var addresses = await _addressService.GetAllAsync(
                                             //predicate: x => !x.IsDeleted && x.CompanyAddresses.Any(),
                                             include: x => x
+                                            .Include(ca=>ca.CompanyAddresses)
+                                            .Include(at=>at.AddressTranslations!.Where(at=>at.LanguageId==language.Id))
                                             .Include(a => a.City!).ThenInclude(c => c.CityTranslations!.Where(a=>a.LanguageId==language.Id))
                                             .Include(a => a.City!).ThenInclude(c => c.Country!).ThenInclude(ct => ct.Translations!
                                             .Where(a => a.LanguageId == language.Id)));
@@ -45,10 +47,19 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             var addressesByCities = addresses.DistinctBy(a => a.City!.Name);
 
 
+            var companies = await _companyService.GetAllAsync(
+                                               include: c=>c
+                                               .Include(ct=>ct.CompanyTranslations!
+                                               .Where(c=>c.LanguageId==language.Id))
+                                               .Include(ca=>ca.CompanyAddresses));
+
+           
+
             var homeViewModel = new HomeViewModel
             {
                 JobCategories = jobCategories.ToList(),
                 Addresses=addressesByCities.ToList(),
+                Companies=companies.ToList(),
             };
                 
             return homeViewModel;

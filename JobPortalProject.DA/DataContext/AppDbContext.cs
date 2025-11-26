@@ -32,6 +32,10 @@ namespace JobPortalProject.DA.DataContext
         public DbSet<City> Cities { get; set; } = null!;
         public DbSet<CityTranslation> CityTranslations { get; set; } = null!;
         public DbSet<CompanyAddress> CompanyAddresses { get; set; } = null!;
+        public DbSet<Bio> Bios { get; set; } = null!;
+        public DbSet<MainSocial> MainSocials {get; set;}=null!;
+        public DbSet<WorkingField> WorkingFields { get; set; }=null!;
+        public DbSet<WorkingFieldTranslation> WorkingFieldTranslations { get; set; } = null!;
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

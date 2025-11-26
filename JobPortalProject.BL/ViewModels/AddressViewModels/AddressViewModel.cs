@@ -11,7 +11,7 @@ namespace JobPortalProject.BL.ViewModels.AddressViewModels
     public class AddressViewModel
     {
         public int Id { get; set; }
-        public List<int> CompanyAddresses { get; set; } = [];
+        public List<int> CompanyIds { get; set; } = [];
         public string? Street { get; set; }
         public CityViewModel? City { get; set; }
     }

@@ -11,6 +11,7 @@ namespace JobPortalProject.BL.ViewModels.CityViewModels
     {
         public int Id { get; set; }
         public string? Name { get; set; }
+        public string? CoverPhotoUrl { get; set; }
         public CountryViewModel? Country {  get; set; }
     }
 

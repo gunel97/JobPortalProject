@@ -156,6 +156,40 @@ namespace JobPortalProject.DA.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.Bio", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LogoPublicId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LogoUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Bios");
+                });
+
             modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.City", b =>
                 {
                     b.Property<int>("Id")
@@ -166,6 +200,14 @@ namespace JobPortalProject.DA.Migrations
 
                     b.Property<int>("CountryId")
                         .HasColumnType("int");
+
+                    b.Property<string>("CoverPhotoPublicId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CoverPhotoUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -227,6 +269,9 @@ namespace JobPortalProject.DA.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CompanySize")
+                        .HasColumnType("int");
+
                     b.Property<int>("CompanyTypeId")
                         .HasColumnType("int");
 
@@ -248,6 +293,9 @@ namespace JobPortalProject.DA.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<DateTime?>("LastPostedJob")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("LogoPublicId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -255,6 +303,9 @@ namespace JobPortalProject.DA.Migrations
                     b.Property<string>("LogoUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("MemberSince")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("PrimaryPhone")
                         .IsRequired()
@@ -292,6 +343,9 @@ namespace JobPortalProject.DA.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsMain")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -750,6 +804,44 @@ namespace JobPortalProject.DA.Migrations
                     b.ToTable("Languages");
                 });
 
+            modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.MainSocial", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("IconPublicId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IconUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MainSocials");
+                });
+
             modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.SocialMedia", b =>
                 {
                     b.Property<int>("Id")
@@ -782,6 +874,81 @@ namespace JobPortalProject.DA.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SocialMedias");
+                });
+
+            modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.WorkingField", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("IconPublicId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IconUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("WorkingFields");
+                });
+
+            modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.WorkingFieldTranslation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("WorkingFieldId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LanguageId");
+
+                    b.HasIndex("WorkingFieldId");
+
+                    b.ToTable("WorkingFieldTranslations");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -1058,8 +1225,8 @@ namespace JobPortalProject.DA.Migrations
 
             modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.CompanyTypeTranslation", b =>
                 {
-                    b.HasOne("JobPortalProject.DA.DataContext.Entities.Company", "CompanyType")
-                        .WithMany()
+                    b.HasOne("JobPortalProject.DA.DataContext.Entities.CompanyType", "CompanyType")
+                        .WithMany("CompanyTypeTranslations")
                         .HasForeignKey("CompanyTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1151,6 +1318,36 @@ namespace JobPortalProject.DA.Migrations
                     b.Navigation("Language");
                 });
 
+            modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.WorkingField", b =>
+                {
+                    b.HasOne("JobPortalProject.DA.DataContext.Entities.Company", "Company")
+                        .WithMany("WorkingFields")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.WorkingFieldTranslation", b =>
+                {
+                    b.HasOne("JobPortalProject.DA.DataContext.Entities.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("JobPortalProject.DA.DataContext.Entities.WorkingField", "WorkingField")
+                        .WithMany("Translations")
+                        .HasForeignKey("WorkingFieldId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Language");
+
+                    b.Navigation("WorkingField");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -1227,11 +1424,15 @@ namespace JobPortalProject.DA.Migrations
                     b.Navigation("CompanyTranslations");
 
                     b.Navigation("Jobs");
+
+                    b.Navigation("WorkingFields");
                 });
 
             modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.CompanyType", b =>
                 {
                     b.Navigation("Companies");
+
+                    b.Navigation("CompanyTypeTranslations");
                 });
 
             modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.Country", b =>
@@ -1251,6 +1452,11 @@ namespace JobPortalProject.DA.Migrations
                     b.Navigation("JobCategoryTranslations");
 
                     b.Navigation("Jobs");
+                });
+
+            modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.WorkingField", b =>
+                {
+                    b.Navigation("Translations");
                 });
 #pragma warning restore 612, 618
         }

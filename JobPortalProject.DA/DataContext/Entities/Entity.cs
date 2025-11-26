@@ -92,12 +92,16 @@ namespace JobPortalProject.DA.DataContext.Entities
         public string PrimaryPhone { get; set; } = null!;
         public string SecondaryPhone { get; set; } = null!;
         public string Email { get; set; } = null!;
+        public int CompanySize { get; set; }
+        public DateTime? MemberSince { get; set; }
+        public DateTime? LastPostedJob { get; set; }
         //
         public List<Job> Jobs { get; set; } = [];
         public List<CompanyImage> CompanyImages { get; set; } = [];
         public List<CompanySocial> CompanySocials { get; set; } = [];
         public List<CompanyTranslation> CompanyTranslations { get; set; } = [];
         public List<CompanyAddress> CompanyAddresses { get; set; } = [];
+        public List<WorkingField> WorkingFields { get; set; } = [];
         public int CompanyTypeId { get; set; }
         public CompanyType? CompanyType { get; set; }
     }
@@ -115,17 +119,17 @@ namespace JobPortalProject.DA.DataContext.Entities
     public class CompanyType : TimeStample
     {
         public List<Company> Companies { get; set; } = [];
+        public List<CompanyTypeTranslation> CompanyTypeTranslations { get; set; } = [];
     }
 
     public class CompanyTypeTranslation : TimeStample
     {
         public string Name { get; set; } = null!;
         public int CompanyTypeId { get; set; }
-        public Company? CompanyType { get; set; }
+        public CompanyType? CompanyType { get; set; }
         public int LanguageId { get; set; }
         public Language? Language { get; set; }
     }
-
 
     public class CompanySocial : TimeStample
     {
@@ -144,11 +148,45 @@ namespace JobPortalProject.DA.DataContext.Entities
         public Company? Company { get; set; }
     }
 
+    public class WorkingField : TimeStample
+    {
+        public int CompanyId { get; set; }
+        public Company? Company { get; set; }
+        public string IconPublicId { get; set; } = null!;
+        public string IconUrl { get; set; }=null!;
+        public List<WorkingFieldTranslation> Translations { get; set; } = [];
+    }
+
+    public class WorkingFieldTranslation:TimeStample
+    {
+        public int WorkingFieldId { get; set; }
+        public WorkingField? WorkingField { get; set; }
+        public int LanguageId { get; set; }
+        public Language? Language { get; set; }
+        public string Name { get; set; } = null!;
+        public string Description { get; set; } = null!;
+    }
+
     public class SocialMedia : TimeStample
     {
         public string IconPublicId { get; set; } = null!;
         public string IconUrl { get; set; } = null!;
         public string Title { get; set; } = null!;
+    }
+
+    public class MainSocial : TimeStample
+    {
+        public string IconPublicId { get; set; } = null!;
+        public string IconUrl { get; set; } = null!;
+        public string Title { get; set; } = null!;
+        public string Url { get; set; }=null!;
+    }
+
+    public class Bio : TimeStample
+    {
+        public string Phone { get; set; } = null!;
+        public string LogoPublicId { get; set; } = null!;
+        public string LogoUrl { get; set; } = null!;
     }
 
     public class AppUser : IdentityUser
@@ -157,10 +195,9 @@ namespace JobPortalProject.DA.DataContext.Entities
         public string? LastName { get; set; }
     }
 
-
     public class Country : TimeStample
     {
-        public List<City> Cities { get; set; } = null!;
+        public List<City> Cities { get; set; } = [];
         public List<CountryTranslation> Translations { get; set; } = [];
 
     }
@@ -176,6 +213,8 @@ namespace JobPortalProject.DA.DataContext.Entities
 
     public class City : TimeStample
     {
+        public string CoverPhotoPublicId { get; set; } = null!;
+        public string CoverPhotoUrl { get; set; } = null!;
         public int CountryId { get; set; }
         public Country? Country { get; set; }
         public List<Address> Addresses { get; set; } = [];
@@ -190,7 +229,6 @@ namespace JobPortalProject.DA.DataContext.Entities
         public int LanguageId { get; set; }
         public Language? Language { get; set; }
     }
-
 
     public class Address : TimeStample
     {
@@ -210,8 +248,9 @@ namespace JobPortalProject.DA.DataContext.Entities
         public Language? Language { get; set; }
     }
 
-    public class CompanyAddress:TimeStample
+    public class CompanyAddress : TimeStample
     {
+        public bool IsMain { get; set; }
         public int CompanyId { get; set; }
         public Company? Company { get; set; }
         public int AddressId { get; set; }

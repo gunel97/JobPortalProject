@@ -1,4 +1,9 @@
-﻿@model HomeViewModel
+﻿@{
+    HomeViewModel model = Model;
+    var jobCategories = model.JobCategories;
+    var addresses = model.Addresses;
+    var companies = model.Companies;
+}
     <!-- ========== Hero One Start============= -->
 <div class="hero1">
     <div class="container">
@@ -12,7 +17,7 @@
                             <div class="col-lg-3 col-sm-6">
                                 <div class="counter-single">
                                     <div class="counter-icon">
-                                        <img src="assets/images/icon/job2.svg" alt="image">
+                                        <img src="~/images/icon/job2.svg" alt="image">
                                     </div>
                                     <div class="coundown">
                                         <p>Live Jobs</p>
@@ -27,7 +32,7 @@
                             <div class="col-lg-3 col-sm-6">
                                 <div class="counter-single">
                                     <div class="counter-icon">
-                                        <img src="assets/images/icon/companies.svg" alt="image">
+                                        <img src="~/images/icon/companies.svg" alt="image">
                                     </div>
                                     <div class="coundown">
                                         <p>Companies</p>
@@ -43,7 +48,7 @@
                             <div class="col-lg-3 col-sm-6">
                                 <div class="counter-single">
                                     <div class="counter-icon">
-                                        <img src="assets/images/icon/candidates.svg" alt="image">
+                                        <img src="~/images/icon/candidates.svg" alt="image">
                                     </div>
                                     <div class="coundown">
                                         <p>Candidates</p>
@@ -59,7 +64,7 @@
                             <div class="col-lg-3 col-sm-6">
                                 <div class="counter-single">
                                     <div class="counter-icon">
-                                        <img src="assets/images/icon/new-jobs.svg" alt="image">
+                                        <img src="~/images/icon/new-jobs.svg" alt="image">
                                     </div>
                                     <div class="coundown">
                                         <p>New Jobs</p>
@@ -89,7 +94,7 @@
                                 </select>
                             </div>
                             <div class="form-inner">
-                                <button type="submit" class="primry-btn-2 "><img src="assets/images/icon/search-icon.svg" alt=""> Search</button>
+                                <button type="submit" class="primry-btn-2 "><img src="~/images/icon/search-icon.svg" alt=""> Search</button>
                             </div>
                         </form>
                     </div>
@@ -111,7 +116,7 @@
             </div>
         </div>
         <div class="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 g-4 cf justify-content-center">
-            @foreach (var jobCategory in Model.JobCategories ?? [])
+            @foreach (var jobCategory in jobCategories ?? [])
             {
                 <div class="col">
                     <div class="job-category-card2">
@@ -139,6 +144,7 @@
                 </div>
             </div>
             }
+     
             <div class="col">
                 <div class="category-btn-area">
                     <h5>Category List</h5>
@@ -159,7 +165,7 @@
                     <p>To choose your trending job dream & to make future bright.</p>
                 </div>
                 <div class="explore-btn">
-                    <a href="job-listing1.html">Explore More <span><img src="assets/images/icon/explore-elliose.svg" alt=""></span></a>
+                    <a href="job-listing1.html">Explore More <span><img src="~/images/icon/explore-elliose.svg" alt=""></span></a>
                 </div>
             </div>
         </div>
@@ -168,7 +174,7 @@
                 <div class="feature-card">
                     <div class="company-area">
                         <div class="logo">
-                            <img src="assets/images/bg/company-logo/company-01.png" alt="">
+                            <img src="~/images/bg/company-logo/company-01.png" alt="">
                         </div>
                         <div class="company-details">
                             <div class="name-location">
@@ -183,22 +189,22 @@
                     <div class="job-discription">
                         <ul>
                             <li>
-                                <img src="assets/images/icon/arrow2.svg" alt="">
+                                <img src="~/images/icon/arrow2.svg" alt="">
                                 <p><span class="title">Salary:</span> $80-$110 / <span class="time">Per month</span></p>
                             </li>
                             <li>
-                                <img src="assets/images/icon/arrow2.svg" alt="">
+                                <img src="~/images/icon/arrow2.svg" alt="">
                                 <p><span class="title">Vacancy:</span> <span> 07 Person (Both)</span></p>
                             </li>
                             <li>
-                                <img src="assets/images/icon/arrow2.svg" alt="">
+                                <img src="~/images/icon/arrow2.svg" alt="">
                                 <p><span class="title">Deadline:</span> <span> 02 March, 2023</span></p>
                             </li>
                         </ul>
                     </div>
                     <div class="job-type-apply">
                         <div class="apply-btn">
-                            <a href="job-details.html"><span><img src="assets/images/icon/apply-ellipse.svg" alt=""></span>Apply Now</a>
+                            <a href="job-details.html"><span><img src="~/images/icon/apply-ellipse.svg" alt=""></span>Apply Now</a>
                         </div>
                     </div>
                 </div>
@@ -207,7 +213,7 @@
                 <div class="feature-card">
                     <div class="company-area">
                         <div class="logo">
-                            <img src="assets/images/bg/company-logo/company-02.png" alt="">
+                            <img src="~/images/bg/company-logo/company-02.png" alt="">
                         </div>
                         <div class="company-details">
                             <div class="name-location">
@@ -222,22 +228,22 @@
                     <div class="job-discription">
                         <ul>
                             <li>
-                                <img src="assets/images/icon/arrow2.svg" alt="">
+                                <img src="~/images/icon/arrow2.svg" alt="">
                                 <p><span class="title">Salary:</span> $30-$40 / <span class="time">Per month</span></p>
                             </li>
                             <li>
-                                <img src="assets/images/icon/arrow2.svg" alt="">
+                                <img src="~/images/icon/arrow2.svg" alt="">
                                 <p><span class="title">Vacancy:</span> <span> 05 Person (Both)</span></p>
                             </li>
                             <li>
-                                <img src="assets/images/icon/arrow2.svg" alt="">
+                                <img src="~/images/icon/arrow2.svg" alt="">
                                 <p><span class="title">Deadline:</span> <span> 02 March, 2023 </span></p>
                             </li>
                         </ul>
                     </div>
                     <div class="job-type-apply">
                         <div class="apply-btn">
-                            <a href="job-details.html"><span><img src="assets/images/icon/apply-ellipse.svg" alt=""></span>Apply Now</a>
+                            <a href="job-details.html"><span><img src="~/images/icon/apply-ellipse.svg" alt=""></span>Apply Now</a>
                         </div>
                     </div>
                 </div>
@@ -246,7 +252,7 @@
                 <div class="feature-card">
                     <div class="company-area">
                         <div class="logo">
-                            <img src="assets/images/bg/company-logo/company-03.png" alt="">
+                            <img src="~/images/bg/company-logo/company-03.png" alt="">
                         </div>
                         <div class="company-details">
                             <div class="name-location">
@@ -261,22 +267,22 @@
                     <div class="job-discription">
                         <ul>
                             <li>
-                                <img src="assets/images/icon/arrow2.svg" alt="">
+                                <img src="~/images/icon/arrow2.svg" alt="">
                                 <p><span class="title">Salary:</span> $60-$90 / <span class="time">Per month</span></p>
                             </li>
                             <li>
-                                <img src="assets/images/icon/arrow2.svg" alt="">
+                                <img src="~/images/icon/arrow2.svg" alt="">
                                 <p><span class="title">Vacancy:</span> <span> 07 Person (Female)</span></p>
                             </li>
                             <li>
-                                <img src="assets/images/icon/arrow2.svg" alt="">
+                                <img src="~/images/icon/arrow2.svg" alt="">
                                 <p><span class="title">Deadline:</span> <span> 03 March, 2023 </span></p>
                             </li>
                         </ul>
                     </div>
                     <div class="job-type-apply">
                         <div class="apply-btn">
-                            <a href="job-details.html"><span><img src="assets/images/icon/apply-ellipse.svg" alt=""></span>Apply Now</a>
+                            <a href="job-details.html"><span><img src="~/images/icon/apply-ellipse.svg" alt=""></span>Apply Now</a>
                         </div>
                     </div>
                 </div>
@@ -285,7 +291,7 @@
                 <div class="feature-card">
                     <div class="company-area">
                         <div class="logo">
-                            <img src="assets/images/bg/company-logo/company-05.png" alt="">
+                            <img src="~/images/bg/company-logo/company-05.png" alt="">
                         </div>
                         <div class="company-details">
                             <div class="name-location">
@@ -300,22 +306,22 @@
                     <div class="job-discription">
                         <ul>
                             <li>
-                                <img src="assets/images/icon/arrow2.svg" alt="">
+                                <img src="~/images/icon/arrow2.svg" alt="">
                                 <p><span class="title">Salary:</span> $60-$80 / <span class="time">Per month</span></p>
                             </li>
                             <li>
-                                <img src="assets/images/icon/arrow2.svg" alt="">
+                                <img src="~/images/icon/arrow2.svg" alt="">
                                 <p><span class="title">Vacancy:</span> <span> 03 Person (Male)</span></p>
                             </li>
                             <li>
-                                <img src="assets/images/icon/arrow2.svg" alt="">
+                                <img src="~/images/icon/arrow2.svg" alt="">
                                 <p><span class="title">Deadline:</span> <span> 04 March, 2023 </span></p>
                             </li>
                         </ul>
                     </div>
                     <div class="job-type-apply">
                         <div class="apply-btn">
-                            <a href="job-details.html"><span><img src="assets/images/icon/apply-ellipse.svg" alt=""></span>Apply Now</a>
+                            <a href="job-details.html"><span><img src="~/images/icon/apply-ellipse.svg" alt=""></span>Apply Now</a>
                         </div>
                     </div>
                 </div>
@@ -324,7 +330,7 @@
                 <div class="feature-card">
                     <div class="company-area">
                         <div class="logo">
-                            <img src="assets/images/bg/company-logo/company-06.png" alt="">
+                            <img src="~/images/bg/company-logo/company-06.png" alt="">
                         </div>
                         <div class="company-details">
                             <div class="name-location">
@@ -339,22 +345,22 @@
                     <div class="job-discription">
                         <ul>
                             <li>
-                                <img src="assets/images/icon/arrow2.svg" alt="">
+                                <img src="~/images/icon/arrow2.svg" alt="">
                                 <p><span class="title">Salary:</span> $60-$76 / <span class="time">Per month</span></p>
                             </li>
                             <li>
-                                <img src="assets/images/icon/arrow2.svg" alt="">
+                                <img src="~/images/icon/arrow2.svg" alt="">
                                 <p><span class="title">Vacancy:</span> <span> 01 Person (Both)</span></p>
                             </li>
                             <li>
-                                <img src="assets/images/icon/arrow2.svg" alt="">
+                                <img src="~/images/icon/arrow2.svg" alt="">
                                 <p><span class="title">Deadline:</span> <span> 05 March, 2023</span></p>
                             </li>
                         </ul>
                     </div>
                     <div class="job-type-apply">
                         <div class="apply-btn">
-                            <a href="job-details.html"><span><img src="assets/images/icon/apply-ellipse.svg" alt=""></span>Apply Now</a>
+                            <a href="job-details.html"><span><img src="~/images/icon/apply-ellipse.svg" alt=""></span>Apply Now</a>
                         </div>
                     </div>
                 </div>
@@ -363,7 +369,7 @@
                 <div class="feature-card">
                     <div class="company-area">
                         <div class="logo">
-                            <img src="assets/images/bg/company-logo/company-04.png" alt="">
+                            <img src="~/images/bg/company-logo/company-04.png" alt="">
                         </div>
                         <div class="company-details">
                             <div class="name-location">
@@ -378,22 +384,22 @@
                     <div class="job-discription">
                         <ul>
                             <li>
-                                <img src="assets/images/icon/arrow2.svg" alt="">
+                                <img src="~/images/icon/arrow2.svg" alt="">
                                 <p><span class="title">Salary:</span> $60-$70 / <span class="time">Per month</span></p>
                             </li>
                             <li>
-                                <img src="assets/images/icon/arrow2.svg" alt="">
+                                <img src="~/images/icon/arrow2.svg" alt="">
                                 <p><span class="title">Vacancy:</span> <span> 03 Person (Both)</span></p>
                             </li>
                             <li>
-                                <img src="assets/images/icon/arrow2.svg" alt="">
+                                <img src="~/images/icon/arrow2.svg" alt="">
                                 <p><span class="title">Deadline:</span> <span> 02 March, 2023</span></p>
                             </li>
                         </ul>
                     </div>
                     <div class="job-type-apply">
                         <div class="apply-btn">
-                            <a href="job-details.html"><span><img src="assets/images/icon/apply-ellipse.svg" alt=""></span>Apply Now</a>
+                            <a href="job-details.html"><span><img src="~/images/icon/apply-ellipse.svg" alt=""></span>Apply Now</a>
                         </div>
                     </div>
                 </div>
@@ -417,7 +423,7 @@
             <div class="col-xl-3 col-lg-4 col-sm-6">
                 <div class="single-work-process one text-center">
                     <div class="icon">
-                        <img src="assets/images/icon/account-create.svg" alt="">
+                        <img src="~/images/icon/account-create.svg" alt="">
                     </div>
                     <div class="work-content">
                         <h5><a href="register.html">Account Create</a></h5>
@@ -428,7 +434,7 @@
             <div class="col-xl-3 col-lg-4 col-sm-6">
                 <div class="single-work-process two text-center">
                     <div class="icon">
-                        <img src="assets/images/icon/create-resume.svg" alt="">
+                        <img src="~/images/icon/create-resume.svg" alt="">
                     </div>
                     <div class="work-content">
                         <h5><a href="edit-profile.html">Create Resume</a></h5>
@@ -439,7 +445,7 @@
             <div class="col-xl-3 col-lg-4 col-sm-6">
                 <div class="single-work-process one text-center">
                     <div class="icon">
-                        <img src="assets/images/icon/job-find.svg" alt="">
+                        <img src="~/images/icon/job-find.svg" alt="">
                     </div>
                     <div class="work-content">
                         <h5><a href="job-listing1.html">Find Jobs </a></h5>
@@ -450,7 +456,7 @@
             <div class="col-xl-3 col-lg-4 col-sm-6">
                 <div class="single-work-process two text-center">
                     <div class="icon">
-                        <img src="assets/images/icon/job-apply.svg" alt="">
+                        <img src="~/images/icon/job-apply.svg" alt="">
                     </div>
                     <div class="work-content">
                         <h5><a href="job-listing1.html">Apply Jobs</a></h5>
@@ -473,10 +479,10 @@
                 </div>
                 <div class="swiper-btn1 d-flex align-items-center">
                     <div class="left-btn prev-1">
-                        <img src="assets/images/icon/explore-elliose.svg" alt="">
+                        <img src="~/images/icon/explore-elliose.svg" alt="">
                     </div>
                     <div class="right-btn next-1">
-                        <img src="assets/images/icon/explore-elliose.svg" alt="">
+                        <img src="~/images/icon/explore-elliose.svg" alt="">
                     </div>
                 </div>
             </div>
@@ -484,16 +490,16 @@
         <div class="row">
             <div class="swiper location-slider">
                 <div class="swiper-wrapper">
-                    @foreach (var address in Model.Addresses ?? [])
+                    @foreach (var address in addresses ?? [])
                     {
                         <div class="swiper-slide">
                             <div class="location-card">
                                 <div class="location-img">
-                                    <img class="img-fluid" src="assets/images/bg/dhaka1.png" alt="">
+                                    <img class="img-fluid" src="@address.City!.CoverPhotoUrl" alt="">
                                 </div>
                                 <div class="location-content text-center">
-                                    <h5><a href="job-listing1.html"><img src="assets/images/icon/location.svg" alt="">@address.City!.Name, @address.City.Country!.Name</a></h5>
-                                 @*    <h5><a href="job-listing1.html"><img src="assets/images/icon/location.svg" alt="">@city.Name, @city.Country!.Name</a></h5> *@
+                                    <h5><a href="job-listing1.html"><img src="~/images/icon/location.svg" alt="">@address.City!.Name, @address.City.Country!.Name</a></h5>
+                                 @*    <h5><a href="job-listing1.html"><img src="~/images/icon/location.svg" alt="">@city.Name, @city.Country!.Name</a></h5> *@
                                     <p>Job Available: <span>2934</span></p>
                                 </div>
                             </div>
@@ -516,10 +522,10 @@
                 </div>
                 <div class="swiper-btn1 d-flex align-items-center">
                     <div class="left-btn prev-2">
-                        <img src="assets/images/icon/explore-elliose.svg" alt="">
+                        <img src="~/images/icon/explore-elliose.svg" alt="">
                     </div>
                     <div class="right-btn next-2">
-                        <img src="assets/images/icon/explore-elliose.svg" alt="">
+                        <img src="~/images/icon/explore-elliose.svg" alt="">
                     </div>
                 </div>
             </div>
@@ -530,9 +536,9 @@
                     <div class="swiper-slide">
                         <div class="testimonial-card">
                             <div class="author-img">
-                                <img src="assets/images/bg/testimonial-author1.png" alt="">
+                                <img src="~/images/bg/testimonial-author1.png" alt="">
                                 <div class="quat-icon">
-                                    <img src="assets/images/icon/quat-icon.svg" alt="">
+                                    <img src="~/images/icon/quat-icon.svg" alt="">
                                 </div>
                             </div>
                             <div class="testimonial-content">
@@ -556,9 +562,9 @@
                     <div class="swiper-slide">
                         <div class="testimonial-card">
                             <div class="author-img">
-                                <img src="assets/images/bg/testimonial-author2.png" alt="">
+                                <img src="~/images/bg/testimonial-author2.png" alt="">
                                 <div class="quat-icon">
-                                    <img src="assets/images/icon/quat-icon.svg" alt="">
+                                    <img src="~/images/icon/quat-icon.svg" alt="">
                                 </div>
                             </div>
                             <div class="testimonial-content">
@@ -597,32 +603,32 @@
                     <div class="swiper-wrapper">
                         <div class="swiper-slide">
                             <div class="company-logo">
-                                <img src="assets/images/bg/company-logo/trusted-company-01.png" alt="">
+                                <img src="~/images/bg/company-logo/trusted-company-01.png" alt="">
                             </div>
                         </div>
                         <div class="swiper-slide">
                             <div class="company-logo">
-                                <img src="assets/images/bg/company-logo/trusted-company-02.png" alt="">
+                                <img src="~/images/bg/company-logo/trusted-company-02.png" alt="">
                             </div>
                         </div>
                         <div class="swiper-slide">
                             <div class="company-logo">
-                                <img src="assets/images/bg/company-logo/trusted-company-03.png" alt="">
+                                <img src="~/images/bg/company-logo/trusted-company-03.png" alt="">
                             </div>
                         </div>
                         <div class="swiper-slide">
                             <div class="company-logo">
-                                <img src="assets/images/bg/company-logo/trusted-company-04.png" alt="">
+                                <img src="~/images/bg/company-logo/trusted-company-04.png" alt="">
                             </div>
                         </div>
                         <div class="swiper-slide">
                             <div class="company-logo">
-                                <img src="assets/images/bg/company-logo/trusted-company-05.png" alt="">
+                                <img src="~/images/bg/company-logo/trusted-company-05.png" alt="">
                             </div>
                         </div>
                         <div class="swiper-slide">
                             <div class="company-logo">
-                                <img src="assets/images/bg/company-logo/trusted-company-06.png" alt="">
+                                <img src="~/images/bg/company-logo/trusted-company-06.png" alt="">
                             </div>
                         </div>
                     </div>
@@ -646,28 +652,32 @@
         <div class="row">
             <div class="slick-wrapper">
                 <div id="slick1">
-                    <div class="slide-item">
-                        <div class="recruters-card">
-                            <div class="company-area">
-                                <div class="logo">
-                                    <img src="assets/images/bg/company-logo/company-06.png" alt="">
+                    @foreach (var item in companies ?? [])
+                    {
+                        <div class="slide-item">
+                            <div class="recruters-card">
+                                <div class="company-area">
+                                    <div class="logo">
+                                        <img src="@item.LogoUrl" alt="">
+                                    </div>
+                                    <div class="name-location">
+                                        <h5><a href="company-listing1.html">@item.Name</a></h5>
+                                        <p><img src="~/images/icon/location.svg" alt=""> @item.MainAddress?.City?.Name, @item.MainAddress?.City?.Country?.Name</p>
+                                        <p><img src="~/images/icon/person-2.svg" alt=""> @item.CompanySize People</p>
+                                    </div>
                                 </div>
-                                <div class="name-location">
-                                    <h5><a href="company-listing1.html">Norland Company</a></h5>
-                                    <p><img src="assets/images/icon/location.svg" alt=""> New-York, USA</p>
-                                    <p><img src="assets/images/icon/person-2.svg" alt=""> 45 People</p>
-                                </div>
-                            </div>
-                            <div class="job-details-vacancies">
-                                <div class="apply-btn">
-                                    <a href="company-details.html"><span><img src="assets/images/icon/apply-ellipse.svg" alt=""></span>View Details</a>
-                                </div>
-                                <div class="vacancies">
-                                    <p>Vacancies: <span>21</span></p>
+                                <div class="job-details-vacancies">
+                                    <div class="apply-btn">
+                                        <a href="company-details.html"><span><img src="~/images/icon/apply-ellipse.svg" alt=""></span>View Details</a>
+                                    </div>
+                                    <div class="vacancies">
+                                        <p>Vacancies: <span>21</span></p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    }
+
                     <div class="slide-item">
                         <div class="recruters-card">
                             <div class="company-area">
@@ -931,7 +941,7 @@
             <div class="col-lg-4 col-md-6 col-sm-10">
                 <div class="recent-article-wrap">
                     <div class="recent-article-img">
-                        <img class="img-fluid" src="assets/images/blog/blog-img-01.png" alt="">
+                        <img class="img-fluid" src="~/images/blog/blog-img-01.png" alt="">
                         <div class="publish-area d-xl-none d-flex">
                             <a href="blog-grid.html"><span>02</span>March</a>
                         </div>
@@ -942,8 +952,8 @@
                                 <a href="blog-grid.html"><span>02</span>March</a>
                             </div>
                             <ul>
-                                <li><a href="blog-grid.html"><img src="assets/images/icon/comment.svg" alt="">03 Comments</a></li>
-                                <li><a href="blog-grid.html"><img src="assets/images/icon/user.svg" alt="">Mr. Jack Frank</a></li>
+                                <li><a href="blog-grid.html"><img src="~/images/icon/comment.svg" alt="">03 Comments</a></li>
+                                <li><a href="blog-grid.html"><img src="~/images/icon/user.svg" alt="">Mr. Jack Frank</a></li>
                             </ul>
                         </div>
                         <h4>
@@ -953,7 +963,7 @@
                             </a>
                         </h4>
                         <div class="explore-btn">
-                            <a href="blog-details.html"><span><img src="assets/images/icon/explore-elliose.svg" alt=""></span> Explore More</a>
+                            <a href="blog-details.html"><span><img src="~/images/icon/explore-elliose.svg" alt=""></span> Explore More</a>
                         </div>
                     </div>
                 </div>
@@ -961,7 +971,7 @@
             <div class="col-lg-4 col-md-6 col-sm-10">
                 <div class="recent-article-wrap">
                     <div class="recent-article-img">
-                        <img class="img-fluid" src="assets/images/blog/blog-img-02.png" alt="">
+                        <img class="img-fluid" src="~/images/blog/blog-img-02.png" alt="">
                         <div class="publish-area d-xl-none d-flex">
                             <a href="blog-grid.html"><span>04</span>March</a>
                         </div>
@@ -972,8 +982,8 @@
                                 <a href="blog-grid.html"><span>04</span>March</a>
                             </div>
                             <ul>
-                                <li><a href="blog-grid.html"><img src="assets/images/icon/comment.svg" alt="">11 Comments</a></li>
-                                <li><a href="blog-grid.html"><img src="assets/images/icon/user.svg" alt="">Mr. Marko jack</a></li>
+                                <li><a href="blog-grid.html"><img src="~/images/icon/comment.svg" alt="">11 Comments</a></li>
+                                <li><a href="blog-grid.html"><img src="~/images/icon/user.svg" alt="">Mr. Marko jack</a></li>
                             </ul>
                         </div>
                         <h4>
@@ -983,7 +993,7 @@
                             </a>
                         </h4>
                         <div class="explore-btn">
-                            <a href="blog-details.html"><span><img src="assets/images/icon/explore-elliose.svg" alt=""></span> Explore More</a>
+                            <a href="blog-details.html"><span><img src="~/images/icon/explore-elliose.svg" alt=""></span> Explore More</a>
                         </div>
                     </div>
                 </div>
@@ -991,7 +1001,7 @@
             <div class="col-lg-4 col-md-6 col-sm-10">
                 <div class="recent-article-wrap">
                     <div class="recent-article-img">
-                        <img class="img-fluid" src="assets/images/blog/blog-img-03.png" alt="">
+                        <img class="img-fluid" src="~/images/blog/blog-img-03.png" alt="">
                         <div class="publish-area d-xl-none d-flex">
                             <a href="blog-grid.html"><span>05</span>March</a>
                         </div>
@@ -1002,8 +1012,8 @@
                                 <a href="blog-grid.html"><span>05 </span>March</a>
                             </div>
                             <ul>
-                                <li><a href="blog-grid.html"><img src="assets/images/icon/comment.svg" alt="">02 Comments</a></li>
-                                <li><a href="blog-grid.html"><img src="assets/images/icon/user.svg" alt="">Srikanto Frank</a></li>
+                                <li><a href="blog-grid.html"><img src="~/images/icon/comment.svg" alt="">02 Comments</a></li>
+                                <li><a href="blog-grid.html"><img src="~/images/icon/user.svg" alt="">Srikanto Frank</a></li>
                             </ul>
                         </div>
                         <h4>
@@ -1013,7 +1023,7 @@
                             </a>
                         </h4>
                         <div class="explore-btn">
-                            <a href="blog-details.html"><span><img src="assets/images/icon/explore-elliose.svg" alt=""></span> Explore More</a>
+                            <a href="blog-details.html"><span><img src="~/images/icon/explore-elliose.svg" alt=""></span> Explore More</a>
                         </div>
                     </div>
                 </div>

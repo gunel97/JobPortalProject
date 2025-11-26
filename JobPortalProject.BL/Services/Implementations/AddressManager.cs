@@ -12,5 +12,5 @@ namespace JobPortalProject.BL.Services.Implementations
         public AddressManager(IRepositoryAsync<Address> repository, IMapper mapper) : base(repository, mapper) { }
     }
 
-
+    
 }

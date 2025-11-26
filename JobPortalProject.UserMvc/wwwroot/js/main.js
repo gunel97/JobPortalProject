@@ -944,7 +944,7 @@ $('body').on('click','.add-education-row',function(){
       newRow += '<div class="form-inner mb-25">';
         newRow += '<label for="educationalLavel">Education Level*</label>';
         newRow += '<div class="input-area">';
-          newRow += '<img src="assets/images/icon/qualification-2.svg" alt="">';
+          newRow += '<img src="~/images/icon/qualification-2.svg" alt="">';
           newRow += '<select class="select1">';
             newRow += '<option value="0">Bachelor Degree in CSE</option>';
             newRow += '<option value="1">IGCSE</option>';
@@ -957,7 +957,7 @@ $('body').on('click','.add-education-row',function(){
     newRow += '<div class="form-inner mb-25">';
       newRow += '<label for="major">My Major*</label>';
       newRow += '<div class="input-area">';
-        newRow += '<img src="assets/images/icon/major.svg" alt="">';
+        newRow += '<img src="~/images/icon/major.svg" alt="">';
         newRow += '<select class="select1">';
           newRow += '<option value="0">Science</option>';
           newRow += '<option value="1">Arts</option>';
@@ -970,7 +970,7 @@ $('body').on('click','.add-education-row',function(){
     newRow += '<div class="form-inner mb-25">';
       newRow += '<label for="institute">Institute/University*</label>';
       newRow += '<div class="input-area">';
-        newRow += '<img src="assets/images/icon/univercity.svg" alt="">';
+        newRow += '<img src="~/images/icon/univercity.svg" alt="">';
         newRow += '<input type="text" id="institute" name="institute" placeholder="Type Your Institute Name...">';
       newRow += '</div>';
     newRow += '</div>';
@@ -979,7 +979,7 @@ $('body').on('click','.add-education-row',function(){
     newRow += '<div class="form-inner mb-30">';
       newRow += '<label for="gpa">Result/GPA**</label>';
       newRow += '<div class="input-area">';
-        newRow += '<img src="assets/images/icon/gpa-2.svg" alt="">';
+        newRow += '<img src="~/images/icon/gpa-2.svg" alt="">';
         newRow += '<input type="text" id="gpa" name="gpa" placeholder="4.75/5">';
       newRow += '</div>';
     newRow += '</div>';
@@ -988,7 +988,7 @@ $('body').on('click','.add-education-row',function(){
   newRow += '<div class="form-inner mb-25">';
     newRow += '<label for="datepicker10">Starting Period*</label>';
     newRow += '<div class="input-area">';
-      newRow += '<img src="assets/images/icon/calender2.svg" alt="">';
+      newRow += '<img src="~/images/icon/calender2.svg" alt="">';
       newRow += '<input type="text" id="datepicker10" name="stp" placeholder="DD/MM/YY">';
     newRow += '</div>';
   newRow += '</div>';
@@ -997,7 +997,7 @@ newRow += '<div class="col-md-6">';
   newRow += '<div class="form-inner mb-30">';
     newRow += '<label for="datepicker11">Ending Period*</label>';
     newRow += '<div class="input-area">';
-      newRow += '<img src="assets/images/icon/calender2.svg" alt="">';
+      newRow += '<img src="~/images/icon/calender2.svg" alt="">';
       newRow += '<input type="text" id="datepicker11" name="ep" placeholder="DD/MM/YY">';
     newRow += '</div>';
   newRow += '</div>';
@@ -1024,7 +1024,7 @@ $('body').on('click','.add-experiences-row',function(){
     newRow += '<div class="form-inner mb-25">';
       newRow += '<label for="companies">Company Name*</label>';
       newRow += '<div class="input-area">';
-        newRow += '<img src="assets/images/icon/company-2.svg " alt="">';
+        newRow += '<img src="~/images/icon/company-2.svg " alt="">';
         newRow += '<input type="text" id="companies" name="companies" placeholder="Egenslab">';
       newRow += '</div>';
     newRow += '</div>';
@@ -1033,7 +1033,7 @@ $('body').on('click','.add-experiences-row',function(){
     newRow += '<div class="form-inner mb-25">';
       newRow += '<label for="desigation">Designation*</label>';
       newRow += '<div class="input-area">';
-        newRow += '<img src="assets/images/icon/designation-2.svg" alt="">';
+        newRow += '<img src="~/images/icon/designation-2.svg" alt="">';
         newRow += '<select class="select1">';
           newRow += '<option value="0">Back-end developer</option>';
           newRow += '<option value="1">Front-end developer</option>';
@@ -1046,7 +1046,7 @@ $('body').on('click','.add-experiences-row',function(){
     newRow += '<div class="form-inner mb-25">';
       newRow += '<label for="datepicker6">Starting Period*</label>';
       newRow += '<div class="input-area">';
-        newRow += '<img src="assets/images/icon/calender2.svg" alt="">';
+        newRow += '<img src="~/images/icon/calender2.svg" alt="">';
         newRow += '<input type="text" id="datepicker6" name="stp" placeholder="DD/MM/YY">';
       newRow += '</div>';
     newRow += '</div>';
@@ -1055,7 +1055,7 @@ $('body').on('click','.add-experiences-row',function(){
     newRow += '<div class="form-inner mb-30">';
       newRow += '<label for="datepicker7">Ending Period*</label>';
       newRow += '<div class="input-area">';
-        newRow += '<img src="assets/images/icon/calender2.svg" alt="">';
+        newRow += '<img src="~/images/icon/calender2.svg" alt="">';
         newRow += '<input type="text" id="datepicker7" name="ep" placeholder="DD/MM/YY">';
       newRow += '</div>';
     newRow += '</div>';
@@ -1090,7 +1090,7 @@ $('body').on('click','.addwork-area-row',function(){
       newRow += '<div class="form-inner mb-25">';
         newRow += '<label for="working-field">Working Field*</label>';
         newRow += '<div class="input-area">';
-          newRow += '<img src="assets/images/icon/company-2.svg" alt="">';
+          newRow += '<img src="~/images/icon/company-2.svg" alt="">';
           newRow += '<input type="text" id="working-field" name="working-field" placeholder="Frontend Developer">';
         newRow += '</div>';
       newRow += '</div>';
@@ -1099,7 +1099,7 @@ $('body').on('click','.addwork-area-row',function(){
       newRow += '<div class="form-inner mb-25">';
         newRow += '<label for="icon">Add Icon*</label>';
         newRow += '<div class="input-area">';
-          newRow += '<img src="assets/images/icon/company-2.svg" alt="">';
+          newRow += '<img src="~/images/icon/company-2.svg" alt="">';
           newRow += '<input type="file">';
         newRow += '</div>';
       newRow += '</div>';

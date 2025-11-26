@@ -1,6 +1,3 @@
-C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\obj\Debug\net8.0\JobPortalProject.UserMvc.csproj.AssemblyReference.cache
-C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\obj\Debug\net8.0\rpswa.dswa.cache.json
-C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\obj\Debug\net8.0\JobPortalProject.UserMvc.csproj.GenerateResource.cache
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\bin\Debug\net8.0\appsettings.json
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\bin\Debug\net8.0\JobPortalProject.UserMvc.staticwebassets.runtime.json
@@ -138,9 +135,12 @@ C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\bin\Debug
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\bin\Debug\net8.0\JobPortalProject.DA.dll
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\bin\Debug\net8.0\JobPortalProject.BL.pdb
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\bin\Debug\net8.0\JobPortalProject.DA.pdb
+C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\obj\Debug\net8.0\JobPortalProject.UserMvc.csproj.AssemblyReference.cache
+C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\obj\Debug\net8.0\rpswa.dswa.cache.json
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\obj\Debug\net8.0\JobPortalProject.UserMvc.Resources.SharedResources.az.resources
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\obj\Debug\net8.0\JobPortalProject.UserMvc.Resources.SharedResources.de.resources
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\obj\Debug\net8.0\JobPortalProject.UserMvc.Resources.SharedResources.en-US.resources
+C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\obj\Debug\net8.0\JobPortalProject.UserMvc.csproj.GenerateResource.cache
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\obj\Debug\net8.0\JobPortalProject.UserMvc.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\obj\Debug\net8.0\JobPortalProject.UserMvc.AssemblyInfoInputs.cache
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\obj\Debug\net8.0\JobPortalProject.UserMvc.AssemblyInfo.cs
@@ -148,6 +148,7 @@ C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\obj\Debug
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\obj\Debug\net8.0\JobPortalProject.UserMvc.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\obj\Debug\net8.0\JobPortalProject.UserMvc.RazorAssemblyInfo.cache
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\obj\Debug\net8.0\JobPortalProject.UserMvc.RazorAssemblyInfo.cs
+C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\obj\Debug\net8.0\JobPortalProject.UserMvc.sourcelink.json
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\obj\Debug\net8.0\az\JobPortalProject.UserMvc.resources.dll
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\obj\Debug\net8.0\de\JobPortalProject.UserMvc.resources.dll
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\obj\Debug\net8.0\en-US\JobPortalProject.UserMvc.resources.dll
@@ -168,4 +169,3 @@ C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\obj\Debug
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\obj\Debug\net8.0\JobPortalProject.UserMvc.pdb
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\obj\Debug\net8.0\JobPortalProject.UserMvc.genruntimeconfig.cache
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\obj\Debug\net8.0\ref\JobPortalProject.UserMvc.dll
-C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\obj\Debug\net8.0\JobPortalProject.UserMvc.sourcelink.json

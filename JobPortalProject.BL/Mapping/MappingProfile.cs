@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
 using JobPortalProject.BL.ViewModels.AddressViewModels;
 using JobPortalProject.BL.ViewModels.CityViewModels;
+using JobPortalProject.BL.ViewModels.CompanySocialViewModels;
+using JobPortalProject.BL.ViewModels.CompanyTypeViewModels;
 using JobPortalProject.BL.ViewModels.CompanyViewModels;
 using JobPortalProject.BL.ViewModels.CountryViewModels;
 using JobPortalProject.BL.ViewModels.JobCategoryViewModels;
 using JobPortalProject.BL.ViewModels.LanguageViewModels;
+using JobPortalProject.BL.ViewModels.SocialMediaViewModels;
 using JobPortalProject.BL.ViewModels.WorkingFieldViewModels;
 using JobPortalProject.DA.DataContext.Entities;
 using System;
@@ -50,6 +53,9 @@ namespace JobPortalProject.BL.Mapping
                 .ForMember(x=>x.Name, opt => opt
                 .MapFrom(src=>src.CityTranslations!.FirstOrDefault()==null ? "" : 
                 src.CityTranslations!.FirstOrDefault()!.Name))
+                .ForMember(x=>x.CountryName, opt=>opt
+                .MapFrom(src=>src.Country==null ? "" :
+                src.Country.Translations.FirstOrDefault()!.Name))
                 .ReverseMap();
             CreateMap<City, CityCreateViewModel>().ReverseMap();
             CreateMap<City, CityUpdateViewModel>().ReverseMap();
@@ -81,6 +87,9 @@ namespace JobPortalProject.BL.Mapping
                 src.CompanyAddresses.FirstOrDefault(a => a.IsMain)!.Address))
                 .ForMember(x => x.CompanyAddresses, opt => opt.MapFrom(src => src.CompanyAddresses
                 .Select(a => a.Address != null ? a.Address : null).ToList()))
+                .ForMember(x=>x.CategoryName, opt => opt
+                .MapFrom(src=>src.CompanyType == null ? "" :
+                src.CompanyType.CompanyTypeTranslations.FirstOrDefault()!.Name))
                 .ReverseMap();
             CreateMap<Company, CompanyCreateViewModel>().ReverseMap();
             CreateMap<Company, CompanyUpdateViewModel>().ReverseMap();
@@ -104,6 +113,25 @@ namespace JobPortalProject.BL.Mapping
             CreateMap<WorkingField, WorkingFieldCreateViewModel>().ReverseMap();
             CreateMap<WorkingField, WorkingFieldUpdateViewModel>().ReverseMap();
 
+            CreateMap<SocialMedia, SocialMediaViewModel>().ReverseMap();
+            CreateMap<SocialMedia, SocialMediaCreateViewModel>().ReverseMap();
+            CreateMap<SocialMedia, SocialMediaUpdateViewModel>().ReverseMap();
+
+            CreateMap<CompanySocial, CompanySocialViewModel>().ReverseMap();
+            CreateMap<CompanySocial, CompanySocialCreateViewModel>().ReverseMap();
+            CreateMap<CompanySocial, CompanySocialUpdateViewModel>().ReverseMap();
+
+            CreateMap<CompanyType, CompanyTypeViewModel>()
+                .ForMember(x=>x.Name, opt => opt
+                .MapFrom(src=>src.CompanyTypeTranslations.FirstOrDefault()==null ? "" :
+                src.CompanyTypeTranslations!.FirstOrDefault()!.Name))
+                .ReverseMap();
+            CreateMap<CompanyType, CompanyTypeCreateViewModel>().ReverseMap();
+            CreateMap<CompanyType, CompanyTypeUpdateViewModel>().ReverseMap();
+
+            CreateMap<CompanyTypeTranslation, CompanyTypeTranslationViewModel>().ReverseMap();
+            CreateMap<CompanyTypeTranslation, CompanyTypeTranslationCreateViewModel>().ReverseMap();
+            CreateMap<CompanyTypeTranslation, CompanyTypeTranslationUpdateViewModel>().ReverseMap();
 
 
         }

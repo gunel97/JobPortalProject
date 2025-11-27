@@ -5,4 +5,5 @@ namespace JobPortalProject.DA.Repositories.Contracts
     public interface IAddressRepository : IRepositoryAsync<Address> { }
 
 
+
 }

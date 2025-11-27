@@ -8,6 +8,8 @@ namespace JobPortalProject.BL.ViewModels.CompanyTypeViewModels
 {
     public class CompanyTypeViewModel
     {
+        public int Id { get;set; }
+        public string? Name { get;set; }
     }
 
     public class CompanyTypeCreateViewModel { }

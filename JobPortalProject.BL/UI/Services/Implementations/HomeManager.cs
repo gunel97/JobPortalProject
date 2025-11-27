@@ -50,10 +50,8 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             var companies = await _companyService.GetAllAsync(
                                                include: c=>c
                                                .Include(ct=>ct.CompanyTranslations!
-                                               .Where(c=>c.LanguageId==language.Id))
-                                               .Include(ca=>ca.CompanyAddresses));
+                                               .Where(c=>c.LanguageId==language.Id)));
 
-           
 
             var homeViewModel = new HomeViewModel
             {

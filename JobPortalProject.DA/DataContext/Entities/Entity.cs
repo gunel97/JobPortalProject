@@ -236,7 +236,6 @@ namespace JobPortalProject.DA.DataContext.Entities
         public City? City { get; set; }
         public List<AddressTranslation> AddressTranslations { get; set; } = [];
         public List<CompanyAddress> CompanyAddresses { get; set; } = [];
-
     }
 
     public class AddressTranslation : TimeStample

@@ -57,9 +57,13 @@ namespace JobPortalProject.BL
             services.AddScoped<ICompanyTypeTranslationService, CompanyTypeTranslationManager>();
             services.AddScoped<IWorkingFieldTranslationService, WorkingFieldTranslationManager>();
             services.AddScoped<IWorkingFieldService, WorkingFieldManager>();
+            services.AddScoped<ISocialMediaService,  SocialMediaManager>();
+            services.AddScoped<ICompanySocialService,  CompanySocialManager>();
 
-            services.AddScoped<IHomeService, HomeManager>();
             services.AddScoped<ITopHeaderService, TopHeaderManager>();
+            services.AddScoped<IHomeService, HomeManager>();
+            services.AddScoped<ICompanyDetailsService, CompanyDetailsManager>();
+            services.AddScoped<ICompanyListingService, CompanyListingManager>();
 
             services.AddScoped<ICloudinaryService, CloudinaryManager>();
             services.AddScoped<ICookieService, CookieManager>();

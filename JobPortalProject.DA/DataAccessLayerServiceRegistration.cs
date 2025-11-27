@@ -40,6 +40,8 @@ namespace JobPortalProject.DA
             services.AddScoped<ICompanyTranslationRepository, CompanyTranslationRepository>();
             services.AddScoped<IWorkingFieldRepository, WorkingFieldRepository>();
             services.AddScoped<IWorkingFieldTranslationRepository, WorkingFieldTranslationRepository>();
+            services.AddScoped<ISocialMediaRepository, SocialMediaRepository>();
+            services.AddScoped<ICompanySocialRepository, CompanySocialRepository>();
 
             return services;
         }

@@ -10,9 +10,17 @@ namespace JobPortalProject.BL.ViewModels.CompanyViewModels
 {
     public class CompanyViewModel
     {
-        public string? Name { get; set; }
-        public string? LogoUrl {  get; set; }
+        public int Id { get; set; }
         public int CompanySize { get; set; }
+        public string? Name { get; set; }
+        public string DetailsUrl => $"{Name?.Replace(" ", "-").Replace("/", "-")}-{Id}";
+        public string? LogoUrl {  get; set; }
+        public string? CoverPhotoUrl { get; set; }
+        public string? CategoryName { get; set; }
+        public string? PrimaryPhone { get; set; }
+        public string? SecondaryPhone { get; set; }
+        public DateTime? MemberSince { get; set; }
+        public DateTime? LastPostedJob {  get; set; }
         public AddressViewModel? MainAddress { get; set; }
         public List<AddressViewModel> CompanyAddresses { get; set; } = [];
         public List<WorkingFieldViewModel> WorkingFields { get; set; } = [];

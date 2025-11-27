@@ -1,4 +1,13 @@
-﻿    <!-- ========== Inner Banner Start============= -->
+﻿@{
+    CompanyDetailsViewModel model = Model;
+    var company = model.Company;
+    var companyAddresses = model.CompanyAddresses;
+    var mainAddress = model.MainAddress;
+    var companySocials = model.CompanySocials;
+    var website = model.Website;
+}
+
+    <!-- ========== Inner Banner Start============= -->
     <div class="inner-banner">
         <div class="container">
             <div class="row">
@@ -24,31 +33,31 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="post-thumb">
-                        <img class="img-fluid" src="assets/images/bg/blog-dt-img.png" alt="">
+                        <img class="img-fluid" src="@company?.CoverPhotoUrl" alt="">
                         <div class="company-logo">
-                            <img src="assets/images/bg/blog-dt-logo.png" alt="">
+                            <img src="@company?.LogoUrl" alt="">
                         </div>
                     </div>
                     <div class="company-area">
                         <div class="company-info">
-                            <h4>Elite Hangstroman</h4>
+                            <h4>@company?.Name</h4>
                             <ul>
-                                <li><img src="assets/images/icon/map-2.svg" alt=""> Dhaka, Bangladesh</li>
-                                <li><img src="assets/images/icon/category-2.svg" alt=""><span class="title">Category: </span> Software Agency</li>
+                                <li><img src="~/images/icon/map-2.svg" alt=""> @mainAddress?.City?.Name, @mainAddress?.City?.Country?.Name</li>
+                                <li><img src="~/images/icon/category-2.svg" alt=""><span class="title">Category: </span> @company?.CategoryName</li>
                             </ul>
                         </div>
                         <div class="company-contact">
                             <div class="websitet-link">
-                                <p><img src="assets/images/icon/web-5.svg" alt="">Website Link:</p>
-                                <a href="#">www.example24.com</a>
+                                <p><img src="~/images/icon/web-5.svg" alt="">Website Link:</p>
+                                <a href="#">@website?.AddressUrl</a>
                             </div>
                             <div class="social-area">
-                                <p><img src="assets/images/icon/share-icon.svg" alt="">Follow Company:</p>
+                                <p><img src="~/images/icon/share-icon.svg" alt="">Follow Company:</p>
                                 <ul>
-                                    <li><a href="https://www.facebook.com/"><i class="bx bxl-facebook"></i></a></li>
-                                    <li><a href="https://twitter.com/"><i class="bx bxl-twitter"></i></a></li>
-                                    <li><a href="https://www.linkedin.com/"><i class="bx bxl-linkedin"></i></a></li>
-                                    <li><a href="https://www.instagram.com/"><i class="bx bxl-instagram"></i></a></li>
+                                @foreach (var social in companySocials ?? [])
+                                {
+                                    <li><a href="https://www.facebook.com/"><i class="bx bxl-@social.SocialMedia?.Title"></i></a></li>
+                                }                  
                                 </ul>
                             </div>
                         </div>
@@ -61,56 +70,23 @@
                                 <br><br>
                                 <h5>Working Area</h5>
     
-                                <div class="row pt-20">
+                                <div class="row pt-20" id="workingField">
+                                @foreach (var field in company?.WorkingFields ?? [])
+                                {
                                     <div class="col-sm-6 mb-50">
-                                       <div class="working-process">
-                                        <div class="icon">
-                                            <img src="assets/images/icon/creative-design.svg" alt="">
+                                        <div class="working-process">
+                                            <div class="icon">
+                                                <img src="@field.IconUrl" alt="">
+                                            </div>
+                                            <div class="work-content">
+                                                <div class="sl"></div>
+                                                <h6>@field.Name</h6>
+                                                <p>@field.Description</p>
+                                            </div>
                                         </div>
-                                        <div class="work-content">
-                                            <div class="sl">01</div>
-                                            <h6>Creative Design</h6>
-                                            <p>Creative design is a process that involves creating.</p>
-                                        </div>
-                                       </div>
                                     </div>
-                                    <div class="col-sm-6 mb-50">
-                                       <div class="working-process">
-                                        <div class="icon">
-                                            <img src="assets/images/icon/react-next.svg" alt="">
-                                        </div>
-                                        <div class="work-content">
-                                            <div class="sl">02</div>
-                                            <h6>React Next.JS</h6>
-                                            <p>Creative design is a process that involves creating.</p>
-                                        </div>
-                                       </div>
-                                    </div>
-                                    <div class="col-sm-6 mb-50">
-                                       <div class="working-process">
-                                        <div class="icon">
-                                            <img src="assets/images/icon/html-tem.svg" alt="">
-                                        </div>
-                                        <div class="work-content">
-                                            <div class="sl">03</div>
-                                            <h6>HTML Template</h6>
-                                            <p>Creative design is a process that involves creating.</p>
-                                        </div>
-                                       </div>
-                                    </div>
-                                    <div class="col-sm-6 mb-50">
-                                       <div class="working-process">
-                                        <div class="icon">
-                                            <img src="assets/images/icon/wordpress.svg" alt="">
-                                        </div>
-                                        <div class="work-content">
-                                            <div class="sl">04</div>
-                                            <h6>WordPress</h6>
-                                            <p>Creative design is a process that involves creating.</p>
-                                        </div>
-                                       </div>
-                                    </div>
-                                </div>
+                                }
+                            </div>
                             </div>
                         </div>
                         <div class="col-lg-4">
@@ -118,13 +94,18 @@
                                 <div class="company-overview-area mb-50">
                                     <h5>Company Overview:</h5>
                                     <ul>
-                                        <li><span>Company Name:</span> Elite Hangstroman.</li>
-                                        <li><span>Category:</span> Software Agency.</li>
-                                        <li><span>Location:</span> Dhaka, Bangladesh.</li>
-                                        <li><span>Member Since:</span> 03 April, 1982.</li>
-                                        <li><span>Company size:</span> 40 People.</li>
+                                        <li><span>Company Name:</span> @company?.Name</li>
+                                        <li><span>Category:</span> @company?.CategoryName</li>
+                                        <li><span>Primary phone:</span> @company?.PrimaryPhone</li>
+                                        @if(company?.SecondaryPhone!=null)
+                                        {
+                                        <li><span>Secondary phone:</span> @company?.SecondaryPhone</li>
+                                        }
+                                        <li><span>Location:</span> @company?.MainAddress?.City?.Name, @Model.MainAddress?.City?.Country?.Name</li>
+                                        <li><span>Member Since:</span> @company?.MemberSince.Value</li>
+                                        <li><span>Company size:</span> @company?.CompanySize People.</li>
                                         <li><span>Completed Job:</span> 08.</li>
-                                        <li><span>Last Job Posted:</span> 06 January, 2023.</li>
+                                        <li><span>Last Job Posted:</span> @company?.LastPostedJob</li>
                                     </ul>
                                 </div>
                                 <a class="primry-btn-2 lg-btn" href="job-listing1.html">Job Available   23</a>
@@ -355,4 +336,4 @@
             </div>
         </div>
     </div>
-    <!-- ========== Job Details e nd============= -->
+    <!-- ========== Job Details end============= -->

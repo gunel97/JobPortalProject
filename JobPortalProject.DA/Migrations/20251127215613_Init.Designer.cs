@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobPortalProject.DA.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251126210713_AddWorkingFields")]
-    partial class AddWorkingFields
+    [Migration("20251127215613_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,10 +36,16 @@ namespace JobPortalProject.DA.Migrations
                     b.Property<int>("CityId")
                         .HasColumnType("int");
 
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsMainAddress")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -48,6 +54,8 @@ namespace JobPortalProject.DA.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CityId");
+
+                    b.HasIndex("CompanyId");
 
                     b.ToTable("Addresses");
                 });
@@ -326,41 +334,6 @@ namespace JobPortalProject.DA.Migrations
                     b.HasIndex("CompanyTypeId");
 
                     b.ToTable("Companies");
-                });
-
-            modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.CompanyAddress", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AddressId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsMain")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AddressId");
-
-                    b.HasIndex("CompanyId");
-
-                    b.ToTable("CompanyAddresses");
                 });
 
             modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.CompanyImage", b =>
@@ -1095,7 +1068,15 @@ namespace JobPortalProject.DA.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("JobPortalProject.DA.DataContext.Entities.Company", "Company")
+                        .WithMany("Addresses")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("City");
+
+                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.AddressTranslation", b =>
@@ -1156,25 +1137,6 @@ namespace JobPortalProject.DA.Migrations
                         .IsRequired();
 
                     b.Navigation("CompanyType");
-                });
-
-            modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.CompanyAddress", b =>
-                {
-                    b.HasOne("JobPortalProject.DA.DataContext.Entities.Address", "Address")
-                        .WithMany("CompanyAddresses")
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("JobPortalProject.DA.DataContext.Entities.Company", "Company")
-                        .WithMany("CompanyAddresses")
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Address");
-
-                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.CompanyImage", b =>
@@ -1341,7 +1303,7 @@ namespace JobPortalProject.DA.Migrations
                         .IsRequired();
 
                     b.HasOne("JobPortalProject.DA.DataContext.Entities.WorkingField", "WorkingField")
-                        .WithMany()
+                        .WithMany("Translations")
                         .HasForeignKey("WorkingFieldId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1405,8 +1367,6 @@ namespace JobPortalProject.DA.Migrations
             modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.Address", b =>
                 {
                     b.Navigation("AddressTranslations");
-
-                    b.Navigation("CompanyAddresses");
                 });
 
             modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.City", b =>
@@ -1418,7 +1378,7 @@ namespace JobPortalProject.DA.Migrations
 
             modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.Company", b =>
                 {
-                    b.Navigation("CompanyAddresses");
+                    b.Navigation("Addresses");
 
                     b.Navigation("CompanyImages");
 
@@ -1455,6 +1415,11 @@ namespace JobPortalProject.DA.Migrations
                     b.Navigation("JobCategoryTranslations");
 
                     b.Navigation("Jobs");
+                });
+
+            modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.WorkingField", b =>
+                {
+                    b.Navigation("Translations");
                 });
 #pragma warning restore 612, 618
         }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace JobPortalProject.DA.Migrations
 {
     /// <inheritdoc />
-    public partial class InitCompanyJobAddressLanguage : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -50,6 +50,24 @@ namespace JobPortalProject.DA.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Bios",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LogoPublicId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LogoUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bios", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -116,6 +134,25 @@ namespace JobPortalProject.DA.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Languages", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MainSocials",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IconPublicId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IconUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MainSocials", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -255,6 +292,9 @@ namespace JobPortalProject.DA.Migrations
                     PrimaryPhone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SecondaryPhone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CompanySize = table.Column<int>(type: "int", nullable: false),
+                    MemberSince = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastPostedJob = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CompanyTypeId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -277,6 +317,8 @@ namespace JobPortalProject.DA.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CoverPhotoPublicId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CoverPhotoUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CountryId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -289,6 +331,36 @@ namespace JobPortalProject.DA.Migrations
                         name: "FK_Cities_Countries_CountryId",
                         column: x => x.CountryId,
                         principalTable: "Countries",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CompanyTypeTranslations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CompanyTypeId = table.Column<int>(type: "int", nullable: false),
+                    LanguageId = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CompanyTypeTranslations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CompanyTypeTranslations_CompanyTypes_CompanyTypeId",
+                        column: x => x.CompanyTypeId,
+                        principalTable: "CompanyTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CompanyTypeTranslations_Languages_LanguageId",
+                        column: x => x.LanguageId,
+                        principalTable: "Languages",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -439,36 +511,6 @@ namespace JobPortalProject.DA.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CompanyTypeTranslations",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CompanyId = table.Column<int>(type: "int", nullable: false),
-                    LanguageId = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CompanyTypeTranslations", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CompanyTypeTranslations_Companies_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "Companies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CompanyTypeTranslations_Languages_LanguageId",
-                        column: x => x.LanguageId,
-                        principalTable: "Languages",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Jobs",
                 columns: table => new
                 {
@@ -507,12 +549,38 @@ namespace JobPortalProject.DA.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "WorkingFields",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
+                    IconPublicId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IconUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WorkingFields", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WorkingFields_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Addresses",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    IsMainAddress = table.Column<bool>(type: "bit", nullable: false),
                     CityId = table.Column<int>(type: "int", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
@@ -524,6 +592,12 @@ namespace JobPortalProject.DA.Migrations
                         name: "FK_Addresses_Cities_CityId",
                         column: x => x.CityId,
                         principalTable: "Cities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Addresses_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -593,6 +667,37 @@ namespace JobPortalProject.DA.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "WorkingFieldTranslations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    WorkingFieldId = table.Column<int>(type: "int", nullable: false),
+                    LanguageId = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WorkingFieldTranslations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WorkingFieldTranslations_Languages_LanguageId",
+                        column: x => x.LanguageId,
+                        principalTable: "Languages",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_WorkingFieldTranslations_WorkingFields_WorkingFieldId",
+                        column: x => x.WorkingFieldId,
+                        principalTable: "WorkingFields",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AddressTranslation",
                 columns: table => new
                 {
@@ -622,39 +727,15 @@ namespace JobPortalProject.DA.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "CompanyAddresses",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CompanyId = table.Column<int>(type: "int", nullable: false),
-                    AddressId = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CompanyAddresses", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CompanyAddresses_Addresses_AddressId",
-                        column: x => x.AddressId,
-                        principalTable: "Addresses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CompanyAddresses_Companies_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "Companies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Addresses_CityId",
                 table: "Addresses",
                 column: "CityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Addresses_CompanyId",
+                table: "Addresses",
+                column: "CompanyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AddressTranslation_AddressId",
@@ -726,16 +807,6 @@ namespace JobPortalProject.DA.Migrations
                 column: "CompanyTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CompanyAddresses_AddressId",
-                table: "CompanyAddresses",
-                column: "AddressId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CompanyAddresses_CompanyId",
-                table: "CompanyAddresses",
-                column: "CompanyId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_CompanyImages_CompanyId",
                 table: "CompanyImages",
                 column: "CompanyId");
@@ -761,9 +832,9 @@ namespace JobPortalProject.DA.Migrations
                 column: "LanguageId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CompanyTypeTranslations_CompanyId",
+                name: "IX_CompanyTypeTranslations_CompanyTypeId",
                 table: "CompanyTypeTranslations",
-                column: "CompanyId");
+                column: "CompanyTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CompanyTypeTranslations_LanguageId",
@@ -809,6 +880,21 @@ namespace JobPortalProject.DA.Migrations
                 name: "IX_JobTranslations_LanguageId",
                 table: "JobTranslations",
                 column: "LanguageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkingFields_CompanyId",
+                table: "WorkingFields",
+                column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkingFieldTranslations_LanguageId",
+                table: "WorkingFieldTranslations",
+                column: "LanguageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkingFieldTranslations_WorkingFieldId",
+                table: "WorkingFieldTranslations",
+                column: "WorkingFieldId");
         }
 
         /// <inheritdoc />
@@ -833,10 +919,10 @@ namespace JobPortalProject.DA.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "CityTranslations");
+                name: "Bios");
 
             migrationBuilder.DropTable(
-                name: "CompanyAddresses");
+                name: "CityTranslations");
 
             migrationBuilder.DropTable(
                 name: "CompanyImages");
@@ -860,13 +946,19 @@ namespace JobPortalProject.DA.Migrations
                 name: "JobTranslations");
 
             migrationBuilder.DropTable(
+                name: "MainSocials");
+
+            migrationBuilder.DropTable(
+                name: "WorkingFieldTranslations");
+
+            migrationBuilder.DropTable(
+                name: "Addresses");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "Addresses");
 
             migrationBuilder.DropTable(
                 name: "SocialMedias");
@@ -878,13 +970,16 @@ namespace JobPortalProject.DA.Migrations
                 name: "Languages");
 
             migrationBuilder.DropTable(
+                name: "WorkingFields");
+
+            migrationBuilder.DropTable(
                 name: "Cities");
 
             migrationBuilder.DropTable(
-                name: "Companies");
+                name: "JobCategories");
 
             migrationBuilder.DropTable(
-                name: "JobCategories");
+                name: "Companies");
 
             migrationBuilder.DropTable(
                 name: "Countries");

@@ -100,7 +100,8 @@ namespace JobPortalProject.DA.DataContext.Entities
         public List<CompanyImage> CompanyImages { get; set; } = [];
         public List<CompanySocial> CompanySocials { get; set; } = [];
         public List<CompanyTranslation> CompanyTranslations { get; set; } = [];
-        public List<CompanyAddress> CompanyAddresses { get; set; } = [];
+        public List<Address> Addresses { get; set; } = [];
+        //public List<CompanyAddress> CompanyAddresses { get; set; } = [];
         public List<WorkingField> WorkingFields { get; set; } = [];
         public int CompanyTypeId { get; set; }
         public CompanyType? CompanyType { get; set; }
@@ -232,10 +233,13 @@ namespace JobPortalProject.DA.DataContext.Entities
 
     public class Address : TimeStample
     {
+        public bool IsMainAddress { get; set; }
         public int CityId { get; set; }
         public City? City { get; set; }
+        public int CompanyId { get; set; }
+        public Company? Company { get; set; }
         public List<AddressTranslation> AddressTranslations { get; set; } = [];
-        public List<CompanyAddress> CompanyAddresses { get; set; } = [];
+        //public List<CompanyAddress> CompanyAddresses { get; set; } = [];
     }
 
     public class AddressTranslation : TimeStample
@@ -247,14 +251,14 @@ namespace JobPortalProject.DA.DataContext.Entities
         public Language? Language { get; set; }
     }
 
-    public class CompanyAddress : TimeStample
-    {
-        public bool IsMain { get; set; }
-        public int CompanyId { get; set; }
-        public Company? Company { get; set; }
-        public int AddressId { get; set; }
-        public Address? Address { get; set; }
-    }
+    //public class CompanyAddress : TimeStample
+    //{
+    //    public bool IsMain { get; set; }
+    //    public int CompanyId { get; set; }
+    //    public Company? Company { get; set; }
+    //    public int AddressId { get; set; }
+    //    public Address? Address { get; set; }
+    //}
 
 }
 

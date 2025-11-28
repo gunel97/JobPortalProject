@@ -144,7 +144,7 @@
                 </div>
             </div>
             }
-     
+       
             <div class="col">
                 <div class="category-btn-area">
                     <h5>Category List</h5>
@@ -490,7 +490,7 @@
         <div class="row">
             <div class="swiper location-slider">
                 <div class="swiper-wrapper">
-                    @foreach (var address in addresses ?? [])
+                     @foreach (var address in addresses ?? [])
                     {
                         <div class="swiper-slide">
                             <div class="location-card">
@@ -499,7 +499,6 @@
                                 </div>
                                 <div class="location-content text-center">
                                     <h5><a href="job-listing1.html"><img src="~/images/icon/location.svg" alt="">@address.City!.Name, @address.City.Country!.Name</a></h5>
-                                 @*    <h5><a href="job-listing1.html"><img src="~/images/icon/location.svg" alt="">@city.Name, @city.Country!.Name</a></h5> *@
                                     <p>Job Available: <span>2934</span></p>
                                 </div>
                             </div>
@@ -652,7 +651,7 @@
         <div class="row">
             <div class="slick-wrapper">
                 <div id="slick1">
-                    @foreach (var item in companies ?? [])
+                     @foreach (var item in companies ?? [])
                     {
                         <div class="slide-item">
                             <div class="recruters-card">
@@ -677,7 +676,7 @@
                             </div>
                         </div>
                     }
-            </div>
+           </div>
         </div>
     </div>
 </div>

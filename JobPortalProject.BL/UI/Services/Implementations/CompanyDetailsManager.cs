@@ -29,30 +29,24 @@ namespace JobPortalProject.BL.UI.Services.Implementations
         {
             var language = await _cookieService.GetLanguageAsync();
 
-            var companyAddresses = await _addressService.GetAllAsync(
-                                          predicate: x => !x.IsDeleted && x.CompanyAddresses.Any(c=>c.CompanyId==id),
-                                          include: x => x
-                                          .Include(ca => ca.CompanyAddresses)
-                                          .Include(at => at.AddressTranslations!.Where(at => at.LanguageId == language.Id))
-                                          .Include(a => a.City!).ThenInclude(c => c.CityTranslations!.Where(a => a.LanguageId == language.Id))
-                                          .Include(a => a.City!).ThenInclude(c => c.Country!).ThenInclude(ct => ct.Translations!
-                                          .Where(a => a.LanguageId == language.Id)));
+            var addresses = await _addressService.GetAllAsync(
+                                           predicate: x => !x.IsDeleted && x.CompanyId==id,
+                                           include: x => x
+                                           .Include(at => at.AddressTranslations!.Where(at => at.LanguageId == language.Id))
+                                           .Include(a => a.City!).ThenInclude(c => c.CityTranslations!.Where(a => a.LanguageId == language.Id))
+                                           .Include(a => a.City!).ThenInclude(c => c.Country!).ThenInclude(ct => ct.Translations!
+                                           .Where(a => a.LanguageId == language.Id))
+                                           );
+
 
             var company = await _companyService.GetAsync(
                                             predicate: x => !x.IsDeleted && x.Id == id,
                                             include: x => x
                                             .Include(ct => ct.CompanyTranslations!.Where(x => x.LanguageId == language.Id))
-                                            .Include(t=>t.CompanyType).ThenInclude(ct=>ct.CompanyTypeTranslations!.Where(x=>x.LanguageId==language.Id))
+                                            .Include(x=>x.Addresses).ThenInclude(x=>x.AddressTranslations.Where(x=>x.LanguageId==language.Id))
+                                        
+                                            .Include(t => t.CompanyType).ThenInclude(ct => ct.CompanyTypeTranslations!.Where(x => x.LanguageId == language.Id))
                                             .Include(w => w.WorkingFields).ThenInclude(wt => wt.Translations.Where(x => x.LanguageId == language.Id)));
-
-            var mainAddress = await _addressService.GetAsync(
-                                          predicate: x => !x.IsDeleted && x.CompanyAddresses.Any(c => c.CompanyId == id && c.IsMain)                                          ,
-                                          include: x => x
-                                          .Include(ca => ca.CompanyAddresses)
-                                          .Include(at => at.AddressTranslations!.Where(at => at.LanguageId == language.Id))
-                                          .Include(a => a.City!).ThenInclude(c => c.CityTranslations!.Where(a => a.LanguageId == language.Id))
-                                          .Include(a => a.City!).ThenInclude(c => c.Country!).ThenInclude(ct => ct.Translations!
-                                          .Where(a => a.LanguageId == language.Id)));
 
             var companySocials = await _companySocialService.GetAllAsync(
                                             predicate: x => !x.IsDeleted && x.CompanyId == id,
@@ -64,14 +58,12 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             var companyDetailsViewModel = new CompanyDetailsViewModel
             {
                 Company = company,
-                CompanyAddresses = companyAddresses.ToList(),
-                MainAddress = mainAddress,
                 CompanySocials = companySocials.ToList(),
                 Website = website
             };
 
             return companyDetailsViewModel;
-                
+
         }
     }
 }

@@ -53,9 +53,6 @@ namespace JobPortalProject.BL.Mapping
                 .ForMember(x=>x.Name, opt => opt
                 .MapFrom(src=>src.CityTranslations!.FirstOrDefault()==null ? "" : 
                 src.CityTranslations!.FirstOrDefault()!.Name))
-                .ForMember(x=>x.CountryName, opt=>opt
-                .MapFrom(src=>src.Country==null ? "" :
-                src.Country.Translations.FirstOrDefault()!.Name))
                 .ReverseMap();
             CreateMap<City, CityCreateViewModel>().ReverseMap();
             CreateMap<City, CityUpdateViewModel>().ReverseMap();
@@ -65,11 +62,15 @@ namespace JobPortalProject.BL.Mapping
             CreateMap<CityTranslation, CityTranslationUpdateViewModel>().ReverseMap();
 
             CreateMap<Address, AddressViewModel>()
-                .ForMember(x=>x.Street, opt=>opt
-                .MapFrom(src=>src.AddressTranslations!.FirstOrDefault()==null ? "" :
+                .ForMember(x => x.Street, opt => opt
+                .MapFrom(src => src.AddressTranslations!.FirstOrDefault() == null ? "" :
                 src.AddressTranslations!.FirstOrDefault()!.Street))
-                .ForMember(x=>x.CompanyIds, opt=>opt
-                .MapFrom(src=>src.CompanyAddresses.Select(at=>at.CompanyId).ToList()))
+                .ForMember(x=>x.CityName, opt=>opt
+                .MapFrom(src=>src.City == null ? "" :
+                src.City.CityTranslations!.FirstOrDefault()!.Name))
+                .ForMember(x=>x.CountryName, opt=>opt
+                .MapFrom(src=>src.City!.Country == null ? "" : 
+                src.City.Country.Translations.FirstOrDefault()!.Name))
                 .ReverseMap();
             CreateMap<Address, AddressCreateViewModel>().ReverseMap();
             CreateMap<Address, AddressUpdateViewModel>().ReverseMap();
@@ -82,13 +83,10 @@ namespace JobPortalProject.BL.Mapping
                 .ForMember(x => x.Name, opt => opt
                 .MapFrom(src => src.CompanyTranslations!.FirstOrDefault() == null ? "" :
                 src.CompanyTranslations!.FirstOrDefault()!.Name))
-                .ForMember(src => src.MainAddress, opt => opt
-                .MapFrom(src => src.CompanyAddresses == null ? null :
-                src.CompanyAddresses.FirstOrDefault(a => a.IsMain)!.Address))
-                .ForMember(x => x.CompanyAddresses, opt => opt.MapFrom(src => src.CompanyAddresses
-                .Select(a => a.Address != null ? a.Address : null).ToList()))
-                .ForMember(x=>x.CategoryName, opt => opt
-                .MapFrom(src=>src.CompanyType == null ? "" :
+                .ForMember(x=>x.MainAddress, opt=>opt
+                .MapFrom(src=>src.Addresses.FirstOrDefault(x=>x.IsMainAddress)))
+                .ForMember(x => x.CategoryName, opt => opt
+                .MapFrom(src => src.CompanyType == null ? "" :
                 src.CompanyType.CompanyTypeTranslations.FirstOrDefault()!.Name))
                 .ReverseMap();
             CreateMap<Company, CompanyCreateViewModel>().ReverseMap();

@@ -3,6 +3,7 @@ using JobPortalProject.BL.Services.Contracts;
 using JobPortalProject.BL.ViewModels.AddressViewModels;
 using JobPortalProject.DA.DataContext.Entities;
 using JobPortalProject.DA.Repositories.Contracts;
+using Microsoft.EntityFrameworkCore;
 
 namespace JobPortalProject.BL.Services.Implementations
 {

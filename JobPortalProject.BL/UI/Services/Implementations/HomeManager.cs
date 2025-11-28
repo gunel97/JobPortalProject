@@ -38,28 +38,27 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             var addresses = await _addressService.GetAllAsync(
                                             //predicate: x => !x.IsDeleted && x.CompanyAddresses.Any(),
                                             include: x => x
-                                            .Include(ca=>ca.CompanyAddresses)
-                                            .Include(at=>at.AddressTranslations!.Where(at=>at.LanguageId==language.Id))
-                                            .Include(a => a.City!).ThenInclude(c => c.CityTranslations!.Where(a=>a.LanguageId==language.Id))
+                                            .Include(at => at.AddressTranslations!.Where(at => at.LanguageId == language.Id))
+                                            .Include(a => a.City!).ThenInclude(c => c.CityTranslations!.Where(a => a.LanguageId == language.Id))
                                             .Include(a => a.City!).ThenInclude(c => c.Country!).ThenInclude(ct => ct.Translations!
                                             .Where(a => a.LanguageId == language.Id)));
 
-            var addressesByCities = addresses.DistinctBy(a => a.City!.Name);
+            var addressesByCities = addresses.DistinctBy(a => a.City!.Name!);
 
 
             var companies = await _companyService.GetAllAsync(
-                                               include: c=>c
-                                               .Include(ct=>ct.CompanyTranslations!
-                                               .Where(c=>c.LanguageId==language.Id)));
+                                               include: c => c
+                                               .Include(ct => ct.CompanyTranslations!
+                                               .Where(c => c.LanguageId == language.Id)));
 
 
             var homeViewModel = new HomeViewModel
             {
                 JobCategories = jobCategories.ToList(),
-                Addresses=addressesByCities.ToList(),
-                Companies=companies.ToList(),
+                Addresses = addressesByCities.ToList(),
+                Companies = companies.ToList(),
             };
-                
+
             return homeViewModel;
         }
 

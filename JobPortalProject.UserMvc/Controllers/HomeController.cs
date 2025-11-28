@@ -19,6 +19,7 @@ namespace JobPortalProject.UserMvc.Controllers
             var homeViewModel = await _homeService.GetHomeViewModelAsync();
 
             return View(homeViewModel);
+
         }
 
        

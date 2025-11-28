@@ -27,33 +27,35 @@ namespace JobPortalProject.BL.UI.Services.Implementations
         {
             var language = await _cookieService.GetLanguageAsync();
 
-            var cities = await _cityService.GetAllAsync(
-                                        predicate: x => !x.IsDeleted,
-                                        include: c => c
-                                        .Include(ct => ct.CityTranslations!
-                                        .Where(c => c.LanguageId == language.Id))
-                                        .Include(c => c.Country!)
-                                        .ThenInclude(ct => ct.Translations!.Where(x => x.LanguageId == language.Id)));
+            var addresses = await _addressService.GetAllAsync(
+                                      predicate: x => !x.IsDeleted && x.CompanyId !=0,
+                                      include: x => x
+                                      .Include(at => at.AddressTranslations!.Where(at => at.LanguageId == language.Id))
+                                      .Include(a => a.City!).ThenInclude(c => c.CityTranslations!.Where(a => a.LanguageId == language.Id))
+                                      .Include(a => a.City!).ThenInclude(c => c.Country!).ThenInclude(ct => ct.Translations!
+                                      .Where(a => a.LanguageId == language.Id))
+                                      );
+
+            var addressesByCities = addresses.DistinctBy(x => x.CityName).ToList();
 
             var companies = await _companyService.GetAllAsync(
                                         predicate: x => !x.IsDeleted,
                                         include: c => c
                                         .Include(ct => ct.CompanyTranslations!
                                         .Where(c => c.LanguageId == language.Id))
-                                        .Include(c=>c.CompanyAddresses!.Where(x=>x.IsMain))
-                                        .ThenInclude(x=>x.Address!)
-                                        .ThenInclude(x=>x.AddressTranslations!.Where(x=>x.LanguageId==language.Id)!));
+                                        .Include(c => c.Addresses!.Where(x => x.IsMainAddress))
+                                        .ThenInclude(x => x.AddressTranslations!.Where(x => x.LanguageId == language.Id)!));
 
-            var companyTypes =await _companyTypeService.GetAllAsync(
+            var companyTypes = await _companyTypeService.GetAllAsync(
                                         predicate: x => !x.IsDeleted,
-                                        include:x=>x
-                                        .Include(c=>c.CompanyTypeTranslations.Where(ct=>ct.LanguageId== language.Id)));
+                                        include: x => x
+                                        .Include(c => c.CompanyTypeTranslations.Where(ct => ct.LanguageId == language.Id)));
 
             var companyListingViewModel = new CompanyListingViewModel
             {
-                Cities = cities.ToList(),
-                Companies=companies.ToList(),
-                CompanyTypes=companyTypes.ToList()
+                Companies = companies.ToList(),
+                CompanyTypes = companyTypes.ToList(),
+                Addresses = addressesByCities
             };
 
             return companyListingViewModel;

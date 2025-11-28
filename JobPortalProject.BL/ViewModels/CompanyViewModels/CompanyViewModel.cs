@@ -22,19 +22,15 @@ namespace JobPortalProject.BL.ViewModels.CompanyViewModels
         public DateTime? MemberSince { get; set; }
         public DateTime? LastPostedJob {  get; set; }
         public AddressViewModel? MainAddress { get; set; }
-        public List<AddressViewModel> CompanyAddresses { get; set; } = [];
+        public List<AddressViewModel> Addresses { get; set; } = [];
         public List<WorkingFieldViewModel> WorkingFields { get; set; } = [];
-
-        
     }
 
     public class CompanyCreateViewModel { }
 
     public class CompanyUpdateViewModel { }
 
-    public class CompanyTranslationViewModel
-    {
-    }
+    public class CompanyTranslationViewModel { }
 
     public class CompanyTranslationCreateViewModel { }
 

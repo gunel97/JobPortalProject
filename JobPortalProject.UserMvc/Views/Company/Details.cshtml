@@ -1,8 +1,6 @@
 ﻿@{
     CompanyDetailsViewModel model = Model;
     var company = model.Company;
-    var companyAddresses = model.CompanyAddresses;
-    var mainAddress = model.MainAddress;
     var companySocials = model.CompanySocials;
     var website = model.Website;
 }
@@ -42,7 +40,7 @@
                         <div class="company-info">
                             <h4>@company?.Name</h4>
                             <ul>
-                                <li><img src="~/images/icon/map-2.svg" alt=""> @mainAddress?.City?.Name, @mainAddress?.City?.Country?.Name</li>
+                                <li><img src="~/images/icon/map-2.svg" alt=""> @company?.MainAddress?.CityName, @company?.MainAddress?.CountryName</li>
                                 <li><img src="~/images/icon/category-2.svg" alt=""><span class="title">Category: </span> @company?.CategoryName</li>
                             </ul>
                         </div>
@@ -68,7 +66,7 @@
                                 <h5>About Company</h5>
                                 <p>A software company is a business that develops and sells computer software. Some software companies specialize in a particular type of software, such as operating systems, productivity tools, or games, while others develop a range of software products. Many software companies also offer services such as custom software development, consulting, and technical support to their customers. The size and scope of software companies can vary greatly, from small startups to large multinational corporations.</p>
                                 <br><br>
-                                <h5>Working Area</h5>
+                                <h5>Working Areas</h5>
     
                                 <div class="row pt-20" id="workingField">
                                 @foreach (var field in company?.WorkingFields ?? [])
@@ -99,13 +97,24 @@
                                         <li><span>Primary phone:</span> @company?.PrimaryPhone</li>
                                         @if(company?.SecondaryPhone!=null)
                                         {
-                                        <li><span>Secondary phone:</span> @company?.SecondaryPhone</li>
+                                            <li><span>Secondary phone:</span> @company?.SecondaryPhone</li>
                                         }
-                                        <li><span>Location:</span> @company?.MainAddress?.City?.Name, @Model.MainAddress?.City?.Country?.Name</li>
-                                        <li><span>Member Since:</span> @company?.MemberSince.Value</li>
+@*                                         <li><span>Main Location:</span> @company?.MainAddress?.CityName, @company?.MainAddress?.CountryName</li> *@
+                                    <li><span>Locations:</span></li>
+                                        @foreach(var address in company?.Addresses ?? [])
+                                    {
+                                        if(address.IsMainAddress)
+                                        {
+                                        <li><span></span> @address.Street, @address?.CityName, @address?.CountryName - (Main Location)</li>
+                                        }
+                                        if(!address.IsMainAddress){
+                                        <li><span></span> @address.Street, @address?.CityName, @address?.CountryName</li>
+                                        }
+                                    }
+                                    <li><span>Member Since:</span> @company?.MemberSince!.Value.Date.ToShortDateString()</li>
                                         <li><span>Company size:</span> @company?.CompanySize People.</li>
                                         <li><span>Completed Job:</span> 08.</li>
-                                        <li><span>Last Job Posted:</span> @company?.LastPostedJob</li>
+                                        <li><span>Last Job Posted:</span> @company?.LastPostedJob!.Value.Date.ToShortDateString()</li>
                                     </ul>
                                 </div>
                                 <a class="primry-btn-2 lg-btn" href="job-listing1.html">Job Available   23</a>

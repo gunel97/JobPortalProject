@@ -2,7 +2,7 @@
     CompanyListingViewModel model = Model;
     var companyTypes = model.CompanyTypes;
     var companies = model.Companies;
-    var cities = model.Cities;
+    var addresses = model.Addresses;
 }
 <!-- ========== Inner Banner Start============= -->
 <div class="inner-banner">
@@ -41,7 +41,7 @@
                                             <label class="containerss">
                                                 <input type="checkbox">
                                                 <span class="checkmark"></span>
-                                                <span class="text">@type.Name</span>
+                                                <span class="text">@type?.Name</span>
                                                 <span class="qty">(80)</span>
                                             </label>
                                         </li>
@@ -56,17 +56,17 @@
                             <h5 class="job-widget-title">Country/ Location</h5>
                             <div class="checkbox-container">
                                 <ul>
-                                    @foreach (var city in cities)
+                                     @foreach (var address in addresses ?? [])
                                     {
                                         <li>
                                             <label class="containerss">
                                                 <input type="checkbox">
                                                 <span class="checkmark"></span>
-                                                <span class="text">@city.Name, @city.CountryName</span>
+                                                <span class="text">@address?.CityName, @address?.CountryName</span>
                                                 <span class="qty">(30)</span>
                                             </label>
                                         </li>
-                                    }
+                                    } 
                                 </ul>
 
                             </div>
@@ -210,19 +210,19 @@
                         </div>
                     </div>
                     <div class="row g-4 mb-70">
-                        @foreach (var company in companies)
+                        @foreach (var company in companies ?? [])
                         {
                             <div class="col-md-6">
                                 <div class="company-list-card1">
                                     <div class="company-area">
                                         <div class="logo">
-                                            <img src="@company.LogoUrl" alt="">
+                                            <img src="@company?.LogoUrl" alt="">
                                         </div>
                                         <div class="company-content">
                                             <div class="company-details">
                                                 <div class="name-location">
-                                                    <h5><a href="company-details.html">@company.Name</a></h5>
-                                                    <p><img src="~/images/icon/location.svg" alt=""> @company.MainAddress?.City?.Name, @company.MainAddress?.City?.CountryName</p>
+                                                    <h5><a href="company-details.html">@company?.Name</a></h5>
+                                                    <p><img src="~/images/icon/location.svg" alt=""> @company?.MainAddress?.City?.Name, @company?.MainAddress?.City?.Country?.Name</p>
                                                 </div>
                                                 <div class="bookmark">
                                                     <i class="bi bi-bookmark-fill"></i>

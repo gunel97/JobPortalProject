@@ -1,6 +1,7 @@
 ﻿using JobPortalProject.DA.DataContext.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,11 +32,16 @@ namespace JobPortalProject.DA.DataContext
         public DbSet<CountryTranslation> CountriesTranslation { get; set; }= null!;
         public DbSet<City> Cities { get; set; } = null!;
         public DbSet<CityTranslation> CityTranslations { get; set; } = null!;
-        //public DbSet<CompanyAddress> CompanyAddresses { get; set; } = null!;
         public DbSet<Bio> Bios { get; set; } = null!;
         public DbSet<MainSocial> MainSocials {get; set;}=null!;
         public DbSet<WorkingField> WorkingFields { get; set; }=null!;
         public DbSet<WorkingFieldTranslation> WorkingFieldTranslations { get; set; } = null!;
+        public DbSet<JobExtraBenefit> JobExtraBenefits { get; set; }=null!;
+        public DbSet<JobExtraBenefitTranslation> JobExtraBenefitTranslations { get; set; }=null!;
+        public DbSet<JobResponsibility> JobResponsibilities { get; set; }=null!;
+        public DbSet<JobResponsibilityTranslation> JobResponsibilityTranslations { get; set; }=null!;
+        public DbSet<JobMainDuty> JobMainDuties { get; set; }=null!;
+        public DbSet<JobMainDutyTranslation> JobMainDutyTranslations { get; set; }=null!;
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -48,6 +54,25 @@ namespace JobPortalProject.DA.DataContext
                 .Property(p => p.MaxSalary)
                 .HasPrecision(18, 2);
 
+            modelBuilder.Entity<Company>()
+        .HasMany(c => c.Addresses)
+        .WithOne(a => a.Company)
+        .HasForeignKey(a => a.CompanyId)
+        .OnDelete(DeleteBehavior.Cascade); // burda qala bilər
+
+            // City – Address (1–çox)
+            modelBuilder.Entity<City>()
+                .HasMany(c => c.Addresses)
+                .WithOne(a => a.City)
+                .HasForeignKey(a => a.CityId)
+                .OnDelete(DeleteBehavior.Restrict); // və ya NoAction
+
+            // Address – Job (1–çox) → BURDA CASCADE OLMASIN
+            modelBuilder.Entity<Address>()
+                .HasMany(a => a.Jobs)
+                .WithOne(j => j.Address)
+                .HasForeignKey(j => j.AddressId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(modelBuilder);
         }

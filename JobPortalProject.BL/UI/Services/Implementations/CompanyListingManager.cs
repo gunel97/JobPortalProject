@@ -27,16 +27,10 @@ namespace JobPortalProject.BL.UI.Services.Implementations
         {
             var language = await _cookieService.GetLanguageAsync();
 
-            var addresses = await _addressService.GetAllAsync(
-                                      predicate: x => !x.IsDeleted && x.CompanyId !=0,
-                                      include: x => x
-                                      .Include(at => at.AddressTranslations!.Where(at => at.LanguageId == language.Id))
-                                      .Include(a => a.City!).ThenInclude(c => c.CityTranslations!.Where(a => a.LanguageId == language.Id))
-                                      .Include(a => a.City!).ThenInclude(c => c.Country!).ThenInclude(ct => ct.Translations!
-                                      .Where(a => a.LanguageId == language.Id))
-                                      );
+            var addresses = await _addressService.GetAllAsync();
 
             var addressesByCities = addresses.DistinctBy(x => x.CityName).ToList();
+            var addressesCitiesGroup = addresses.GroupBy(a => a.CityName).ToList();
 
             var companies = await _companyService.GetAllAsync(
                                         predicate: x => !x.IsDeleted,
@@ -47,7 +41,7 @@ namespace JobPortalProject.BL.UI.Services.Implementations
                                         .ThenInclude(x => x.AddressTranslations!.Where(x => x.LanguageId == language.Id)!));
 
             var companyTypes = await _companyTypeService.GetAllAsync(
-                                        predicate: x => !x.IsDeleted,
+                                        predicate: x => !x.IsDeleted && x.CompanyTypeTranslations.Any(),
                                         include: x => x
                                         .Include(c => c.CompanyTypeTranslations.Where(ct => ct.LanguageId == language.Id)));
 
@@ -55,7 +49,7 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             {
                 Companies = companies.ToList(),
                 CompanyTypes = companyTypes.ToList(),
-                Addresses = addressesByCities
+                AddressesCitiesGroup=addressesCitiesGroup
             };
 
             return companyListingViewModel;

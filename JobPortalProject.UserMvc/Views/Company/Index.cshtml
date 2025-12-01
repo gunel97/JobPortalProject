@@ -2,7 +2,7 @@
     CompanyListingViewModel model = Model;
     var companyTypes = model.CompanyTypes;
     var companies = model.Companies;
-    var addresses = model.Addresses;
+    var addressesCitiesGroup = model.AddressesCitiesGroup;
 }
 <!-- ========== Inner Banner Start============= -->
 <div class="inner-banner">
@@ -42,7 +42,7 @@
                                                 <input type="checkbox">
                                                 <span class="checkmark"></span>
                                                 <span class="text">@type?.Name</span>
-                                                <span class="qty">(80)</span>
+                                                <span class="qty">(@type?.CompanyIds.Count())</span>
                                             </label>
                                         </li>
                                     }
@@ -56,7 +56,18 @@
                             <h5 class="job-widget-title">Country/ Location</h5>
                             <div class="checkbox-container">
                                 <ul>
-                                     @foreach (var address in addresses ?? [])
+                                     @foreach (var group in addressesCitiesGroup ?? [])
+                                    {
+                                        <li>
+                                            <label class="containerss">
+                                                <input type="checkbox">
+                                                <span class="checkmark"></span>
+                                                <span class="text">@group.FirstOrDefault()?.CityName, @group.FirstOrDefault()?.CountryName</span>
+                                                <span class="qty">(@group.Count())</span>
+                                            </label>
+                                        </li>
+                                    } 
+                                @*      @foreach (var address in addresses ?? [])
                                     {
                                         <li>
                                             <label class="containerss">
@@ -66,7 +77,7 @@
                                                 <span class="qty">(30)</span>
                                             </label>
                                         </li>
-                                    } 
+                                    }  *@
                                 </ul>
 
                             </div>

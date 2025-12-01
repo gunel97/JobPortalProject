@@ -3,7 +3,10 @@
     var jobCategories = model.JobCategories;
     var addresses = model.Addresses;
     var companies = model.Companies;
+    var jobs = model.Jobs;
 }
+@inject StringLocalizerManager localizer;
+
     <!-- ========== Hero One Start============= -->
 <div class="hero1">
     <div class="container">
@@ -170,16 +173,18 @@
             </div>
         </div>
         <div class="row g-4">
-            <div class="col-xl-4 col-lg-6">
-                <div class="feature-card">
+            @foreach (var job in jobs)
+            {
+                <div class="col-xl-4 col-lg-6">
+                    <div class="feature-card">
                     <div class="company-area">
                         <div class="logo">
-                            <img src="~/images/bg/company-logo/company-01.png" alt="">
+                            <img src="@job.CompanyLogoUrl" alt="">
                         </div>
                         <div class="company-details">
                             <div class="name-location">
-                                <h5><a href="job-details.html">React JS Developer</a></h5>
-                                <p>Full Time, Part Time</p>
+                                <h5><a asp-controller="job" asp-action="details" asp-route-id="@job.DetailsUrl">@job.Title</a></h5>
+                                <p>@localizer.GetValue(job.JobType ?? "")</p>
                             </div>
                             <div class="bookmark">
                                 <i class="bi bi-bookmark"></i>
@@ -190,15 +195,15 @@
                         <ul>
                             <li>
                                 <img src="~/images/icon/arrow2.svg" alt="">
-                                <p><span class="title">Salary:</span> $80-$110 / <span class="time">Per month</span></p>
+                                <p><span class="title">Salary:</span> $@job.MinSalary-$@job.MaxSalary / <span class="time">@localizer.GetValue(job.SalaryTypeDuration ?? "")</span></p>
                             </li>
                             <li>
                                 <img src="~/images/icon/arrow2.svg" alt="">
-                                <p><span class="title">Vacancy:</span> <span> 07 Person (Both)</span></p>
+                                <p><span class="title">Vacancy:</span> <span> @job.VacancyCount Person (@localizer.GetValue(job.Gender!))</span></p>
                             </li>
                             <li>
                                 <img src="~/images/icon/arrow2.svg" alt="">
-                                <p><span class="title">Deadline:</span> <span> 02 March, 2023</span></p>
+                                <p><span class="title">Deadline:</span> <span> @job.ExpirationDate?.Date.ToShortDateString()</span></p>
                             </li>
                         </ul>
                     </div>
@@ -209,201 +214,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-4 col-lg-6">
-                <div class="feature-card">
-                    <div class="company-area">
-                        <div class="logo">
-                            <img src="~/images/bg/company-logo/company-02.png" alt="">
-                        </div>
-                        <div class="company-details">
-                            <div class="name-location">
-                                <h5><a href="job-details.html">Assistant Laboratorist</a></h5>
-                                <p>Full Time, Part Time</p>
-                            </div>
-                            <div class="bookmark">
-                                <i class="bi bi-bookmark"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="job-discription">
-                        <ul>
-                            <li>
-                                <img src="~/images/icon/arrow2.svg" alt="">
-                                <p><span class="title">Salary:</span> $30-$40 / <span class="time">Per month</span></p>
-                            </li>
-                            <li>
-                                <img src="~/images/icon/arrow2.svg" alt="">
-                                <p><span class="title">Vacancy:</span> <span> 05 Person (Both)</span></p>
-                            </li>
-                            <li>
-                                <img src="~/images/icon/arrow2.svg" alt="">
-                                <p><span class="title">Deadline:</span> <span> 02 March, 2023 </span></p>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="job-type-apply">
-                        <div class="apply-btn">
-                            <a href="job-details.html"><span><img src="~/images/icon/apply-ellipse.svg" alt=""></span>Apply Now</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-4 col-lg-6">
-                <div class="feature-card">
-                    <div class="company-area">
-                        <div class="logo">
-                            <img src="~/images/bg/company-logo/company-03.png" alt="">
-                        </div>
-                        <div class="company-details">
-                            <div class="name-location">
-                                <h5><a href="job-details.html">Senior Receptionist</a></h5>
-                                <p>Full Time, Part Time</p>
-                            </div>
-                            <div class="bookmark">
-                                <i class="bi bi-bookmark"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="job-discription">
-                        <ul>
-                            <li>
-                                <img src="~/images/icon/arrow2.svg" alt="">
-                                <p><span class="title">Salary:</span> $60-$90 / <span class="time">Per month</span></p>
-                            </li>
-                            <li>
-                                <img src="~/images/icon/arrow2.svg" alt="">
-                                <p><span class="title">Vacancy:</span> <span> 07 Person (Female)</span></p>
-                            </li>
-                            <li>
-                                <img src="~/images/icon/arrow2.svg" alt="">
-                                <p><span class="title">Deadline:</span> <span> 03 March, 2023 </span></p>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="job-type-apply">
-                        <div class="apply-btn">
-                            <a href="job-details.html"><span><img src="~/images/icon/apply-ellipse.svg" alt=""></span>Apply Now</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-4 col-lg-6">
-                <div class="feature-card">
-                    <div class="company-area">
-                        <div class="logo">
-                            <img src="~/images/bg/company-logo/company-05.png" alt="">
-                        </div>
-                        <div class="company-details">
-                            <div class="name-location">
-                                <h5><a href="job-details.html">Senior WordPress Develope</a></h5>
-                                <p>Part Time, Remote</p>
-                            </div>
-                            <div class="bookmark">
-                                <i class="bi bi-bookmark"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="job-discription">
-                        <ul>
-                            <li>
-                                <img src="~/images/icon/arrow2.svg" alt="">
-                                <p><span class="title">Salary:</span> $60-$80 / <span class="time">Per month</span></p>
-                            </li>
-                            <li>
-                                <img src="~/images/icon/arrow2.svg" alt="">
-                                <p><span class="title">Vacancy:</span> <span> 03 Person (Male)</span></p>
-                            </li>
-                            <li>
-                                <img src="~/images/icon/arrow2.svg" alt="">
-                                <p><span class="title">Deadline:</span> <span> 04 March, 2023 </span></p>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="job-type-apply">
-                        <div class="apply-btn">
-                            <a href="job-details.html"><span><img src="~/images/icon/apply-ellipse.svg" alt=""></span>Apply Now</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-4 col-lg-6">
-                <div class="feature-card">
-                    <div class="company-area">
-                        <div class="logo">
-                            <img src="~/images/bg/company-logo/company-06.png" alt="">
-                        </div>
-                        <div class="company-details">
-                            <div class="name-location">
-                                <h5><a href="job-details.html">Manager (HR)</a></h5>
-                                <p>Full Time, Part Time</p>
-                            </div>
-                            <div class="bookmark">
-                                <i class="bi bi-bookmark"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="job-discription">
-                        <ul>
-                            <li>
-                                <img src="~/images/icon/arrow2.svg" alt="">
-                                <p><span class="title">Salary:</span> $60-$76 / <span class="time">Per month</span></p>
-                            </li>
-                            <li>
-                                <img src="~/images/icon/arrow2.svg" alt="">
-                                <p><span class="title">Vacancy:</span> <span> 01 Person (Both)</span></p>
-                            </li>
-                            <li>
-                                <img src="~/images/icon/arrow2.svg" alt="">
-                                <p><span class="title">Deadline:</span> <span> 05 March, 2023</span></p>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="job-type-apply">
-                        <div class="apply-btn">
-                            <a href="job-details.html"><span><img src="~/images/icon/apply-ellipse.svg" alt=""></span>Apply Now</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-4 col-lg-6">
-                <div class="feature-card">
-                    <div class="company-area">
-                        <div class="logo">
-                            <img src="~/images/bg/company-logo/company-04.png" alt="">
-                        </div>
-                        <div class="company-details">
-                            <div class="name-location">
-                                <h5><a href="job-details.html">UI/UX Designer</a></h5>
-                                <p>Full Time, Part Time</p>
-                            </div>
-                            <div class="bookmark">
-                                <i class="bi bi-bookmark"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="job-discription">
-                        <ul>
-                            <li>
-                                <img src="~/images/icon/arrow2.svg" alt="">
-                                <p><span class="title">Salary:</span> $60-$70 / <span class="time">Per month</span></p>
-                            </li>
-                            <li>
-                                <img src="~/images/icon/arrow2.svg" alt="">
-                                <p><span class="title">Vacancy:</span> <span> 03 Person (Both)</span></p>
-                            </li>
-                            <li>
-                                <img src="~/images/icon/arrow2.svg" alt="">
-                                <p><span class="title">Deadline:</span> <span> 02 March, 2023</span></p>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="job-type-apply">
-                        <div class="apply-btn">
-                            <a href="job-details.html"><span><img src="~/images/icon/apply-ellipse.svg" alt=""></span>Apply Now</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            }
         </div>
     </div>
 </div>
@@ -676,10 +487,12 @@
                             </div>
                         </div>
                     }
-           </div>
+                </div>
+             </div>
         </div>
-    </div>
 </div>
+<br/>
+<br/>
 <!-- ========== Home1 Top Recruiters area end============= -->
 <!-- ========== Home1 Recent Article area Start============= -->
 <div class="home1-article-area mb-120">

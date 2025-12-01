@@ -117,10 +117,55 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="associate" xml:space="preserve">
+    <value>Peşə təhsili</value>
+  </data>
+  <data name="bachelor" xml:space="preserve">
+    <value>Ali təhsil (bakalavriat) </value>
+  </data>
+  <data name="doctoral" xml:space="preserve">
+    <value>Ali təhsil (doktorantura)</value>
+  </data>
+  <data name="female" xml:space="preserve">
+    <value>Qadın</value>
+  </data>
+  <data name="fullTime" xml:space="preserve">
+    <value>Tam ştat</value>
+  </data>
   <data name="home" xml:space="preserve">
-    <value>homeAZ</value>
+    <value>Ana səhifə</value>
+  </data>
+  <data name="internship" xml:space="preserve">
+    <value>Təcrübəçi</value>
+  </data>
+  <data name="male" xml:space="preserve">
+    <value>Kişi</value>
+  </data>
+  <data name="master" xml:space="preserve">
+    <value>Ali təhsil (magistratura)</value>
   </data>
   <data name="pages" xml:space="preserve">
     <value>pagesAZ</value>
+  </data>
+  <data name="partTime" xml:space="preserve">
+    <value>Yarım ştat</value>
+  </data>
+  <data name="perHour" xml:space="preserve">
+    <value>Saatlıq</value>
+  </data>
+  <data name="perMonth" xml:space="preserve">
+    <value>Aylıq</value>
+  </data>
+  <data name="perYear" xml:space="preserve">
+    <value>İllik</value>
+  </data>
+  <data name="projectBased" xml:space="preserve">
+    <value>Layihə əsasən</value>
+  </data>
+  <data name="remote" xml:space="preserve">
+    <value>Uzaqdan</value>
+  </data>
+  <data name="Temporary" xml:space="preserve">
+    <value>Müvəqqəti</value>
   </data>
 </root>

@@ -6,6 +6,7 @@ using JobPortalProject.BL.ViewModels.CompanyTypeViewModels;
 using JobPortalProject.BL.ViewModels.CompanyViewModels;
 using JobPortalProject.BL.ViewModels.CountryViewModels;
 using JobPortalProject.BL.ViewModels.JobCategoryViewModels;
+using JobPortalProject.BL.ViewModels.JobViewModels;
 using JobPortalProject.BL.ViewModels.LanguageViewModels;
 using JobPortalProject.BL.ViewModels.SocialMediaViewModels;
 using JobPortalProject.BL.ViewModels.WorkingFieldViewModels;
@@ -25,18 +26,6 @@ namespace JobPortalProject.BL.Mapping
             CreateMap<Language, LanguageViewModel>().ReverseMap();
             CreateMap<Language, LanguageCreateViewModel>().ReverseMap();
             CreateMap<Language, LanguageUpdateViewModel>().ReverseMap();
-
-            CreateMap<JobCategory, JobCategoryViewModel>()
-                .ForMember(dest => dest.Name, opt => opt
-                .MapFrom(src => src.JobCategoryTranslations!.FirstOrDefault() == null ? "" :
-                src.JobCategoryTranslations!.FirstOrDefault()!.Name))
-                .ReverseMap();
-            CreateMap<JobCategory, JobCategoryCreateViewModel>().ReverseMap();
-            CreateMap<JobCategory, JobCategoryUpdateViewModel>().ReverseMap();
-
-            CreateMap<JobCategoryTranslation, JobCategoryTranslationViewModel>().ReverseMap();
-            CreateMap<JobCategoryTranslation, JobCategoryTranslationCreateViewModel>().ReverseMap();
-            CreateMap<JobCategoryTranslation, JobCategoryTranslationUpdateViewModel>().ReverseMap();
 
             CreateMap<Country, CountryViewModel>()
                 .ForMember(x=>x.Name, opt=>opt.MapFrom(src=>src.Translations!.FirstOrDefault()==null ? "" :
@@ -123,6 +112,8 @@ namespace JobPortalProject.BL.Mapping
                 .ForMember(x=>x.Name, opt => opt
                 .MapFrom(src=>src.CompanyTypeTranslations.FirstOrDefault()==null ? "" :
                 src.CompanyTypeTranslations!.FirstOrDefault()!.Name))
+                .ForMember(x=>x.CompanyIds, opt=> opt
+                .MapFrom(src=>src.Companies.Select(x=>x.Id)))
                 .ReverseMap();
             CreateMap<CompanyType, CompanyTypeCreateViewModel>().ReverseMap();
             CreateMap<CompanyType, CompanyTypeUpdateViewModel>().ReverseMap();
@@ -131,6 +122,27 @@ namespace JobPortalProject.BL.Mapping
             CreateMap<CompanyTypeTranslation, CompanyTypeTranslationCreateViewModel>().ReverseMap();
             CreateMap<CompanyTypeTranslation, CompanyTypeTranslationUpdateViewModel>().ReverseMap();
 
+            CreateMap<Job, JobViewModel>().ReverseMap();
+            CreateMap<Job, JobCreateViewModel>().ReverseMap();
+            CreateMap<Job, JobUpdateViewModel>().ReverseMap();
+
+            CreateMap<JobTranslation, JobTranslationViewModel>().ReverseMap();
+            CreateMap<JobTranslation, JobTranslationCreateViewModel>().ReverseMap();
+            CreateMap<JobTranslation, JobTranslationUpdateViewModel>().ReverseMap();
+
+            CreateMap<JobCategory, JobCategoryViewModel>()
+                .ForMember(dest => dest.Name, opt => opt
+                .MapFrom(src => src.JobCategoryTranslations!.FirstOrDefault() == null ? "" :
+                src.JobCategoryTranslations!.FirstOrDefault()!.Name))
+                .ForMember(dest=>dest.JobIds, opt=>opt
+                .MapFrom(src=>src.Jobs.Select(x=>x.Id)))
+                .ReverseMap();
+            CreateMap<JobCategory, JobCategoryCreateViewModel>().ReverseMap();
+            CreateMap<JobCategory, JobCategoryUpdateViewModel>().ReverseMap();
+
+            CreateMap<JobCategoryTranslation, JobCategoryTranslationViewModel>().ReverseMap();
+            CreateMap<JobCategoryTranslation, JobCategoryTranslationCreateViewModel>().ReverseMap();
+            CreateMap<JobCategoryTranslation, JobCategoryTranslationUpdateViewModel>().ReverseMap();
 
         }
     }

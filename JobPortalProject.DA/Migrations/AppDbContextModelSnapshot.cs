@@ -568,6 +568,9 @@ namespace JobPortalProject.DA.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("AddressId")
+                        .HasColumnType("int");
+
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");
 
@@ -613,6 +616,8 @@ namespace JobPortalProject.DA.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AddressId");
 
                     b.HasIndex("CompanyId");
 
@@ -687,6 +692,192 @@ namespace JobPortalProject.DA.Migrations
                     b.ToTable("JobCategoryTranslations");
                 });
 
+            modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.JobExtraBenefit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("JobId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobId");
+
+                    b.ToTable("JobExtraBenefits");
+                });
+
+            modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.JobExtraBenefitTranslation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("JobExtraBenefitId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobExtraBenefitId");
+
+                    b.HasIndex("LanguageId");
+
+                    b.ToTable("JobExtraBenefitTranslations");
+                });
+
+            modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.JobMainDuty", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("JobId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobId");
+
+                    b.ToTable("JobMainDuties");
+                });
+
+            modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.JobMainDutyTranslation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("JobMainDutyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobMainDutyId");
+
+                    b.HasIndex("LanguageId");
+
+                    b.ToTable("JobMainDutyTranslations");
+                });
+
+            modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.JobResponsibility", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("JobId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobId");
+
+                    b.ToTable("JobResponsibilities");
+                });
+
+            modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.JobResponsibilityTranslation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("JobResponsibilityId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobResponsibilityId");
+
+                    b.HasIndex("LanguageId");
+
+                    b.ToTable("JobResponsibilityTranslations");
+                });
+
             modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.JobTranslation", b =>
                 {
                     b.Property<int>("Id")
@@ -702,10 +893,6 @@ namespace JobPortalProject.DA.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ExtraBenefits")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -714,14 +901,6 @@ namespace JobPortalProject.DA.Migrations
 
                     b.Property<int>("LanguageId")
                         .HasColumnType("int");
-
-                    b.Property<string>("MainDuties")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Responsibilities")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -1062,7 +1241,7 @@ namespace JobPortalProject.DA.Migrations
                     b.HasOne("JobPortalProject.DA.DataContext.Entities.City", "City")
                         .WithMany("Addresses")
                         .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("JobPortalProject.DA.DataContext.Entities.Company", "Company")
@@ -1225,6 +1404,12 @@ namespace JobPortalProject.DA.Migrations
 
             modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.Job", b =>
                 {
+                    b.HasOne("JobPortalProject.DA.DataContext.Entities.Address", "Address")
+                        .WithMany("Jobs")
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("JobPortalProject.DA.DataContext.Entities.Company", "Company")
                         .WithMany("Jobs")
                         .HasForeignKey("CompanyId")
@@ -1236,6 +1421,8 @@ namespace JobPortalProject.DA.Migrations
                         .HasForeignKey("JobCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Address");
 
                     b.Navigation("Company");
 
@@ -1257,6 +1444,96 @@ namespace JobPortalProject.DA.Migrations
                         .IsRequired();
 
                     b.Navigation("JobCategory");
+
+                    b.Navigation("Language");
+                });
+
+            modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.JobExtraBenefit", b =>
+                {
+                    b.HasOne("JobPortalProject.DA.DataContext.Entities.Job", "Job")
+                        .WithMany("ExtraBenefits")
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Job");
+                });
+
+            modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.JobExtraBenefitTranslation", b =>
+                {
+                    b.HasOne("JobPortalProject.DA.DataContext.Entities.JobExtraBenefit", "JobExtraBenefit")
+                        .WithMany("JobExtraBenefitTranslations")
+                        .HasForeignKey("JobExtraBenefitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("JobPortalProject.DA.DataContext.Entities.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("JobExtraBenefit");
+
+                    b.Navigation("Language");
+                });
+
+            modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.JobMainDuty", b =>
+                {
+                    b.HasOne("JobPortalProject.DA.DataContext.Entities.Job", "Job")
+                        .WithMany("MainDuties")
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Job");
+                });
+
+            modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.JobMainDutyTranslation", b =>
+                {
+                    b.HasOne("JobPortalProject.DA.DataContext.Entities.JobMainDuty", "JobMainDuty")
+                        .WithMany("JobMainDutyTranslations")
+                        .HasForeignKey("JobMainDutyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("JobPortalProject.DA.DataContext.Entities.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("JobMainDuty");
+
+                    b.Navigation("Language");
+                });
+
+            modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.JobResponsibility", b =>
+                {
+                    b.HasOne("JobPortalProject.DA.DataContext.Entities.Job", "Job")
+                        .WithMany("Responsibilities")
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Job");
+                });
+
+            modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.JobResponsibilityTranslation", b =>
+                {
+                    b.HasOne("JobPortalProject.DA.DataContext.Entities.JobResponsibility", "JobResponsibility")
+                        .WithMany("JobResponsibilityTranslations")
+                        .HasForeignKey("JobResponsibilityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("JobPortalProject.DA.DataContext.Entities.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("JobResponsibility");
 
                     b.Navigation("Language");
                 });
@@ -1364,6 +1641,8 @@ namespace JobPortalProject.DA.Migrations
             modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.Address", b =>
                 {
                     b.Navigation("AddressTranslations");
+
+                    b.Navigation("Jobs");
                 });
 
             modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.City", b =>
@@ -1404,7 +1683,13 @@ namespace JobPortalProject.DA.Migrations
 
             modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.Job", b =>
                 {
+                    b.Navigation("ExtraBenefits");
+
                     b.Navigation("JobTranslations");
+
+                    b.Navigation("MainDuties");
+
+                    b.Navigation("Responsibilities");
                 });
 
             modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.JobCategory", b =>
@@ -1412,6 +1697,21 @@ namespace JobPortalProject.DA.Migrations
                     b.Navigation("JobCategoryTranslations");
 
                     b.Navigation("Jobs");
+                });
+
+            modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.JobExtraBenefit", b =>
+                {
+                    b.Navigation("JobExtraBenefitTranslations");
+                });
+
+            modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.JobMainDuty", b =>
+                {
+                    b.Navigation("JobMainDutyTranslations");
+                });
+
+            modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.JobResponsibility", b =>
+                {
+                    b.Navigation("JobResponsibilityTranslations");
                 });
 
             modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.WorkingField", b =>

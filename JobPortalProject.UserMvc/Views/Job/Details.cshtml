@@ -1,0 +1,315 @@
+﻿ @model JobViewModel;
+ @inject StringLocalizerManager localizer;
+ <!-- ========== Inner Banner Start============= -->
+<div class="inner-banner">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="banner-content text-center">
+                    <h1>Job Details</h1>
+                    <span></span>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Job Details</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ========== Inner Banner end============= -->
+<!-- ========== Job Details Start============= -->
+<div class="job-details-pages pt-120 mb-120">
+    <div class="container">
+        <div class="row g-lg-4 gy-5">
+            <div class="col-lg-8">
+                <div class="job-details-content">
+                    <div class="job-list-content">
+                        <div class="company-area">
+                            <div class="logo">
+                                <img src="@Model.CompanyLogoUrl" alt="">
+                            </div>
+                            <div class="company-details">
+                                <div class="name-location">
+                                    <h5><a href="#">@Model.Title</a></h5>
+                                    <p>@Model.CompanyName</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="job-discription">
+                            <ul class="one">
+                                <li>
+                                    <img src="assets/images/icon/map-2.svg" alt="">
+                                    <p><span class="title">Location:</span> @Model.Address?.CityName, @Model.Address?.CountryName </p>
+                                </li>
+                                <li>
+                                    <img src="assets/images/icon/category-2.svg" alt="">
+                                    <p><span class="title">Category:</span> @Model.JobCategoryName</p>
+                                </li>
+                            </ul>
+                            <ul>
+                                <li>
+                                    <img src="assets/images/icon/company-2.svg" alt="">
+                                    <p><span class="title">Job Type:</span> @localizer.GetValue(Model.JobType ?? "")</p>
+                                </li>
+                                <li>
+                                    <img src="assets/images/icon/salary-2.svg" alt="">
+                                    <p><span class="title">Salary:</span> $@Model.MinSalary K-$@Model.MaxSalary K/ @localizer.GetValue(Model.SalaryTypeDuration ?? "")</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p><span>Job Description:</span>  @Model.Description</p>
+                    <br>
+                    @if(Model.Responsibilities.Any()){
+                    <p><span>Job Responsibility:</span>  Collaborating with cross-functional teams: UI/UX designers often work closely with other teams, including product management, engineering, and marketing, to ensure that the user interface is aligned with business and technical requirements. You will need to be able to effectively communicate your design ideas and gather feedback from other team members.</p>
+                    <ul>
+                        @foreach (var responsibility in Model.Responsibilities)
+                        {
+                            <li>@responsibility</li>
+                        }
+                    </ul>
+                    }
+               
+                    <h6>Educational Requirements:</h6>
+                    <ul>
+                        <li>@localizer.GetValue(Model.RequiredMinEducationType ?? "")</li>
+                    </ul>
+                    <h6>Experiences:</h6>
+                    <ul>
+                        <li>2-3 Years in this field.</li>
+                    </ul>
+                    @if (Model.MainDuties.Any()){
+                    <p><span>Main Duties:</span> Some specific tasks that a UI/UX designer might be responsible for include:</p>
+                    <ul>
+                        @foreach (var duty in Model.MainDuties)
+                        {
+                            <li>@duty</li>
+                        }
+                    </ul>
+                    }
+                    
+                    @if (Model.Benefits.Any()){
+                    <p><span>Extra Benefits:</span>  Some specific tasks that a UI/UX designer might be responsible for include:</p>
+                    <ul>
+                        @foreach (var benefit in Model.Benefits)
+                        {
+                            <li>@benefit</li>
+                        }
+                    </ul>
+                    }
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="job-details-sidebar mb-120">
+                    <div class="save-apply-btn d-flex justify-content-end mb-50">
+                        <ul>
+                            <li><a class="save-btn" href="#">Save Job <span><i class="bi bi-bookmark-fill"></i></span></a></li>
+                            <li><a class="primry-btn-2 lg-btn" href="#">Apply Position</a></li>
+                        </ul>
+                    </div>
+                    <div class="job-summary-area mb-50">
+                        <div class="job-summary-title">
+                            <h6>Job Summary:</h6>
+                        </div>
+                        <ul>
+                            <li><p><span class="title">Job Posted:</span> @Model.CreatedAt?.Date.ToShortDateString() .</p></li>
+                            <li><p><span class="title">Expiration:</span> @Model.ExpirationDate?.Date.ToShortDateString() .</p></li>
+                            <li><p><span class="title">Vacancy:</span> @Model.VacancyCount Person.</p></li>
+                            <li><p><span class="title">Experiences:</span> 2-3 Years.</p></li>
+                            <li><p><span class="title">Education:</span> @localizer.GetValue(Model.RequiredMinEducationType ?? "")</p></li>
+                            <li><p><span class="title">Gender:</span> @localizer.GetValue(Model.Gender!) .</p></li>
+                        </ul>
+                    </div>
+                    <div class="view-job-btn mb-30">
+                        <a href="job-listing1.html"><img src="~/images/icon/company-2.svg" alt="">View All Jobs In This Company</a>
+                    </div>
+                    <div class="job-share-area mb-50">
+                        <h6>Job Link Share:</h6>
+                        <ul>
+                            <li><a href="#"><i class='bx bx-link'></i></a></li>
+                            <li><a href="https://www.facebook.com/"><i class='bx bxl-facebook'></i></a></li>
+                            <li><a href="https://twitter.com/"><i class='bx bxl-twitter'></i></a></li>
+                            <li><a href="https://www.linkedin.com/"><i class='bx bxl-linkedin'></i></a></li>
+                            <li><a href="https://www.instagram.com/"><i class='bx bxl-instagram-alt'></i></a></li>
+                        </ul>
+                    </div>
+                    <div class="email-area mb-50">
+                        <div class="title">
+                            <h6><img src="assets/images/icon/email-2.svg" alt="">Email Now</h6>
+                        </div>
+                        <p>Send your resume at <a href="https://demo.egenslab.com/cdn-cgi/l/email-protection#0960676f66496c71686479656c276a6664"><span class="__cf_email__" data-cfemail="8be2e5ede4cbeef3eae6fbe7eea5e8e4e6">[email&#160;protected]</span></a></p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-lg-12 mb-120">
+                <div class="company-gallery">
+                    <div class="title">
+                        <h5>Company Gallery View</h5>
+                    </div>
+                    <div class="swiper company-gallery-slider" data-cursor="Drag">
+                        <div class="swiper-wrapper">
+                            @foreach (var image in Model.CompanyImages)
+                            {
+                                <div class="swiper-slide">
+                                    <a href="assets/images/bg/company-gallery-big-01.png" data-fancybox="gallery" class="gallery2-img">
+                                        <div class="gallery-wrap">
+                                            <img class="img-fluid" src="@image" alt="">
+                                            <div class="overlay d-flex align-items-center justify-content-center">
+                                                <div class="items-content text-center">
+                                                    <img src="assets/images/icon/eye.svg" alt="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="related-jobs">
+                    <div class="section-title mb-40">
+                        <h3>Related Jobs:</h3>
+                        <div class="swiper-btn1 d-flex align-items-center">
+                            <div class="left-btn prev-4">
+                                <img src="assets/images/icon/explore-elliose.svg" alt="">
+                            </div>
+                            <div class="right-btn next-4">
+                                <img src="assets/images/icon/explore-elliose.svg" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper related-job-slider">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <div class="feature-card">
+                                    <div class="company-area">
+                                        <div class="logo">
+                                            <img src="assets/images/bg/company-logo/company-02.png" alt="">
+                                        </div>
+                                        <div class="company-details">
+                                            <div class="name-location">
+                                                <h5><a href="job-details.html">Assistant Laboratorist</a></h5>
+                                                <p>Full Time, Part Time</p>
+                                            </div>
+                                            <div class="bookmark">
+                                                <i class="bi bi-bookmark"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="job-discription">
+                                        <ul>
+                                            <li>
+                                                <img src="assets/images/icon/arrow2.svg" alt="">
+                                                <p><span class="title">Salary:</span> $30-$40 / <span class="time">Per month</span></p>
+                                            </li>
+                                            <li>
+                                                <img src="assets/images/icon/arrow2.svg" alt="">
+                                                <p><span class="title">Vacancy:</span> <span> 05 Person (Both)</span></p>
+                                            </li>
+                                            <li>
+                                                <img src="assets/images/icon/arrow2.svg" alt="">
+                                                <p><span class="title">Deadline:</span> <span> 02 March, 2023 </span></p>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="job-type-apply">
+                                        <div class="apply-btn">
+                                            <a href="job-details.html"><span><img src="assets/images/icon/apply-ellipse.svg" alt=""></span>Apply Now</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="feature-card">
+                                    <div class="company-area">
+                                        <div class="logo">
+                                            <img src="assets/images/bg/company-logo/company-03.png" alt="">
+                                        </div>
+                                        <div class="company-details">
+                                            <div class="name-location">
+                                                <h5><a href="job-details.html">Senior Receptionist</a></h5>
+                                                <p>Full Time, Part Time</p>
+                                            </div>
+                                            <div class="bookmark">
+                                                <i class="bi bi-bookmark"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="job-discription">
+                                        <ul>
+                                            <li>
+                                                <img src="assets/images/icon/arrow2.svg" alt="">
+                                                <p><span class="title">Salary:</span> $60-$90 / <span class="time">Per month</span></p>
+                                            </li>
+                                            <li>
+                                                <img src="assets/images/icon/arrow2.svg" alt="">
+                                                <p><span class="title">Vacancy:</span> <span> 07 Person (Female)</span></p>
+                                            </li>
+                                            <li>
+                                                <img src="assets/images/icon/arrow2.svg" alt="">
+                                                <p><span class="title">Deadline:</span> <span> 03 March, 2023 </span></p>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="job-type-apply">
+                                        <div class="apply-btn">
+                                            <a href="job-details.html"><span><img src="assets/images/icon/apply-ellipse.svg" alt=""></span>Apply Now</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="feature-card">
+                                    <div class="company-area">
+                                        <div class="logo">
+                                            <img src="assets/images/bg/company-logo/company-06.png" alt="">
+                                        </div>
+                                        <div class="company-details">
+                                            <div class="name-location">
+                                                <h5><a href="job-details.html">Manager (HR)</a></h5>
+                                                <p>Full Time, Part Time</p>
+                                            </div>
+                                            <div class="bookmark">
+                                                <i class="bi bi-bookmark"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="job-discription">
+                                        <ul>
+                                            <li>
+                                                <img src="assets/images/icon/arrow2.svg" alt="">
+                                                <p><span class="title">Salary:</span> $60-$76 / <span class="time">Per month</span></p>
+                                            </li>
+                                            <li>
+                                                <img src="assets/images/icon/arrow2.svg" alt="">
+                                                <p><span class="title">Vacancy:</span> <span> 01 Person (Both)</span></p>
+                                            </li>
+                                            <li>
+                                                <img src="assets/images/icon/arrow2.svg" alt="">
+                                                <p><span class="title">Deadline:</span> <span> 05 March, 2023</span></p>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="job-type-apply">
+                                        <div class="apply-btn">
+                                            <a href="job-details.html"><span><img src="assets/images/icon/apply-ellipse.svg" alt=""></span>Apply Now</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ========== Job Details End============= -->

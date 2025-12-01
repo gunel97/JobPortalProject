@@ -8,35 +8,12 @@ namespace JobPortalProject.DA.DataContext.Enums
 {
     public enum JobType
     {
-        FullTime,
-        PartTime,
-        Temporary,
-        Freelance,
-        Remote,
-        Internship
-    }
-
-    public enum EducationType
-    {
-        Associate,
-        Bachelor,
-        Master,
-        Doctoral
-    }
-
-    public enum SalaryTypeDuration
-    {
-        PerMonth,
-        PerYear,
-        PerHour,
-        ProjectBased
-    }
-
-    public enum Gender
-    {
-        Male,
-        Female,
-        Both
+        fullTime=1,
+        partTime=2,
+        temporary=3,
+        freelance=4,
+        remote=5,
+        internship=6
     }
 
 }

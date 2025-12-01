@@ -3,17 +3,10 @@ using JobPortalProject.BL.Services.Contracts;
 using JobPortalProject.BL.Services.Implementations;
 using JobPortalProject.BL.UI.Services.Abstracts;
 using JobPortalProject.BL.UI.Services.Implementations;
-using JobPortalProject.DA.DataContext.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace JobPortalProject.BL
 {
     public static class BusinessLogicLayerServiceRegistration
@@ -42,8 +35,6 @@ namespace JobPortalProject.BL
             services.AddScoped(typeof(ICrudService<,,,>), typeof(CrudManager<,,,>));
 
             services.AddScoped<ILanguageService, LanguageManager>();
-            services.AddScoped<IJobCategoryService, JobCategoryManager>();
-            services.AddScoped<IJobCategoryTranslationService, JobCategoryTranslationManager>();
             services.AddScoped<ICountryTranslationService, CountryTranslationManager>();
             services.AddScoped<ICityTranslationService, CityTranslationManager>();
             services.AddScoped<IAddressTranslationService, AddressTranslationManager>();
@@ -59,6 +50,12 @@ namespace JobPortalProject.BL
             services.AddScoped<IWorkingFieldService, WorkingFieldManager>();
             services.AddScoped<ISocialMediaService,  SocialMediaManager>();
             services.AddScoped<ICompanySocialService,  CompanySocialManager>();
+
+            services.AddScoped<IJobCategoryService, JobCategoryManager>();
+            services.AddScoped<IJobCategoryTranslationService, JobCategoryTranslationManager>();
+            services.AddScoped<IJobTranslationService, JobTranslationManager>();
+            services.AddScoped<IJobService, JobManager>();
+            services.AddScoped<IJobListingService, JobListingManager>();
 
             services.AddScoped<ITopHeaderService, TopHeaderManager>();
             services.AddScoped<IHomeService, HomeManager>();

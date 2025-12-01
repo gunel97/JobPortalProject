@@ -64,8 +64,12 @@ namespace JobPortalProject.DA.DataContext.Entities
         public JobCategory? JobCategory { get; set; }
         public int CompanyId { get; set; }
         public Company? Company { get; set; }
+        public int AddressId { get; set; }
+        public Address? Address { get; set; }
+        public List<JobResponsibility> Responsibilities { get; set; } = [];
+        public List<JobExtraBenefit> ExtraBenefits { get; set; } = [];
+        public List<JobMainDuty> MainDuties { get; set; } = [];
         public List<JobTranslation> JobTranslations { get; set; } = [];
-
 
     }
 
@@ -73,14 +77,59 @@ namespace JobPortalProject.DA.DataContext.Entities
     {
         public string Title { get; set; } = null!;
         public string Description { get; set; } = null!;
-        public List<string> Responsibilities { get; set; } = [];
-        public List<string> ExtraBenefits { get; set; } = [];
-        public List<string> MainDuties { get; set; } = [];
-        //
         public int JobId { get; set; }
         public Job? Job { get; set; }
         public int LanguageId { get; set; }
         public Language? Language { get; set; }
+    }
+
+    public class JobResponsibility : TimeStample
+    {
+        public int JobId { get; set; }
+        public Job? Job { get; set; }
+        public List<JobResponsibilityTranslation> JobResponsibilityTranslations { get; set; } = [];
+    }
+
+    public class JobResponsibilityTranslation : TimeStample
+    {
+        public string? Value { get; set; }
+        public int JobResponsibilityId { get; set; }
+        public JobResponsibility? JobResponsibility { get; set; }
+        public int LanguageId { get; set; }
+        public Language? Language { get; set; }
+    }
+
+    public class JobExtraBenefit : TimeStample
+    {
+        public int JobId { get; set; }
+        public Job? Job { get; set; }
+        public List<JobExtraBenefitTranslation> JobExtraBenefitTranslations { get; set; } = [];
+    }
+
+    public class JobExtraBenefitTranslation : TimeStample
+    {
+        public string? Value { get; set; }
+        public int JobExtraBenefitId { get; set; }
+        public JobExtraBenefit? JobExtraBenefit { get; set; }
+        public int LanguageId { get; set; }
+        public Language? Language{ get; set; }
+    }
+
+    public class JobMainDuty : TimeStample
+    {
+        public int JobId { get; set; }
+        public Job? Job { get; set; }
+        public List<JobMainDutyTranslation> JobMainDutyTranslations { get; set; } = [];
+    }
+
+    public class JobMainDutyTranslation : TimeStample
+    {
+        public string? Value { get; set; }
+        public int JobMainDutyId { get; set; }
+        public JobMainDuty? JobMainDuty { get; set; }
+        public int LanguageId { get; set; }
+        public Language? Language { get; set; }
+
     }
 
     public class Company : TimeStample
@@ -239,7 +288,7 @@ namespace JobPortalProject.DA.DataContext.Entities
         public int CompanyId { get; set; }
         public Company? Company { get; set; }
         public List<AddressTranslation> AddressTranslations { get; set; } = [];
-        //public List<CompanyAddress> CompanyAddresses { get; set; } = [];
+        public List<Job> Jobs { get; set; } = [];
     }
 
     public class AddressTranslation : TimeStample
@@ -250,15 +299,6 @@ namespace JobPortalProject.DA.DataContext.Entities
         public int LanguageId { get; set; }
         public Language? Language { get; set; }
     }
-
-    //public class CompanyAddress : TimeStample
-    //{
-    //    public bool IsMain { get; set; }
-    //    public int CompanyId { get; set; }
-    //    public Company? Company { get; set; }
-    //    public int AddressId { get; set; }
-    //    public Address? Address { get; set; }
-    //}
 
 }
 

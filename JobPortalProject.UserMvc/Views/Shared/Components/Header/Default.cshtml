@@ -25,13 +25,7 @@
                         <a asp-controller="home" asp-action="index">@localizer.GetValue("home")</a>
                     </li>
                     <li class="menu-item-has-children">
-                        <a href="#" class="drop-down">Find Jobs</a><i class="bi bi-plus dropdown-icon"></i>
-                        <ul class="sub-menu">
-                            <li><a href="category.html">Job Category</a></li>
-                            <li><a href="job-listing1.html">Job Listing 01</a></li>
-                            <li><a href="job-listing2.html">Job Listing 02</a></li>
-                            <li><a href="job-details.html">Job Details</a></li>
-                        </ul>
+                        <a asp-controller="job" asp-action="index" class="drop-down">Find Jobs</a><i class="bi bi-plus dropdown-icon"></i>
                     </li>
                     <li class="menu-item-has-children">
                         <a href="#" class="drop-down">@localizer.GetValue("pages")</a><i class="bi bi-plus dropdown-icon"></i>

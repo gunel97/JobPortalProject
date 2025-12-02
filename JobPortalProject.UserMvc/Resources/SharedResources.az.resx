@@ -123,6 +123,12 @@
   <data name="bachelor" xml:space="preserve">
     <value>Ali təhsil (bakalavriat) </value>
   </data>
+  <data name="companies" xml:space="preserve">
+    <value>Şirkətlər</value>
+  </data>
+  <data name="contact" xml:space="preserve">
+    <value>Əlaqə</value>
+  </data>
   <data name="doctoral" xml:space="preserve">
     <value>Ali təhsil (doktorantura)</value>
   </data>
@@ -137,6 +143,9 @@
   </data>
   <data name="internship" xml:space="preserve">
     <value>Təcrübəçi</value>
+  </data>
+  <data name="jobs" xml:space="preserve">
+    <value>İş Elanları</value>
   </data>
   <data name="male" xml:space="preserve">
     <value>Kişi</value>
@@ -164,6 +173,12 @@
   </data>
   <data name="remote" xml:space="preserve">
     <value>Uzaqdan</value>
+  </data>
+  <data name="signin" xml:space="preserve">
+    <value>Daxil ol</value>
+  </data>
+  <data name="signout" xml:space="preserve">
+    <value>Çıxış</value>
   </data>
   <data name="Temporary" xml:space="preserve">
     <value>Müvəqqəti</value>

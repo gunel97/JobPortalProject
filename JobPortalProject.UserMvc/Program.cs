@@ -1,6 +1,8 @@
 using JobPortalProject.BL;
 using JobPortalProject.DA;
 using JobPortalProject.DA.DataContext;
+using JobPortalProject.DA.DataContext.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 namespace JobPortalProject.UserMvc
 {
@@ -20,7 +22,15 @@ namespace JobPortalProject.UserMvc
             builder.Services.AddDataAccessLayerServices(builder.Configuration);
             builder.Services.AddBusinessLogicLayerServices();
 
-           
+            builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
+            {
+                options.Password.RequiredLength = 4;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 3;
+            }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
 
             var app = builder.Build();

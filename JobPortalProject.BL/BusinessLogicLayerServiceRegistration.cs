@@ -65,6 +65,7 @@ namespace JobPortalProject.BL
             services.AddScoped<ICloudinaryService, CloudinaryManager>();
             services.AddScoped<ICookieService, CookieManager>();
             services.AddSingleton<StringLocalizerManager>();
+            services.AddScoped<IUserService, UserManager>();
 
             return services;
         }

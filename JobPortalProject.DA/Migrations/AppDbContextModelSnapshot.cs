@@ -277,26 +277,27 @@ namespace JobPortalProject.DA.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CompanySize")
+                    b.Property<string>("AppUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CompanyEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CompanySize")
                         .HasColumnType("int");
 
                     b.Property<int>("CompanyTypeId")
                         .HasColumnType("int");
 
                     b.Property<string>("CoverPhotoPublicId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CoverPhotoUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -305,28 +306,27 @@ namespace JobPortalProject.DA.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LogoPublicId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LogoUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("MemberSince")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PrimaryPhone")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecondaryPhone")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AppUserId")
+                        .IsUnique();
 
                     b.HasIndex("CompanyTypeId");
 
@@ -419,7 +419,6 @@ namespace JobPortalProject.DA.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
@@ -1306,11 +1305,19 @@ namespace JobPortalProject.DA.Migrations
 
             modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.Company", b =>
                 {
+                    b.HasOne("JobPortalProject.DA.DataContext.Entities.AppUser", "AppUser")
+                        .WithOne("Company")
+                        .HasForeignKey("JobPortalProject.DA.DataContext.Entities.Company", "AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("JobPortalProject.DA.DataContext.Entities.CompanyType", "CompanyType")
                         .WithMany("Companies")
                         .HasForeignKey("CompanyTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("AppUser");
 
                     b.Navigation("CompanyType");
                 });
@@ -1643,6 +1650,11 @@ namespace JobPortalProject.DA.Migrations
                     b.Navigation("AddressTranslations");
 
                     b.Navigation("Jobs");
+                });
+
+            modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.AppUser", b =>
+                {
+                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.City", b =>

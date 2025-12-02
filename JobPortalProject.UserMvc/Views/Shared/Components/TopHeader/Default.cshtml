@@ -3,7 +3,7 @@
     <p>Welcome Our Job Portal! <a href="bookmark.html">Save Jobs</a></p>
     <div class="top-bar-right">
         <div class="language-select">
-            <img src="~/images/icon/flag-eng.svg" alt="image"><span>Language</span>
+            <img src="@Model.SelectedLanguage?.IconUrl" alt="image"><span>Language</span>
             <ul class="topbar-sublist">
                 @foreach (var item in Model.Languages ?? [])
                 {

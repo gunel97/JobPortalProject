@@ -115,6 +115,7 @@ namespace JobPortalProject.DA.DataContext.Entities
         public Language? Language{ get; set; }
     }
 
+
     public class JobMainDuty : TimeStample
     {
         public int JobId { get; set; }
@@ -134,14 +135,14 @@ namespace JobPortalProject.DA.DataContext.Entities
 
     public class Company : TimeStample
     {
-        public string CoverPhotoPublicId { get; set; } = null!;
-        public string CoverPhotoUrl { get; set; } = null!;
-        public string LogoPublicId { get; set; } = null!;
-        public string LogoUrl { get; set; } = null!;
-        public string PrimaryPhone { get; set; } = null!;
-        public string SecondaryPhone { get; set; } = null!;
-        public string Email { get; set; } = null!;
-        public int CompanySize { get; set; }
+        public string? CoverPhotoPublicId { get; set; } 
+        public string? CoverPhotoUrl { get; set; } = null!;
+        public string? LogoPublicId { get; set; } = null!;
+        public string? LogoUrl { get; set; } = null!;
+        public string? PrimaryPhone { get; set; } = null!;
+        public string? SecondaryPhone { get; set; } = null!;
+        public string? CompanyEmail { get; set; } = null!;
+        public int? CompanySize { get; set; }
         public DateTime? MemberSince { get; set; }
         public DateTime? LastPostedJob { get; set; }
         //
@@ -150,16 +151,17 @@ namespace JobPortalProject.DA.DataContext.Entities
         public List<CompanySocial> CompanySocials { get; set; } = [];
         public List<CompanyTranslation> CompanyTranslations { get; set; } = [];
         public List<Address> Addresses { get; set; } = [];
-        //public List<CompanyAddress> CompanyAddresses { get; set; } = [];
         public List<WorkingField> WorkingFields { get; set; } = [];
         public int CompanyTypeId { get; set; }
         public CompanyType? CompanyType { get; set; }
+        public string AppUserId { get; set; } = null!;
+        public AppUser? AppUser { get; set; }
     }
 
     public class CompanyTranslation : TimeStample
     {
         public string Name { get; set; } = null!;
-        public string Description { get; set; } = null!;
+        public string? Description { get; set; }
         public int CompanyId { get; set; }
         public Company? Company { get; set; }
         public int LanguageId { get; set; }
@@ -243,6 +245,8 @@ namespace JobPortalProject.DA.DataContext.Entities
     {
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
+        //public int? CompanyId { get; set; }
+        public Company? Company { get; set; } 
     }
 
     public class Country : TimeStample

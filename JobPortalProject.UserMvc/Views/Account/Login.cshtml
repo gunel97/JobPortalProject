@@ -1,5 +1,51 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model LoginViewModel
+
+<!-- ========== Login Area end============= -->
+<div class="login-area pt-120 mb-120">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-wrapper">
+                    <div class="form-title">
+                        <h3>Log In Here!</h3>
+                        <span></span>
+                    </div>
+                    <form method="post">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-inner mb-25">
+                                    <label for="email">Username</label>
+                                        <input asp-for="Username" id="email" placeholder="Username">
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-inner">
+                                    <label for="email">Password*</label>
+                                    <input asp-for="Password" id="password" placeholder="Password" />
+                                    <i class="bi bi-eye-slash" id="togglePassword"></i>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-agreement form-inner d-flex justify-content-between flex-wrap">
+                                    <div class="form-group">
+                                        <input asp-for="RememberMe" id="html">
+                                        <label for="html">Remember Me</label>
+                                    </div>
+                                    <a href="#" class="forgot-pass">Forget Password?</a>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-inner">
+                                    <button class="primry-btn-2" type="submit">LogIn</button>
+                                </div>
+                            </div>
+                            <h6>Don’t have an account? <a asp-controller="account" asp-action="login">Sign Up</a></h6>
+                            <div asp-validation-summary="ModelOnly"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ========== Login Area end============= -->

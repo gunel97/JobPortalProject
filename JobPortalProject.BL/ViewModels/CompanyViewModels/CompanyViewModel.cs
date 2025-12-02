@@ -26,13 +26,25 @@ namespace JobPortalProject.BL.ViewModels.CompanyViewModels
         public List<WorkingFieldViewModel> WorkingFields { get; set; } = [];
     }
 
-    public class CompanyCreateViewModel { }
+    public class CompanyCreateViewModel
+    {
+        public required int CompanyTypeId { get; set; }
+        public required string AppUserId { get; set; }
+    }
 
     public class CompanyUpdateViewModel { }
 
-    public class CompanyTranslationViewModel { }
+    public class CompanyTranslationViewModel
+    {
+      
+    }
 
-    public class CompanyTranslationCreateViewModel { }
+    public class CompanyTranslationCreateViewModel
+    {
+        public required int LanguageId { get; set; }
+        public required string Name { get; set; }
+        public required int CompanyId { get; set; }
+    }
 
     public class CompanyTranslationUpdateViewModel { }
 

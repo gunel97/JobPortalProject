@@ -1,0 +1,1 @@
+C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\wwwroot\js\jquery.nice-number.min.js

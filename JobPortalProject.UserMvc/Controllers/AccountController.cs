@@ -4,22 +4,23 @@ using JobPortalProject.BL.UI.Services.Implementations;
 using JobPortalProject.BL.ViewModels.UserViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace JobPortalProject.UserMvc.Controllers
 {
     public class AccountController : Controller
     {
         private readonly ICompanyService _companyService;
-        private readonly ICompanyTypeService _companyTypeService;
+        private readonly ICompanyDashboardService _companyDashboardService;
         private readonly IUserService _userService;
         private readonly ICookieService _cookieService;
 
-        public AccountController(IUserService userService, ICompanyService companyService, ICompanyTypeService companyTypeService, ICookieService cookieService)
+        public AccountController(IUserService userService, ICompanyService companyService, ICookieService cookieService, ICompanyDashboardService companyDashboardService)
         {
             _userService = userService;
             _companyService = companyService;
-            _companyTypeService = companyTypeService;
             _cookieService = cookieService;
+            _companyDashboardService = companyDashboardService;
         }
 
         public IActionResult Index()
@@ -62,7 +63,7 @@ namespace JobPortalProject.UserMvc.Controllers
                 return View(model);
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("CompanyDashboard", "Account");
         }
 
         public IActionResult Login()
@@ -96,15 +97,36 @@ namespace JobPortalProject.UserMvc.Controllers
             if (!string.IsNullOrEmpty(model.ReturnUrl))
                 return Redirect(model.ReturnUrl);
 
+            if (result.Succeeded)
+            {
+                var role = await _userService.GetUserRoleAsync(model.Username);
+
+                if (role == "Company")
+                    return RedirectToAction("CompanyDashboard", "Account");
+            }
+
             return RedirectToAction("Index", "Home");
         }
 
-        
         public async Task<IActionResult> Logout()
         {
             await _userService.LogOutAsync();
 
             return RedirectToAction("Index", "Home");
+        }
+
+        public async Task<IActionResult> CompanyDashboard()
+        {
+            var model = await _companyDashboardService.GetCompanyDashboardViewModelAsync();
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> EditCompanyProfile()
+        {
+            var model = await _companyService.GetCompanyUpdateViewModelAsync(1);
+
+            return View(model);
         }
     } 
 }

@@ -284,7 +284,7 @@ namespace JobPortalProject.DA.Migrations
                     b.Property<string>("CompanyEmail")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CompanySize")
+                    b.Property<int>("CompanySize")
                         .HasColumnType("int");
 
                     b.Property<int>("CompanyTypeId")
@@ -298,6 +298,9 @@ namespace JobPortalProject.DA.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsAccountApproved")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");

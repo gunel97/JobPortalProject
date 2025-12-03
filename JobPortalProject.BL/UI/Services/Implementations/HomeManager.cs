@@ -31,16 +31,6 @@ namespace JobPortalProject.BL.UI.Services.Implementations
         {
             var language = await _cookieService.GetLanguageAsync();
 
-            //var addresses = await _addressService.GetAllAsync(
-            //                                //predicate: x => !x.IsDeleted && x.CompanyAddresses.Any(),
-            //                                include: x => x
-            //                                .Include(at => at.AddressTranslations!.Where(at => at.LanguageId == language.Id))
-            //                                .Include(a => a.City!).ThenInclude(c => c.CityTranslations!.Where(a => a.LanguageId == language.Id))
-            //                                .Include(a => a.City!).ThenInclude(c => c.Country!).ThenInclude(ct => ct.Translations!
-            //                                .Where(a => a.LanguageId == language.Id)));
-
-
-
             var addresses =await  _addressService.GetAllAsync();
 
             var jobs = await _jobService.GetAllAsync();

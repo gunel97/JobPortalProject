@@ -15,5 +15,6 @@ namespace JobPortalProject.BL.UI.ViewModels
         public CompanyViewModel? Company { get; set; }
         public List<CompanySocialViewModel>? CompanySocials { get; set; } = [];
         public CompanySocialViewModel? Website { get; set; }
+        public bool IsAccountApproved { get; set; }
     }
 }

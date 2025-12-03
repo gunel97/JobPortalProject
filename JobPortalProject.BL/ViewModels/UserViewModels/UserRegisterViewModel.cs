@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JobPortalProject.BL.ViewModels.CompanyViewModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -36,5 +37,13 @@ namespace JobPortalProject.BL.ViewModels.UserViewModels
         public required string Password { get; set; }
         public string? ReturnUrl { get; set; }
         public bool RememberMe { get; set; }
+    }
+
+    public class LoginResultViewModel
+    {
+        public bool IsSuccess { get; set; }
+        public string? UserId { get; set; }
+        public string? Username { get; set; }
+        public string? Role { get; set; }
     }
 }

@@ -115,7 +115,6 @@ namespace JobPortalProject.DA.DataContext.Entities
         public Language? Language{ get; set; }
     }
 
-
     public class JobMainDuty : TimeStample
     {
         public int JobId { get; set; }
@@ -135,6 +134,7 @@ namespace JobPortalProject.DA.DataContext.Entities
 
     public class Company : TimeStample
     {
+        public int CompanySize { get; set; }
         public string? CoverPhotoPublicId { get; set; } 
         public string? CoverPhotoUrl { get; set; } = null!;
         public string? LogoPublicId { get; set; } = null!;
@@ -142,7 +142,7 @@ namespace JobPortalProject.DA.DataContext.Entities
         public string? PrimaryPhone { get; set; } = null!;
         public string? SecondaryPhone { get; set; } = null!;
         public string? CompanyEmail { get; set; } = null!;
-        public int? CompanySize { get; set; }
+        public bool IsAccountApproved { get; set; }
         public DateTime? MemberSince { get; set; }
         public DateTime? LastPostedJob { get; set; }
         //

@@ -132,11 +132,17 @@
   <data name="doctoral" xml:space="preserve">
     <value>Doctoral</value>
   </data>
+  <data name="editProfile" xml:space="preserve">
+    <value>Edit Profile</value>
+  </data>
   <data name="female" xml:space="preserve">
     <value>Female</value>
   </data>
   <data name="fullTime" xml:space="preserve">
     <value>Full Time</value>
+  </data>
+  <data name="hello" xml:space="preserve">
+    <value>Hello</value>
   </data>
   <data name="home" xml:space="preserve">
     <value>Home</value>

@@ -414,7 +414,6 @@ wwwroot\js\counterup.js
 wwwroot\js\drop-zone.js
 wwwroot\js\jquery.fancybox.min.js
 wwwroot\js\jquery.marquee.min.js
-wwwroot\js\jquery.nice-number.min.js
 wwwroot\js\jquery.nice-select.js
 wwwroot\js\jquery.waypoints.min.js
 wwwroot\js\jquery-3.6.0.min.js

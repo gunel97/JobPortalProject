@@ -37,8 +37,7 @@ namespace JobPortalProject.BL.UI.Services.Implementations
                                             include: x => x
                                             .Include(ct => ct.CompanyTranslations!.Where(x => x.LanguageId == language.Id))
                                             .Include(x=>x.Addresses).ThenInclude(x=>x.AddressTranslations.Where(x=>x.LanguageId==language.Id))
-                                        
-                                            .Include(t => t.CompanyType).ThenInclude(ct => ct.CompanyTypeTranslations!.Where(x => x.LanguageId == language.Id))
+                                            .Include(t => t.CompanyType!).ThenInclude(ct => ct.CompanyTypeTranslations!.Where(x => x.LanguageId == language.Id))
                                             .Include(w => w.WorkingFields).ThenInclude(wt => wt.Translations.Where(x => x.LanguageId == language.Id)));
 
             var companySocials = await _companySocialService.GetAllAsync(
@@ -46,7 +45,7 @@ namespace JobPortalProject.BL.UI.Services.Implementations
                                             include: x => x
                                             .Include(s => s.SocialMedia!));
 
-            var website = companySocials.FirstOrDefault(x => x.SocialMedia!.Title == "web");
+            var website =  companySocials.FirstOrDefault(x => x.SocialMedia!.Title == "web");
 
             var companyDetailsViewModel = new CompanyDetailsViewModel
             {

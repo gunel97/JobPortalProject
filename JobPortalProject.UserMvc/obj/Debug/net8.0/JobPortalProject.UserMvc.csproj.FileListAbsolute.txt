@@ -172,3 +172,9 @@ C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\bin\Debug
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\bin\Debug\net8.0\System.Security.Cryptography.Pkcs.dll
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\bin\Debug\net8.0\System.Security.Cryptography.Xml.dll
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
+C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\bin\Debug\net8.0\Microsoft.AspNetCore.JsonPatch.dll
+C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\bin\Debug\net8.0\Microsoft.AspNetCore.Mvc.Razor.Extensions.dll
+C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\bin\Debug\net8.0\Microsoft.AspNetCore.Razor.Language.dll
+C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\bin\Debug\net8.0\Microsoft.CodeAnalysis.Razor.dll
+C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\bin\Debug\net8.0\Microsoft.Extensions.Localization.dll
+C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.UserMvc\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll

@@ -61,6 +61,7 @@ namespace JobPortalProject.BL
             services.AddScoped<IHomeService, HomeManager>();
             services.AddScoped<ICompanyDetailsService, CompanyDetailsManager>();
             services.AddScoped<ICompanyListingService, CompanyListingManager>();
+            services.AddScoped<ICompanyDashboardService, CompanyDashboardManager>();
 
             services.AddScoped<ICloudinaryService, CloudinaryManager>();
             services.AddScoped<ICookieService, CookieManager>();

@@ -4,11 +4,6 @@ using JobPortalProject.BL.ViewModels.CompanyViewModels;
 using JobPortalProject.BL.ViewModels.UserViewModels;
 using JobPortalProject.DA.DataContext.Entities;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JobPortalProject.BL.UI.Services.Implementations
 {
@@ -29,16 +24,19 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             _companyService = companyService;
         }
 
-        public Task<AppUser> GetUserByIdAsync(string userId)
+        public async Task<string> GetUserRoleAsync(string username)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByNameAsync(username);
+            var role = await _userManager.GetRolesAsync(user!);
+
+            return role.FirstOrDefault()!;
         }
 
         public async Task<SignInResult> LoginAsync(LoginViewModel model)
         {
             var user = await _userManager.FindByNameAsync(model.Username);
 
-            if (user==null)
+            if (user == null)
             {
                 return SignInResult.Failed;
             }
@@ -101,6 +99,14 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             }
 
             return result;
+        }
+
+        public async Task<CompanyViewModel> GetCompanyIdOfUserAsync(AppUser user)
+        {
+            var userId = await _userManager.GetUserIdAsync(user);
+            var company = await _companyService.GetAsync(predicate: x => x.AppUser!.Id == userId);
+
+            return company;
         }
     }
 }

@@ -1,0 +1,205 @@
+﻿ @model CompanyUpdateViewModel
+ 
+ <!-- ========== Dashboard Area end============= -->
+<div class="dashboard-area company-dashboard pt-120 mb-120">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 mb-50">
+             <partial name="_SidebarPartial" />
+            </div>
+            <div class="col-lg-12">
+                <div class="my-profile-inner ">
+
+                    <div class="form-wrapper">
+                        <div class="section-title two">
+                            <h5>My Profile</h5>
+                            <div class="dash"></div>
+                        </div>
+                        <form class="profile-form">
+                            <div class="section-title2">
+                                <h5>Company Information:</h5>
+                            </div>
+                            <div class="row">
+                        
+                                <div class="col-md-6">
+                                    <div class="form-inner mb-25">
+                                        <label>Company Type*</label>
+                                        <div class="input-area">
+                                            <img src="~/images/icon/category-2.svg" alt="">
+                                            @* <select class="select1">
+                                                <option value="0">Digital Agency</option>
+                                                <option value="1">Digital Marketing Agency</option>
+                                                <option value="2">Software Company</option>
+                                            </select> *@
+                                            <select asp-items="Model.CompanyTypeList" asp-for="CompanyTypeId" class="select1"></select>
+                                            <span asp-validation-for="CompanyTypeId"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-inner mb-25">
+                                        <label for="company">Company Size*</label>
+                                        <div class="input-area">
+                                            <img src="~/images/icon/person-2.svg" alt="">
+                                            <input asp-for="CompanySize" placeholder="40 Person">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-inner mb-25">
+                                        <label for="email">Email*</label>
+                                        <div class="input-area">
+                                            <img src="~/images/icon/email-2.svg" alt="">
+                                            <input asp-for="CompanyEmail" id="email" placeholder="info@example.com">
+                                        </div>
+                                    </div>
+                                </div>
+                               
+                                
+                                <div class="col-md-6">
+                                    <div class="form-inner mb-25">
+                                        <label for="website">Website Link*</label>
+                                        <div class="input-area">
+                                            <img src="~/images/icon/website-2.svg" alt="">
+                                            <input type="text" id="website" name="website" placeholder="https://example.com/">
+                                        </div>
+                                    </div>
+                                </div>
+                                @for (int i = 0; i < Model.CompanySocialUpdateViewModels.Count; i++)
+                                {
+                                    <div class="col-md-6">
+                                        <div class="form-inner mb-25">
+                                            <label for="facebook">@Model.CompanySocialUpdateViewModels[i].Title</label>
+                                            <div class="input-area">
+                                                <img src="@Model.CompanySocialUpdateViewModels[i].IconUrl" alt="">
+                                                <input asp-for="CompanySocialUpdateViewModels[i].AddressUrl" id="facebook" placeholder="https://example-facebook.com/">
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="col-lg-12">
+                                    <div class="col-md-6">
+                                        <div class="form-inner mb-25">
+                                            <label for="location">Location*</label>
+                                            <div class="input-area">
+                                                <img src="~/images/icon/map-2.svg" alt="">
+                                                <input type="text" id="location" name="location" placeholder="Type Location">
+                                            </div>
+                                        </div>
+                                        <div class="add-remove-btn d-flex align-items-center justify-content-between mb-50">
+                                            <div class="add-row">
+                                                <button type="button" class="addwork-area-row">Add Location+</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="company-images-area mb-50">
+                                        <div class="row g-lg-4 gy-5">
+                                            <div class="col-lg-6 devaider1 position-relative">
+                                                <div class="company-logo-area">
+                                                    
+                                                   
+                                                    <h5>Company Logo: </h5>
+                                                    <div>
+                                                    <div class="drag-area">
+                                                        <p>Upload Logo</p>
+                                                        <button type="button" class="upload-btn"><i class="bi bi-plus-lg"></i></button>
+                                                        <input asp-for="LogoFile" accept="image/*" hidden="">
+                                                    </div>
+                                                    <br/>
+                                                    <div>
+                                                         <input name="CoverImageName" value="@Model.LogoUrl" type="hidden" />
+                                                        <img src="@Model.LogoUrl" width="100" height="100" />
+                                                    </div>
+                                                    </div>
+
+                                                    <span>Maximum File Upload: 2 MB</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="company-cover-photo-area">
+                                                    <h5>Company Cover Photo: </h5>
+                                                    <div class="drag-area" id="dragArea2">
+                                                        <p>Upload Photo</p>
+                                                        <button type="button" class="upload-btn"><i class="bi bi-plus-lg"></i></button>
+                                                        <input asp-for="CoverPhotoFile" accept="image/*" hidden="">
+                                                    </div>
+                                                    <br/>
+                                                    <div class="drag-area" id="dragArea2">
+                                                        <input name="CoverImageName" value="@Model.CoverPhotoUrl" type="hidden" />
+                                                        <img src="@Model.CoverPhotoUrl" width="100" height="100" />
+                                                    </div>
+                                                    <span>Maximum File Upload: 5 MB</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="section-title2">
+                                    <h5>Company Details:</h5>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-inner mb-25">
+                                        <label for="companyname">Company Name*</label>
+                                        <div class="input-area">
+                                            <img src="~/images/icon/company-2.svg" alt="">
+                                            <input asp-for="CompanyTranslationUpdateViewModel.Name" id="companyname" placeholder="Elite Hangstroman">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-inner mb-40">
+                                        <label for="description">Description*</label>
+                                        <textarea asp-for="CompanyTranslationUpdateViewModel.Description" placeholder="Company Details*"></textarea>
+                                    </div>
+                                </div>
+                                <div class="section-title2">
+                                    <h5>Working Area:</h5>
+                                </div>
+                                <div class="work-area-row">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-inner mb-25">
+                                                <label for="working-field">Working Field*</label>
+                                                <div class="input-area">
+                                                    <img src="~/images/icon/company-2.svg" alt="">
+                                                    <input type="text" id="working-field" name="working-field" placeholder="Frontend Developer">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-inner mb-25">
+                                                <label>Add Icon*</label>
+                                                <div class="input-area">
+                                                    <img src="~/images/icon/company-2.svg" alt="">
+                                                    <input type="file">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-inner mb-40">
+                                                <label for="description">Short Description*</label>
+                                                <textarea name="description" id="description" placeholder="Details*"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="add-remove-btn d-flex align-items-center justify-content-between mb-50">
+                                    <div class="add-row">
+                                        <button type="button" class="addwork-area-row">Add Working Area+</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-inner">
+                                        <button class="primry-btn-2 lg-btn w-unset" type="submit">Update Change</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ========== Dashboard Area end============= -->

@@ -132,11 +132,17 @@
   <data name="doctoral" xml:space="preserve">
     <value>Ali təhsil (doktorantura)</value>
   </data>
+  <data name="editProfile" xml:space="preserve">
+    <value>Profili düzənlə</value>
+  </data>
   <data name="female" xml:space="preserve">
     <value>Qadın</value>
   </data>
   <data name="fullTime" xml:space="preserve">
     <value>Tam ştat</value>
+  </data>
+  <data name="hello" xml:space="preserve">
+    <value>Salam</value>
   </data>
   <data name="home" xml:space="preserve">
     <value>Ana səhifə</value>

@@ -63,10 +63,11 @@ namespace JobPortalProject.BL
             services.AddScoped<ICompanyListingService, CompanyListingManager>();
             services.AddScoped<ICompanyDashboardService, CompanyDashboardManager>();
 
+            services.AddSingleton<StringLocalizerManager>();
             services.AddScoped<ICloudinaryService, CloudinaryManager>();
             services.AddScoped<ICookieService, CookieManager>();
-            services.AddSingleton<StringLocalizerManager>();
             services.AddScoped<IUserService, UserManager>();
+            services.AddScoped<FileService>();
 
             return services;
         }

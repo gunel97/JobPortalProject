@@ -102,7 +102,7 @@ namespace JobPortalProject.UserMvc.Controllers
                 var role = await _userService.GetUserRoleAsync(model.Username);
 
                 if (role == "Company")
-                    return RedirectToAction("CompanyDashboard", "Account");
+                    return RedirectToAction("CompanyDashboard", "Company");
             }
 
             return RedirectToAction("Index", "Home");
@@ -115,18 +115,6 @@ namespace JobPortalProject.UserMvc.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public async Task<IActionResult> CompanyDashboard()
-        {
-            var model = await _companyDashboardService.GetCompanyDashboardViewModelAsync();
-
-            return View(model);
-        }
-
-        public async Task<IActionResult> EditCompanyProfile()
-        {
-            var model = await _companyService.GetCompanyUpdateViewModelAsync(1);
-
-            return View(model);
-        }
+ 
     } 
 }

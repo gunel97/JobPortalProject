@@ -9,6 +9,7 @@ namespace JobPortalProject.BL.UI.ViewModels
 {
     public class CompanyDashboardViewModel
     {
+        public int CompanyId { get; set; }
         public string? Name { get; set; }
         public string? LogoUrl { get; set; }
         public bool IsAccountActive { get; set; }

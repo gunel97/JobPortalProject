@@ -32,6 +32,7 @@ namespace JobPortalProject.BL.UI.Services.Implementations
 
             var companyDashboardViewModel = new CompanyDashboardViewModel
             {
+                CompanyId=company.Id,
                 Languages = languages.ToList(),
                 Name = company.Name,
                 LogoUrl=company.LogoUrl,

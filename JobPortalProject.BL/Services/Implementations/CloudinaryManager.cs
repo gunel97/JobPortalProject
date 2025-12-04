@@ -33,9 +33,9 @@ namespace JobPortalProject.BL.Services.Implementations
             _cloudinary.Api.Secure = true;
         }
 
-        public async Task<CloudinaryUploadResult> UploadImageAsync(IFormFile file)
+        public async Task<CloudinaryUploadResult> UploadImageAsync(IFormFile file, string folderName)
         {
-            if (file == null || file.Length! > 0)
+            if (file == null || file.Length !< 0)
             {
                 return new CloudinaryUploadResult
                 {
@@ -62,6 +62,7 @@ namespace JobPortalProject.BL.Services.Implementations
                 var uploadParams = new ImageUploadParams
                 {
                     File = new FileDescription(fileName, stream),
+                    Folder=folderName,
                     Transformation = new Transformation()
                         .Quality("auto:good")
                         .FetchFormat("auto"),
@@ -97,6 +98,17 @@ namespace JobPortalProject.BL.Services.Implementations
                     ErrorMessage = ex.Message
                 };
             }
+        }
+
+        public async Task<bool> DeleteImageAsync(string publicId)
+        {
+            if (string.IsNullOrEmpty(publicId))
+                return false;
+
+            var deleteParams = new DeletionParams(publicId);
+            var result = await _cloudinary.DestroyAsync(deleteParams);
+
+            return result.Result == "ok";
         }
     }
 }

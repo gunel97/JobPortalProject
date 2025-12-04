@@ -1,4 +1,6 @@
 using JobPortalProject.BL;
+using JobPortalProject.BL.Constants;
+using JobPortalProject.BL.Settings;
 using JobPortalProject.DA;
 using JobPortalProject.DA.DataContext;
 using JobPortalProject.DA.DataContext.Entities;
@@ -12,6 +14,7 @@ namespace JobPortalProject.UserMvc
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
             builder.Services.AddMvc().AddViewLocalization();
@@ -34,6 +37,8 @@ namespace JobPortalProject.UserMvc
                 options.Lockout.MaxFailedAccessAttempts = 3;
             }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
+
+            FilePathConstants.CompanyImagePath = "CompanyImages";
 
             var app = builder.Build();
 

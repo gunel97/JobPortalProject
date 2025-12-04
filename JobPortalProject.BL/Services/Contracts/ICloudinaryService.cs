@@ -10,6 +10,7 @@ namespace JobPortalProject.BL.Services.Contracts
 {
     public interface ICloudinaryService
     {
-        Task<CloudinaryUploadResult> UploadImageAsync(IFormFile file);
+        Task<CloudinaryUploadResult> UploadImageAsync(IFormFile file, string folderName);
+        public Task<bool> DeleteImageAsync(string publicId);
     }
 }

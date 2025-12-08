@@ -12,23 +12,22 @@ namespace JobPortalProject.BL.Services.Implementations
     public class CompanyTypeManager : CrudManager<CompanyType, CompanyTypeViewModel, CompanyTypeCreateViewModel, CompanyTypeUpdateViewModel>
  , ICompanyTypeService
     {
-        private readonly ICookieService _cookieService;
-        public CompanyTypeManager(IRepositoryAsync<CompanyType> repository, IMapper mapper, ICookieService cookieService) : base(repository, mapper)
+        public CompanyTypeManager(IRepositoryAsync<CompanyType> repository, IMapper mapper) : base(repository, mapper)
         {
-            _cookieService = cookieService;
         }
 
-        public async Task<List<SelectListItem>> GetCompanyTypeSelectListItems()
-        {
-            var language = await _cookieService.GetLanguageAsync();
+        public async Task<List<SelectListItem>> GetCompanyTypeSelectListItems(int selectedLanguageId)
+        {;
             var companyTypesSelectListItems = new List<SelectListItem>();
+
             var companyTypes = await Repository.GetAllAsync(include: 
-                x=>x.Include(c=>c.CompanyTypeTranslations.Where(ct=>ct.LanguageId==language.Id)));
+                x=>x.Include(c=>c.CompanyTypeTranslations.Where(ct=>ct.LanguageId==selectedLanguageId)));
             var companyTypeViewModelsList = companyTypes.Select(
                 x=>Mapper.Map<CompanyTypeViewModel>(x)).ToList();
 
             companyTypeViewModelsList.ForEach(x => companyTypesSelectListItems.Add(
                 new SelectListItem(x.Name, x.Id.ToString())));
+
 
             return companyTypesSelectListItems;
         }

@@ -41,6 +41,7 @@ namespace JobPortalProject.BL.ViewModels.CompanyViewModels
     public class CompanyUpdateViewModel
     {
         public int Id { get; set; }
+        public int SelectedUpdateLanguageId { get; set; }
         public int CompanySize { get; set; }
         public string? CompanyEmail { get; set; }
         public bool IsAccountApproved { get; set; }
@@ -49,9 +50,12 @@ namespace JobPortalProject.BL.ViewModels.CompanyViewModels
         public string? LogoUrl { get; set; }
         public IFormFile? LogoFile { get; set; }
         public int CompanyTypeId { get; set; }
+        public CompanyTranslationUpdateViewModel? CompanyTranslationUpdateViewModel { get; set; }
         public List<SelectListItem>? CompanyTypeList { get; set; } = [];
         public List<CompanySocialUpdateViewModel> CompanySocialUpdateViewModels { get; set; } = [];
-        public CompanyTranslationUpdateViewModel? CompanyTranslationUpdateViewModel { get; set; } 
+        public List<AddressUpdateViewModel> CompanyAddressUpdateViewModels { get; set; } = [];
+        public List<WorkingFieldUpdateViewModel> WorkingFieldUpdateViewModels { get; set; } = [];
+       
     }
 
     public class CompanyTranslationViewModel

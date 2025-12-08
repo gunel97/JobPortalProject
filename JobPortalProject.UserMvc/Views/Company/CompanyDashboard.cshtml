@@ -30,7 +30,7 @@
                             <ul>
                                 @foreach(var language in Model.Languages)
                                 {
-                                    <li><a href="company-profile.html"><span><img src="@language.IconUrl" alt=""></span><span><img src="~/images/icon/edit2.svg" alt=""></span>@localizer.GetValue("editProfile")</a></li>
+                                    <li><a asp-controller="company" asp-action="editCompanyProfile" asp-route-selectedLanguageId="@language.Id"><span><img src="@language.IconUrl" alt=""></span><span><img src="~/images/icon/edit2.svg" alt=""></span>@localizer.GetValue("editProfile")</a></li>
                                 }
                             </ul>
                         </div>

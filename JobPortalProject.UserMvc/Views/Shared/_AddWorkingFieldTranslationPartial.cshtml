@@ -1,0 +1,50 @@
+﻿@model AddWorkingFieldTranslationViewModel
+
+<form method="post" class="profile-form" enctype="multipart/form-data">
+    <input asp-for="SelectedLanguageId" value="@Model.SelectedLanguageId" type="hidden" />
+<div id="workingField" class="work-area-row">
+    <div class="row">
+            <div class="col-md-6">
+                <div class="form-inner mb-25">
+                    <label for="working-field">Working Field *</label>
+                    <div class="input-area">
+                        <img src="~/images/icon/company-2.svg" alt="">
+                        <select asp-items="Model.WorkingFields" asp-for="WorkingFieldId" class="select1"></select>
+                        <span asp-validation-for="WorkingFieldId"></span>
+                    </div>
+                </div>
+            </div>
+        <div class="col-md-6">
+            <div class="form-inner mb-25">
+                <label for="working-field">Working Field *</label>
+                <div class="input-area">
+                    <img src="~/images/icon/company-2.svg" alt="">
+                    <input asp-for="TranslationCreateViewModel.Name" id="working-field" placeholder="Frontend Developer" />
+                    <span asp-validation-for="TranslationCreateViewModel.Name"></span>
+                </div>
+            </div>
+        </div>
+@*         <div class="col-md-6">
+            <div class="form-inner mb-25">
+                <label>Add Icon*</label>
+                <div class="input-area">
+                    <img src="~/images/icon/company-2.svg" alt="">
+                    <input asp-for="IconFile" accept="image/*">
+                    <span asp-validation-for="IconFile"></span>
+                </div>
+            </div>
+        </div> *@
+        <div class="col-md-12">
+            <div class="form-inner mb-40">
+                <label for="description">Short Description*</label>
+                <input asp-for="TranslationCreateViewModel.Description" id="description" placeholder="Details*" />
+                <span asp-validation-for="TranslationCreateViewModel.Description"></span>
+            </div>
+                        <button type="submit" asp-controller="company" asp-action="addWorkingFieldTranslation">Save Translation</button>
+           
+        </div>
+    </div>
+</div>
+</form>
+<br />
+<br />

@@ -419,6 +419,7 @@ wwwroot\js\jquery.waypoints.min.js
 wwwroot\js\jquery-3.6.0.min.js
 wwwroot\js\jquery-ui.js
 wwwroot\js\main.js
+wwwroot\js\new\workingField.js
 wwwroot\js\range-slider.js
 wwwroot\js\select2.min.js
 wwwroot\js\slick.js

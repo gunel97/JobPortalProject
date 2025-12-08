@@ -6,6 +6,6 @@ namespace JobPortalProject.BL.Services.Contracts
 {
     public interface ICompanyTypeService : ICrudService<CompanyType, CompanyTypeViewModel, CompanyTypeCreateViewModel, CompanyTypeUpdateViewModel>
     {
-        public Task<List<SelectListItem>> GetCompanyTypeSelectListItems();
+        public Task<List<SelectListItem>> GetCompanyTypeSelectListItems(int selectedLanguageId);
     }
 }

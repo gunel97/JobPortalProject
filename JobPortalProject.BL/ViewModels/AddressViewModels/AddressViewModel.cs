@@ -1,5 +1,6 @@
 ﻿using JobPortalProject.BL.ViewModels.CityViewModels;
 using JobPortalProject.BL.ViewModels.CountryViewModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,11 +22,25 @@ namespace JobPortalProject.BL.ViewModels.AddressViewModels
 
     public class AddressCreateViewModel { }
 
-    public class AddressUpdateViewModel { }
+    public class AddressUpdateViewModel
+    {
+        public int Id { get; set; }
+        public bool? IsMainAddress { get; set; }
+        public int CityId { get; set; }
+        public List<SelectListItem>? CityListItems { get; set; } = [];
+        public int CompanyId { get; set; }
+        public int AddressTranslationId { get; set; }
+        public string? Street { get; set; }
+    }
 
     public class AddressTranslationViewModel { }
 
     public class AddressTranslationCreateViewModel { }
-    public class AddressTranslationUpdateViewModel { }
+    public class AddressTranslationUpdateViewModel {
+        public int Id { get; set; }
+        public int LanguageId {  get; set; }
+        public int AddressId { get; set; }
+        public string? Street { get; set; }
+    }
 
 }

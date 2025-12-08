@@ -9,7 +9,9 @@ namespace JobPortalProject.BL.ViewModels.WorkingFieldViewModels
 {
     public class WorkingFieldViewModel
     {
+        public int Id { get; set; }
         public string? IconUrl { get; set; }
+        public string? IconPublicId { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
     }
@@ -17,9 +19,11 @@ namespace JobPortalProject.BL.ViewModels.WorkingFieldViewModels
     public class WorkingFieldCreateViewModel
     {
         public int CompanyId { get; set; }
+        public int SelectedUpdateLanguageId { get; set; }
         public IFormFile? IconFile { get; set; }
-        public List<WorkingFieldTranslationCreateViewModel> Translations { get; set; } = [];
-
+        public string? IconUrl { get; set; }
+        public string? IconPublicId { get; set; }
+        public WorkingFieldTranslationCreateViewModel? WorkingFieldTranslationCreateViewModel { get; set; }
     }
 
     public class WorkingFieldUpdateViewModel
@@ -27,10 +31,10 @@ namespace JobPortalProject.BL.ViewModels.WorkingFieldViewModels
         public int Id { get; set; }
         public int CompanyId { get; set; }
         public string? IconUrl { get; set; }
+        public string? IconPublicId { get; set; }
         public IFormFile? IconFile { get; set; }
         public WorkingFieldTranslationUpdateViewModel? WorkingFieldTranslationUpdateViewModel { get; set; } 
     }
-
 
     public class WorkingFieldTranslationViewModel
     {
@@ -43,7 +47,7 @@ namespace JobPortalProject.BL.ViewModels.WorkingFieldViewModels
 
     public class WorkingFieldTranslationCreateViewModel
     {
-        public int CompanyId { get; set; }
+        public int WorkingFieldId { get; set; }
         public int LanguageId { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
@@ -52,7 +56,7 @@ namespace JobPortalProject.BL.ViewModels.WorkingFieldViewModels
     public class WorkingFieldTranslationUpdateViewModel
     {
         public int Id { get; set; }
-         public int CompanyId { get; set; }
+        public int WorkingFieldId { get; set; }
         public int LanguageId { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }

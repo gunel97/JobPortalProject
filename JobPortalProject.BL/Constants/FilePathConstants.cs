@@ -9,5 +9,6 @@ namespace JobPortalProject.BL.Constants
     public class FilePathConstants
     {
         public static string CompanyImagePath = "";
+        public static string WorkingFieldImagePath = "";
     }
 }

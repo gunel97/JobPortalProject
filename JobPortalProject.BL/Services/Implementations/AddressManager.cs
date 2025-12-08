@@ -14,9 +14,13 @@ namespace JobPortalProject.BL.Services.Implementations
 , IAddressService
     {
         private readonly ICookieService _cookieService;
-        public AddressManager(IRepositoryAsync<Address> repository, IMapper mapper, ICookieService cookieService) : base(repository, mapper)
+        private readonly ICityService _cityService;
+        private readonly IAddressTranslationService _addressTranslationService;
+        public AddressManager(IRepositoryAsync<Address> repository, IMapper mapper, ICookieService cookieService, ICityService cityService, IAddressTranslationService addressTranslationService) : base(repository, mapper)
         {
             _cookieService = cookieService;
+            _cityService = cityService;
+            _addressTranslationService = addressTranslationService;
         }
 
         public override async Task<IEnumerable<AddressViewModel>> GetAllAsync(Expression<Func<Address, bool>>? predicate = null, Func<IQueryable<Address>, IOrderedQueryable<Address>>? orderBy = null, Func<IQueryable<Address>, IIncludableQueryable<Address, object>>? include = null, bool AsNoTracking = false)
@@ -31,10 +35,66 @@ namespace JobPortalProject.BL.Services.Implementations
                                             .Include(a => a.City!).ThenInclude(c => c.Country!).ThenInclude(ct => ct.Translations!
                                             .Where(a => a.LanguageId == languageId)));
 
-            var addressViewModels = addresses.Select(x=>Mapper.Map<AddressViewModel>(x));
+            var addressViewModels = addresses.Select(x => Mapper.Map<AddressViewModel>(x));
 
             return addressViewModels;
+        }
 
+        public async Task<List<AddressUpdateViewModel>> GetAddressUpdateViewModels(int companyId, int selectedLanguageId)
+        {
+            var addresses = await Repository.GetAllAsync(
+                predicate: x => x.CompanyId == companyId,
+                include: x => x.
+                Include(a => a.AddressTranslations.Where(t => t.LanguageId == selectedLanguageId)).
+                Include(c => c.City!).ThenInclude(ct => ct.CityTranslations.Where(t => t.LanguageId == selectedLanguageId)));
+            var cityListItems = await _cityService.GetCitySelectListItemsWithCountry(selectedLanguageId);
+
+            var addressUpdateViewModels = addresses.Select(x => new AddressUpdateViewModel
+            {
+                Id = x.Id,
+                CompanyId = x.CompanyId,
+                CityId = x.CityId,
+                IsMainAddress = x.IsMainAddress,
+                AddressTranslationId = x.AddressTranslations!.FirstOrDefault(x => x.LanguageId == selectedLanguageId)!.Id,
+                Street = x.AddressTranslations.FirstOrDefault(x => x.LanguageId == selectedLanguageId)!.Street,
+                CityListItems = cityListItems,
+
+            }).ToList();
+
+            return addressUpdateViewModels;
+        }
+
+        //public override Task<bool> UpdateAsync(int id, AddressUpdateViewModel model)
+        //{
+
+        //}
+
+        public async Task<bool> UpdateAddressAsync(int languageId, int addressId, AddressUpdateViewModel model)
+        {
+            var address = await Repository.GetAsync(predicate: x => x.Id == model.Id,
+                include: x => x.Include(a => a.AddressTranslations.Where(t => t.LanguageId == languageId)));
+
+            if (address == null)
+                return false;
+
+            var translation = address.AddressTranslations.FirstOrDefault(x => x.LanguageId == languageId);
+            if (translation == null)
+                return false;
+
+            var translationUpdateViewModel = new AddressTranslationUpdateViewModel
+            {
+                Id = translation.Id,
+                Street = model.Street,
+                AddressId = addressId,
+                LanguageId = languageId
+            };
+
+            await _addressTranslationService.UpdateAsync(translation.Id, translationUpdateViewModel);
+
+            address.CityId = model.CityId;
+            await Repository.UpdateAsync(address);
+
+            return true;
         }
     }
 }

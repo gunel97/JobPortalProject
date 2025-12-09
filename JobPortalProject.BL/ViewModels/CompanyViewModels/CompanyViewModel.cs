@@ -15,6 +15,7 @@ namespace JobPortalProject.BL.ViewModels.CompanyViewModels
     {
         public int Id { get; set; }
         public int CompanySize { get; set; }
+        public int TranslationsCount { get; set; }
         public string? Name { get; set; }
         public string DetailsUrl => $"{Name?.Replace(" ", "-").Replace("/", "-")}-{Id}";
         public string? LogoUrl {  get; set; }
@@ -50,12 +51,9 @@ namespace JobPortalProject.BL.ViewModels.CompanyViewModels
         public string? LogoUrl { get; set; }
         public IFormFile? LogoFile { get; set; }
         public int CompanyTypeId { get; set; }
-        public CompanyTranslationUpdateViewModel? CompanyTranslationUpdateViewModel { get; set; }
+        public List<CompanyTranslationUpdateViewModel> CompanyTranslations { get; set; } = [];
         public List<SelectListItem>? CompanyTypeList { get; set; } = [];
-        public List<CompanySocialUpdateViewModel> CompanySocialUpdateViewModels { get; set; } = [];
-        public List<AddressUpdateViewModel> CompanyAddressUpdateViewModels { get; set; } = [];
-        public List<WorkingFieldUpdateViewModel> WorkingFieldUpdateViewModels { get; set; } = [];
-       
+        public List<CompanySocialUpdateViewModel> CompanySocialUpdateViewModels { get; set; } = [];       
     }
 
     public class CompanyTranslationViewModel
@@ -77,12 +75,20 @@ namespace JobPortalProject.BL.ViewModels.CompanyViewModels
 
     public class CompanyTranslationUpdateViewModel
     {
-        public int Id { get; set; }
+        public int TranslationId { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
         public int LanguageId { get; set; }
         public int CompanyId { get; set; }
+        public string? LanguageIcon { get; set; }
     }
 
+    public class CompanyTranslationEditPageViewModel
+    {
+        public int LangaugeId { get; set; }
+        public CompanyTranslationUpdateViewModel CompanyTranslationUpdateViewModel { get; set; } = null!;
+        public List<WorkingFieldUpdateViewModel> WorkingFieldUpdateViewModels { get; set; } = [];
+        public List<AddressUpdateViewModel> AddressUpdateViewModels { get; set; } = [];
+    }
 
 }

@@ -1,6 +1,6 @@
 ﻿ @model CompanyUpdateViewModel
- 
- <!-- ========== Dashboard Area end============= -->
+@inject StringLocalizerManager localizer;
+ <!-- ========== Edit Area end============= -->
 <div class="dashboard-area company-dashboard pt-120 mb-120">
     <div class="container">
         <div class="row">
@@ -15,7 +15,7 @@
                             <h5>My Profile</h5>
                             <div class="dash"></div>
                         </div>
-                        <form method="post" class="profile-form" enctype="multipart/form-data">
+                        <form  method="post"  class="profile-form" enctype="multipart/form-data">
                             <input asp-for="Id" value="@Model.Id" type="hidden" />
                             <input asp-for="SelectedUpdateLanguageId" value="@Model.SelectedUpdateLanguageId" type="hidden" />
                             <div class="section-title2">
@@ -64,36 +64,8 @@
                                         </div>
                                     </div>
                                 }
-                                @for (int i = 0; i < Model.CompanyAddressUpdateViewModels.Count; i++)
-                                {
-                                    <input asp-for="CompanyAddressUpdateViewModels[i].Id" value="@Model.CompanyAddressUpdateViewModels[i].Id" type="hidden" />
-                                    <div class="section-title2">
-                                        <h5>Location:</h5>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-inner mb-25">
-                                            <label for="location">City *</label>
-                                            <div class="input-area">
-                                                <img src="~/images/icon/map-2.svg" alt="">
-                                                <select asp-items="Model.CompanyAddressUpdateViewModels[i].CityListItems" asp-for="CompanyAddressUpdateViewModels[i].CityId" class="select1"></select>
-                                                <span asp-validation-for="CompanyAddressUpdateViewModels[i].CityId"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-inner mb-25">
-                                            <label for="location">Street *</label>
-                                            <div class="input-area">
-                                                <img src="~/images/icon/map-2.svg" alt="">
-                                                <input asp-for="CompanyAddressUpdateViewModels[i].Street" id="location" placeholder="Type Street">
-                                                <span asp-validation-for="CompanyAddressUpdateViewModels[i].Street"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
+
                                 <div class="col-lg-12">
-                                  
-                                      
                                     <div class="section-title2">
                                         <h5>Company Image:</h5>
                                     </div>
@@ -101,20 +73,18 @@
                                         <div class="row g-lg-4 gy-5">
                                             <div class="col-lg-6 devaider1 position-relative">
                                                 <div class="company-logo-area">
-                                                    
-                                                   
                                                     <h5>Company Logo: </h5>
                                                     <div>
-                                                    <div class="drag-area">
-                                                        <p>Upload Logo</p>
-                                                        <button type="button" class="upload-btn"><i class="bi bi-plus-lg"></i></button>
-                                                        <input asp-for="LogoFile" accept="image/*">
-                                                    </div>
-                                                    <br/>
-                                                    <div>
-                                                         <input name="LogoUrl" value="@Model.LogoUrl" type="hidden" />
-                                                        <img src="@Model.LogoUrl" width="100" height="100" />
-                                                    </div>
+                                                        <div class="drag-area">
+                                                            <p>Upload Logo</p>
+                                                            <button type="button" class="upload-btn"><i class="bi bi-plus-lg"></i></button>
+                                                            <input asp-for="LogoFile" accept="image/*">
+                                                        </div>
+                                                        <br />
+                                                        <div>
+                                                            <input name="LogoUrl" value="@Model.LogoUrl" type="hidden" />
+                                                            <img src="@Model.LogoUrl" width="100" height="100" />
+                                                        </div>
                                                     </div>
 
                                                     <span>Maximum File Upload: 2 MB</span>
@@ -128,7 +98,7 @@
                                                         <button type="button" class="upload-btn"><i class="bi bi-plus-lg"></i></button>
                                                         <input asp-for="CoverPhotoFile" accept="image/*">
                                                     </div>
-                                                    <br/>
+                                                    <br />
                                                     <div class="drag-area" id="dragArea2">
                                                         <input name="CoverPhotoUrl" value="@Model.CoverPhotoUrl" type="hidden" />
                                                         <img src="@Model.CoverPhotoUrl" width="100" height="100" />
@@ -139,90 +109,54 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="section-title2">
-                                    <h5>Company Details:</h5>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-inner mb-25">
-                                        <label for="companyname">Company Name*</label>
-                                        <div class="input-area">
-                                            <img src="~/images/icon/company-2.svg" alt="">
-                                            <input asp-for="CompanyTranslationUpdateViewModel.Name" id="companyname" placeholder="Elite Hangstroman" />
-                                            <input asp-for="CompanyTranslationUpdateViewModel.Id" value="@Model.CompanyTranslationUpdateViewModel!.Id" type="hidden" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-inner mb-40">
-                                        <label for="description">Description*</label>
-                                        <textarea asp-for="CompanyTranslationUpdateViewModel.Description" placeholder="Company Details*"></textarea>
-                                    </div>
-                                </div>
-                                <div id="workingFieldsDiv"  class="section-title2">
-                                    <h5>Working Fields:</h5>
-                                <br/>
-                                <br/>
-
-                                @for (int i = 0; i < Model.WorkingFieldUpdateViewModels.Count; i++)
-                                {
-                                    <input asp-for="WorkingFieldUpdateViewModels[i].Id" value="@Model.WorkingFieldUpdateViewModels[i].Id" type="hidden" />
-                                  
-                                    <div  class="work-area-row">
-                                        <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-inner mb-25">
-                                                <label for="working-field">Working Field @(i+1) *</label>
-                                                <div class="input-area">
-                                                    <img src="~/images/icon/company-2.svg" alt="">
-                                                    <input asp-for="WorkingFieldUpdateViewModels[i].WorkingFieldTranslationUpdateViewModel.Name" id="working-field" placeholder="Frontend Developer" />
-                                                    <span asp-validation-for="WorkingFieldUpdateViewModels[i].WorkingFieldTranslationUpdateViewModel.Name"></span>
-                                                    <input asp-for="WorkingFieldUpdateViewModels[i].WorkingFieldTranslationUpdateViewModel.Id" value="@Model.WorkingFieldUpdateViewModels[i].WorkingFieldTranslationUpdateViewModel!.Id" type="hidden" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-inner mb-25">
-                                                <label>Add Icon*</label>
-                                                <div class="input-area">
-                                                    <img src="~/images/icon/company-2.svg" alt="">
-                                                    <input asp-for="WorkingFieldUpdateViewModels[i].IconFile" accept="image/*">
-                                                    <span asp-validation-for="WorkingFieldUpdateViewModels[i].IconFile"></span>
-                                                        <div class="form-inner mb-25">
-                                                            <input name="@Model.WorkingFieldUpdateViewModels[i].IconUrl" value="@Model.WorkingFieldUpdateViewModels[i].IconUrl" type="hidden" />
-                                                            <img src="@Model.WorkingFieldUpdateViewModels[i].IconUrl" width="100" height="100" />
-                                                        </div>
-                                                </div> 
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="form-inner mb-40">
-                                                <label for="description">Short Description*</label>
-                                                <input asp-for="WorkingFieldUpdateViewModels[i].WorkingFieldTranslationUpdateViewModel.Description" id="description" placeholder="Details*"/>
-                                                <span asp-validation-for="WorkingFieldUpdateViewModels[i].WorkingFieldTranslationUpdateViewModel.Description"></span>
-                                                <br />
-                                                    <div class="add-row">
-                                                        <button onclick="deleteWorkingField(@Model.WorkingFieldUpdateViewModels[i].Id)" type="button" class="remove-work-area-row remove">Remove Work Area</button>
-                                                    </div>
-                                            </div>                             
-                                        </div>
-                                    </div>
-                                </div>
-                                }
-                                </div>
-                                <div class="add-remove-btn d-flex align-items-center justify-content-between mb-50">
-                                    <div class="add-row">
-                                        <button type="button" onclick="addWorkingAreaPartialView(@Model.SelectedUpdateLanguageId)">Add Working Area+</button>
-                                    </div>
-                                    <div class="add-row">
-                                        <button type="button" onclick="addWorkingAreaTranslation(@Model.SelectedUpdateLanguageId)">Add Translation For Existing Work Area+</button>
-                                    </div>
-                                </div>
                                 <div class="col-md-12">
                                     <div class="form-inner">
-                                        <button class="primry-btn-2 lg-btn w-unset" type="submit">Update Change</button>
+                                        <button class="primry-btn-2 lg-btn w-unset"  type="submit">Update Change</button>
                                     </div>
                                 </div>
-
+                            </div>
+                        </form>
+                       
+                    </div>
+</div>
+                <div class="my-profile-inner ">
+                    <div class="form-wrapper">
+                        <br />
+                        <div class="section-title two">
+                            <h5>Profile Details</h5>
+                            <div class="dash"></div>
+                        </div>
+                        <form asp-controller="company" asp-action="UpdateCompanyTranslation" class="profile-form" enctype="multipart/form-data">
+                            <div class="col-lg-12">
+                                <div class="action-btn-group">
+                                    <div class="add-row">
+                                        <a asp-controller="company" asp-action="addWorkingField" class="primry-btn-2 lg-btn w-unset">Add Working Field</a>
+                                        <a asp-controller="company" asp-action="addAddress" class="primry-btn-2 lg-btn w-unset">Add Location</a>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="section-title2">
+                                    <h5>Translations :</h5>
+                                </div>
+                                <div class="action-btn-group">
+                                    <ul>
+                                        @foreach (var translation in Model.CompanyTranslations ?? [])
+                                        {
+                                            <li>
+                                                <div class="add-row">
+                                                    <button type="button" onclick="updateCompanyTranslation(@translation.LanguageId)">
+                                                        <span>
+                                                            <img src="~/images/icon/edit2.svg" alt="">
+                                                            <span><img src="@translation.LanguageIcon" alt="">@localizer.GetValue("editProfile")</span>
+                                                        </span>
+                                                    </button>
+                                                </div>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                                <div id="companyTranslation" class="col-lg-12">
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -231,4 +165,6 @@
         </div>
     </div>
 </div>
-<!-- ========== Dashboard Area end============= -->
+<!-- ========== Edit Area end============= -->
+
+

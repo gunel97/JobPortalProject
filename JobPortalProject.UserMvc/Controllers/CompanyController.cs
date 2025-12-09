@@ -1,6 +1,7 @@
 ﻿using JobPortalProject.BL.Services.Contracts;
 using JobPortalProject.BL.UI.Services.Abstracts;
 using JobPortalProject.BL.UI.ViewModels;
+using JobPortalProject.BL.ViewModels.AddressViewModels;
 using JobPortalProject.BL.ViewModels.CompanyViewModels;
 using JobPortalProject.BL.ViewModels.WorkingFieldViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -16,8 +17,12 @@ namespace JobPortalProject.UserMvc.Controllers
         private readonly ICookieService _cookieService;
         private readonly IWorkingFieldService _workingFieldService;
         private readonly IWorkingFieldTranslationService _workingFieldTranslationService;
+        private readonly IAddressService _addressService;
 
-        public CompanyController(ICompanyDetailsService companyDetailsService, ICompanyListingService companyListingService, ICompanyService companyService, ICompanyDashboardService companyDashboardService, ICookieService cookieService, IWorkingFieldService workingFieldService, IWorkingFieldTranslationService workingFieldTranslationService)
+        public CompanyController(ICompanyDetailsService companyDetailsService, ICompanyListingService companyListingService, 
+            ICompanyService companyService, ICompanyDashboardService companyDashboardService, ICookieService cookieService, 
+            IWorkingFieldService workingFieldService, IWorkingFieldTranslationService workingFieldTranslationService, 
+            IAddressService addressService)
         {
             _companyDetailsService = companyDetailsService;
             _companyListingService = companyListingService;
@@ -26,6 +31,7 @@ namespace JobPortalProject.UserMvc.Controllers
             _cookieService = cookieService;
             _workingFieldService = workingFieldService;
             _workingFieldTranslationService = workingFieldTranslationService;
+            _addressService = addressService;
         }
 
         public async Task<IActionResult> Index()
@@ -54,10 +60,10 @@ namespace JobPortalProject.UserMvc.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> EditCompanyProfile(int selectedLanguageId)
+        public async Task<IActionResult> EditCompanyProfile()
         {
             var language = await _cookieService.GetLanguageAsync();
-            var model = await _companyService.GetCompanyUpdateViewModelAsync(selectedLanguageId);
+            var model = await _companyService.GetCompanyUpdateViewModelAsync();
 
             return View(model);
         }
@@ -67,17 +73,42 @@ namespace JobPortalProject.UserMvc.Controllers
         {
             if (!ModelState.IsValid)
             {
-                model = await _companyService.GetCompanyUpdateViewModelAsync(model.SelectedUpdateLanguageId);
+                model = await _companyService.GetCompanyUpdateViewModelAsync();
 
                 return View(model);
             }
 
             var isUpdated = await _companyService.UpdateAsync(model.SelectedUpdateLanguageId, model);
-          
+
             if (!isUpdated)
                 return NotFound();
 
             return RedirectToAction("CompanyDashboard", "Company");
+        }
+
+        public async Task<IActionResult> UpdateCompanyTranslation(int id)
+        {
+            var model = await _companyService.GetCompanyTranslationEditPageAsync(id);
+            if (model == null)
+                return NotFound();
+
+            return PartialView("_CompanyTranslateUpdateViewPartial", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateCompanyTranslation(CompanyTranslationEditPageViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return PartialView("_CompanyTranslationUpdateViewPartial", model); 
+            }
+
+            var isUpdated = await _companyService.UpdateCompanyTranslation(model);
+
+            if (!isUpdated)
+                return NotFound();
+
+            return RedirectToAction(nameof(EditCompanyProfile));
         }
 
         public async Task<IActionResult> DeleteWorkingField(int id)
@@ -93,61 +124,61 @@ namespace JobPortalProject.UserMvc.Controllers
             else return RedirectToAction("CompanyDashboard", "Company");
         }
 
-        public async Task<IActionResult> AddWorkingField(int id)
+        public async Task<IActionResult> DeleteAddress(int id)
         {
-            var model = await _companyService.GetWorkingFieldCreateViewModel(id);
+            var address = await _addressService.GetByIdAsync(id);
 
-            return PartialView("_WorkingFieldAddPartial", model);
+            if (address == null)
+                return BadRequest();
+
+            var deleted = await _addressService.DeleteAsync(id);
+            if (deleted)
+                return NoContent();
+            else return RedirectToAction("CompanyDashboard", "Company");
+        }
+
+        public async Task<IActionResult> AddWorkingField()
+        {
+            var model = await _companyService.GetWorkingFieldCreateViewModel();
+
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddWorkingField(int id, WorkingFieldCreateViewModel model)
+        public async Task<IActionResult> AddWorkingField(WorkingFieldCreateViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                await _companyService.GetWorkingFieldCreateViewModel(model.SelectedUpdateLanguageId);
-
-                return PartialView("_WorkingFieldAddPartial", model);
+                model = await _companyService.GetWorkingFieldCreateViewModel(); 
+                return View(model);
             }
 
             var isCreated = await _companyService.CreateWorkingField(model);
             if (!isCreated) return NotFound();
 
-            return NoContent();
+            return RedirectToAction("CompanyDashboard", "Company");
         }
 
-        public async Task<IActionResult> AddWorkingFieldTranslation(int id)
+        public async Task<IActionResult> AddAddress()
         {
-            var model = await _companyService.GetAddTranslationViewModelAsync(id);
-
-            return PartialView("_AddWorkingFieldTranslationPartial", model);
+            var model = await _companyService.GetAddressCreateViewModel();
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddWorkingFieldTranslation(AddWorkingFieldTranslationViewModel model)
+        public async Task<IActionResult> AddAddress(AddressCreateViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                await _companyService.GetAddTranslationViewModelAsync(model.SelectedLanguageId);
-
-                return PartialView("_AddWorkingFieldTranslationPartial", model);
+                model = await _companyService.GetAddressCreateViewModel();
+                return View(model);
             }
 
-            if (model.TranslationCreateViewModel != null)
-            {
-                var translation = await _workingFieldService.CreateWorkingFieldTranslationAsync(model);
+            var isCreated = await _companyService.CreateAddress(model);
+            if(!isCreated)
+                return NotFound();
+            return RedirectToAction("CompanyDashboard", "Company");
 
-                if (translation == null)
-                    return NotFound();
-            }
-            else
-            {
-                await _companyService.GetAddTranslationViewModelAsync(model.SelectedLanguageId);
-
-                return PartialView("_AddWorkingFieldTranslationPartial", model);
-            }
-
-            return NoContent();
         }
     }
 }

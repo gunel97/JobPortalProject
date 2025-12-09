@@ -35,12 +35,12 @@ namespace JobPortalProject.BL.Services.Implementations
                 {
                     workingFieldUpdateViewModels.Add(new WorkingFieldUpdateViewModel
                     {
-                        Id = workingField.Id,
+                        WorkingFieldId = workingField.Id,
                         CompanyId = companyId,
                         IconUrl = workingField.IconUrl,
                         WorkingFieldTranslationUpdateViewModel = new WorkingFieldTranslationUpdateViewModel
                         {
-                            Id = workingField.Translations.FirstOrDefault()!.Id,
+                            WorkingFieldTranslationId = workingField.Translations.FirstOrDefault()!.Id,
                             WorkingFieldId = workingField.Id,
                             LanguageId = selectedLanguageId,
                             Name = workingField.Translations.FirstOrDefault()!.Name,

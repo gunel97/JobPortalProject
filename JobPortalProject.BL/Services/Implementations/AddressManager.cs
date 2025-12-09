@@ -2,11 +2,14 @@
 using JobPortalProject.BL.Services.Contracts;
 using JobPortalProject.BL.UI.Services.Abstracts;
 using JobPortalProject.BL.ViewModels.AddressViewModels;
+using JobPortalProject.BL.ViewModels.WorkingFieldViewModels;
 using JobPortalProject.DA.DataContext.Entities;
 using JobPortalProject.DA.Repositories.Contracts;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
+using System.Security.Claims;
 
 namespace JobPortalProject.BL.Services.Implementations
 {
@@ -16,6 +19,7 @@ namespace JobPortalProject.BL.Services.Implementations
         private readonly ICookieService _cookieService;
         private readonly ICityService _cityService;
         private readonly IAddressTranslationService _addressTranslationService;
+
         public AddressManager(IRepositoryAsync<Address> repository, IMapper mapper, ICookieService cookieService, ICityService cityService, IAddressTranslationService addressTranslationService) : base(repository, mapper)
         {
             _cookieService = cookieService;
@@ -64,14 +68,11 @@ namespace JobPortalProject.BL.Services.Implementations
             return addressUpdateViewModels;
         }
 
-        //public override Task<bool> UpdateAsync(int id, AddressUpdateViewModel model)
-        //{
-
-        //}
+        
 
         public async Task<bool> UpdateAddressAsync(int languageId, int addressId, AddressUpdateViewModel model)
         {
-            var address = await Repository.GetAsync(predicate: x => x.Id == model.Id,
+            var address = await Repository.GetAsync(predicate: x => x.Id == addressId,
                 include: x => x.Include(a => a.AddressTranslations.Where(t => t.LanguageId == languageId)));
 
             if (address == null)
@@ -86,7 +87,7 @@ namespace JobPortalProject.BL.Services.Implementations
                 Id = translation.Id,
                 Street = model.Street,
                 AddressId = addressId,
-                LanguageId = languageId
+                LanguageId = languageId,              
             };
 
             await _addressTranslationService.UpdateAsync(translation.Id, translationUpdateViewModel);

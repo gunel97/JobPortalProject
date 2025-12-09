@@ -77,6 +77,8 @@ namespace JobPortalProject.BL.Mapping
                 .ForMember(x => x.CategoryName, opt => opt
                 .MapFrom(src => src.CompanyType == null ? "" :
                 src.CompanyType.CompanyTypeTranslations.FirstOrDefault()!.Name))
+                .ForMember(x=>x.TranslationsCount, opt=> opt
+                .MapFrom(src=>src.CompanyTranslations.Count()))
                 .ReverseMap();
             CreateMap<Company, CompanyCreateViewModel>().ReverseMap();
             CreateMap<Company, CompanyUpdateViewModel>().ReverseMap();

@@ -20,14 +20,23 @@ namespace JobPortalProject.BL.ViewModels.AddressViewModels
         public CityViewModel? City {get;set;}
     }
 
-    public class AddressCreateViewModel { }
+    public class AddressCreateViewModel
+    {
+        public int CompanyId { get; set; }
+        public int CityId { get; set; }
+        public int SelectedLanguageId { get;set; }
+        public int CompanyTranslationsCount { get; set; }
+        public bool IsMainAddress { get; set; }
+        public List<SelectListItem> CityListItems { get; set; } = [];
+        public List<AddressTranslationCreateViewModel> AddressTranslationCreateViewModels { get; set; } = [];
+    }
 
     public class AddressUpdateViewModel
     {
         public int Id { get; set; }
         public bool? IsMainAddress { get; set; }
         public int CityId { get; set; }
-        public List<SelectListItem>? CityListItems { get; set; } = [];
+        public List<SelectListItem> CityListItems { get; set; } = [];
         public int CompanyId { get; set; }
         public int AddressTranslationId { get; set; }
         public string? Street { get; set; }
@@ -35,7 +44,13 @@ namespace JobPortalProject.BL.ViewModels.AddressViewModels
 
     public class AddressTranslationViewModel { }
 
-    public class AddressTranslationCreateViewModel { }
+    public class AddressTranslationCreateViewModel
+    {
+        public int AddressId { get; set; }
+        public int LanguageId { get; set; }
+        public string Street { get; set; } = null!;
+    }
+
     public class AddressTranslationUpdateViewModel {
         public int Id { get; set; }
         public int LanguageId {  get; set; }

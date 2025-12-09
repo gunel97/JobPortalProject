@@ -8,5 +8,6 @@ namespace JobPortalProject.BL.Services.Contracts
     {
         public Task<List<AddressUpdateViewModel>> GetAddressUpdateViewModels(int companyId, int selectedLanguageId);
         public Task<bool> UpdateAddressAsync(int languageId, int addressId, AddressUpdateViewModel model);
+
     }
 }

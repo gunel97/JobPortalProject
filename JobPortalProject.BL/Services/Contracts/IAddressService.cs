@@ -1,5 +1,6 @@
 ﻿using JobPortalProject.BL.ViewModels.AddressViewModels;
 using JobPortalProject.DA.DataContext.Entities;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace JobPortalProject.BL.Services.Contracts
 {
@@ -8,6 +9,7 @@ namespace JobPortalProject.BL.Services.Contracts
     {
         public Task<List<AddressUpdateViewModel>> GetAddressUpdateViewModels(int companyId, int selectedLanguageId);
         public Task<bool> UpdateAddressAsync(int languageId, int addressId, AddressUpdateViewModel model);
+        public Task<List<SelectListItem>> GetAddressSelectListItems(int companyId, int languageId);
 
     }
 }

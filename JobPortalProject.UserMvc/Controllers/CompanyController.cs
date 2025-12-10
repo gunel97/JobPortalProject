@@ -56,6 +56,8 @@ namespace JobPortalProject.UserMvc.Controllers
         public async Task<IActionResult> CompanyDashboard()
         {
             var model = await _companyDashboardService.GetCompanyDashboardViewModelAsync();
+            var isActive = await _companyService.IsCompanyActive();
+            model.IsAccountActive = isActive;
 
             return View(model);
         }

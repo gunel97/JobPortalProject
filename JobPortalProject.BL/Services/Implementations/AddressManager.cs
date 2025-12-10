@@ -6,6 +6,7 @@ using JobPortalProject.BL.ViewModels.WorkingFieldViewModels;
 using JobPortalProject.DA.DataContext.Entities;
 using JobPortalProject.DA.Repositories.Contracts;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
@@ -68,7 +69,22 @@ namespace JobPortalProject.BL.Services.Implementations
             return addressUpdateViewModels;
         }
 
-        
+        public async Task<List<SelectListItem>> GetAddressSelectListItems(int companyId, int languageId)
+        {
+            var addressSelectListItems = new List<SelectListItem>();
+            var addresses = await Repository.GetAllAsync(
+                predicate: x => x.CompanyId == companyId && !x.IsDeleted,
+                include: x => x.Include(x => x.City!).ThenInclude(x => x.CityTranslations.Where(t=>t.LanguageId==languageId))
+                .Include(x => x.City!).ThenInclude(x => x.Country!).ThenInclude(x => x.Translations.Where(t => t.LanguageId == languageId))
+                .Include(x=>x.AddressTranslations.Where(t=>t.LanguageId==languageId)));
+
+            var addressViewModels = addresses.Select(
+                x => Mapper.Map<AddressViewModel>(x)).ToList();
+            addressViewModels.ForEach(x => addressSelectListItems.Add(
+                new SelectListItem(x.Street + ", " + x.CityName + ", " + x.CountryName, x.Id.ToString())));
+
+            return addressSelectListItems;
+        }
 
         public async Task<bool> UpdateAddressAsync(int languageId, int addressId, AddressUpdateViewModel model)
         {

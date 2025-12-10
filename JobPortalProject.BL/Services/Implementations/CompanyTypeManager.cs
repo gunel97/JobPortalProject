@@ -17,7 +17,7 @@ namespace JobPortalProject.BL.Services.Implementations
         }
 
         public async Task<List<SelectListItem>> GetCompanyTypeSelectListItems(int selectedLanguageId)
-        {;
+        {
             var companyTypesSelectListItems = new List<SelectListItem>();
 
             var companyTypes = await Repository.GetAllAsync(include: 

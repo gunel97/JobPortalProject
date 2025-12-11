@@ -1,4 +1,6 @@
 ﻿using JobPortalProject.BL.ViewModels.AddressViewModels;
+using JobPortalProject.BL.ViewModels.JobExtraBenefitViewModels;
+using JobPortalProject.BL.ViewModels.JobResponsibilityViewModels;
 using JobPortalProject.DA.DataContext.Enums;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -62,7 +64,10 @@ namespace JobPortalProject.BL.ViewModels.JobViewModels
         public int JobCategoryId { get; set; }
         public List<SelectListItem> JobCategoriesList { get; set; } = [];
         public List<JobTranslationCreateViewModel> TranslationCreateViewModels { get; set; } = [];
+        public List<JobResponsibilityCreateViewModel> Responsibilities { get; set; } = [];
+        public List<JobExtraBenefitCreateViewModel> Benefits { get; set; } = [];
     }
+
 
     public class JobUpdateViewModel
     {
@@ -78,6 +83,7 @@ namespace JobPortalProject.BL.ViewModels.JobViewModels
         public int LanguageId { get; set; }
         public string Title { get; set; } = null!;
         public string Description { get;set; } = null!;
+        public string? LanguageIcon { get; set; }
     }
 
     public class JobTranslationUpdateViewModel

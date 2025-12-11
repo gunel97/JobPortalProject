@@ -17,5 +17,6 @@ namespace JobPortalProject.BL.Services.Contracts
         public Task<AddressCreateViewModel> GetAddressCreateViewModel();
         public Task<bool> CreateAddress(AddressCreateViewModel model);
         public Task<bool> IsCompanyActive();
+        public Task<int> GetCompanyIdOfUser();
     }
 }

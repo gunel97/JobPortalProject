@@ -2,6 +2,7 @@
 using JobPortalProject.BL.UI.Services.Abstracts;
 using JobPortalProject.BL.ViewModels.JobViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens.Experimental;
 
 namespace JobPortalProject.UserMvc.Controllers
 {
@@ -9,11 +10,13 @@ namespace JobPortalProject.UserMvc.Controllers
     {
         private readonly IJobService _jobService;
         private readonly IJobListingService _jobListingService;
+        private readonly ICompanyService _companyService;
 
-        public JobController(IJobService jobService, IJobListingService jobListingService)
+        public JobController(IJobService jobService, IJobListingService jobListingService, ICompanyService companyService)
         {
             _jobService = jobService;
             _jobListingService = jobListingService;
+            _companyService = companyService;
         }
 
         public async Task<IActionResult> Index()
@@ -27,7 +30,7 @@ namespace JobPortalProject.UserMvc.Controllers
         {
             int jobId = int.Parse(id.Split('-').Last());
 
-            var job = await _jobService.GetAsync(predicate: x=>x.Id==jobId);
+            var job = await _jobService.GetByIdAsync(jobId);
 
             if (job == null)
                 return NotFound();
@@ -35,9 +38,12 @@ namespace JobPortalProject.UserMvc.Controllers
             return View(job);
         }
 
-        public IActionResult JobList()
+        public async Task<IActionResult> JobList()
         {
-            return View();
+            var companyId = await _companyService.GetCompanyIdOfUser();
+            var model = await _jobService.GetAllJobsOfCompanyAsync(companyId);
+
+            return View(model);
         }
 
         public async Task<IActionResult> Create()

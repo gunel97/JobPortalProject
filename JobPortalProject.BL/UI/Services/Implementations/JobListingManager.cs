@@ -28,7 +28,7 @@ namespace JobPortalProject.BL.UI.Services.Implementations
         public async Task<JobListingViewModel> GetJobListingViewModel()
         {
             var language = await _cookieService.GetLanguageAsync();
-            var jobs = await _jobService.GetAllAsync();
+            var jobs = await _jobService.GetAllJobsAsync();
             var jobCategories = await _jobCategoryService.GetAllAsync(
                 include: x => x
                 .Include(x => x.JobCategoryTranslations.Where(x => x.LanguageId == language.Id))

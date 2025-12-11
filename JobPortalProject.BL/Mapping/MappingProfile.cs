@@ -6,6 +6,8 @@ using JobPortalProject.BL.ViewModels.CompanyTypeViewModels;
 using JobPortalProject.BL.ViewModels.CompanyViewModels;
 using JobPortalProject.BL.ViewModels.CountryViewModels;
 using JobPortalProject.BL.ViewModels.JobCategoryViewModels;
+using JobPortalProject.BL.ViewModels.JobExtraBenefitViewModels;
+using JobPortalProject.BL.ViewModels.JobResponsibilityViewModels;
 using JobPortalProject.BL.ViewModels.JobViewModels;
 using JobPortalProject.BL.ViewModels.LanguageViewModels;
 using JobPortalProject.BL.ViewModels.SocialMediaViewModels;
@@ -146,6 +148,21 @@ namespace JobPortalProject.BL.Mapping
             CreateMap<JobCategoryTranslation, JobCategoryTranslationCreateViewModel>().ReverseMap();
             CreateMap<JobCategoryTranslation, JobCategoryTranslationUpdateViewModel>().ReverseMap();
 
+            CreateMap<JobResponsibility, JobResponsibilityViewModel>().ReverseMap();
+            CreateMap<JobResponsibility, JobResponsibilityCreateViewModel>().ReverseMap();
+            CreateMap<JobResponsibility, JobResponsibilityUpdateViewModel>().ReverseMap();
+
+            CreateMap<JobResponsibilityTranslation, JobResponsibilityTranslationViewModel>().ReverseMap();
+            CreateMap<JobResponsibilityTranslation, JobResponsibilityTranslationCreateViewModel>().ReverseMap();
+            CreateMap<JobResponsibilityTranslation, JobResponsibilityTranslationUpdateViewModel>().ReverseMap();
+      
+            CreateMap<JobExtraBenefit, JobExtraBenefitViewModel>().ReverseMap();
+            CreateMap<JobExtraBenefit, JobExtraBenefitCreateViewModel>().ReverseMap();
+            CreateMap<JobExtraBenefit, JobExtraBenefitUpdateViewModel>().ReverseMap();
+
+            CreateMap<JobExtraBenefitTranslation, JobExtraBenefitTranslationViewModel>().ReverseMap();
+            CreateMap<JobExtraBenefitTranslation, JobExtraBenefitTranslationCreateViewModel>().ReverseMap();
+            CreateMap<JobExtraBenefitTranslation, JobExtraBenefitTranslationUpdateViewModel>().ReverseMap();
         }
     }
 }

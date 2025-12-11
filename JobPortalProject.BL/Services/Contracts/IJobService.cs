@@ -13,5 +13,7 @@ namespace JobPortalProject.BL.Services.Contracts
         public List<SelectListItem> GetSalaryTypeListItems();
         public List<SelectListItem> GetEducationTypeListItems();
         public Task<bool> CreateJob(int companyId, JobCreateViewModel model);
+        public Task<List<JobViewModel>> GetAllJobsOfCompanyAsync(int companyId);
+        public Task<IEnumerable<JobViewModel>> GetAllJobsAsync();
     }
 }

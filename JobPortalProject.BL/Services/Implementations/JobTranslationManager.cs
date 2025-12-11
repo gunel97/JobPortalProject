@@ -10,6 +10,25 @@ namespace JobPortalProject.BL.Services.Implementations
 , IJobTranslationService
     {
         public JobTranslationManager(IRepositoryAsync<JobTranslation> repository, IMapper mapper) : base(repository, mapper) { }
+
+        public async Task<bool> CreateJobTranslation(int jobId, JobTranslationCreateViewModel model)
+        {
+            var jobTranslation = new JobTranslation
+            {
+                JobId = jobId,
+                LanguageId = model.LanguageId,
+                Title = model.Title,
+                Description = model.Description,
+            };
+
+            var createdJobEntity = await Repository.AddAsync(jobTranslation);
+            if (createdJobEntity == null)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 
 

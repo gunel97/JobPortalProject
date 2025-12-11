@@ -33,7 +33,7 @@ namespace JobPortalProject.BL.UI.Services.Implementations
 
             var addresses =await  _addressService.GetAllAsync();
 
-            var jobs = await _jobService.GetAllAsync();
+            var jobs = await _jobService.GetAllJobsAsync();
 
             var jobCategories = await _jobCategoryService.GetAllAsync(
                                                 predicate: x => !x.IsDeleted,

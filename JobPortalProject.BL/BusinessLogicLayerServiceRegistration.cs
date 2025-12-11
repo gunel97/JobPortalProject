@@ -57,6 +57,11 @@ namespace JobPortalProject.BL
             services.AddScoped<IJobService, JobManager>();
             services.AddScoped<IJobListingService, JobListingManager>();
 
+            services.AddScoped<IJobResponsibilityService, JobResponsibilityManager>();
+            services.AddScoped<IJobResponsibilityTranslationService, JobResponsibilityTranslationManager>();
+            services.AddScoped<IJobExtraBenefitService, JobExtraBenefitManager>();
+            services.AddScoped<IJobExtraBenefitTranslationService, JobExtraBenefitTranslationManager>();
+
             services.AddScoped<ITopHeaderService, TopHeaderManager>();
             services.AddScoped<IHomeService, HomeManager>();
             services.AddScoped<ICompanyDetailsService, CompanyDetailsManager>();

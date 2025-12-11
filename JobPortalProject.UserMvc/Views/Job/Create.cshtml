@@ -141,6 +141,11 @@
                             </div>
                             @for (int i=0; i< Model.TranslationCreateViewModels.Count(); i++)
                             {
+                                <div class="col-lg-12">
+                                    <div class="section-title2">
+                                        <h5>Job Details Translation <img src="@Model.TranslationCreateViewModels[i].LanguageIcon" alt=""> :</h5>
+                                    </div>
+                                </div>
                                 <input asp-for="TranslationCreateViewModels[i].LanguageId" 
                                 value="@Model.TranslationCreateViewModels[i].LanguageId" type="hidden" />
                                 <div class="col-md-6">
@@ -170,17 +175,42 @@
                                         </div>
                                     </div>
                                 </div>
+                            }
+
+                            <div class="row">
+                            <div class="col-lg-12">
+                                <div class="section-title2">
+                                        <h5 id="benefitTitle"></h5>
+                                </div>
+                            </div>
+                            <div id ="bContainer" class="col-md-12">
+                            </div>
                                 <div class="col-md-12">
-                                    <div class="form-inner mb-25">
-                                        <label for="jobtitle">Extra Benefits</label>
-                                        <div class="input-area">
-                                            <img src="~/images/icon/company-2.svg" alt="">
-                                            <input asp-for="TranslationCreateViewModels[i].Description" id="description" placeholder="Senior UI/UX Engineer">
-                                        </div>
+                                    <div class="form-inner">
+                                        <button onclick='addB(@Html.Raw(Json.Serialize(Model.TranslationCreateViewModels)))' class="primry-btn-2 lg-btn w-unset" type="button">Add Extra Benefits</button>
                                     </div>
                                 </div>
-                            }
+                                <br />
+                            </div>
+                            <div class="row">
+                            <div class="col-lg-12">
+                                <div class="section-title2">
+                                        <h5 id="responsibilityTitle"></h5>
+                                </div>
+                            </div>
+                            <div id ="rContainer" class="col-md-12">
+                            </div>
+                                <div class="col-md-12">
+                                    <div class="form-inner">
+                                        <button onclick='addR(@Html.Raw(Json.Serialize(Model.TranslationCreateViewModels)))' class="primry-btn-2 lg-btn w-unset" type="button">Add Job Responsibility</button>
+                                    </div>
+                                </div>
+                                <br />
+                            </div>
+
+                            <br/>
                             <div class="col-md-12">
+                                <br />
                                 <div class="form-inner">
                                     <button class="primry-btn-2 lg-btn w-unset" type="submit">Post Now</button>
                                 </div>
@@ -192,3 +222,58 @@
         </div>
     </div>
 <!-- ========== Login Area end============= -->
+
+
+<script>
+    let respIndex = 0;
+    let benIndex=0;
+
+    function addR(translations){
+        console.log(translations);
+        console.log("test");
+    const rContainer = document.getElementById("rContainer");
+    const responsibilityTitle = document.getElementById("responsibilityTitle");
+    responsibilityTitle.innerText="Job Responsibilities"
+    for(let i=0; i<translations.length; i++){
+        const divElement =document.createElement('div');
+                divElement.className='form-inner mb-25';
+                    var htmlTextR = `<label for="jobtitle">
+                    Job Responsibility <img src="${translations[i].languageIcon}" alt=""> *</label>
+                                        <div class="input-area">
+                                            <img src="/images/icon/company-2.svg" alt="">
+                                            <input name="Responsibilities[${respIndex}].Translations[${i}].Value" placeholder="Senior UI/UX Engineer">
+                                            <input type="hidden" name="Responsibilities[${respIndex}].Translations[${i}].LanguageId" value="${i + 1}" />
+                                            </div>`;
+            divElement.innerHTML+=htmlTextR;
+            rContainer.appendChild(divElement);
+            console.log(htmlTextR);
+    }
+    respIndex++;
+    }
+
+    function addB(translations){
+        console.log(translations);
+        console.log("test");
+
+    const bContainer = document.getElementById("bContainer");
+    const benefitTitle = document.getElementById("benefitTitle");
+    benefitTitle.innerText="Job Extra Benefits"
+    for(let i=0; i<translations.length; i++){
+        const divElement =document.createElement('div');
+                divElement.className='form-inner mb-25';
+                    var htmlTextB = `<label for="jobtitle">
+                    Job Benefit <img src="${translations[i].languageIcon}" alt=""> *</label>
+                                        <div class="input-area">
+                                            <img src="/images/icon/company-2.svg" alt="">
+                                            <input name="Benefits[${benIndex}].Translations[${i}].Value" placeholder="Senior UI/UX Engineer">
+                                            <input type="hidden" name="Benefits[${benIndex}].Translations[${i}].LanguageId" value="${i + 1}" />
+                                            </div>`;
+            divElement.innerHTML+=htmlTextB;
+            bContainer.appendChild(divElement);
+            console.log(htmlTextB);
+    }
+    benIndex++;
+    }
+
+
+</script>

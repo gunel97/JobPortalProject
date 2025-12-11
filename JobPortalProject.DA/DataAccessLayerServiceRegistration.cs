@@ -44,6 +44,13 @@ namespace JobPortalProject.DA
             services.AddScoped<ICompanySocialRepository, CompanySocialRepository>();
             services.AddScoped<IJobRepository, JobRepository>();
             services.AddScoped<IJobTranslationRepository, JobTranslationRepository>();
+            services.AddScoped<IJobResponsibilityRepository, JobResponsibilityRepository>();
+            services.AddScoped<IJobResponsibilityTranslationRepository, JobResponsibilityTranslationRepository>();
+            services.AddScoped<IJobMainDutyRepository, JobMainDutyRepository>();
+            services.AddScoped<IJobMainDutyTranslationRepository, JobMainDutyTranslationRepository>();
+            services.AddScoped<IJobExtraBenefitRepository, JobExtraBenefitRepository>();
+            services.AddScoped<IJobExtraBenefitTranslationRepository, JobExtraBenefitTranslationRepository>();
+            
 
             return services;
         }

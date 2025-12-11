@@ -6,12 +6,14 @@ using JobPortalProject.BL.UI.ViewModels;
 using JobPortalProject.BL.ViewModels.AddressViewModels;
 using JobPortalProject.BL.ViewModels.CompanySocialViewModels;
 using JobPortalProject.BL.ViewModels.CompanyViewModels;
+using JobPortalProject.BL.ViewModels.JobViewModels;
 using JobPortalProject.BL.ViewModels.WorkingFieldViewModels;
 using JobPortalProject.DA.DataContext.Entities;
 using JobPortalProject.DA.Repositories.Contracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 using System.Security.Claims;
 
 namespace JobPortalProject.BL.Services.Implementations
@@ -50,6 +52,19 @@ namespace JobPortalProject.BL.Services.Implementations
             _addressTranslationService = addressTranslationService;
         }
 
+        public async Task<int> GetCompanyIdOfUser()
+        {
+            var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            var company = await Repository.GetAsync(predicate: x => x.AppUserId == userId);
+
+            if (company == null)
+            {
+                return 0;
+            }
+
+            else
+                return company.Id;
+        }
         public async Task<CompanyCreateViewModel> GetCompanyCreateViewModelAsync()
         {
             var language = await _cookieService.GetLanguageAsync();
@@ -209,6 +224,8 @@ namespace JobPortalProject.BL.Services.Implementations
 
             return workingFieldCreateViewModel;
         }
+
+
 
         public async Task<bool> CreateAddress(AddressCreateViewModel model)
         {

@@ -17,7 +17,8 @@ namespace JobPortalProject.BL.ViewModels.JobResponsibilityViewModels
     }
     public class JobResponsibilityUpdateViewModel
     {
-
+        public int Id { get; set; }
+        public List<JobResponsibilityTranslationUpdateViewModel> JobResponsibilityTranslations { get; set; } = [];
     }
 
     public class JobResponsibilityTranslationViewModel
@@ -32,6 +33,8 @@ namespace JobPortalProject.BL.ViewModels.JobResponsibilityViewModels
     }
     public class JobResponsibilityTranslationUpdateViewModel
     {
-
+        public int Id { get; set; }
+        public int LanguageId { get; set; }
+        public string? Value { get; set; }
     }
 }

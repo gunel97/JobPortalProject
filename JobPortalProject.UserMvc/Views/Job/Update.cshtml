@@ -1,0 +1,334 @@
+﻿@model JobUpdateViewModel
+
+<!-- ========== Inner Banner Start============= -->
+<div class="inner-banner">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="banner-content text-center">
+                    <h1>Post A Jobs</h1>
+                    <span></span>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Post A Jobs</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ========== Inner Banner end============= -->
+<!-- ========== Login Area end============= -->
+<div class="job-post-area pt-120 mb-120">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-wrapper">
+                    <form method="post">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="section-title2">
+                                    <h5>Job Information:</h5>
+                                 <input asp-for="Id" value="@Model.Id" type="hidden" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-inner mb-25">
+                                    <label>Job Category*</label>
+                                    <div class="input-area">
+                                        <img src="~/images/icon/category-2.svg" alt="">
+                                        <select asp-items="Model.JobCategoriesList" asp-for="JobCategoryId" class="select1">
+                                        </select>
+                                        <span asp-validation-for="JobCategoryId"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-inner mb-25">
+                                    <label>Job Type*</label>
+                                    <div class="input-area">
+                                        <img src="~/images/icon/company-2.svg" alt="">
+                                        <select asp-items="Model.JobTypeListItems" asp-for="JobTypeId" class="select1">
+                                        </select>
+                                        <span asp-validation-for="JobTypeId"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-inner mb-25">
+                                    <label>Gender*</label>
+                                    <div class="input-area">
+                                        <img src="~/images/icon/company-2.svg" alt="">
+                                        <select asp-items="Model.GenderListItems" asp-for="GenderId" class="select1">
+                                        </select>
+                                        <span asp-validation-for="GenderId"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-inner mb-25">
+                                    <label>Location</label>
+                                    <div class="input-area">
+                                        <img src="~/images/icon/company-2.svg" alt="">
+                                        <select asp-items="Model.AddressesList" asp-for="AddressId" class="select1">
+                                        </select>
+                                        <span asp-validation-for="AddressId"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-inner mb-25">
+                                    <label>Required Education Type</label>
+                                    <div class="input-area">
+                                        <img src="~/images/icon/company-2.svg" alt="">
+                                        <select asp-items="Model.RequiredEducationTypeListItems" asp-for="RequiredEducationTypeId" class="select1">
+                                        </select>
+                                        <span asp-validation-for="RequiredEducationTypeId"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-inner mb-25">
+                                    <label>Salary Type*</label>
+                                    <div class="input-area">
+                                        <img src="~/images/icon/category-2.svg" alt="">
+                                        <select asp-items="Model.SalaryTypeListItems" asp-for="SalaryTypeId" class="select1">
+                                        </select>
+                                        <span asp-validation-for="SalaryTypeId"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-inner mb-25">
+                                    <label>Min Salary*</label>
+                                    <div class="input-area">
+                                        <img src="~/images/icon/salary-2.svg" alt="">
+                                        <input asp-for="MinSalary" placeholder="Min Salary">
+                                        <span asp-validation-for="MinSalary"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-inner mb-25">
+                                    <label>Max Salary*</label>
+                                    <div class="input-area">
+                                        <img src="~/images/icon/salary-2.svg" alt="">
+                                        <input asp-for="MaxSalary" placeholder="Max Salary">
+                                        <span asp-validation-for="MaxSalary"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-inner mb-25">
+                                    <label for="datepicker9">Deadline*</label>
+                                    <div class="input-area">
+                                        <img src="~/images/icon/calender2.svg" alt="">
+                                        <input asp-for="ExpirationDate" id="datepicker9" placeholder="MM/DD/YY">
+                                        <span asp-validation-for="ExpirationDate"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-inner mb-25">
+                                    <label for="vacancies">Vacancies*</label>
+                                    <div class="input-area">
+                                        <img src="~/images/icon/user-2.svg" alt="">
+                                        <input asp-for="VacancyCount" id="vacancies" placeholder="07 Person">
+                                        <span asp-validation-for="VacancyCount"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            @for (int i = 0; i < Model.JobTranslations.Count(); i++)
+                            {
+                                <div class="col-lg-12">
+                                    <div class="section-title2">
+                                        <h5>  <img src="@Model.JobTranslations[i].LanguageIcon" alt="">  Job Details Translation:</h5>
+                                    </div>
+                                </div>
+                                <input asp-for="JobTranslations[i].LanguageId"
+                                       value="@Model.JobTranslations[i].LanguageId" type="hidden" />
+                                       <input asp-for="JobTranslations[i].Id" value="@Model.JobTranslations[i].Id" type="hidden" />
+                                <div class="col-md-6">
+                                    <div class="form-inner mb-25">
+                                        <label for="jobtitle">Job Title*</label>
+                                        <div class="input-area">
+                                            <img src="~/images/icon/company-2.svg" alt="">
+                                            <input asp-for="JobTranslations[i].Title" id="jobtitle" placeholder="Senior UI/UX Engineer">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-inner mb-25">
+                                        <label for="experiences">Experience Level*</label>
+                                        <div class="input-area">
+                                            <img src="~/images/icon/email-2.svg" alt="">
+                                            <input type="text" id="experiences" name="experiences" placeholder="Type Experiences">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-inner mb-25">
+                                        <label for="jobtitle">Job Description*</label>
+                                        <div class="input-area">
+                                            <img src="~/images/icon/company-2.svg" alt="">
+                                            <input asp-for="JobTranslations[i].Description" id="description" placeholder="Senior UI/UX Engineer">
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="section-title2">
+                                        <h5 id="benefitTitle"></h5>
+                                    </div>
+                                </div>
+                                <div id="bContainer" class="col-md-12">
+                                    <div class="form-inner mb-25">
+                                        <div class="col-lg-12">
+                                            <div class="section-title2">
+                                                <h5>Extra Benefits :</h5>
+                                            </div>
+                                        </div>
+                                        @for(var b=0; b<Model.ExtraBenefits.Count(); b++)
+                                        {
+                                            <input asp-for="ExtraBenefits[b].Id" value="@Model.ExtraBenefits[b].Id" type="hidden" />
+                                            @for (int i=0; i< Model.ExtraBenefits[b].JobExtraBenefitTranslations.Count(); i++)
+                                            {
+                                                <input asp-for="ExtraBenefits[b].JobExtraBenefitTranslations[i].Id"
+                                                value="@Model.ExtraBenefits[b].JobExtraBenefitTranslations[i].Id" type="hidden" />
+                                                <label for="jobtitle">
+                                                    <img src="@Model.JobTranslations[i].LanguageIcon" alt="">
+                                                    Benefit @(i+1)
+                                                </label>
+                                                <div class="input-area">
+                                                    <img src="/images/icon/company-2.svg" alt="">
+                                                    <input asp-for="ExtraBenefits[b].JobExtraBenefitTranslations[i].Value" placeholder="Senior UI/UX Engineer">
+                                                    <input type="hidden" asp-for="ExtraBenefits[b].JobExtraBenefitTranslations[i].LanguageId" 
+                                                    value="@Model.ExtraBenefits[b].JobExtraBenefitTranslations[i].LanguageId" />
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                              @*   <div class="col-md-12">
+                                    <div class="form-inner">
+                                        <button onclick='addB(@Html.Raw(Json.Serialize(Model.TranslationCreateViewModels)))' class="primry-btn-2 lg-btn w-unset" type="button">Add Extra Benefits</button>
+                                    </div>
+                                </div> *@
+                                <br />
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="section-title2">
+                                        <h5 id="responsibilityTitle"></h5>
+                                    </div>
+                                </div>
+                                <div id="rContainer" class="col-md-12">
+                                    <div class="form-inner mb-25">
+                                        <div class="col-lg-12">
+                                            <div class="section-title2">
+                                                <h5>Job Responsibilities :</h5>
+                                            </div>
+                                        </div>
+                                        @for(int r=0; r<Model.Responsibilities.Count(); r++)
+                                        {
+                                            <input asp-for="Responsibilities[r].Id" value="@Model.Responsibilities[r].Id" type="hidden" />
+                                            @for (int i = 0; i < Model.Responsibilities[r].JobResponsibilityTranslations.Count(); i++)
+                                            {
+                                                <input asp-for="Responsibilities[r].JobResponsibilityTranslations[i].Id"
+                                                value ="@Model.Responsibilities[r].JobResponsibilityTranslations[i].Id" type="hidden">
+                                                <label for="jobtitle">
+                                                    <img src="@Model.JobTranslations[i].LanguageIcon" alt="">
+                                                    Responsibility @(i+1)
+                                                </label>
+                                                <div class="input-area">
+                                                    <img src="~/images/icon/company-2.svg" alt="">
+                                                    <input asp-for="Responsibilities[r].JobResponsibilityTranslations[i].Value" placeholder="Senior UI/UX Engineer">
+                                                    <input type="hidden" asp-for="Responsibilities[r].JobResponsibilityTranslations[i].LanguageId"
+                                                    value="@Model.Responsibilities[r].JobResponsibilityTranslations[i].LanguageId"/>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+
+                                @* <div class="col-md-12">
+                                    <div class="form-inner">
+                                        <button onclick='addR(@Html.Raw(Json.Serialize(Model.TranslationCreateViewModels)))' class="primry-btn-2 lg-btn w-unset" type="button">Add Job Responsibility</button>
+                                    </div>
+                                </div> *@
+                                <br />
+                            </div>
+
+                            <br />
+                            <div class="col-md-12">
+                                <br />
+                                <div class="form-inner">
+                                    <button class="primry-btn-2 lg-btn w-unset" type="submit">Post Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ========== Login Area end============= -->
+
+
+    <script>
+        let respIndex = 0;
+        let benIndex=0;
+
+        function addR(translations){
+            console.log(translations);
+            console.log("test");
+        const rContainer = document.getElementById("rContainer");
+        const responsibilityTitle = document.getElementById("responsibilityTitle");
+        responsibilityTitle.innerText="Job Responsibilities"
+        for(let i=0; i<translations.length; i++){
+            const divElement =document.createElement('div');
+                    divElement.className='form-inner mb-25';
+                        var htmlTextR = `<label for="jobtitle">
+                        Job Responsibility <img src="${translations[i].languageIcon}" alt=""> *</label>
+                                            <div class="input-area">
+                                                <img src="/images/icon/company-2.svg" alt="">
+                                                <input name="Responsibilities[${respIndex}].Translations[${i}].Value" placeholder="Senior UI/UX Engineer">
+                                                <input type="hidden" name="Responsibilities[${respIndex}].Translations[${i}].LanguageId" value="${i + 1}" />
+                                                </div>`;
+                divElement.innerHTML+=htmlTextR;
+                rContainer.appendChild(divElement);
+                console.log(htmlTextR);
+        }
+        respIndex++;
+        }
+
+        function addB(translations){
+            console.log(translations);
+            console.log("test");
+
+        const bContainer = document.getElementById("bContainer");
+        const benefitTitle = document.getElementById("benefitTitle");
+        benefitTitle.innerText="Job Extra Benefits"
+        for(let i=0; i<translations.length; i++){
+            const divElement =document.createElement('div');
+                    divElement.className='form-inner mb-25';
+                        var htmlTextB = `<label for="jobtitle">
+                        Job Benefit <img src="${translations[i].languageIcon}" alt=""> *</label>
+                                            <div class="input-area">
+                                                <img src="/images/icon/company-2.svg" alt="">
+                                                <input name="Benefits[${benIndex}].Translations[${i}].Value" placeholder="Senior UI/UX Engineer">
+                                                <input type="hidden" name="Benefits[${benIndex}].Translations[${i}].LanguageId" value="${i + 1}" />
+                                                </div>`;
+                divElement.innerHTML+=htmlTextB;
+                bContainer.appendChild(divElement);
+                console.log(htmlTextB);
+        }
+        benIndex++;
+        }
+
+
+    </script>

@@ -71,6 +71,31 @@ namespace JobPortalProject.BL.ViewModels.JobViewModels
 
     public class JobUpdateViewModel
     {
+        public int Id { get; set; }
+        public int VacancyCount { get; set; }
+        public int CompanyId { get; set; }
+        public double MinSalary { get; set; }
+        public double MaxSalary { get; set; }
+        public DateTime ExpirationDate { get; set; }
+        public int GenderId { get; set; }
+        public Gender Gender { get; set; }
+        public List<SelectListItem> GenderListItems { get; set; } = [];
+        public int JobTypeId { get; set; }
+        public JobType JobType { get; set; }
+        public List<SelectListItem> JobTypeListItems { get; set; } = [];
+        public int RequiredEducationTypeId { get; set; }
+        public EducationType RequiredMinEducationType { get; set; }
+        public List<SelectListItem> RequiredEducationTypeListItems { get; set; } = [];
+        public int SalaryTypeId { get; set; }
+        public SalaryTypeDuration SalaryType { get; set; }
+        public List<SelectListItem> SalaryTypeListItems { get; set; } = [];
+        public int AddressId { get; set; }
+        public List<SelectListItem> AddressesList { get; set; } = [];
+        public int JobCategoryId { get; set; }
+        public List<SelectListItem> JobCategoriesList { get; set; } = [];
+        public List<JobTranslationUpdateViewModel> JobTranslations { get; set; } = [];
+        public List<JobResponsibilityUpdateViewModel> Responsibilities { get; set; } = [];
+        public List<JobExtraBenefitUpdateViewModel> ExtraBenefits { get; set; } = [];
     }
 
     public class JobTranslationViewModel
@@ -88,6 +113,11 @@ namespace JobPortalProject.BL.ViewModels.JobViewModels
 
     public class JobTranslationUpdateViewModel
     {
+        public int Id { get; set; }
+        public int LanguageId { get; set; }
+        public string? Title { get; set; }
+        public string? Description { get; set; }
+        public string? LanguageIcon { get; set; }
     }
 
 }

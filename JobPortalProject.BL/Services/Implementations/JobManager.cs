@@ -2,9 +2,7 @@
 using JobPortalProject.BL.Services.Contracts;
 using JobPortalProject.BL.UI.Services.Abstracts;
 using JobPortalProject.BL.ViewModels.AddressViewModels;
-using JobPortalProject.BL.ViewModels.JobResponsibilityViewModels;
 using JobPortalProject.BL.ViewModels.JobViewModels;
-using JobPortalProject.BL.ViewModels.LanguageViewModels;
 using JobPortalProject.DA.DataContext.Entities;
 using JobPortalProject.DA.DataContext.Enums;
 using JobPortalProject.DA.Repositories.Contracts;
@@ -12,8 +10,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
+using System.ComponentModel.Design;
 using System.Linq.Expressions;
-using System.Security.Claims;
 
 namespace JobPortalProject.BL.Services.Implementations
 {
@@ -327,5 +325,35 @@ namespace JobPortalProject.BL.Services.Implementations
             return jobViewModel;
         }
 
+        public async Task<JobUpdateViewModel> GetUpdateViewModel(int jobId)
+        {
+            var language = await _cookieService.GetLanguageAsync();
+            var job = await Repository.GetAsync(predicate: x => x.Id == jobId,
+                include: x => x.Include(x => x.JobTranslations).Include(x => x.Address)
+                .Include(x => x.ExtraBenefits).ThenInclude(x => x.JobExtraBenefitTranslations)
+                .Include(x => x.Responsibilities).ThenInclude(x => x.JobResponsibilityTranslations));
+
+            if (job == null)
+                return null!;
+
+            var model = Mapper.Map<JobUpdateViewModel>(job);
+            var addressesList = await _addressService.GetAddressSelectListItems(job.CompanyId, language.Id);
+            var jobCategoriesList = await _jobCategoryService.GetJobCategorySelectListItems(language.Id);
+            var languages = await _languageService.GetAllAsync();
+
+            model.RequiredEducationTypeListItems = GetEducationTypeListItems();
+            model.GenderListItems = GetGenderListItems();
+            model.SalaryTypeListItems=GetSalaryTypeListItems();
+            model.JobTypeListItems= GetJobTypeListItems();
+            model.AddressesList = addressesList;
+            model.JobCategoriesList= jobCategoriesList;
+            foreach(var translation in model.JobTranslations)
+            {
+                var languageT = languages.FirstOrDefault(x=>x.Id==translation.LanguageId);
+                translation.LanguageIcon = languageT.IconUrl;
+            }
+
+            return model;
+        }
     }
 }

@@ -2,6 +2,7 @@
 using JobPortalProject.BL.UI.Services.Abstracts;
 using JobPortalProject.BL.ViewModels.JobViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.IdentityModel.Tokens.Experimental;
 
 namespace JobPortalProject.UserMvc.Controllers
@@ -70,6 +71,27 @@ namespace JobPortalProject.UserMvc.Controllers
             }
 
             return RedirectToAction("CompanyDashboard", "Company");
+        }
+
+        public async Task<IActionResult> Update(string id)
+        {
+            int jobId = int.Parse(id.Split('-').Last());
+            var model = await _jobService.GetUpdateViewModel(jobId);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(int id, JobUpdateViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                model = await _jobService.GetUpdateViewModel(id);
+                return View(model);
+            }
+            model = await _jobService.GetUpdateViewModel(id);
+           
+            return View(model);
         }
     }
 }

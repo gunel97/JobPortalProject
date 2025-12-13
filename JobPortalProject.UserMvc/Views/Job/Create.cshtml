@@ -162,7 +162,7 @@
                                         <label for="experiences">Experience Level*</label>
                                         <div class="input-area">
                                             <img src="~/images/icon/email-2.svg" alt="">
-                                            <input type="text" id="experiences" name="experiences" placeholder="Type Experiences">
+                                            <input asp-for="TranslationCreateViewModels[i].RequiredExperience" id="experiences" placeholder="Type Experiences">
                                         </div>
                                     </div>
                                 </div>
@@ -241,8 +241,8 @@
                     Job Responsibility <img src="${translations[i].languageIcon}" alt=""> *</label>
                                         <div class="input-area">
                                             <img src="/images/icon/company-2.svg" alt="">
-                                            <input name="Responsibilities[${respIndex}].Translations[${i}].Value" placeholder="Senior UI/UX Engineer">
-                                            <input type="hidden" name="Responsibilities[${respIndex}].Translations[${i}].LanguageId" value="${i + 1}" />
+                                            <input name="Responsibilities[${respIndex}].JobResponsibilityTranslations[${i}].Value" placeholder="Senior UI/UX Engineer">
+                                            <input type="hidden" name="Responsibilities[${respIndex}].JobResponsibilityTranslations[${i}].LanguageId" value="${i + 1}" />
                                             </div>`;
             divElement.innerHTML+=htmlTextR;
             rContainer.appendChild(divElement);
@@ -265,8 +265,8 @@
                     Job Benefit <img src="${translations[i].languageIcon}" alt=""> *</label>
                                         <div class="input-area">
                                             <img src="/images/icon/company-2.svg" alt="">
-                                            <input name="Benefits[${benIndex}].Translations[${i}].Value" placeholder="Senior UI/UX Engineer">
-                                            <input type="hidden" name="Benefits[${benIndex}].Translations[${i}].LanguageId" value="${i + 1}" />
+                                            <input name="ExtraBenefits[${benIndex}].JobExtraBenefitTranslations[${i}].Value" placeholder="Senior UI/UX Engineer">
+                                            <input type="hidden" name="ExtraBenefits[${benIndex}].JobExtraBenefitTranslations[${i}].LanguageId" value="${i + 1}" />
                                             </div>`;
             divElement.innerHTML+=htmlTextB;
             bContainer.appendChild(divElement);

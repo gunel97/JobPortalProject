@@ -17,6 +17,7 @@ namespace JobPortalProject.BL.ViewModels.JobViewModels
         public string? Title { get; set; }
         public string DetailsUrl => $"{Title?.Replace(" ", "-").Replace("/", "-")}-{Id}";
         public string? Description { get; set; }
+        public string? RequiredExperience {  get; set; }
         public int VacancyCount { get; set; }
         public double MinSalary { get; set; }
         public double MaxSalary { get; set; }
@@ -34,7 +35,7 @@ namespace JobPortalProject.BL.ViewModels.JobViewModels
         public string? CompanyLogoUrl { get; set; }
         public AddressViewModel? Address { get; set; }
         public List<string> Responsibilities { get; set; } = [];
-        public List<string> Benefits { get; set; } = [];
+        public List<string> ExtraBenefits { get; set; } = [];
         public List<string> MainDuties { get; set; } = [];
         public List<string> CompanyImages { get; set; } = [];
     }
@@ -65,7 +66,7 @@ namespace JobPortalProject.BL.ViewModels.JobViewModels
         public List<SelectListItem> JobCategoriesList { get; set; } = [];
         public List<JobTranslationCreateViewModel> TranslationCreateViewModels { get; set; } = [];
         public List<JobResponsibilityCreateViewModel> Responsibilities { get; set; } = [];
-        public List<JobExtraBenefitCreateViewModel> Benefits { get; set; } = [];
+        public List<JobExtraBenefitCreateViewModel> ExtraBenefits { get; set; } = [];
     }
 
 
@@ -108,6 +109,7 @@ namespace JobPortalProject.BL.ViewModels.JobViewModels
         public int LanguageId { get; set; }
         public string Title { get; set; } = null!;
         public string Description { get;set; } = null!;
+        public string RequiredExperience { get; set; } = null!;
         public string? LanguageIcon { get; set; }
     }
 
@@ -117,6 +119,7 @@ namespace JobPortalProject.BL.ViewModels.JobViewModels
         public int LanguageId { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
+        public string? RequiredExperience { get; set; }
         public string? LanguageIcon { get; set; }
     }
 

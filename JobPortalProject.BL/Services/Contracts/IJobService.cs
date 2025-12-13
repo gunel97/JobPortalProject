@@ -8,13 +8,11 @@ namespace JobPortalProject.BL.Services.Contracts
     {
         public Task<IEnumerable<JobViewModel>> GetAllWithLanguageAsync(int languageId);
         public Task<JobCreateViewModel> GetJobCreateViewModelAsync(int companyId);
-        public List<SelectListItem> GetJobTypeListItems();
-        public List<SelectListItem> GetGenderListItems();
-        public List<SelectListItem> GetSalaryTypeListItems();
-        public List<SelectListItem> GetEducationTypeListItems();
         public Task<bool> CreateJob(int companyId, JobCreateViewModel model);
         public Task<List<JobViewModel>> GetAllJobsOfCompanyAsync(int companyId);
         public Task<IEnumerable<JobViewModel>> GetAllJobsAsync();
         public Task<JobUpdateViewModel> GetUpdateViewModel(int jobId);
+        public Task<bool> SoftDeleteJob(int id);
+        public Task<bool> DeactivateJob(int id);
     }
 }

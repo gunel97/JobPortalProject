@@ -9,8 +9,8 @@ using JobPortalProject.DA.Repositories.Contracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Query;
-using System.ComponentModel.Design;
 using System.Linq.Expressions;
 
 namespace JobPortalProject.BL.Services.Implementations
@@ -24,22 +24,21 @@ namespace JobPortalProject.BL.Services.Implementations
         private readonly ICookieService _cookieService;
         private readonly ILanguageService _languageService;
         private readonly StringLocalizerManager _localizer;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IJobTranslationService _jobTranslationService;
         private readonly IJobResponsibilityService _jobResponsibilityService;
         private readonly IJobExtraBenefitService _jobBenefitService;
-
-        public JobManager(IRepositoryAsync<Job> repository, IMapper mapper, ICookieService cookieService, IJobCategoryService jobCategoryService, IAddressService addressService, ILanguageService languageService, StringLocalizerManager localizer, IHttpContextAccessor httpContextAccessor, IJobTranslationService jobTranslationService, IJobResponsibilityService jobResponsibilityService, IJobExtraBenefitService jobBenefitService) : base(repository, mapper)
+        private readonly IEnumService _enumService;
+        public JobManager(IRepositoryAsync<Job> repository, IMapper mapper, ICookieService cookieService, IJobCategoryService jobCategoryService, IAddressService addressService, ILanguageService languageService, StringLocalizerManager localizer, IJobTranslationService jobTranslationService, IJobResponsibilityService jobResponsibilityService, IJobExtraBenefitService jobBenefitService, IEnumService enumService) : base(repository, mapper)
         {
             _cookieService = cookieService;
             _jobCategoryService = jobCategoryService;
             _addressService = addressService;
             _languageService = languageService;
             _localizer = localizer;
-            _httpContextAccessor = httpContextAccessor;
             _jobTranslationService = jobTranslationService;
             _jobResponsibilityService = jobResponsibilityService;
             _jobBenefitService = jobBenefitService;
+            _enumService = enumService;
         }
 
         public async Task<JobCreateViewModel> GetJobCreateViewModelAsync(int companyId)
@@ -53,10 +52,10 @@ namespace JobPortalProject.BL.Services.Implementations
                 CompanyId = companyId,
                 AddressesList = addressesList,
                 JobCategoriesList = jobCategoriesList,
-                JobTypeListItems = GetJobTypeListItems(),
-                GenderListItems = GetGenderListItems(),
-                SalaryTypeListItems = GetSalaryTypeListItems(),
-                RequiredEducationTypeListItems = GetEducationTypeListItems(),
+                JobTypeListItems = _enumService.GetJobTypeListItems(),
+                GenderListItems = _enumService.GetGenderListItems(),
+                SalaryTypeListItems = _enumService.GetSalaryTypeListItems(),
+                RequiredEducationTypeListItems = _enumService.GetEducationTypeListItems(),
                 TranslationCreateViewModels = languages.Select(x => new JobTranslationCreateViewModel
                 {
                     LanguageId = x.Id,
@@ -95,112 +94,40 @@ namespace JobPortalProject.BL.Services.Implementations
                         return false;
                     }
                 }
-
-                foreach(var responsibility in model.Responsibilities)
-                {
-                    responsibility.JobId = createdJob.Id;
-                    var responsibilityResult = await _jobResponsibilityService.CreateJobResponsibilityAsync(responsibility);
-
-                    if (!responsibilityResult)
-                    {
-                        await Repository.DeleteAsync(createdJob);
-                        return false;
-                    }
-                }
-
-                foreach (var benefit in model.Benefits)
-                {
-                    benefit.JobId = createdJob.Id;
-                    var benefitResult = await _jobBenefitService.CreateJobBenefitAsync(benefit);
-
-                    if (!benefitResult)
-                    {
-                        await Repository.DeleteAsync(createdJob);
-                        return false;
-                    }
-                }
             }
 
             return true;
         }
 
-        public List<SelectListItem> GetJobTypeListItems()
+        public override async Task<bool> UpdateAsync(int id, JobUpdateViewModel model)
         {
-            var jobTypeListItems = new List<SelectListItem>();
-            var jobTypes = Enum.GetValues(typeof(JobType)).Cast<JobType>().ToList();
-            jobTypes.ForEach(x => jobTypeListItems.Add(
-                new SelectListItem(_localizer.GetValue(x.ToString()), ((int)x).ToString())));
-            return jobTypeListItems;
-        }
+            model.JobType= (JobType)model.JobTypeId;
+            model.Gender = (Gender)model.GenderId;
+            model.RequiredMinEducationType = (EducationType)model.RequiredEducationTypeId;
+            model.SalaryType = (SalaryTypeDuration)model.SalaryTypeId;
 
-        public List<SelectListItem> GetSalaryTypeListItems()
-        {
-            var salaryTypeListItems = new List<SelectListItem>();
-            var salaryTypes = Enum.GetValues(typeof(SalaryTypeDuration)).Cast<SalaryTypeDuration>().ToList();
-            salaryTypes.ForEach(x => salaryTypeListItems.Add(
-                new SelectListItem(_localizer.GetValue(x.ToString()), ((int)x).ToString())));
-            return salaryTypeListItems;
-        }
-
-        public List<SelectListItem> GetEducationTypeListItems()
-        {
-            var educationTypeListItems = new List<SelectListItem>();
-            var educationTypes = Enum.GetValues(typeof(EducationType)).Cast<EducationType>().ToList();
-            educationTypes.ForEach(x => educationTypeListItems.Add(
-                new SelectListItem(_localizer.GetValue(x.ToString()), ((int)x).ToString())));
-            return educationTypeListItems;
-        }
-
-        public List<SelectListItem> GetGenderListItems()
-        {
-            var genderListItems = new List<SelectListItem>();
-            var genders = Enum.GetValues(typeof(Gender)).Cast<Gender>().ToList();
-            genders.ForEach(x => genderListItems.Add(
-                new SelectListItem(_localizer.GetValue(x.ToString()), ((int)x).ToString())));
-
-            return genderListItems;
+            return await base.UpdateAsync(id, model);
         }
 
         public async Task<List<JobViewModel>> GetAllJobsOfCompanyAsync(int companyId)
         {
             var language = await _cookieService.GetLanguageAsync();
 
-            var jobs = await  Repository.GetAllAsync(predicate: x => x.CompanyId == companyId,
+            var jobs = await  Repository.GetAllAsync(predicate: x => x.CompanyId == companyId && !x.IsDeleted,
                 include: x => x.Include(t => t.JobTranslations.Where(x => x.LanguageId == language.Id)));
             var jobViewModels = jobs.Select(x => MapToJobViewModel(x, language.Id));
 
             return jobViewModels.ToList();
         }
 
-        //public override async Task<IEnumerable<JobViewModel>> GetAllAsync(Expression<Func<Job, bool>>? predicate = null, Func<IQueryable<Job>, IOrderedQueryable<Job>>? orderBy = null, Func<IQueryable<Job>, IIncludableQueryable<Job, object>>? include = null, bool AsNoTracking = false)
-        //{
-        //    var language = await _cookieService.GetLanguageAsync();
-        //    int languageId = language.Id;
-
-
-        //    var jobs = await Repository.GetAllAsync(
-        //       include: x => x
-        //       .Include(x => x.JobTranslations.Where(t => t.LanguageId == languageId))
-        //       .Include(x => x.JobCategory!).ThenInclude(x => x.JobCategoryTranslations.Where(t => t.LanguageId == languageId))
-        //       .Include(x => x.Responsibilities).ThenInclude(t => t.JobResponsibilityTranslations.Where(x => x.LanguageId == languageId))
-        //       .Include(x => x.MainDuties).ThenInclude(t => t.JobMainDutyTranslations.Where(x => x.LanguageId == languageId))
-        //       .Include(x => x.ExtraBenefits).ThenInclude(t => t.JobExtraBenefitTranslations.Where(x => x.LanguageId == languageId))
-        //       .Include(x => x.Company!).ThenInclude(t => t.CompanyTranslations.Where(x => x.LanguageId == languageId))
-        //       .Include(a => a.Address!).ThenInclude(a => a.AddressTranslations.Where(x => x.LanguageId == languageId))
-        //        );
-
-        //    var jobViewModels = jobs.Select(x => MapToJobViewModel(x, languageId));
-
-        //    return jobViewModels;
-        //}
         public async Task<IEnumerable<JobViewModel>> GetAllJobsAsync()
         {
             var language = await _cookieService.GetLanguageAsync();
             int languageId = language.Id;
 
-
             var jobs = await Repository.GetAllAsync(
-               include: x => x
+                predicate: x=>!x.IsDeleted,
+                include: x => x
                .Include(x => x.JobTranslations.Where(t => t.LanguageId == languageId))
                .Include(x => x.JobCategory!).ThenInclude(x => x.JobCategoryTranslations.Where(t => t.LanguageId == languageId))
                .Include(x => x.Responsibilities).ThenInclude(t => t.JobResponsibilityTranslations.Where(x => x.LanguageId == languageId))
@@ -225,7 +152,6 @@ namespace JobPortalProject.BL.Services.Implementations
                .Include(x => x.JobTranslations.Where(t => t.LanguageId == languageId))
                .Include(x => x.JobCategory!).ThenInclude(x => x.JobCategoryTranslations.Where(t => t.LanguageId == languageId))
                .Include(x => x.Responsibilities).ThenInclude(t => t.JobResponsibilityTranslations.Where(x => x.LanguageId == languageId))
-               .Include(x => x.MainDuties).ThenInclude(t => t.JobMainDutyTranslations.Where(x => x.LanguageId == languageId))
                .Include(x => x.ExtraBenefits).ThenInclude(t => t.JobExtraBenefitTranslations.Where(x => x.LanguageId == languageId))
                .Include(x => x.Company!).ThenInclude(t => t.CompanyTranslations.Where(x => x.LanguageId == languageId))
                .Include(a => a.Address!).ThenInclude(a => a.AddressTranslations.Where(x => x.LanguageId == languageId))
@@ -247,7 +173,7 @@ namespace JobPortalProject.BL.Services.Implementations
             var language = await _cookieService.GetLanguageAsync();
             int languageId = language.Id;
 
-            var job = await Repository.GetAsync(predicate: x=>!x.IsDeleted && x.Id==14,
+            var job = await Repository.GetAsync(predicate: x=>!x.IsDeleted,
                 include: x => x
                .Include(x => x.JobTranslations.Where(t => t.LanguageId == languageId))
                .Include(x => x.JobCategory!).ThenInclude(x => x.JobCategoryTranslations.Where(t => t.LanguageId == languageId))
@@ -271,7 +197,7 @@ namespace JobPortalProject.BL.Services.Implementations
 
         public async Task<IEnumerable<JobViewModel>> GetAllWithLanguageAsync(int languageId)
         {
-            var jobs = await Repository.GetAllAsync(
+            var jobs = await Repository.GetAllAsync( predicate: x=>!x.IsDeleted,
                 include: x => x
                 .Include(x => x.JobTranslations.Where(t => t.LanguageId == languageId))
                 .Include(x => x.JobCategory!).ThenInclude(x => x.JobCategoryTranslations.Where(t => t.LanguageId == languageId))
@@ -316,7 +242,7 @@ namespace JobPortalProject.BL.Services.Implementations
                 MainDuties = jobEntity.MainDuties.SelectMany(r => r.JobMainDutyTranslations
                                                   .Where(t => t.LanguageId == languageId)
                                                   .Select(t => t.Value!)).Where(x => !string.IsNullOrWhiteSpace(x)).ToList(),
-                Benefits = jobEntity.ExtraBenefits.SelectMany(r => r.JobExtraBenefitTranslations
+                ExtraBenefits = jobEntity.ExtraBenefits.SelectMany(r => r.JobExtraBenefitTranslations
                                                   .Where(t => t.LanguageId == languageId)
                                                   .Select(t => t.Value!)).Where(x => !string.IsNullOrWhiteSpace(x)).ToList(),
                 CompanyImages = jobEntity.Company!.CompanyImages.Select(x=>x.ImageUrl).ToList()
@@ -341,10 +267,10 @@ namespace JobPortalProject.BL.Services.Implementations
             var jobCategoriesList = await _jobCategoryService.GetJobCategorySelectListItems(language.Id);
             var languages = await _languageService.GetAllAsync();
 
-            model.RequiredEducationTypeListItems = GetEducationTypeListItems();
-            model.GenderListItems = GetGenderListItems();
-            model.SalaryTypeListItems=GetSalaryTypeListItems();
-            model.JobTypeListItems= GetJobTypeListItems();
+            model.RequiredEducationTypeListItems = _enumService.GetEducationTypeListItems();
+            model.GenderListItems = _enumService.GetGenderListItems();
+            model.SalaryTypeListItems=_enumService.GetSalaryTypeListItems();
+            model.JobTypeListItems= _enumService.GetJobTypeListItems();
             model.AddressesList = addressesList;
             model.JobCategoriesList= jobCategoriesList;
             foreach(var translation in model.JobTranslations)
@@ -354,6 +280,36 @@ namespace JobPortalProject.BL.Services.Implementations
             }
 
             return model;
+        }
+
+        public async Task<bool> SoftDeleteJob(int id)
+        {
+            var job = await Repository.GetByIdAsync(id);
+            if (job == null)
+                return false;
+
+            job.IsDeleted = true;
+            await Repository.UpdateAsync(job);
+            return true;
+        }
+
+        public async Task<bool> DeactivateJob(int id)
+        {
+            var job = await Repository.GetByIdAsync(id);
+            if (job == null)
+                return false;
+
+            if (job.IsActive)
+            {
+                job.IsActive = false;
+                await Repository.UpdateAsync(job);
+            }
+            else
+            {
+                job.IsActive = true;
+                await Repository.UpdateAsync(job);
+            }
+                return true;
         }
     }
 }

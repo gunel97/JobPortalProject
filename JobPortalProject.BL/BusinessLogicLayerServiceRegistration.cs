@@ -72,6 +72,7 @@ namespace JobPortalProject.BL
             services.AddScoped<ICloudinaryService, CloudinaryManager>();
             services.AddScoped<ICookieService, CookieManager>();
             services.AddScoped<IUserService, UserManager>();
+            services.AddScoped<IEnumService, EnumManager>();
             services.AddScoped<FileService>();
 
             return services;

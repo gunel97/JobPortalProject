@@ -77,6 +77,7 @@ namespace JobPortalProject.DA.DataContext.Entities
     {
         public string Title { get; set; } = null!;
         public string Description { get; set; } = null!;
+        public string RequiredExperience { get; set; } = null!;
         public int JobId { get; set; }
         public Job? Job { get; set; }
         public int LanguageId { get; set; }

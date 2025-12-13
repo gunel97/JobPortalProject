@@ -15,7 +15,7 @@ namespace JobPortalProject.BL.Services.Implementations
         {
             var jobResponsibility = new JobResponsibility();
             jobResponsibility.JobId= createViewModel.JobId;
-            jobResponsibility.JobResponsibilityTranslations=createViewModel.Translations.Select(
+            jobResponsibility.JobResponsibilityTranslations=createViewModel.JobResponsibilityTranslations.Select(
                 x=> new JobResponsibilityTranslation
             {
                     Value=x.Value,
@@ -28,6 +28,11 @@ namespace JobPortalProject.BL.Services.Implementations
                 return false;
             }
 
+            return true;
+        }
+
+        public async Task<bool> AddResponsibilityToJob(JobResponsibilityCreateViewModel model)
+        {
             return true;
         }
     }

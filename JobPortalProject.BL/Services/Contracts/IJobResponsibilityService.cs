@@ -6,6 +6,7 @@ namespace JobPortalProject.BL.Services.Contracts
     public interface IJobResponsibilityService : ICrudService<JobResponsibility, JobResponsibilityViewModel, JobResponsibilityCreateViewModel, JobResponsibilityUpdateViewModel>
     {
         public Task<bool> CreateJobResponsibilityAsync(JobResponsibilityCreateViewModel createViewModel);
+        public Task<bool> AddResponsibilityToJob(JobResponsibilityCreateViewModel model);
     }
   
 }

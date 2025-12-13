@@ -420,6 +420,7 @@ wwwroot\js\jquery-3.6.0.min.js
 wwwroot\js\jquery-ui.js
 wwwroot\js\main.js
 wwwroot\js\new\companyTranslation.js
+wwwroot\js\new\job.js
 wwwroot\js\new\workingField.js
 wwwroot\js\range-slider.js
 wwwroot\js\select2.min.js

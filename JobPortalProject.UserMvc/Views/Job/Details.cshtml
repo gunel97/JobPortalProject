@@ -79,7 +79,7 @@
                     </ul>
                     <h6>Experiences:</h6>
                     <ul>
-                        <li>2-3 Years in this field.</li>
+                        <li>@Model.RequiredExperience</li>
                     </ul>
                     @if (Model.MainDuties.Any()){
                     <p><span>Main Duties:</span> Some specific tasks that a UI/UX designer might be responsible for include:</p>
@@ -91,10 +91,10 @@
                     </ul>
                     }
                     
-                    @if (Model.Benefits.Any()){
+                    @if (Model.ExtraBenefits.Any()){
                     <p><span>Extra Benefits:</span>  Some specific tasks that a UI/UX designer might be responsible for include:</p>
                     <ul>
-                        @foreach (var benefit in Model.Benefits)
+                        @foreach (var benefit in Model.ExtraBenefits)
                         {
                             <li>@benefit</li>
                         }

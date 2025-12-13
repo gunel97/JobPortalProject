@@ -8,12 +8,13 @@ namespace JobPortalProject.BL.ViewModels.JobResponsibilityViewModels
 {
     public class JobResponsibilityViewModel
     {
-
+        public int Id { get; set; }
+        public int JobId { get; set; }
     }
     public class JobResponsibilityCreateViewModel
     {
         public int JobId { get; set; }
-        public List<JobResponsibilityTranslationCreateViewModel> Translations { get; set; } = [];
+        public List<JobResponsibilityTranslationCreateViewModel> JobResponsibilityTranslations { get; set; } = [];
     }
     public class JobResponsibilityUpdateViewModel
     {

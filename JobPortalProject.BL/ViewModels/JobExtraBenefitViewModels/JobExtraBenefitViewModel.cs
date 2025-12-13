@@ -9,11 +9,13 @@ namespace JobPortalProject.BL.ViewModels.JobExtraBenefitViewModels
 {
     public class JobExtraBenefitViewModel
     {
+        public int Id { get; set; }
+        public int JobId { get; set; }
     }
     public class JobExtraBenefitCreateViewModel
     {
         public int JobId { get; set; }
-        public List<JobExtraBenefitTranslationCreateViewModel> Translations { get; set; } = [];
+        public List<JobExtraBenefitTranslationCreateViewModel> JobExtraBenefitTranslations { get; set; } = [];
     }
     public class JobExtraBenefitUpdateViewModel
     {
@@ -25,7 +27,7 @@ namespace JobPortalProject.BL.ViewModels.JobExtraBenefitViewModels
     }
     public class JobExtraBenefitTranslationCreateViewModel
     {
-        public int JobResponsibilityId { get; set; }
+        public int JobExtraBenefitId { get; set; }
         public int LanguageId { get; set; }
         public string Value { get; set; } = null!;
     }

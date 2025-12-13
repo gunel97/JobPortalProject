@@ -16,7 +16,7 @@ namespace JobPortalProject.BL.Services.Implementations
         {
             var jobBenefit = new JobExtraBenefit();
             jobBenefit.JobId = createViewModel.JobId;
-            jobBenefit.JobExtraBenefitTranslations = createViewModel.Translations.Select(
+            jobBenefit.JobExtraBenefitTranslations = createViewModel.JobExtraBenefitTranslations.Select(
                 x => new JobExtraBenefitTranslation
                 {
                     Value = x.Value,

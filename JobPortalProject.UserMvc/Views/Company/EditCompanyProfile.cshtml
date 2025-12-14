@@ -1,4 +1,4 @@
-﻿ @model CompanyUpdateViewModel
+﻿@model CompanyUpdateViewModel
 @inject StringLocalizerManager localizer;
  <!-- ========== Edit Area end============= -->
 <div class="dashboard-area company-dashboard pt-120 mb-120">
@@ -42,28 +42,59 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-inner mb-25">
-                                        <label for="email">Email*</label>
-                                        <div class="input-area">
-                                            <img src="~/images/icon/email-2.svg" alt="">
-                                            <input asp-for="CompanyEmail" id="email" placeholder="info@example.com">
-                                        </div>
-                                    </div>
-                                </div>
-                                @for (int i = 0; i < Model.CompanySocialUpdateViewModels.Count; i++)
-                                {
-                                    <div class="col-md-6">
-                                        <div class="form-inner mb-25">
-                                            <label for="facebook">@Model.CompanySocialUpdateViewModels[i].Title</label>
-                                            <div class="input-area">
-                                                <img src="@Model.CompanySocialUpdateViewModels[i].IconUrl" alt="">
-                                                 <input asp-for="CompanySocialUpdateViewModels[i].AddressUrl" id="facebook" placeholder="https://example-facebook.com/"> 
-                                                <input asp-for="CompanySocialUpdateViewModels[i].Id" value="@Model.CompanySocialUpdateViewModels[i].Id" type="hidden"/>
+                                <div class="phone-email-area">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="info-title">
+                                                <h6>Phone & Email & Web</h6>
+                                                <div class="dash"></div>
                                             </div>
                                         </div>
+                                        <div class="col-md-6">
+                                            <div class="form-inner mb-25">
+                                                <label for="pphonenumber">Primary Number*</label>
+                                                <div class="input-area">
+                                                    <img src="~/images/icon/phone-2.svg" alt="">
+                                                    <input type="text" id="pphonenumber" name="pphonenumber" placeholder="+880-17 *** *** **">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-inner mb-25">
+                                                <label for="sphonenumber">Secondary Number*</label>
+                                                <div class="input-area">
+                                                    <img src="~/images/icon/phone-2.svg" alt="">
+                                                    <input type="text" id="sphonenumber" name="sphonenumber" placeholder="+880-17 *** *** **">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-inner mb-25">
+                                                <label for="email">Email*</label>
+                                                <div class="input-area">
+                                                    <img src="~/images/icon/email-2.svg" alt="">
+                                                    <input asp-for="CompanyEmail" id="email" placeholder="info@example.com">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @for (int i = 0; i < Model.CompanySocialUpdateViewModels.Count; i++)
+                                        {
+                                            <div class="col-md-6">
+                                                <div class="form-inner mb-25">
+                                                    <label for="facebook">@Model.CompanySocialUpdateViewModels[i].Title</label>
+                                                    <div class="input-area">
+                                                        <img src="@Model.CompanySocialUpdateViewModels[i].IconUrl" alt="">
+                                                        <input asp-for="CompanySocialUpdateViewModels[i].AddressUrl" id="facebook" placeholder="https://example-facebook.com/">
+                                                        <input asp-for="CompanySocialUpdateViewModels[i].Id" value="@Model.CompanySocialUpdateViewModels[i].Id" type="hidden" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+
                                     </div>
-                                }
+                                </div>
+
+                               
 
                                 <div class="col-lg-12">
                                     <div class="section-title2">
@@ -130,8 +161,8 @@
                             <div class="col-lg-12">
                                 <div class="action-btn-group">
                                     <div class="add-row">
-                                        <a asp-controller="company" asp-action="addWorkingField" class="primry-btn-2 lg-btn w-unset">Add Working Field</a>
-                                        <a asp-controller="company" asp-action="addAddress" class="primry-btn-2 lg-btn w-unset">Add Location</a>
+                                        <a data-bs-toggle="modal" data-bs-target="#addWorkingFieldModal" class="primry-btn-2 lg-btn w-unset">Add Working Field</a>
+                                        <a data-bs-toggle="modal" data-bs-target="#addAddressModal" class="primry-btn-2 lg-btn w-unset">Add Location</a>
                                     </div>
                                 </div>
                                 <br />
@@ -168,3 +199,136 @@
 <!-- ========== Edit Area end============= -->
 
 
+<!-- ========== Add address field modal============= -->
+<div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addAddressModalLabel">Add Address</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" enctype="multipart/form-data"
+                asp-action="AddAddress" asp-controller="Company">
+                <div class="modal-body">
+                    <input type="hidden" name="CompanyId" value="@Model.Id" />
+                    <input name="SelectedLanguageId" value="@Model.SelectedUpdateLanguageId" type="hidden" />
+                    <div id="workingField" class="work-area-row">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-inner mb-25">
+                                    <label for="location">City *</label>
+                                    <div class="input-area">
+                                        <img src="~/images/icon/map-2.svg" alt="">
+                                        <select name="CityId" asp-items="@Model.CitiesList" class="select1"></select>
+                                    </div>
+                                </div>
+                            </div>
+                    @if (Model.CompanyTranslations != null && Model.CompanyTranslations.Any())
+                    {
+                        @for (int i = 0; i < Model.CompanyTranslations.Count; i++)
+                        {
+                            <input name="AddressTranslationCreateViewModels[@i].LanguageId" value="@Model.CompanyTranslations[i].LanguageId" type="hidden" />
+                         <div class="form-inner mb-25">
+                                <div class="col-lg-12 mb-3">
+                                    <h6><img src="@Model.CompanyTranslations[i].LanguageIcon" alt="" /> Translation:</h6>
+                                </div>
+                            <div class="col-md-6">
+                                <div class="input-area">
+                                    <input name="AddressTranslationCreateViewModels[@i].Street" placeholder="Street Name" class="form-control">
+                                </div>
+                            </div>
+                         </div>
+                        }
+                    }
+                </div>
+                </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="primry-btn-2 lg-btn w-unset">Add Address</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- ========== Add address field modal end============= -->
+
+<!-- ========== Add working field modal============= -->
+<div class="modal fade" id="addWorkingFieldModal" tabindex="-1" aria-labelledby="addWorkingFieldModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addWorkingFieldModalLabel">Add Work Area</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" enctype="multipart/form-data"
+                asp-action="AddWorkingField" asp-controller="Company">
+                <div class="modal-body">
+                    <input type="hidden" name="CompanyId" value="@Model.Id" />
+
+                    <div class="col-md-12">
+                        <div class="form-inner mb-25">
+                            <label>Add Icon*</label>
+                            <div class="input-area">
+                                <img src="~/images/icon/company-2.svg" alt="">
+                                <input type="file" name="IconFile" accept="image/*">
+                            </div>
+                        </div>
+                    </div>
+                    @if (Model.CompanyTranslations != null && Model.CompanyTranslations.Any())
+                    {
+
+
+                        @for (int i = 0; i < Model.CompanyTranslations.Count; i++)
+                        {
+                            <input name="WorkingFieldTranslationCreateViewModels[@i].SelectedUpdateLanguageId" value="@Model.SelectedUpdateLanguageId" type="hidden" />
+                            <div class="form-inner mb-25">
+                                <div class="col-lg-12 mb-3">
+                                    <h6><img src="@Model.CompanyTranslations[i].LanguageIcon" alt="" /> Translation:</h6>
+                                </div>
+                                <div class="col-md-6">
+
+                                    <input name="WorkingFieldTranslationCreateViewModels[@i].LanguageId" value="@Model.CompanyTranslations[i].LanguageId" type="hidden" />
+                                    <div class="input-area">
+                                        <input name="WorkingFieldTranslationCreateViewModels[@i].Name" placeholder="Work Area Name" class="form-control">
+                                    </div>
+                                    <div class="input-area">
+                                        <input name="WorkingFieldTranslationCreateViewModels[@i].Description" placeholder="Work Area Description" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="primry-btn-2 lg-btn w-unset">Add Work Area</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- ========== Add working field modal end============= -->
+
+
+
+@if (TempData["CloseModal"] != null)
+{
+    <script>
+        // Close the modal on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            var modal = bootstrap.Modal.getInstance(document.getElementById('addResponsibilityModal'));
+            if (modal) {
+                modal.hide();
+            }
+
+            // Optional: Show success message
+            @if (TempData["Success"] != null)
+            {
+                        <text>
+                        alert('@TempData["Success"]');
+                        </text>
+            }
+        });
+    </script>
+}

@@ -12,19 +12,23 @@ namespace JobPortalProject.BL.ViewModels.JobExtraBenefitViewModels
         public int Id { get; set; }
         public int JobId { get; set; }
     }
+
     public class JobExtraBenefitCreateViewModel
     {
         public int JobId { get; set; }
         public List<JobExtraBenefitTranslationCreateViewModel> JobExtraBenefitTranslations { get; set; } = [];
     }
+
     public class JobExtraBenefitUpdateViewModel
     {
         public int Id { get; set; }
         public List<JobExtraBenefitTranslationUpdateViewModel> JobExtraBenefitTranslations { get; set; } = [];
     }
+
     public class JobExtraBenefitTranslationViewModel
     {
     }
+
     public class JobExtraBenefitTranslationCreateViewModel
     {
         public int JobExtraBenefitId { get; set; }

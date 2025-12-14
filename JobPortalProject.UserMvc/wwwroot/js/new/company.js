@@ -18,3 +18,19 @@ function updateCompanyTranslation(id) {
         }
         );
 }
+
+function deleteWorkingField(id, languageId) {
+    console.log(id);
+    console.log(languageId);
+    var row = document.getElementById('workingFieldRow');
+
+    fetch(`/company/deleteWorkingField?id=${id}&languageId=${languageId}`, {
+        method: 'POST'
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            row.innerHTML = data;
+        })
+        .catch(error => console.error('Error:', error));
+}

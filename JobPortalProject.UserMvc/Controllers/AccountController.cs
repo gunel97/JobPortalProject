@@ -1,6 +1,7 @@
 ﻿using JobPortalProject.BL.Services.Contracts;
 using JobPortalProject.BL.UI.Services.Abstracts;
 using JobPortalProject.BL.UI.Services.Implementations;
+using JobPortalProject.BL.UI.ViewModels;
 using JobPortalProject.BL.ViewModels.UserViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -39,7 +40,7 @@ namespace JobPortalProject.UserMvc.Controllers
             var language = await _cookieService.GetLanguageAsync();
             var existedCompany = await _companyService.GetAsync(
                 predicate: x =>
-                x.CompanyTranslations.FirstOrDefault(a=>a.LanguageId==language.Id)!.Name==model.CompanyName);
+                x.CompanyTranslations.FirstOrDefault(a => a.LanguageId == language.Id)!.Name == model.CompanyName);
 
             if (existedCompany != null)
             {
@@ -48,17 +49,17 @@ namespace JobPortalProject.UserMvc.Controllers
                 return View(model);
             }
 
-            if(!ModelState.IsValid) 
+            if (!ModelState.IsValid)
                 return View(model);
 
             var result = await _userService.RegisterCompanyAsync(model);
 
             if (!result.Succeeded)
             {
-                foreach(var item in result.Errors)
+                foreach (var item in result.Errors)
                 {
                     ModelState.AddModelError("", item.Description);
-                }    
+                }
 
                 return View(model);
             }
@@ -115,6 +116,30 @@ namespace JobPortalProject.UserMvc.Controllers
             return RedirectToAction("Index", "Home");
         }
 
- 
-    } 
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return RedirectToAction("Settings", "Company");
+
+            var user = await _userService.GetCurrentUserAsync();
+            if (user == null)
+                return RedirectToAction("Login", "Account");
+
+            var result = await _userService.ChangePasswordAsync(user, model);
+
+            if (!result.Succeeded)
+            {
+                foreach (var item in result.Errors)
+                {
+                    ModelState.AddModelError("", item.Description);
+                }
+
+                return View(model);
+            }
+
+            await _userService.LogOutAsync();
+            return RedirectToAction("Login", "Account");
+        }
+    }
 }

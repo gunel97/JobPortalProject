@@ -1,4 +1,4 @@
-﻿@model List<JobResponsibilityUpdateViewModel>
+﻿@model JobUpdateViewModel
 <div class="col-lg-12">
     <div class="section-title2">
         <h5 id="responsibilityTitle"></h5>
@@ -12,31 +12,37 @@
                 <h5>Job Responsibilities :</h5>
             </div>
         </div>
-        @for (int r = 0; r < Model.Count(); r++)
-        {
-            <input asp-for="@Model[r].Id" value="@Model[r].Id" type="hidden" />
-            @for (int i = 0; i < Model[r].JobResponsibilityTranslations.Count(); i++)
+     
+            @for (int r = 0; r < Model.Responsibilities.Count(); r++)
             {
-                <input asp-for="@Model[r].JobResponsibilityTranslations[i].Id"
-                       value="@Model.@Model[r].JobResponsibilityTranslations[i].Id" type="hidden">
-                <label for="jobtitle">
-                    @* <img src="@Model.JobTranslations[i].LanguageIcon" alt=""> *@
-                    Responsibility @(r + 1)
-                </label>
-                <div class="input-area">
-                    <img src="~/images/icon/company-2.svg" alt="">
-                    <input asp-for="@Model[r].JobResponsibilityTranslations[i].Value" placeholder="Senior UI/UX Engineer">
-                    <input type="hidden" asp-for="@Model[r].JobResponsibilityTranslations[i].LanguageId"
-                           value="@Model[r].JobResponsibilityTranslations[i].LanguageId" />
-                </div>
+                <input asp-for="Responsibilities[r].Id" value="@Model.Responsibilities[r].Id" type="hidden" />
+            @if (Model.Responsibilities[r].JobResponsibilityTranslations.Any())
+            {
+                @for (int i = 0; i < Model.Responsibilities[r].JobResponsibilityTranslations.Count(); i++)
+                {
+                    <input asp-for="Responsibilities[r].JobResponsibilityTranslations[i].Id"
+                    value="@Model.Responsibilities[r].JobResponsibilityTranslations[i].Id" type="hidden">
+                    <label for="jobtitle">
+                        <img src="@Model.JobTranslations[i].LanguageIcon" alt=""> 
+                        Responsibility @(r + 1)
+                    </label>
+                    <div class="input-area">
+                        <img src="~/images/icon/company-2.svg" alt="">
+                        <input asp-for="Responsibilities[r].JobResponsibilityTranslations[i].Value" placeholder="Senior UI/UX Engineer">
+                        <input type="hidden" asp-for="@Model.Responsibilities[r].JobResponsibilityTranslations[i].LanguageId"
+                        value="@Model.Responsibilities[r].JobResponsibilityTranslations[i].LanguageId" />
+                    </div>
+                }
+
             }
             <div class="add-row">
-                <button type="button"
-                        onclick="deleteJobResponsibility(@Model[r].Id)" class="remove-work-area-row remove">
-                    Remove
-                </button>
-            </div>
-        }
+                    <button type="button"
+                    onclick="deleteJobResponsibility(@Model.Responsibilities[r].Id)" class="remove-work-area-row remove">
+                        Remove
+                    </button>
+                </div>
+            }
+        
     </div>
 </div>
 <br />

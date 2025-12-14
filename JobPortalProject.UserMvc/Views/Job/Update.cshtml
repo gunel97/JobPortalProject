@@ -178,34 +178,38 @@
                                     </div>
                                 </div>
                             }
-                               @if (Model.ExtraBenefits.Any())
+
+                            @if (Model.ExtraBenefits.Any())
                             {
                                 <div id="jobBenefitRow" class="row">
-                                    <partial name="_BenefitsUpdatePartial" model="@Model.ExtraBenefits" />
+                                    <partial name="_BenefitsUpdatePartial" model="@Model" />
                                 </div>
                             }
                             @if (Model.Responsibilities.Any())
                             {
                                 <div id ="jobResponsibilityRow" class="row">
-                                    <partial name="_ResponsibilitiesUpdatePartial" model="@Model.Responsibilities" />
+                                    <partial name="_ResponsibilitiesUpdatePartial" model="@Model" />
                                 </div>
                             }
 
                             <br />
+                            <div class="col-md-12">
+                                <br />
+                                <div class="form-inner">
+                                    <button class="primry-btn-2 lg-btn w-unset" type="submit">Save Changes</button>
+                                </div>
+                            </div>
                             <div class="add-remove-btn d-flex align-items-center justify-content-between mb-50">
                                 <div class="add-row">
-                                    <button type="button" class="addwork-area-row">Add Extra Benefit</button>
+                                    <button data-bs-toggle="modal" data-bs-target="#addBenefitModal" type="button" class="addwork-area-row">Add Extra Benefit</button>
                                 </div>
+                            </div>
+                            <div class="add-remove-btn d-flex align-items-center justify-content-between mb-50">
                                 <div class="add-row">
                                     <button data-bs-toggle="modal" data-bs-target="#addResponsibilityModal" type="button" class="addwork-area-row">Add Responsibility</button>
                                 </div>
                             </div>
-                            <div class="col-md-12">
-                                <br />
-                                <div class="form-inner">
-                                    <button class="primry-btn-2 lg-btn w-unset" type="submit">Post Now</button>
-                                </div>
-                            </div>
+                            
                         </div>
                     </form>
                 </div>
@@ -230,18 +234,18 @@
 
                     @if (Model.JobTranslations != null && Model.JobTranslations.Any())
                     {
-                        <div class="col-lg-12 mb-3">
-                            <h6>Translations:</h6>
-                        </div>
+                        
 
                         @for (int i = 0; i < Model.JobTranslations.Count; i++)
                         {
                             <div class="form-inner mb-25">
-                                <label><img src="@Model.JobTranslations[i].LanguageIcon" alt="" /></label>
-                                <div class="col-md-6">  
+                                <div class="col-lg-12 mb-3">
+                                    <h6><img src="@Model.JobTranslations[i].LanguageIcon" alt="" /> Translation:</h6>
+                                </div>
+                                <div class="col-md-6">
+
+                                    <input name="JobResponsibilityTranslations[@i].LanguageId" value="@Model.JobTranslations[i].LanguageId" type="hidden" />
                                         <div class="input-area">
-                                            <img src="~/images/icon/company-2.svg" alt="">
-                                        <input name="JobResponsibilityTranslations[@i].LanguageId" value="@Model.JobTranslations[i].LanguageId" type="hidden" />
                                         <input name="JobResponsibilityTranslations[@i].Value" placeholder="Add Responsibility" class="form-control">
                                         </div>
                                 </div>
@@ -251,13 +255,54 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Add Responsibility</button>
+                    <button type="submit" class="primry-btn-2 lg-btn w-unset">Add Responsibility</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 <!-- ========== Add responsibility modal end============= -->
+
+<!-- ========== Add benefit modal============= -->
+<div class="modal fade" id="addBenefitModal" tabindex="-1" aria-labelledby="addBenefitModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addBenefitModalLabel">Add ExtraBenefit</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" asp-action="AddBenefit" asp-controller="Job">
+                <div class="modal-body">
+                    <input type="hidden" name="JobId" value="@Model.Id" />
+
+                    @if (Model.JobTranslations != null && Model.JobTranslations.Any())
+                    {
+                        @for (int i = 0; i < Model.JobTranslations.Count; i++)
+                        {
+                            <div class="form-inner mb-25">
+                                <div class="col-lg-12 mb-3">
+                                    <h6><img src="@Model.JobTranslations[i].LanguageIcon" alt="" /> Translation:</h6>
+                                </div>
+                                <div class="col-md-6">
+
+                                    <input name="JobExtraBenefitTranslations[@i].LanguageId" value="@Model.JobTranslations[i].LanguageId" type="hidden" />
+                                        <div class="input-area">
+                                        <input name="JobExtraBenefitTranslations[@i].Value" placeholder="Add Extra Benefit" class="form-control">
+                                        </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="primry-btn-2 lg-btn w-unset">Add Extra Benefit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- ========== Add benefit modal end============= -->
 
 @if (TempData["CloseModal"] != null)
 {
@@ -280,57 +325,3 @@
     </script>
 }
 
-
-<script>
-    let respIndex = 0;
-    let benIndex=0;
-
-    function addR(translations){
-        console.log(translations);
-        console.log("test");
-    const rContainer = document.getElementById("rContainer");
-    const responsibilityTitle = document.getElementById("responsibilityTitle");
-    responsibilityTitle.innerText="Job Responsibilities"
-    for(let i=0; i<translations.length; i++){
-        const divElement =document.createElement('div');
-                divElement.className='form-inner mb-25';
-                    var htmlTextR = `<label for="jobtitle">
-                    Job Responsibility <img src="${translations[i].languageIcon}" alt=""> *</label>
-                                        <div class="input-area">
-                                            <img src="/images/icon/company-2.svg" alt="">
-                                            <input name="Responsibilities[${respIndex}].Translations[${i}].Value" placeholder="Senior UI/UX Engineer">
-                                            <input type="hidden" name="Responsibilities[${respIndex}].Translations[${i}].LanguageId" value="${i + 1}" />
-                                            </div>`;
-            divElement.innerHTML+=htmlTextR;
-            rContainer.appendChild(divElement);
-            console.log(htmlTextR);
-    }
-    respIndex++;
-    }
-
-    function addB(translations){
-        console.log(translations);
-        console.log("test");
-
-    const bContainer = document.getElementById("bContainer");
-    const benefitTitle = document.getElementById("benefitTitle");
-    benefitTitle.innerText="Job Extra Benefits"
-    for(let i=0; i<translations.length; i++){
-        const divElement =document.createElement('div');
-                divElement.className='form-inner mb-25';
-                    var htmlTextB = `<label for="jobtitle">
-                    Job Benefit <img src="${translations[i].languageIcon}" alt=""> *</label>
-                                        <div class="input-area">
-                                            <img src="/images/icon/company-2.svg" alt="">
-                                            <input name="Benefits[${benIndex}].Translations[${i}].Value" placeholder="Senior UI/UX Engineer">
-                                            <input type="hidden" name="Benefits[${benIndex}].Translations[${i}].LanguageId" value="${i + 1}" />
-                                            </div>`;
-            divElement.innerHTML+=htmlTextB;
-            bContainer.appendChild(divElement);
-            console.log(htmlTextB);
-    }
-    benIndex++;
-    }
-
-
-</script>

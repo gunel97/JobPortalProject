@@ -1,5 +1,6 @@
 ﻿using JobPortalProject.BL.Services.Contracts;
 using JobPortalProject.BL.UI.Services.Abstracts;
+using JobPortalProject.BL.ViewModels.JobExtraBenefitViewModels;
 using JobPortalProject.BL.ViewModels.JobResponsibilityViewModels;
 using JobPortalProject.BL.ViewModels.JobViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -150,12 +151,11 @@ namespace JobPortalProject.UserMvc.Controllers
             if (deleted)
             {
                 var model = await _jobService.GetUpdateViewModel(benefit.JobId);
-                var benefitHtml = await RenderPartialViewToString("_BenefitsUpdatePartial", model.ExtraBenefits);
+                var benefitHtml = await RenderPartialViewToString("_BenefitsUpdatePartial", model);
 
                 return Json(new
                 {
                     success = true,
-                    model.ExtraBenefits,
                     benefitHtml
                 });
             }
@@ -176,12 +176,11 @@ namespace JobPortalProject.UserMvc.Controllers
             if (deleted)
             {
                 var model = await _jobService.GetUpdateViewModel(responsibility.JobId);
-                var responsibilityHtml = await RenderPartialViewToString("_ResponsibilitiesUpdatePartial", model.Responsibilities);
+                var responsibilityHtml = await RenderPartialViewToString("_ResponsibilitiesUpdatePartial", model);
 
                 return Json(new
                 {
                     success = true,
-                    model.ExtraBenefits,
                     responsibilityHtml
                 });
             }
@@ -191,7 +190,8 @@ namespace JobPortalProject.UserMvc.Controllers
             }
         }
 
-        [HttpPost] public async Task<IActionResult> AddResponsibility(JobResponsibilityCreateViewModel model)
+        [HttpPost] 
+        public async Task<IActionResult> AddResponsibility(JobResponsibilityCreateViewModel model)
         {
             if (model.JobId == 0)
             {
@@ -214,6 +214,34 @@ namespace JobPortalProject.UserMvc.Controllers
             }
 
             TempData["Success"] = "Responsibility added successfully!";
+            TempData["CloseModal"] = "true";
+            return RedirectToAction("Update", jobUpdateModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddBenefit(JobExtraBenefitCreateViewModel model)
+        {
+            if (model.JobId == 0)
+            {
+                return BadRequest();
+            }
+
+            var jobUpdateModel = await _jobService.GetUpdateViewModel(model.JobId);
+
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "Please fill in all required fields";
+                return RedirectToAction("Update", jobUpdateModel);
+            }
+
+            var created = await _benefitService.CreateAsync(model);
+            if(created == null)
+            {
+                TempData["Error"] = "Cant create";
+                return RedirectToAction("Update", jobUpdateModel);
+            }
+
+            TempData["Success"] = "Extra Benefit added successfully!";
             TempData["CloseModal"] = "true";
             return RedirectToAction("Update", jobUpdateModel);
         }

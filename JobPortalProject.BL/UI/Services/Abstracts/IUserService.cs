@@ -1,4 +1,5 @@
-﻿using JobPortalProject.BL.ViewModels.UserViewModels;
+﻿using JobPortalProject.BL.UI.ViewModels;
+using JobPortalProject.BL.ViewModels.UserViewModels;
 using JobPortalProject.DA.DataContext.Entities;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -14,6 +15,8 @@ namespace JobPortalProject.BL.UI.Services.Abstracts
         public Task<IdentityResult> RegisterCompanyAsync(CompanyRegisterViewModel model);
         public Task<string> GetUserRoleAsync(string username);
         public Task<SignInResult> LoginAsync(LoginViewModel model);
-        public Task LogOutAsync(); 
+        public Task LogOutAsync();
+        public Task<AppUser> GetCurrentUserAsync();
+        public Task<IdentityResult> ChangePasswordAsync(AppUser user, ChangePasswordViewModel model);
     }
 }

@@ -1,8 +1,10 @@
 ﻿using JobPortalProject.BL.Services.Contracts;
 using JobPortalProject.BL.UI.Services.Abstracts;
+using JobPortalProject.BL.UI.ViewModels;
 using JobPortalProject.BL.ViewModels.CompanyViewModels;
 using JobPortalProject.BL.ViewModels.UserViewModels;
 using JobPortalProject.DA.DataContext.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 
 namespace JobPortalProject.BL.UI.Services.Implementations
@@ -14,14 +16,16 @@ namespace JobPortalProject.BL.UI.Services.Implementations
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ICompanyTranslationService _companyTranslationService;
         private readonly ICompanyService _companyService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserManager(UserManager<AppUser> userManager, ICompanyTranslationService companyTranslationService, ICookieService cookieService, SignInManager<AppUser> signInManager, ICompanyService companyService)
+        public UserManager(UserManager<AppUser> userManager, ICompanyTranslationService companyTranslationService, ICookieService cookieService, SignInManager<AppUser> signInManager, ICompanyService companyService, IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _companyTranslationService = companyTranslationService;
             _cookieService = cookieService;
             _signInManager = signInManager;
             _companyService = companyService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<string> GetUserRoleAsync(string username)
@@ -107,6 +111,20 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             var company = await _companyService.GetAsync(predicate: x => x.AppUser!.Id == userId);
 
             return company;
+        }
+
+        public async Task<IdentityResult> ChangePasswordAsync(AppUser user, ChangePasswordViewModel model)
+        {
+            return await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+        }
+
+        public async Task<AppUser> GetCurrentUserAsync()
+        {
+            var user = _httpContextAccessor.HttpContext?.User;
+            if (user == null)
+                return null!;
+
+            return await _userManager.GetUserAsync(user);
         }
     }
 }

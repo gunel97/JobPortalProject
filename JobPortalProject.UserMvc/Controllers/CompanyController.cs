@@ -3,8 +3,12 @@ using JobPortalProject.BL.UI.Services.Abstracts;
 using JobPortalProject.BL.UI.ViewModels;
 using JobPortalProject.BL.ViewModels.AddressViewModels;
 using JobPortalProject.BL.ViewModels.CompanyViewModels;
+using JobPortalProject.BL.ViewModels.JobExtraBenefitViewModels;
 using JobPortalProject.BL.ViewModels.WorkingFieldViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace JobPortalProject.UserMvc.Controllers
 {
@@ -61,6 +65,10 @@ namespace JobPortalProject.UserMvc.Controllers
 
             return View(model);
         }
+        public IActionResult Settings()
+        {
+            return View();
+        }
 
         public async Task<IActionResult> EditCompanyProfile()
         {
@@ -113,17 +121,33 @@ namespace JobPortalProject.UserMvc.Controllers
             return RedirectToAction(nameof(EditCompanyProfile));
         }
 
-        public async Task<IActionResult> DeleteWorkingField(int id)
+        [HttpPost]
+        public async Task<IActionResult> DeleteWorkingField(int id, int languageId)
         {
-            var workingField = await _workingFieldService.GetByIdAsync(id);
-
-            if (workingField == null)
+            var companyId = _companyService.GetCompanyIdOfUser();
+            var field = await _workingFieldService.GetByIdAsync(id);
+            if (field == null)
                 return BadRequest();
 
             var deleted = await _workingFieldService.DeleteAsync(id);
             if (deleted)
-                return NoContent();
-            else return RedirectToAction("CompanyDashboard", "Company");
+            {
+                var model = await _companyService.GetCompanyTranslationEditPageAsync(languageId);
+                if (model == null)
+                    return NotFound();
+
+                var workingFieldHtml = await RenderPartialViewToString("_WorkingFieldsUpdatePartial", model);
+
+                return Json(new
+                {
+                    success = true,
+                    workingFieldHtml
+                });
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         public async Task<IActionResult> DeleteAddress(int id)
@@ -149,16 +173,24 @@ namespace JobPortalProject.UserMvc.Controllers
         [HttpPost]
         public async Task<IActionResult> AddWorkingField(WorkingFieldCreateViewModel model)
         {
+            var companyUpdateModel = await _companyService.GetCompanyUpdateViewModelAsync();
+
             if (!ModelState.IsValid)
             {
-                model = await _companyService.GetWorkingFieldCreateViewModel(); 
-                return View(model);
+                TempData["Error"] = "Please fill in all required fields";
+                return RedirectToAction("EditCompanyProfile", companyUpdateModel);
             }
 
-            var isCreated = await _companyService.CreateWorkingField(model);
-            if (!isCreated) return NotFound();
+            var created = await _companyService.CreateWorkingField(model);
+            if (!created)
+            {
+                TempData["Error"] = "Cant create";
+                return RedirectToAction("Edit company profile", companyUpdateModel);
+            }
 
-            return RedirectToAction("CompanyDashboard", "Company");
+            TempData["Success"] = "Work Area added successfully!";
+            TempData["CloseModal"] = "true";
+            return RedirectToAction("EditCompanyProfile", companyUpdateModel);
         }
 
         public async Task<IActionResult> AddAddress()
@@ -181,6 +213,32 @@ namespace JobPortalProject.UserMvc.Controllers
                 return NotFound();
             return RedirectToAction("CompanyDashboard", "Company");
 
+        }
+
+        private async Task<string> RenderPartialViewToString(string viewName, object model)
+        {
+            ViewData.Model = model;
+            using var writer = new StringWriter();
+
+            var viewEngine = HttpContext.RequestServices.GetService<ICompositeViewEngine>();
+            var viewResult = viewEngine.FindView(ControllerContext, viewName, false);
+
+            if (!viewResult.Success)
+            {
+                throw new InvalidOperationException($"Could not find view '{viewName}'");
+            }
+
+            var viewContext = new ViewContext(
+                ControllerContext,  // This provides the ViewContext data
+                viewResult.View,
+                ViewData,
+                TempData,
+                writer,
+                new HtmlHelperOptions()
+            );
+
+            await viewResult.View.RenderAsync(viewContext);
+            return writer.ToString();
         }
     }
 }

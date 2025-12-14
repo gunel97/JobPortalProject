@@ -125,6 +125,7 @@ namespace JobPortalProject.BL.Services.Implementations
                                             .Include(s => s.SocialMedia!));
 
             var companyTypeSelectListItems = await _companyTypeService.GetCompanyTypeSelectListItems(selectedLanguageId);
+            var citiesList = await _cityService.GetCitySelectListItemsWithCountry(selectedLanguageId);
 
             var companyUpdateViewModel = new CompanyUpdateViewModel
             {
@@ -136,6 +137,7 @@ namespace JobPortalProject.BL.Services.Implementations
                 LogoUrl = company.LogoUrl,
                 CompanyTypeId = company.CompanyTypeId,
                 CompanyTypeList = companyTypeSelectListItems,
+                CitiesList=citiesList,
                 CompanyTranslations = company.CompanyTranslations.Select(x => new CompanyTranslationUpdateViewModel
                 {
                     TranslationId = x.Id,

@@ -95,7 +95,6 @@ namespace JobPortalProject.BL.Services.Implementations
                     }
                 }
             }
-
             return true;
         }
 

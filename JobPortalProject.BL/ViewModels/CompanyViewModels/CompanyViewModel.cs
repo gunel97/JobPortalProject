@@ -52,7 +52,8 @@ namespace JobPortalProject.BL.ViewModels.CompanyViewModels
         public IFormFile? LogoFile { get; set; }
         public int CompanyTypeId { get; set; }
         public List<CompanyTranslationUpdateViewModel> CompanyTranslations { get; set; } = [];
-        public List<SelectListItem>? CompanyTypeList { get; set; } = [];
+        public List<SelectListItem> CompanyTypeList { get; set; } = [];
+        public List<SelectListItem> CitiesList { get; set; } = [];
         public List<CompanySocialUpdateViewModel> CompanySocialUpdateViewModels { get; set; } = [];       
     }
 

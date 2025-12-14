@@ -1,4 +1,7 @@
 ﻿@model CompanyTranslationEditPageViewModel
+@{
+    ViewData["languageId"] = Model.LangaugeId;
+}
 
 <input asp-for="LangaugeId" value="@Model.LangaugeId" type="hidden" />
 <div class="section-title2">
@@ -22,66 +25,12 @@
             <span asp-validation-for="CompanyTranslationUpdateViewModel.Description"></span>
     </div>
 </div>
-    <div class="section-title2">
-    <h5>Working Areas:</h5>
-        <div class="dash"></div>
+@if (Model.WorkingFieldUpdateViewModels.Any())
+{
+    <div id="workingFieldRow" class="row">
+    <partial name="_WorkingFieldsUpdatePartial" model="@Model" />
     </div>
-  <div class="work-area-row">
-            @for (int i = 0; i < Model.WorkingFieldUpdateViewModels.Count; i++)
-    {
-        <input asp-for="WorkingFieldUpdateViewModels[i].WorkingFieldId"
-                            value="@Model.WorkingFieldUpdateViewModels[i].WorkingFieldId"
-                            type="hidden" />
-                    <div class="row" id="workingAreaItemRow${@Model.WorkingFieldUpdateViewModels[i].WorkingFieldId}">
-
-
-            <input asp-for="WorkingFieldUpdateViewModels[i].WorkingFieldTranslationUpdateViewModel!.WorkingFieldTranslationId"
-                   value="@Model.WorkingFieldUpdateViewModels[i].WorkingFieldTranslationUpdateViewModel!.WorkingFieldTranslationId"
-                   type="hidden" />
-                        <div class="col-md-6">
-                            <div class="form-inner mb-25">
-                                <label for="working-field">Working Field *</label>
-                                <div class="input-area">
-                                    <img src="~/images/icon/company-2.svg" alt="">
-                                    <input asp-for="WorkingFieldUpdateViewModels[i].WorkingFieldTranslationUpdateViewModel.Name" id="working-field" placeholder="Frontend Developer" />
-                                    <span asp-validation-for="WorkingFieldUpdateViewModels[i].WorkingFieldTranslationUpdateViewModel.Name"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-inner mb-25">
-                                <label>Add Icon*</label>
-                                <div class="input-area">
-                                    <img src="~/images/icon/company-2.svg" alt="">
-                                    <input asp-for="WorkingFieldUpdateViewModels[i].IconFile" accept="image/*">
-                                    <span asp-validation-for="WorkingFieldUpdateViewModels[i].IconFile"></span>
-                                    <div class="form-inner mb-25">
-                                        <input name="@Model.WorkingFieldUpdateViewModels[i].IconUrl" value="@Model.WorkingFieldUpdateViewModels[i].IconUrl" type="hidden" />
-                                        <img src="@Model.WorkingFieldUpdateViewModels[i].IconUrl" width="100" height="100" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-inner mb-40">
-                                <label for="description">Short Description*</label>
-                                <input asp-for="WorkingFieldUpdateViewModels[i].WorkingFieldTranslationUpdateViewModel.Description" id="description" placeholder="Details*" />
-                                <span asp-validation-for="WorkingFieldUpdateViewModels[i].WorkingFieldTranslationUpdateViewModel.Description"></span>
-                            </div>
-                <div class="add-row">
-                    <button onclick="deleteWorkingField(@Model.WorkingFieldUpdateViewModels[i].WorkingFieldId)"
-                            type="button" class="remove-work-area-row remove">
-                        Remove Work Area
-                    </button>
-                </div>
-                <div class="section-title two">
-                    <div class="dash"></div>
-                </div>
-                        </div>
-                    </div>
-                    <br />
-                }
-                </div>
+}
 
 <div class="section-title2">
     <h5>Locations:</h5>

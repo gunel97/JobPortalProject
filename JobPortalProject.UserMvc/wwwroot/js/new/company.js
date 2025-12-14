@@ -4,7 +4,6 @@ const companyTranslation = document.getElementById("companyTranslation");
 companyTranslation.innerHTML="";
 }
 
-
 function updateCompanyTranslation(id) {
     console.log(id);
 

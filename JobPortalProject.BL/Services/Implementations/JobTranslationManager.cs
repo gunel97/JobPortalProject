@@ -19,6 +19,7 @@ namespace JobPortalProject.BL.Services.Implementations
                 LanguageId = model.LanguageId,
                 Title = model.Title,
                 Description = model.Description,
+                RequiredExperience=model.RequiredExperience
             };
 
             var createdJobEntity = await Repository.AddAsync(jobTranslation);

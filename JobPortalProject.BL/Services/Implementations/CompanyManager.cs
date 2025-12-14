@@ -126,6 +126,7 @@ namespace JobPortalProject.BL.Services.Implementations
 
             var companyTypeSelectListItems = await _companyTypeService.GetCompanyTypeSelectListItems(selectedLanguageId);
             var citiesList = await _cityService.GetCitySelectListItemsWithCountry(selectedLanguageId);
+            var addressesList = await _addressService.GetAddressSelectListItems(existedCompany.Id, selectedLanguageId);
 
             var companyUpdateViewModel = new CompanyUpdateViewModel
             {
@@ -133,10 +134,13 @@ namespace JobPortalProject.BL.Services.Implementations
                 SelectedUpdateLanguageId = selectedLanguageId,
                 CompanySize = company.CompanySize,
                 CompanyEmail = company.CompanyEmail,
+                PrimaryPhone=company.PrimaryPhone,
+                SecondaryPhone=company.SecondaryPhone,
                 CoverPhotoUrl = company.CoverPhotoUrl,
                 LogoUrl = company.LogoUrl,
                 CompanyTypeId = company.CompanyTypeId,
                 CompanyTypeList = companyTypeSelectListItems,
+                AddressesOfCompany=addressesList,
                 CitiesList=citiesList,
                 CompanyTranslations = company.CompanyTranslations.Select(x => new CompanyTranslationUpdateViewModel
                 {
@@ -223,8 +227,6 @@ namespace JobPortalProject.BL.Services.Implementations
             return workingFieldCreateViewModel;
         }
 
-
-
         public async Task<bool> CreateAddress(AddressCreateViewModel model)
         {
             var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -232,9 +234,15 @@ namespace JobPortalProject.BL.Services.Implementations
 
             if (existedCompany == null)
                 return false;
+            var addressesOfCompany = await _addressService.GetByCompanyIdAsync(existedCompany.Id);
 
             model.CompanyId = existedCompany.Id;
-            var createdAddress = await _addressService.CreateAsync(model);
+            if (!addressesOfCompany.Any())
+            {
+                model.IsMainAddress = true;
+            }
+
+            var createdAddress = await _addressService.CreateAsync(model);       
 
             if (createdAddress == null)
             {
@@ -242,6 +250,14 @@ namespace JobPortalProject.BL.Services.Implementations
             }
             else
             {
+                if (model.IsMainAddress && addressesOfCompany.Any())
+                {
+                    foreach (var address in addressesOfCompany)
+                    {
+                        address.IsMainAddress = false;
+                    }
+                }
+
                 foreach (var translationModel in model.AddressTranslationCreateViewModels)
                 {
                     translationModel.AddressId = createdAddress.Id;
@@ -381,10 +397,26 @@ namespace JobPortalProject.BL.Services.Implementations
         {
             var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
             var existedCompany = await Repository.GetAsync(predicate: x => x.AppUserId == userId);
-
             if (existedCompany == null)
                 return false;
 
+
+            var addressesOfCompany = await _addressService.GetByCompanyIdAsync(existedCompany.Id);
+            var currentMainAddressOfCompany = addressesOfCompany.FirstOrDefault(x => x.IsMainAddress);
+            var newMainAddressOfCompany = addressesOfCompany.FirstOrDefault(x => x.Id == model.MainAddressId);
+
+            if (currentMainAddressOfCompany!.Id != model.MainAddressId)
+            {
+                if (newMainAddressOfCompany == null || newMainAddressOfCompany.CompanyId != existedCompany.Id)
+                {
+                    return false;
+                }
+                foreach (var address in addressesOfCompany)
+                {
+                    address.IsMainAddress = false;
+                }
+                newMainAddressOfCompany.IsMainAddress = true;
+            }
             existedCompany = Mapper.Map(model, existedCompany);
 
             if (model.CoverPhotoFile != null)

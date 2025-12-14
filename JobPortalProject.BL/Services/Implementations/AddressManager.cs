@@ -28,6 +28,12 @@ namespace JobPortalProject.BL.Services.Implementations
             _addressTranslationService = addressTranslationService;
         }
 
+        public async Task<List<Address>> GetByCompanyIdAsync(int companyId)
+        {
+            var addresses = await Repository.GetAllAsync(predicate: x => !x.IsDeleted && x.CompanyId == companyId);
+
+            return addresses.ToList();
+        } 
         public override async Task<IEnumerable<AddressViewModel>> GetAllAsync(Expression<Func<Address, bool>>? predicate = null, Func<IQueryable<Address>, IOrderedQueryable<Address>>? orderBy = null, Func<IQueryable<Address>, IIncludableQueryable<Address, object>>? include = null, bool AsNoTracking = false)
         {
             var language = await _cookieService.GetLanguageAsync();

@@ -34,7 +34,7 @@ namespace JobPortalProject.BL.ViewModels.AddressViewModels
     public class AddressUpdateViewModel
     {
         public int Id { get; set; }
-        public bool? IsMainAddress { get; set; }
+        public bool IsMainAddress { get; set; }
         public int CityId { get; set; }
         public List<SelectListItem> CityListItems { get; set; } = [];
         public int CompanyId { get; set; }

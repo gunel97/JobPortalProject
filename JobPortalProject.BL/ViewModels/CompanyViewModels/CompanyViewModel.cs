@@ -45,12 +45,16 @@ namespace JobPortalProject.BL.ViewModels.CompanyViewModels
         public int SelectedUpdateLanguageId { get; set; }
         public int CompanySize { get; set; }
         public string? CompanyEmail { get; set; }
+        public string? PrimaryPhone { get; set; }
+        public string? SecondaryPhone { get; set; }
         public bool IsAccountApproved { get; set; }
         public string? CoverPhotoUrl { get; set; }
         public IFormFile? CoverPhotoFile { get; set; }
         public string? LogoUrl { get; set; }
         public IFormFile? LogoFile { get; set; }
         public int CompanyTypeId { get; set; }
+        public int MainAddressId { get; set; }
+        public List<SelectListItem> AddressesOfCompany { get; set; } = [];
         public List<CompanyTranslationUpdateViewModel> CompanyTranslations { get; set; } = [];
         public List<SelectListItem> CompanyTypeList { get; set; } = [];
         public List<SelectListItem> CitiesList { get; set; } = [];

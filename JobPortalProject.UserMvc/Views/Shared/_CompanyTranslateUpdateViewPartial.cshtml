@@ -37,10 +37,15 @@
 </div>
                 @for (int i = 0; i < Model.AddressUpdateViewModels.Count; i++)
                 {
-                    <div id="address${@Model.AddressUpdateViewModels[i].Id}">
+    @if (Model.AddressUpdateViewModels[i].IsMainAddress)
+    {
+        <div class="section-title2">
+            <h5>Main Address:</h5>
+        </div>
+    }
+    <div id="address${@Model.AddressUpdateViewModels[i].Id}">
                     <input asp-for="AddressUpdateViewModels[i].AddressTranslationId" value="@Model.AddressUpdateViewModels[i].AddressTranslationId" type="hidden" />
-                    <input asp-for="AddressUpdateViewModels[i].Id" value="@Model.AddressUpdateViewModels[i].Id" type="hidden" />
-                    
+                    <input asp-for="AddressUpdateViewModels[i].Id" value="@Model.AddressUpdateViewModels[i].Id" type="hidden" />                    
                     <div class="col-md-6">
                         <div class="form-inner mb-25">
               

@@ -150,12 +150,14 @@
                                 <input asp-for="JobTranslations[i].LanguageId"
                                        value="@Model.JobTranslations[i].LanguageId" type="hidden" />
                                        <input asp-for="JobTranslations[i].Id" value="@Model.JobTranslations[i].Id" type="hidden" />
+                                       <span asp-validation-for="JobTranslations[i].Id"></span>
                                 <div class="col-md-6">
                                     <div class="form-inner mb-25">
                                         <label for="jobtitle">Job Title*</label>
                                         <div class="input-area">
                                             <img src="~/images/icon/company-2.svg" alt="">
                                             <input asp-for="JobTranslations[i].Title" id="jobtitle" placeholder="Senior UI/UX Engineer">
+                                            <span asp-validation-for="JobTranslations[i].Title"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -165,6 +167,7 @@
                                         <div class="input-area">
                                             <img src="~/images/icon/email-2.svg" alt="">
                                             <input asp-for="JobTranslations[i].RequiredExperience" id="experiences" placeholder="Type Experiences">
+                                            <span asp-validation-for="JobTranslations[i].RequiredExperience"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -174,6 +177,7 @@
                                         <div class="input-area">
                                             <img src="~/images/icon/company-2.svg" alt="">
                                             <input asp-for="JobTranslations[i].Description" id="description" placeholder="Senior UI/UX Engineer">
+                                            <span asp-validation-for="JobTranslations[i].Description"></span>
                                         </div>
                                     </div>
                                 </div>

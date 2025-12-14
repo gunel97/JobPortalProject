@@ -219,6 +219,7 @@ namespace JobPortalProject.BL.Services.Implementations
                 Id = jobEntity.Id,
                 Title = jobEntity.JobTranslations.FirstOrDefault()?.Title,
                 Description = jobEntity.JobTranslations.FirstOrDefault()?.Description,
+                RequiredExperience=jobEntity.JobTranslations.FirstOrDefault()?.RequiredExperience,
                 VacancyCount = jobEntity.VacancyCount,
                 MinSalary = jobEntity.MinSalary,
                 MaxSalary = jobEntity.MaxSalary,

@@ -30,8 +30,9 @@ namespace JobPortalProject.BL.Services.Implementations
         private readonly IAddressTranslationService _addressTranslationService;
         private readonly ILanguageService _languageService;
         private readonly ICityService _cityService;
+        private readonly ISocialMediaService _socialMediaService;
 
-        public CompanyManager(IRepositoryAsync<Company> repository, IMapper mapper, ICompanyTypeService companyTypeService, ICookieService cookieService, IHttpContextAccessor httpContextAccessor, ICompanySocialService companySocialService, ICloudinaryService cloudinaryService, FileService fileService, ICompanyTranslationService translationService, IWorkingFieldService workingFieldService, IWorkingFieldTranslationService workingFieldTranslationService, IAddressService addressService, ILanguageService languageService, ICityService cityService, IAddressTranslationService addressTranslationService) : base(repository, mapper)
+        public CompanyManager(IRepositoryAsync<Company> repository, IMapper mapper, ICompanyTypeService companyTypeService, ICookieService cookieService, IHttpContextAccessor httpContextAccessor, ICompanySocialService companySocialService, ICloudinaryService cloudinaryService, FileService fileService, ICompanyTranslationService translationService, IWorkingFieldService workingFieldService, IWorkingFieldTranslationService workingFieldTranslationService, IAddressService addressService, ILanguageService languageService, ICityService cityService, IAddressTranslationService addressTranslationService, ISocialMediaService socialMediaService) : base(repository, mapper)
         {
             _companyTypeService = companyTypeService;
             _cookieService = cookieService;
@@ -46,6 +47,7 @@ namespace JobPortalProject.BL.Services.Implementations
             _languageService = languageService;
             _cityService = cityService;
             _addressTranslationService = addressTranslationService;
+            _socialMediaService = socialMediaService;
         }
 
         public async Task<int> GetCompanyIdOfUser()
@@ -60,17 +62,6 @@ namespace JobPortalProject.BL.Services.Implementations
 
             else
                 return company.Id;
-        }
-        public async Task<CompanyCreateViewModel> GetCompanyCreateViewModelAsync()
-        {
-            var language = await _cookieService.GetLanguageAsync();
-            var companyCreateViewModel = new CompanyCreateViewModel();
-
-            var companyTypeSelectListItems = await _companyTypeService.GetCompanyTypeSelectListItems(language.Id);
-
-            companyCreateViewModel.CompanyTypeList = companyTypeSelectListItems;
-
-            return companyCreateViewModel;
         }
 
         public async Task<AddressCreateViewModel> GetAddressCreateViewModel()
@@ -127,6 +118,7 @@ namespace JobPortalProject.BL.Services.Implementations
             var companyTypeSelectListItems = await _companyTypeService.GetCompanyTypeSelectListItems(selectedLanguageId);
             var citiesList = await _cityService.GetCitySelectListItemsWithCountry(selectedLanguageId);
             var addressesList = await _addressService.GetAddressSelectListItems(existedCompany.Id, selectedLanguageId);
+            var socialMediasList = await _socialMediaService.GetSocialMediaListItems();
 
             var companyUpdateViewModel = new CompanyUpdateViewModel
             {
@@ -142,6 +134,7 @@ namespace JobPortalProject.BL.Services.Implementations
                 CompanyTypeList = companyTypeSelectListItems,
                 AddressesOfCompany=addressesList,
                 CitiesList=citiesList,
+                SocialMediasList=socialMediasList,
                 CompanyTranslations = company.CompanyTranslations.Select(x => new CompanyTranslationUpdateViewModel
                 {
                     TranslationId = x.Id,
@@ -489,9 +482,8 @@ namespace JobPortalProject.BL.Services.Implementations
             if (existedCompany == null)
                 return false;
 
-            if (existedCompany.CompanyTranslations.Any() && existedCompany.CompanySocials.Any()
-                && existedCompany.Addresses.Any() && existedCompany.CompanyEmail!=null 
-                && existedCompany.LogoUrl!=null)
+            if (existedCompany.CompanyTranslations.Any() && existedCompany.Addresses.Any() 
+                && existedCompany.CompanyEmail!=null)
                 return true;
             else
                 return false;

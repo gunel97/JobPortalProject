@@ -1,4 +1,5 @@
 ﻿using JobPortalProject.BL.ViewModels.SocialMediaViewModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace JobPortalProject.BL.ViewModels.CompanySocialViewModels
     {
         public int CompanyId { get; set; }
         public int SocialMediaId { get; set; }
-        public string? AddressUrl { get; set; }
+        public string AddressUrl { get; set; } = null!;
     }
 
     public class CompanySocialUpdateViewModel

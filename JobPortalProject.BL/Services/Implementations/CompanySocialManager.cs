@@ -9,7 +9,9 @@ namespace JobPortalProject.BL.Services.Implementations
     public class CompanySocialManager : CrudManager<CompanySocial, CompanySocialViewModel, CompanySocialCreateViewModel, CompanySocialUpdateViewModel>
 , ICompanySocialService
     {
-        public CompanySocialManager(IRepositoryAsync<CompanySocial> repository, IMapper mapper) : base(repository, mapper) { }
+        public CompanySocialManager(IRepositoryAsync<CompanySocial> repository, IMapper mapper) : base(repository, mapper)
+        {
+        }
     }
 
 

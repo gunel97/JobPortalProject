@@ -17,8 +17,9 @@ namespace JobPortalProject.BL.UI.Services.Implementations
         private readonly ICompanyTranslationService _companyTranslationService;
         private readonly ICompanyService _companyService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ICompanyTypeService _companyTypeService;
 
-        public UserManager(UserManager<AppUser> userManager, ICompanyTranslationService companyTranslationService, ICookieService cookieService, SignInManager<AppUser> signInManager, ICompanyService companyService, IHttpContextAccessor httpContextAccessor)
+        public UserManager(UserManager<AppUser> userManager, ICompanyTranslationService companyTranslationService, ICookieService cookieService, SignInManager<AppUser> signInManager, ICompanyService companyService, IHttpContextAccessor httpContextAccessor, ICompanyTypeService companyTypeService)
         {
             _userManager = userManager;
             _companyTranslationService = companyTranslationService;
@@ -26,6 +27,7 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             _signInManager = signInManager;
             _companyService = companyService;
             _httpContextAccessor = httpContextAccessor;
+            _companyTypeService = companyTypeService;
         }
 
         public async Task<string> GetUserRoleAsync(string username)
@@ -54,7 +56,7 @@ namespace JobPortalProject.BL.UI.Services.Implementations
         {
             await _signInManager.SignOutAsync();
         }
-
+        
         public async Task<IdentityResult> RegisterCompanyAsync(CompanyRegisterViewModel model)
         {
             var language = await _cookieService.GetLanguageAsync();
@@ -75,8 +77,8 @@ namespace JobPortalProject.BL.UI.Services.Implementations
 
                 var companyModel = new CompanyCreateViewModel
                 {
-                    CompanyTypeId = model.CompanyTypeId,
-                    AppUserId=user.Id
+                    AppUserId=user.Id,
+                    CompanyTypeId=model.CompanyTypeId,
                 };
 
                 var company = await _companyService.CreateAsync(companyModel);
@@ -90,19 +92,41 @@ namespace JobPortalProject.BL.UI.Services.Implementations
                         LanguageId = language.Id,
                         Name = model.CompanyName
                     };
-                    
 
-                   var companyTranslation =  await _companyTranslationService.CreateAsync(companyTranslationmodel);
 
-                    if (companyTranslation==null)
+                    var companyTranslation = await _companyTranslationService.CreateAsync(companyTranslationmodel);
+
+                    if (companyTranslation == null)
                     {
                         await _userManager.DeleteAsync(user);
                         await _companyService.DeleteAsync(company.Id);
                     }
                 }
+                else
+                {
+                    await _userManager.DeleteAsync(user);
+                    return IdentityResult.Failed(new IdentityError
+                    {
+                        Code = "CompanyCreationFailed",
+                        Description = "Failed to create company."
+                    });
+                }
             }
 
             return result;
+        }
+
+        public async Task<CompanyRegisterViewModel> GetCompanyRegisterViewModel()
+        {
+            var language = await _cookieService.GetLanguageAsync();
+            var companyTypesList = await _companyTypeService.GetCompanyTypeSelectListItems(language.Id);
+
+            var model = new CompanyRegisterViewModel
+            {
+                CompanyTypesList = companyTypesList
+            };
+
+            return model;
         }
 
         public async Task<CompanyViewModel> GetCompanyIdOfUserAsync(AppUser user)

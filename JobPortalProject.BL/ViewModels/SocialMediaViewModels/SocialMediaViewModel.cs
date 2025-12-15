@@ -8,6 +8,7 @@ namespace JobPortalProject.BL.ViewModels.SocialMediaViewModels
 {
     public class SocialMediaViewModel
     {
+        public int Id { get; set; }
         public string? IconUrl { get; set; }
         public string? Title { get; set; }
     }

@@ -1,8 +1,9 @@
 ﻿@{
     CompanyDetailsViewModel model = Model;
     var company = model.Company;
-    var companySocials = model.CompanySocials;
+    var companySocials = model.CompanySocials ?? [];
     var website = model.Website;
+    var addresses = model.Company?.Addresses ?? [];
 }
 
     <!-- ========== Inner Banner Start============= -->
@@ -99,18 +100,19 @@
                                         {
                                             <li><span>Secondary phone:</span> @company?.SecondaryPhone</li>
                                         }
-@*                                         <li><span>Main Location:</span> @company?.MainAddress?.CityName, @company?.MainAddress?.CountryName</li> *@
-                                    <li><span>Locations:</span></li>
-                                        @foreach(var address in company?.Addresses ?? [])
+
+                                        <li><span>Locations:</span></li>
+                                      @*   @foreach(var address in company?.Addresses ?? [])
                                     {
-                                        if(address.IsMainAddress)
-                                        {
-                                        <li><span></span> @address.Street, @address?.CityName, @address?.CountryName - (Main Location)</li>
-                                        }
-                                        if(!address.IsMainAddress){
-                                        <li><span></span> @address.Street, @address?.CityName, @address?.CountryName</li>
-                                        }
-                                    }
+
+                                        <li> 
+                                            @if(address.IsMainAddress)
+                                            {
+                                            <span>(Main Location)</span>
+                                            } 
+                                            @address.Street, @address.CityName, @address.CountryName 
+                                        </li>
+                                    } *@
                                     <li><span>Member Since:</span> @company?.MemberSince!.Value.Date.ToShortDateString()</li>
                                         <li><span>Company size:</span> @company?.CompanySize People.</li>
                                         <li><span>Completed Job:</span> 08.</li>

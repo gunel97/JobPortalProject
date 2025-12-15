@@ -2,6 +2,7 @@
 using JobPortalProject.BL.UI.Services.Abstracts;
 using JobPortalProject.BL.UI.ViewModels;
 using JobPortalProject.BL.ViewModels.AddressViewModels;
+using JobPortalProject.BL.ViewModels.CompanySocialViewModels;
 using JobPortalProject.BL.ViewModels.CompanyViewModels;
 using JobPortalProject.BL.ViewModels.JobExtraBenefitViewModels;
 using JobPortalProject.BL.ViewModels.WorkingFieldViewModels;
@@ -22,11 +23,12 @@ namespace JobPortalProject.UserMvc.Controllers
         private readonly IWorkingFieldService _workingFieldService;
         private readonly IWorkingFieldTranslationService _workingFieldTranslationService;
         private readonly IAddressService _addressService;
+        private readonly ICompanySocialService _companySocialService;
 
-        public CompanyController(ICompanyDetailsService companyDetailsService, ICompanyListingService companyListingService, 
-            ICompanyService companyService, ICompanyDashboardService companyDashboardService, ICookieService cookieService, 
-            IWorkingFieldService workingFieldService, IWorkingFieldTranslationService workingFieldTranslationService, 
-            IAddressService addressService)
+        public CompanyController(ICompanyDetailsService companyDetailsService, ICompanyListingService companyListingService,
+            ICompanyService companyService, ICompanyDashboardService companyDashboardService, ICookieService cookieService,
+            IWorkingFieldService workingFieldService, IWorkingFieldTranslationService workingFieldTranslationService,
+            IAddressService addressService, ICompanySocialService companySocialService)
         {
             _companyDetailsService = companyDetailsService;
             _companyListingService = companyListingService;
@@ -36,6 +38,7 @@ namespace JobPortalProject.UserMvc.Controllers
             _workingFieldService = workingFieldService;
             _workingFieldTranslationService = workingFieldTranslationService;
             _addressService = addressService;
+            _companySocialService = companySocialService;
         }
 
         public async Task<IActionResult> Index()
@@ -163,13 +166,6 @@ namespace JobPortalProject.UserMvc.Controllers
             else return RedirectToAction("CompanyDashboard", "Company");
         }
 
-        public async Task<IActionResult> AddWorkingField()
-        {
-            var model = await _companyService.GetWorkingFieldCreateViewModel();
-
-            return View(model);
-        }
-
         [HttpPost]
         public async Task<IActionResult> AddWorkingField(WorkingFieldCreateViewModel model)
         {
@@ -193,27 +189,51 @@ namespace JobPortalProject.UserMvc.Controllers
             return RedirectToAction("EditCompanyProfile", companyUpdateModel);
         }
 
-        public async Task<IActionResult> AddAddress()
-        {
-            var model = await _companyService.GetAddressCreateViewModel();
-            return View(model);
-        }
-
         [HttpPost]
         public async Task<IActionResult> AddAddress(AddressCreateViewModel model)
         {
+            var companyUpdateModel = await _companyService.GetCompanyUpdateViewModelAsync();
             if (!ModelState.IsValid)
             {
-                model = await _companyService.GetAddressCreateViewModel();
-                return View(model);
+                TempData["Error"] = "Please fill in all required fields";
+                return RedirectToAction("EditCompanyProfile", companyUpdateModel);
             }
 
-            var isCreated = await _companyService.CreateAddress(model);
-            if(!isCreated)
-                return NotFound();
-            return RedirectToAction("CompanyDashboard", "Company");
+            var created = await _companyService.CreateAddress(model);
+            if (!created)
+            {
+                TempData["Error"] = "Cant create";
+                return RedirectToAction("Edit company profile", companyUpdateModel);
+            }
 
+            TempData["Success"] = "Address added successfully!";
+            TempData["CloseModal"] = "true";
+            return RedirectToAction("EditCompanyProfile", companyUpdateModel);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AddCompanySocialMedia(CompanySocialCreateViewModel model)
+        {
+            var companyUpdateModel = await _companyService.GetCompanyUpdateViewModelAsync();
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "Please fill in all required fields";
+                return RedirectToAction("EditCompanyProfile", companyUpdateModel);
+            }
+
+            var created = await _companySocialService.CreateAsync(model);
+            if (created==null)
+            {
+                TempData["Error"] = "Cant create";
+                return RedirectToAction("Edit company profile", companyUpdateModel);
+            }
+
+            TempData["Success"] = "Address added successfully!";
+            TempData["CloseModal"] = "true";
+            return RedirectToAction("EditCompanyProfile", companyUpdateModel);
+        }
+
+
 
         private async Task<string> RenderPartialViewToString(string viewName, object model)
         {

@@ -29,9 +29,10 @@ namespace JobPortalProject.UserMvc.Controllers
             return View();
         }
 
-        public IActionResult RegisterCompany()
+        public async Task<IActionResult> RegisterCompany()
         {
-            return View();
+            var model = await _userService.GetCompanyRegisterViewModel();
+            return View(model);
         }
 
         [HttpPost]
@@ -64,7 +65,7 @@ namespace JobPortalProject.UserMvc.Controllers
                 return View(model);
             }
 
-            return RedirectToAction("CompanyDashboard", "Account");
+            return RedirectToAction(nameof(Login));
         }
 
         public IActionResult Login()

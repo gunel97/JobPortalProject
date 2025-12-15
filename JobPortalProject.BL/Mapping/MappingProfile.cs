@@ -56,11 +56,11 @@ namespace JobPortalProject.BL.Mapping
                 .ForMember(x => x.Street, opt => opt
                 .MapFrom(src => src.AddressTranslations!.FirstOrDefault() == null ? "" :
                 src.AddressTranslations!.FirstOrDefault()!.Street))
-                .ForMember(x=>x.CityName, opt=>opt
-                .MapFrom(src=>src.City == null ? "" :
+                .ForMember(x => x.CityName, opt => opt
+                .MapFrom(src => src.City == null ? "" :
                 src.City.CityTranslations!.FirstOrDefault()!.Name))
-                .ForMember(x=>x.CountryName, opt=>opt
-                .MapFrom(src=>src.City!.Country == null ? "" : 
+                .ForMember(x => x.CountryName, opt => opt
+                .MapFrom(src => src.City!.Country == null ? "" :
                 src.City.Country.Translations.FirstOrDefault()!.Name))
                 .ReverseMap();
             CreateMap<Address, AddressCreateViewModel>().ReverseMap();

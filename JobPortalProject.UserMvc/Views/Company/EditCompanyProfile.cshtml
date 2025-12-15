@@ -33,16 +33,19 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-inner mb-25">
-                                        <label>Main Address*</label>
-                                        <div class="input-area">
-                                            <img src="~/images/icon/category-2.svg" alt="">
-                                            <select asp-items="Model.AddressesOfCompany" asp-for="MainAddressId" class="select1"></select>
-                                            <span asp-validation-for="MainAddressId"></span>
+                                @if (Model.AddressesOfCompany.Any())
+                                {
+                                    <div class="col-md-6">
+                                        <div class="form-inner mb-25">
+                                            <label>Main Address*</label>
+                                            <div class="input-area">
+                                                <img src="~/images/icon/category-2.svg" alt="">
+                                                <select asp-items="Model.AddressesOfCompany" asp-for="MainAddressId" class="select1"></select>
+                                                <span asp-validation-for="MainAddressId"></span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                }
                                 <div class="col-md-6">
                                     <div class="form-inner mb-25">
                                         <label for="company">Company Size*</label>
@@ -169,12 +172,10 @@
                                     <div class="add-row">
                                         <a data-bs-toggle="modal" data-bs-target="#addWorkingFieldModal" class="primry-btn-2 lg-btn w-unset">Add Working Field</a>
                                         <a data-bs-toggle="modal" data-bs-target="#addAddressModal" class="primry-btn-2 lg-btn w-unset">Add Location</a>
+                                        <a data-bs-toggle="modal" data-bs-target="#addSocialMediaModal" class="primry-btn-2 lg-btn w-unset">Add Social Media Address</a>
                                     </div>
                                 </div>
                                 <br />
-                                <div class="section-title2">
-                                    <h5>Translations :</h5>
-                                </div>
                                 <div class="action-btn-group">
                                     <ul>
                                         @foreach (var translation in Model.CompanyTranslations ?? [])
@@ -204,6 +205,50 @@
 </div>
 <!-- ========== Edit Area end============= -->
 
+<!-- ========== Add social media field modal============= -->
+<div class="modal fade" id="addSocialMediaModal" tabindex="-1" aria-labelledby="addSocialMediaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addSocialMediaModalLabel">Add Social Media</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" enctype="multipart/form-data"
+                  asp-action="AddCompanySocialMedia" asp-controller="Company">
+                <div class="modal-body">
+                    <input type="hidden" name="CompanyId" value="@Model.Id" />
+                    <div class="work-area-row">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-inner mb-25">
+                                    <label for="location">Socia Media *</label>
+                                    <div class="input-area">
+                                        <img src="~/images/icon/company-2" alt="">
+                                        <select name="SocialMediaId" asp-items="@Model.SocialMediasList" class="select1"></select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-inner mb-25">
+                                    <label for="mainAddress">Address Url*</label>
+                                    <div class="input-area">
+                                        <input name="AddressUrl" placeholder="Url..." class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="primry-btn-2 lg-btn w-unset">Add Social Media Address</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- ========== Add social media field modal end============= -->
 
 <!-- ========== Add address field modal============= -->
 <div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel" aria-hidden="true">

@@ -31,6 +31,8 @@ namespace JobPortalProject.BL.UI.Services.Implementations
 
             var addresses = await _addressService.GetAllAsync();
 
+            //var addresses = await _addressService.GetAsync(predicate: x=>x.AddressTranslations.Any(t=>t.LanguageId==language.Id) && x.CompanyId==id,
+            //    include: x=>x.Include(x=>x.AddressTranslations.Where(t=>t.LanguageId==language.Id)!));
 
             var company = await _companyService.GetAsync(
                                             predicate: x => !x.IsDeleted && x.Id == id,
@@ -45,13 +47,13 @@ namespace JobPortalProject.BL.UI.Services.Implementations
                                             include: x => x
                                             .Include(s => s.SocialMedia!));
 
-            var website =  companySocials.FirstOrDefault(x => x.SocialMedia!.Title == "web");
+            //var website =  companySocials.FirstOrDefault(x => x.SocialMedia!.Title == "web");
 
             var companyDetailsViewModel = new CompanyDetailsViewModel
             {
                 Company = company,
                 CompanySocials = companySocials.ToList(),
-                Website = website
+                //Website = website
             };
 
             return companyDetailsViewModel;

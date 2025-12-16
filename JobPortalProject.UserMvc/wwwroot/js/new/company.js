@@ -14,8 +14,7 @@ function updateCompanyTranslation(id) {
             console.log(html);
             companyTranslation.innerHTML = "";
             companyTranslation.innerHTML = html;
-        }
-        );
+        });
 }
 
 function deleteWorkingField(id, languageId) {

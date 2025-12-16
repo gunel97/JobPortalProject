@@ -1,0 +1,114 @@
+﻿@model AddTranslationToExistedCompanyViewModel
+@{
+    var translationModel = Model.translationModel;
+    var workingFields = Model.workingFieldTranslationCreateModels ?? [];
+    var addresses = Model.addressTranslationCreateModels ?? [];
+}
+
+<!-- ========== Add translation to company modal============= -->
+ <form asp-controller="company" asp-action="addTranslation" class="profile-form" enctype="multipart/form-data">
+                    <div class="section-title2">
+                        <h5>Add translation:</h5>
+                    </div>
+                    <input asp-for="CompanyId" value="@Model.CompanyId" type="hidden" />
+                    <input asp-for="LanguageId" value="@Model.LanguageId" type="hidden" />
+                    <input asp-for="@translationModel.LanguageId" value="@translationModel.LanguageId" type="hidden">
+                    <input asp-for="@translationModel.CompanyId" value="@translationModel.CompanyId" type="hidden">
+                    <div class="col-md-6">
+                        <div class="form-inner mb-25">
+                            <label for="companyname">Company Name*</label>
+                            <div class="input-area">
+                                <img src="~/images/icon/company-2.svg" alt="">
+                                <input asp-for="@translationModel.Name" id="companyname" placeholder="Elite Hangstroman" />
+                                <span asp-validation-for="@translationModel.Name"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-inner mb-40">
+                            <label for="description">Description*</label>
+                            <textarea asp-for="@translationModel.Description" placeholder="Company Details*"></textarea>
+                            <span asp-validation-for="@translationModel.Description"></span>
+                        </div>
+                    </div>
+                    @if (Model.workingFieldTranslationCreateModels.Any())
+                    {
+                        <div class="section-title2">
+                            <h5>Working Areas:</h5>
+                            <div class="dash"></div>
+                        </div>
+                        <div class="work-area-row">
+                            @for (int i = 0; i < Model.workingFieldTranslationCreateModels.Count(); i++)
+                            {
+                                <input asp-for="@Model.workingFieldTranslationCreateModels[i].WorkingFieldId" value="@Model.workingFieldTranslationCreateModels[i].WorkingFieldId" type="hidden" />
+                                <input asp-for="@Model.workingFieldTranslationCreateModels[i].LanguageId" value="@Model.workingFieldTranslationCreateModels[i].LanguageId" type="hidden" />
+            <div class="col-md-6">
+                <div class="form-inner mb-25">
+                        <div class="form-inner mb-25">
+                            <img src="@Model.workingFieldTranslationCreateModels[i].IconUrl" width="100" height="100" />
+                        </div>
+                </div>
+            </div>
+                                <div class="col-md-6">
+                                    <div class="form-inner mb-25">
+                                        <label for="working-field">Working Field - (@Model.workingFieldTranslationCreateModels[i].ExistingFieldName) </label>
+                                        <div class="input-area">
+                                            <img src="~/images/icon/company-2.svg" alt="">
+                                            <input asp-for="@Model.workingFieldTranslationCreateModels[i].Name" id="working-field" placeholder="Frontend Developer" />
+                                            <span asp-validation-for="@Model.workingFieldTranslationCreateModels[i].Name"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-inner mb-40">
+                                        <label for="description">Short Description*</label>
+                                        <input asp-for="@Model.workingFieldTranslationCreateModels[i].Description" id="description" placeholder="Details*" />
+                                        <span asp-validation-for="@Model.workingFieldTranslationCreateModels[i].Description"></span>
+                                    </div>
+                                    <div class="section-title two">
+                                        <div class="dash"></div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    @if(Model.addressTranslationCreateModels!.Any()){
+                    <div class="section-title2">
+                        <h5>Locations:</h5>
+                    </div>
+                    @for (int i = 0; i < Model.addressTranslationCreateModels.Count(); i++)
+                    {
+                            <input asp-for="@Model.addressTranslationCreateModels[i].AddressId" value="@Model.addressTranslationCreateModels[i].AddressId" type="hidden" />
+                            <input asp-for="@Model.addressTranslationCreateModels[i].LanguageId" value="@Model.addressTranslationCreateModels[i].LanguageId" type="hidden" />
+                            <div class="col-md-6">
+                                <div class="form-inner mb-25">
+
+                                    <label for="location">(@Model.addressTranslationCreateModels[i].ExistingAddress)</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-inner mb-25">
+                                    <label for="location">Street *</label>
+                                    <div class="input-area">
+                                        <img src="~/images/icon/map-2.svg" alt="">
+                                        <input asp-for="@Model.addressTranslationCreateModels[i].Street" id="location" placeholder="Type Street">
+                                        <span asp-validation-for="@Model.addressTranslationCreateModels[i].Street"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="section-title two">
+                                <div class="dash"></div>
+                            </div>
+                    }
+                    }
+                    <div class="col-md-12">
+                        <div class="form-inner">
+                            <button class="primry-btn-2 lg-btn w-unset" type="submit">Add Translation</button>
+                            <button class="primry-btn-2 lg-btn w-unset" onclick="cancelAddTranslation()"  type="button">Cancel</button>
+                        </div>
+                    </div>
+ </form>
+
+<!-- ========== Add translation to company modal end============= -->
+
+

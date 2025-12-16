@@ -14,16 +14,16 @@
                value="@Model.WorkingFieldUpdateViewModels[i].WorkingFieldId"
                type="hidden" />
         <div class="row" id="workingAreaItemRow${@Model.WorkingFieldUpdateViewModels[i].WorkingFieldId}">
-            <input asp-for="WorkingFieldUpdateViewModels[i].WorkingFieldTranslationUpdateViewModel!.WorkingFieldTranslationId"
-                   value="@Model.WorkingFieldUpdateViewModels[i].WorkingFieldTranslationUpdateViewModel!.WorkingFieldTranslationId"
+            <input asp-for="WorkingFieldUpdateViewModels[i].WorkingFieldTranslationId"
+                   value="@Model.WorkingFieldUpdateViewModels[i].WorkingFieldTranslationId"
                    type="hidden" />
             <div class="col-md-6">
                 <div class="form-inner mb-25">
                     <label for="working-field">Working Field *</label>
                     <div class="input-area">
                         <img src="~/images/icon/company-2.svg" alt="">
-                        <input asp-for="WorkingFieldUpdateViewModels[i].WorkingFieldTranslationUpdateViewModel.Name" id="working-field" placeholder="Frontend Developer" />
-                        <span asp-validation-for="WorkingFieldUpdateViewModels[i].WorkingFieldTranslationUpdateViewModel.Name"></span>
+                        <input asp-for="WorkingFieldUpdateViewModels[i].Name" id="working-field" placeholder="Frontend Developer" />
+                        <span asp-validation-for="WorkingFieldUpdateViewModels[i].Name"></span>
                     </div>
                 </div>
             </div>
@@ -44,8 +44,8 @@
             <div class="col-md-12">
                 <div class="form-inner mb-40">
                     <label for="description">Short Description*</label>
-                    <input asp-for="WorkingFieldUpdateViewModels[i].WorkingFieldTranslationUpdateViewModel.Description" id="description" placeholder="Details*" />
-                    <span asp-validation-for="WorkingFieldUpdateViewModels[i].WorkingFieldTranslationUpdateViewModel.Description"></span>
+                    <input asp-for="WorkingFieldUpdateViewModels[i].Description" id="description" placeholder="Details*" />
+                    <span asp-validation-for="WorkingFieldUpdateViewModels[i].Description"></span>
                 </div>
                 <div class="add-row">
                     <button onclick="deleteWorkingField(@Model.WorkingFieldUpdateViewModels[i].WorkingFieldId, @languageId)"

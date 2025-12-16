@@ -10,5 +10,8 @@ namespace JobPortalProject.BL.Services.Contracts
         public Task<List<WorkingFieldUpdateViewModel>> GetUpdateViewModelAsync(int companyId, int languageId);
         public  Task<List<SelectListItem>> GetWorkingFieldSelectListItemsAsync(int companyId, int selectedLanguageId);
         public Task<WorkingFieldTranslationViewModel> CreateWorkingFieldTranslationAsync(AddWorkingFieldTranslationViewModel model);
+        public Task<bool> UpdateWorkingFieldAsync(int languageId, int workingFieldId, WorkingFieldUpdateViewModel model);
+        public Task<bool> CreateWorkingField(int companyId, WorkingFieldCreateViewModel model);
+        public Task<bool> AddTranslationToExistingWorkingField(WorkingFieldTranslationCreateViewModel model);
     }
 }

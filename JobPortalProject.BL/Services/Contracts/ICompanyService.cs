@@ -11,11 +11,9 @@ namespace JobPortalProject.BL.Services.Contracts
         public Task<CompanyUpdateViewModel> GetCompanyUpdateViewModelAsync();
         public Task<CompanyTranslationEditPageViewModel> GetCompanyTranslationEditPageAsync(int languageId);
         public Task<bool> UpdateCompanyTranslation(CompanyTranslationEditPageViewModel model);
-        public Task<WorkingFieldCreateViewModel> GetWorkingFieldCreateViewModel();
-        public Task<bool> CreateWorkingField(WorkingFieldCreateViewModel model);
-        public Task<AddressCreateViewModel> GetAddressCreateViewModel();
-        public Task<bool> CreateAddress(AddressCreateViewModel model);
         public Task<bool> IsCompanyActive();
         public Task<int> GetCompanyIdOfUser();
+        public Task<bool> AddTranslationToExistingCompany(AddTranslationToExistedCompanyViewModel model);
+        public Task<AddTranslationToExistedCompanyViewModel> GetAddTranslationToExistedCompanyViewModel(int languageId);
     }
 }

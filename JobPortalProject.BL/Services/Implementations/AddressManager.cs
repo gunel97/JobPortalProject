@@ -33,18 +33,65 @@ namespace JobPortalProject.BL.Services.Implementations
             var addresses = await Repository.GetAllAsync(predicate: x => !x.IsDeleted && x.CompanyId == companyId);
 
             return addresses.ToList();
-        } 
+        }
+
+        public async Task<bool> CreateAddress(int companyId, AddressCreateViewModel model)
+        {
+            var addressesOfCompany = await GetByCompanyIdAsync(companyId);
+
+            model.CompanyId = companyId;
+            if (!addressesOfCompany.Any())
+            {
+                model.IsMainAddress = true;
+            }
+
+            var createdAddress = await CreateAsync(model);
+
+            if (createdAddress == null)
+            {
+                return false;
+            }
+            else
+            {
+                if (model.IsMainAddress && addressesOfCompany.Any())
+                {
+                    foreach (var address in addressesOfCompany)
+                    {
+                        address.IsMainAddress = false;
+                    }
+                }
+
+                foreach (var translationModel in model.AddressTranslationCreateViewModels)
+                {
+                    translationModel.AddressId = createdAddress.Id;
+                    translationModel.Street = translationModel.Street;
+                    translationModel.LanguageId = translationModel.LanguageId;
+
+                    var result = await _addressTranslationService.CreateAsync(translationModel);
+
+                    if (result == null)
+                    {
+                        await DeleteAsync(createdAddress.Id);
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+
         public override async Task<IEnumerable<AddressViewModel>> GetAllAsync(Expression<Func<Address, bool>>? predicate = null, Func<IQueryable<Address>, IOrderedQueryable<Address>>? orderBy = null, Func<IQueryable<Address>, IIncludableQueryable<Address, object>>? include = null, bool AsNoTracking = false)
         {
             var language = await _cookieService.GetLanguageAsync();
             int languageId = language.Id;
             var addresses = await Repository.GetAllAsync(
-                                            //predicate: x => !x.IsDeleted && x.CompanyAddresses.Any(),
+                                            predicate: x => !x.IsDeleted,
                                             include: x => x
                                             .Include(at => at.AddressTranslations!.Where(at => at.LanguageId == languageId))
                                             .Include(a => a.City!).ThenInclude(c => c.CityTranslations!.Where(a => a.LanguageId == languageId))
                                             .Include(a => a.City!).ThenInclude(c => c.Country!).ThenInclude(ct => ct.Translations!
-                                            .Where(a => a.LanguageId == languageId)));
+                                            .Where(a => a.LanguageId == languageId))); 
 
             var addressViewModels = addresses.Select(x => Mapper.Map<AddressViewModel>(x));
 
@@ -116,6 +163,26 @@ namespace JobPortalProject.BL.Services.Implementations
 
             address.CityId = model.CityId;
             await Repository.UpdateAsync(address);
+
+            return true;
+        }
+
+        public async Task<bool> AddTranslationToExistingAddress(AddressTranslationCreateViewModel model)
+        {
+            var address = await Repository.GetAsync(predicate: x=>x.Id==model.AddressId, include: x=>x.Include(t=>t.AddressTranslations));
+
+            if(address==null) return false;
+
+            address.AddressTranslations.Add(new AddressTranslation
+            {
+                AddressId = model.AddressId,
+                LanguageId = model.LanguageId,
+                Street = model.Street,
+            });
+
+            var result = await Repository.UpdateAsync(address);
+            if(result==null)
+                return false;
 
             return true;
         }

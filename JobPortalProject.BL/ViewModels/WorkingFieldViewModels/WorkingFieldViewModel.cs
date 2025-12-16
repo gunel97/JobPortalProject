@@ -31,11 +31,13 @@ namespace JobPortalProject.BL.ViewModels.WorkingFieldViewModels
     {
         public int WorkingFieldId { get; set; }
         public int CompanyId { get; set; }
+        public string? Name { get; set; }
+        public string? Description { get; set; }
         public string? IconUrl { get; set; }
         public string? IconPublicId { get; set; }
         public IFormFile? IconFile { get; set; }
-        public WorkingFieldTranslationUpdateViewModel? WorkingFieldTranslationUpdateViewModel { get; set; } 
-    }
+        public int WorkingFieldTranslationId { get; set; }
+      }
 
     public class WorkingFieldTranslationViewModel
     {
@@ -50,13 +52,15 @@ namespace JobPortalProject.BL.ViewModels.WorkingFieldViewModels
     {
         public int WorkingFieldId { get; set; }
         public int LanguageId { get; set; }
+        public string? IconUrl { get; set; }
+        public string? ExistingFieldName { get; set; }
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
     }
 
     public class WorkingFieldTranslationUpdateViewModel
     {
-        public int WorkingFieldTranslationId { get; set; }
+        public int Id { get; set; }
         public int WorkingFieldId { get; set; }
         public int LanguageId { get; set; }
         public string? Name { get; set; }

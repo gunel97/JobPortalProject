@@ -191,12 +191,27 @@
                                                 </div>
                                             </li>
                                         }
+                                        @foreach(var item in Model.EmptyLanguages){
+                                        <li>
+                                            <div class="add-row">
+                                                <button type="button" onclick='addTranslation(@item.Id)'>
+                                                    <span>
+                                                        <img src="~/images/icon/edit2.svg" alt="">
+                                                        <span><img src="@item.IconUrl"> Add translation</span>
+                                                    </span>
+                                                </button>
+                                            </div>
+                                        </li>
+                                        }
                                     </ul>
                                 </div>
                                 <div id="companyTranslation" class="col-lg-12">
                                 </div>
-                            </div>
+                              
+                                </div>
                         </form>
+                        <div id="newTranslation" class="form-wrapper">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -370,7 +385,25 @@
 </div>
 <!-- ========== Add working field modal end============= -->
 
+<script>
+    function addTranslation(id) {
+    console.log(id);
+    var newTranslation = document.getElementById("newTranslation");
+    fetch(`/company/AddTranslation/${id}`)
+        .then(response => response.text())
+        .then(html => {
+            console.log(html);
+            newTranslation.innerHTML="";
+            newTranslation.innerHTML = html;
+        });
+}
 
+    function cancelAddTranslation() {
+    console.log();
+    const newTranslation= document.getElementById("newTranslation");
+    newTranslation.innerHTML="";
+    }
+</script>
 
 @if (TempData["CloseModal"] != null)
 {
@@ -390,5 +423,11 @@
                         </text>
             }
         });
+
+
+
+
+
+
     </script>
 }

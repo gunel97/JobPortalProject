@@ -1,6 +1,7 @@
 ﻿using JobPortalProject.BL.ViewModels.CityViewModels;
 using JobPortalProject.BL.ViewModels.CountryViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,6 +49,7 @@ namespace JobPortalProject.BL.ViewModels.AddressViewModels
     {
         public int AddressId { get; set; }
         public int LanguageId { get; set; }
+        public string? ExistingAddress { get; set; }
         public string Street { get; set; } = null!;
     }
 

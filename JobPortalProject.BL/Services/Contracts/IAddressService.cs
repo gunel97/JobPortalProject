@@ -11,6 +11,8 @@ namespace JobPortalProject.BL.Services.Contracts
         public Task<bool> UpdateAddressAsync(int languageId, int addressId, AddressUpdateViewModel model);
         public Task<List<SelectListItem>> GetAddressSelectListItems(int companyId, int languageId);
         public Task<List<Address>> GetByCompanyIdAsync(int companyId);
+        public Task<bool> CreateAddress(int companyId, AddressCreateViewModel model);
+        public Task<bool> AddTranslationToExistingAddress(AddressTranslationCreateViewModel model);
 
     }
 }

@@ -1,5 +1,6 @@
 ﻿using JobPortalProject.BL.ViewModels.AddressViewModels;
 using JobPortalProject.BL.ViewModels.CompanySocialViewModels;
+using JobPortalProject.BL.ViewModels.LanguageViewModels;
 using JobPortalProject.BL.ViewModels.WorkingFieldViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -24,9 +25,9 @@ namespace JobPortalProject.BL.ViewModels.CompanyViewModels
         public string? PrimaryPhone { get; set; }
         public string? SecondaryPhone { get; set; }
         public bool IsAccountActive { get; set; }
-        public DateTime? MemberSince { get; set; }
-        public DateTime? LastPostedJob {  get; set; }
-        public AddressViewModel? MainAddress { get; set; }
+        public DateTime MemberSince { get; set; }
+        public DateTime LastPostedJob {  get; set; }
+        public AddressViewModel MainAddress { get; set; } = null!;
         public List<AddressViewModel> Addresses { get; set; } = [];
         public List<WorkingFieldViewModel> WorkingFields { get; set; } = [];
     }
@@ -53,6 +54,7 @@ namespace JobPortalProject.BL.ViewModels.CompanyViewModels
         public IFormFile? LogoFile { get; set; }
         public int CompanyTypeId { get; set; }
         public int MainAddressId { get; set; }
+        public List<LanguageViewModel> EmptyLanguages { get; set; } = []; 
         public List<SelectListItem> AddressesOfCompany { get; set; } = [];
         public List<CompanyTranslationUpdateViewModel> CompanyTranslations { get; set; } = [];
         public List<SelectListItem> CompanyTypeList { get; set; } = [];
@@ -94,6 +96,15 @@ namespace JobPortalProject.BL.ViewModels.CompanyViewModels
         public CompanyTranslationUpdateViewModel CompanyTranslationUpdateViewModel { get; set; } = null!;
         public List<WorkingFieldUpdateViewModel> WorkingFieldUpdateViewModels { get; set; } = [];
         public List<AddressUpdateViewModel> AddressUpdateViewModels { get; set; } = [];
+    }
+
+    public class AddTranslationToExistedCompanyViewModel
+    {
+        public int CompanyId { get; set; }
+        public int LanguageId { get; set; }
+        public CompanyTranslationCreateViewModel translationModel { get; set; } = null!;
+        public List<WorkingFieldTranslationCreateViewModel> workingFieldTranslationCreateModels { get; set; } = [];
+        public List<AddressTranslationCreateViewModel> addressTranslationCreateModels { get; set; } = [];
     }
 
 }

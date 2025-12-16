@@ -2,7 +2,7 @@
     CompanyDetailsViewModel model = Model;
     var company = model.Company;
     var companySocials = model.CompanySocials ?? [];
-    var website = model.Website;
+    // var website = model.Website;
     var addresses = model.Company?.Addresses ?? [];
 }
 
@@ -46,16 +46,16 @@
                             </ul>
                         </div>
                         <div class="company-contact">
-                            <div class="websitet-link">
+                      @*       <div class="websitet-link">
                                 <p><img src="~/images/icon/web-5.svg" alt="">Website Link:</p>
                                 <a href="#">@website?.AddressUrl</a>
-                            </div>
+                            </div> *@
                             <div class="social-area">
                                 <p><img src="~/images/icon/share-icon.svg" alt="">Follow Company:</p>
                                 <ul>
                                 @foreach (var social in companySocials ?? [])
                                 {
-                                    <li><a href="https://www.facebook.com/"><i class="bx bxl-@social.SocialMedia?.Title"></i></a></li>
+                                    <li><a href="https://www.facebook.com/"><i class="bx bxl-@social.SocialMedia?.Title.ToLower()"></i></a></li>
                                 }                  
                                 </ul>
                             </div>
@@ -93,16 +93,16 @@
                                 <div class="company-overview-area mb-50">
                                     <h5>Company Overview:</h5>
                                     <ul>
-                                        <li><span>Company Name:</span> @company?.Name</li>
-                                        <li><span>Category:</span> @company?.CategoryName</li>
-                                        <li><span>Primary phone:</span> @company?.PrimaryPhone</li>
-                                        @if(company?.SecondaryPhone!=null)
+                                        <li><span>Company Name:</span> @company?.Name</li> 
+                                         <li><span>Category:</span> @company?.CategoryName</li>
+                                        <li><span>Primary phone:</span> @company?.PrimaryPhone</li> 
+                                         @if(company?.SecondaryPhone!=null)
                                         {
                                             <li><span>Secondary phone:</span> @company?.SecondaryPhone</li>
                                         }
 
                                         <li><span>Locations:</span></li>
-                                      @*   @foreach(var address in company?.Addresses ?? [])
+                                        @foreach(var address in company?.Addresses ?? [])
                                     {
 
                                         <li> 
@@ -112,11 +112,12 @@
                                             } 
                                             @address.Street, @address.CityName, @address.CountryName 
                                         </li>
-                                    } *@
-                                    <li><span>Member Since:</span> @company?.MemberSince!.Value.Date.ToShortDateString()</li>
+                                    }
+                                    <li><span>Member Since:</span> @company?.MemberSince!.Date.ToShortDateString()</li>
                                         <li><span>Company size:</span> @company?.CompanySize People.</li>
                                         <li><span>Completed Job:</span> 08.</li>
-                                        <li><span>Last Job Posted:</span> @company?.LastPostedJob!.Value.Date.ToShortDateString()</li>
+                                       
+                                         <li><span>Last Job Posted:</span> @company?.LastPostedJob!.Date.ToShortDateString()</li> 
                                     </ul>
                                 </div>
                                 <a class="primry-btn-2 lg-btn" href="job-listing1.html">Job Available   23</a>

@@ -166,10 +166,33 @@ namespace JobPortalProject.UserMvc.Controllers
             else return RedirectToAction("CompanyDashboard", "Company");
         }
 
+        public async Task<IActionResult> AddTranslation()
+        {
+            var model = await _companyService.GetAddTranslationToExistedCompanyViewModel(2);
+            return PartialView("_AddTranslationModalPartial", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddTranslation(AddTranslationToExistedCompanyViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                model = await _companyService.GetAddTranslationToExistedCompanyViewModel(model.LanguageId);
+                return PartialView("_AddTranslationModalPartial", model);
+            }
+
+            var result = await _companyService.AddTranslationToExistingCompany(model);
+            if (result)
+                return RedirectToAction(nameof(EditCompanyProfile));
+            else
+                return PartialView("_AddTranslationModalPartial", model);
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddWorkingField(WorkingFieldCreateViewModel model)
         {
             var companyUpdateModel = await _companyService.GetCompanyUpdateViewModelAsync();
+            var companyId = await _companyService.GetCompanyIdOfUser();
 
             if (!ModelState.IsValid)
             {
@@ -177,7 +200,7 @@ namespace JobPortalProject.UserMvc.Controllers
                 return RedirectToAction("EditCompanyProfile", companyUpdateModel);
             }
 
-            var created = await _companyService.CreateWorkingField(model);
+            var created = await _workingFieldService.CreateWorkingField(companyId, model);
             if (!created)
             {
                 TempData["Error"] = "Cant create";
@@ -193,13 +216,14 @@ namespace JobPortalProject.UserMvc.Controllers
         public async Task<IActionResult> AddAddress(AddressCreateViewModel model)
         {
             var companyUpdateModel = await _companyService.GetCompanyUpdateViewModelAsync();
+            var companyId = await _companyService.GetCompanyIdOfUser();
             if (!ModelState.IsValid)
             {
                 TempData["Error"] = "Please fill in all required fields";
                 return RedirectToAction("EditCompanyProfile", companyUpdateModel);
             }
 
-            var created = await _companyService.CreateAddress(model);
+            var created = await _addressService.CreateAddress(companyId, model);
             if (!created)
             {
                 TempData["Error"] = "Cant create";

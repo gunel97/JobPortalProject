@@ -5,11 +5,13 @@ using JobPortalProject.BL.UI.Services.Abstracts;
 using JobPortalProject.BL.ViewModels.AddressViewModels;
 using JobPortalProject.BL.ViewModels.CompanySocialViewModels;
 using JobPortalProject.BL.ViewModels.CompanyViewModels;
+using JobPortalProject.BL.ViewModels.LanguageViewModels;
 using JobPortalProject.BL.ViewModels.WorkingFieldViewModels;
 using JobPortalProject.DA.DataContext.Entities;
 using JobPortalProject.DA.Repositories.Contracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using System.Security.Claims;
 
 namespace JobPortalProject.BL.Services.Implementations
@@ -64,31 +66,15 @@ namespace JobPortalProject.BL.Services.Implementations
                 return company.Id;
         }
 
-        public async Task<AddressCreateViewModel> GetAddressCreateViewModel()
+        public async Task<Company> GetCompanyOfUser()
         {
             var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-            var existedCompany = await Repository.GetAsync(predicate: x => x.AppUserId == userId,
-                include: x => x.Include(t => t.CompanyTranslations));
-            var languages = await _languageService.GetAllAsync();
-            var selectedLanguage = await _cookieService.GetLanguageAsync();
+            var company = await Repository.GetAsync(predicate: x => x.AppUserId == userId,
+                include: x=>x.Include(x=>x.CompanyTranslations)
+                .Include(x=>x.WorkingFields).ThenInclude(x=>x.Translations)
+                .Include(x=>x.Addresses).ThenInclude(x=>x.AddressTranslations));
 
-            if (existedCompany == null)
-                return null!;
-
-            var cities = await _cityService.GetCitySelectListItemsWithCountry(selectedLanguage.Id);
-            var addressCreateViewModel = new AddressCreateViewModel
-            {
-                CompanyId = existedCompany.Id,
-                SelectedLanguageId = selectedLanguage.Id,
-                CompanyTranslationsCount = existedCompany.CompanyTranslations.Count(),
-                CityListItems = cities,
-                AddressTranslationCreateViewModels = languages.Select(x => new AddressTranslationCreateViewModel
-                {
-                    LanguageId = x.Id,
-                }).ToList()
-            };
-
-            return addressCreateViewModel;
+            return company!;
         }
 
         public async Task<CompanyUpdateViewModel> GetCompanyUpdateViewModelAsync()
@@ -119,6 +105,13 @@ namespace JobPortalProject.BL.Services.Implementations
             var citiesList = await _cityService.GetCitySelectListItemsWithCountry(selectedLanguageId);
             var addressesList = await _addressService.GetAddressSelectListItems(existedCompany.Id, selectedLanguageId);
             var socialMediasList = await _socialMediaService.GetSocialMediaListItems();
+            var emptyLanguages = new List<LanguageViewModel>();
+            
+            foreach (var item in languages)
+            {
+                if(!company.CompanyTranslations.Any(x=>x.LanguageId==item.Id))
+                    emptyLanguages.Add(item);
+            }
 
             var companyUpdateViewModel = new CompanyUpdateViewModel
             {
@@ -135,6 +128,7 @@ namespace JobPortalProject.BL.Services.Implementations
                 AddressesOfCompany=addressesList,
                 CitiesList=citiesList,
                 SocialMediasList=socialMediasList,
+                EmptyLanguages=emptyLanguages,
                 CompanyTranslations = company.CompanyTranslations.Select(x => new CompanyTranslationUpdateViewModel
                 {
                     TranslationId = x.Id,
@@ -160,6 +154,41 @@ namespace JobPortalProject.BL.Services.Implementations
             }
 
             return companyUpdateViewModel;
+        }
+
+        public async Task<bool> AddTranslationToExistingCompany(AddTranslationToExistedCompanyViewModel model)
+        {
+            var company = await GetCompanyOfUser();
+            if (company == null)
+                return false;
+
+            foreach(var address in model.addressTranslationCreateModels)
+            {
+                var resultAddress = await _addressService.AddTranslationToExistingAddress(address);
+                if (!resultAddress)
+                    return false;
+            }
+
+            foreach(var workingField in model.workingFieldTranslationCreateModels)
+            {
+                var resultField = await _workingFieldService.AddTranslationToExistingWorkingField(workingField);
+                if (!resultField)
+                    return false;
+            }
+
+            company.CompanyTranslations.Add(new CompanyTranslation
+            {
+                LanguageId = model.translationModel.LanguageId,
+                CompanyId = company.Id,
+                Name = model.translationModel.Name!,
+                Description = model.translationModel.Description
+            });
+
+            var result = await Repository.UpdateAsync(company);
+            if (result == null)
+                return false;
+
+            return true;
         }
 
         public async Task<CompanyTranslationEditPageViewModel> GetCompanyTranslationEditPageAsync(int languageId)
@@ -197,127 +226,59 @@ namespace JobPortalProject.BL.Services.Implementations
             return model;
         }
 
-        public async Task<WorkingFieldCreateViewModel> GetWorkingFieldCreateViewModel()
+        public async Task<AddTranslationToExistedCompanyViewModel> GetAddTranslationToExistedCompanyViewModel(int languageId)
         {
-            var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-            var existedCompany = await Repository.GetAsync(predicate: x => x.AppUserId == userId,
-                include: x => x.Include(t => t.CompanyTranslations));
-            var languages = await _languageService.GetAllAsync();
-
-            if (existedCompany == null)
+            var company = await GetCompanyOfUser();
+            if (company == null)
                 return null!;
 
-            var workingFieldCreateViewModel = new WorkingFieldCreateViewModel
+            var images = new List<string>();
+            var translation = company.CompanyTranslations.FirstOrDefault(x => x.LanguageId != languageId);
+            var workingFields = company.WorkingFields.Where(x => !x.Translations.Any(t => t.LanguageId==languageId)).ToList();
+            var addresses = company.Addresses.Where(x => !x.AddressTranslations.Any(t => t.LanguageId == languageId)).ToList();
+
+            if (translation == null)
+                return null!;
+
+            var model = new AddTranslationToExistedCompanyViewModel
             {
-                CompanyId = existedCompany.Id,
-                CompanyTranslationsCount = existedCompany.CompanyTranslations.Count(),
-                WorkingFieldTranslationCreateViewModels = languages.Select(x => new WorkingFieldTranslationCreateViewModel
+                LanguageId = languageId,
+                CompanyId = company.Id,
+                translationModel = new CompanyTranslationCreateViewModel
                 {
-                    LanguageId = x.Id,
-                }).ToList()
+                    CompanyId = company.Id,
+                    LanguageId = languageId,
+                }
             };
 
-            return workingFieldCreateViewModel;
-        }
-
-        public async Task<bool> CreateAddress(AddressCreateViewModel model)
-        {
-            var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-            var existedCompany = await Repository.GetAsync(predicate: x => x.AppUserId == userId);
-
-            if (existedCompany == null)
-                return false;
-            var addressesOfCompany = await _addressService.GetByCompanyIdAsync(existedCompany.Id);
-
-            model.CompanyId = existedCompany.Id;
-            if (!addressesOfCompany.Any())
+            var cities = (await _cityService.GetAllAsync(include:
+                x => x.Include(c => c.CityTranslations.Where(t=>t.LanguageId==languageId))
+                .Include(c => c.Country).ThenInclude(ct => ct.Translations.Where(t=>t.LanguageId==languageId)))).ToList();
+           
+            if (addresses.Any() || addresses != null)
             {
-                model.IsMainAddress = true;
-            }
-
-            var createdAddress = await _addressService.CreateAsync(model);       
-
-            if (createdAddress == null)
-            {
-                return false;
-            }
-            else
-            {
-                if (model.IsMainAddress && addressesOfCompany.Any())
+                model.addressTranslationCreateModels = addresses.Select(x => new AddressTranslationCreateViewModel
                 {
-                    foreach (var address in addressesOfCompany)
-                    {
-                        address.IsMainAddress = false;
-                    }
-                }
-
-                foreach (var translationModel in model.AddressTranslationCreateViewModels)
-                {
-                    translationModel.AddressId = createdAddress.Id;
-                    translationModel.Street = translationModel.Street;
-                    translationModel.LanguageId = translationModel.LanguageId;
-
-                    var result = await _addressTranslationService.CreateAsync(translationModel);
-
-                    if (result == null)
-                    {
-                        await _addressService.DeleteAsync(createdAddress.Id);
-                        return false;
-                    }
-                }
+                    AddressId = x.Id,
+                    LanguageId = languageId,
+                    ExistingAddress = cities.FirstOrDefault(c=>c.Id==x.CityId)!.Name + ", "+ cities.FirstOrDefault(c=>c.Id==x.CityId)!.Country!.Name 
+                    + ", " + x.AddressTranslations.FirstOrDefault()!.Street,
+                }).ToList();
             }
 
-            return true;
-        }
-
-        public async Task<bool> CreateWorkingField(WorkingFieldCreateViewModel model)
-        {
-            var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-            var existedCompany = await Repository.GetAsync(predicate: x => x.AppUserId == userId);
-
-            if (existedCompany == null)
-                return false;
-
-            model.CompanyId = existedCompany.Id;
-            if (model.IconFile != null)
+            if (workingFields.Any() || workingFields!=null)
             {
-                if (!_fileService.IsImageFile(model.IconFile))
-                    throw new ArgumentException("The file is not a valid image.", nameof(model.IconFile));
-
-                var result = await _cloudinaryService.UploadImageAsync(model.IconFile, FilePathConstants.WorkingFieldImagePath);
-
-                if (result.Success)
+                model.workingFieldTranslationCreateModels = workingFields.Select(x => new WorkingFieldTranslationCreateViewModel
                 {
-                    model.IconUrl = result.Url;
-                    model.IconPublicId = result.PublicId;
-                }
+                    WorkingFieldId = x.Id,
+                    LanguageId = languageId,
+                    IconUrl=x.IconUrl,
+                    ExistingFieldName=x.Translations.FirstOrDefault()!.Name
+                }).ToList();
             }
-            var workingField = await _workingFieldService.CreateAsync(model);
 
-            if (workingField == null)
-                return false;
-
-            else
-            {
-                foreach (var translationModel in model.WorkingFieldTranslationCreateViewModels)
-                {
-                    var workingFieldTranslationCreateModel = new WorkingFieldTranslationCreateViewModel
-                    {
-                        WorkingFieldId = workingField.Id,
-                        LanguageId = translationModel.LanguageId,
-                        Name = translationModel.Name,
-                        Description = translationModel.Description,
-                    };
-
-                    var workingFieldTranslation = await _workingFieldTranslationService.CreateAsync(workingFieldTranslationCreateModel);
-                    if (workingFieldTranslation == null)
-                    {
-                        await _workingFieldService.DeleteAsync(workingField.Id);
-                        return false;
-                    }
-                }
-            }
-            return true;
+          
+            return model;
         }
 
         public async Task<bool> UpdateCompanyTranslation(CompanyTranslationEditPageViewModel model)
@@ -344,38 +305,7 @@ namespace JobPortalProject.BL.Services.Implementations
 
             foreach (var workingFieldModel in workingFieldUpdateModels)
             {
-                var workingField = await _workingFieldService.GetAsync(predicate: x => x.Id == workingFieldModel.WorkingFieldId);
-                workingFieldModel.IconUrl = workingField.IconUrl;
-                workingFieldModel.IconPublicId = workingField.IconPublicId;
-                workingFieldModel.CompanyId = existedCompany.Id;
-
-                if (workingFieldModel.IconFile != null)
-                {
-                    if (!_fileService.IsImageFile(workingFieldModel.IconFile))
-                        throw new ArgumentException("The file is not a valid image.", nameof(workingFieldModel.IconFile));
-
-                    var resultLogo = await _cloudinaryService.UploadImageAsync(workingFieldModel.IconFile, FilePathConstants.WorkingFieldImagePath);
-
-                    if (resultLogo.Success)
-                    {
-                        if (workingField.IconPublicId != null)
-                        {
-                            var deleteResult = await _cloudinaryService.DeleteImageAsync(workingField.IconPublicId);
-                        }
-                        workingFieldModel.IconUrl = resultLogo.Url;
-                        workingFieldModel.IconPublicId = resultLogo.PublicId;
-                    }
-                }
-
-                var workingFieldTranslationModel = workingFieldModel.WorkingFieldTranslationUpdateViewModel;
-                if (workingFieldTranslationModel == null)
-                    return false;
-
-                workingFieldTranslationModel.WorkingFieldId = workingFieldModel.WorkingFieldId;
-                workingFieldTranslationModel.LanguageId = selectedLanguageId;
-                await _workingFieldTranslationService.UpdateAsync(workingFieldTranslationModel.WorkingFieldTranslationId, workingFieldTranslationModel);
-
-
+                await _workingFieldService.UpdateWorkingFieldAsync(selectedLanguageId, workingFieldModel.WorkingFieldId, workingFieldModel);
             }
 
             translationUpdateModel.LanguageId = selectedLanguageId;

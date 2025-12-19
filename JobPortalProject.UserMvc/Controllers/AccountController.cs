@@ -29,6 +29,11 @@ namespace JobPortalProject.UserMvc.Controllers
             return View();
         }
 
+        public IActionResult Register()
+        {
+            return View();
+        }
+
         public async Task<IActionResult> RegisterCompany()
         {
             var model = await _userService.GetCompanyRegisterViewModel();
@@ -71,6 +76,34 @@ namespace JobPortalProject.UserMvc.Controllers
         public IActionResult Login()
         {
             return View();
+        }
+
+        public IActionResult RegisterCandidate()
+        {
+            var model = new UserRegisterViewModel();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RegisterCandidate(UserRegisterViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var result = await _userService.RegisterCandidateAsync(model);
+
+            if (!result.Succeeded)
+            {
+                foreach (var item in result.Errors)
+                {
+                    ModelState.AddModelError("", item.Description);
+                }
+
+                return View(model);
+            }
+
+            return RedirectToAction(nameof(Login));
         }
 
         [HttpPost]

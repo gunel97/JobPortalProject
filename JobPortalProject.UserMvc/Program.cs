@@ -40,6 +40,7 @@ namespace JobPortalProject.UserMvc
 
             FilePathConstants.CompanyImagePath = "CompanyImages";
             FilePathConstants.WorkingFieldImagePath = "WorkingFieldImages";
+            FilePathConstants.CandidateProfilImagePath = "CandidateProfileImages";
 
             var app = builder.Build();
 

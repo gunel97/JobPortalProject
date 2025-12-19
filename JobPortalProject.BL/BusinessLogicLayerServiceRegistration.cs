@@ -62,6 +62,16 @@ namespace JobPortalProject.BL
             services.AddScoped<IJobExtraBenefitService, JobExtraBenefitManager>();
             services.AddScoped<IJobExtraBenefitTranslationService, JobExtraBenefitTranslationManager>();
 
+            services.AddScoped<ICandidateService, CandidateManager>();
+            services.AddScoped<IResumeService, ResumeManager>();
+            services.AddScoped<IResumeTranslationService, ResumeTranslationManager>();
+            services.AddScoped<IPersonalInfoService, PersonalInfoManager>();
+            services.AddScoped<IPersonalInfoTranslationService, PersonalInfoTranslationManager>();
+            services.AddScoped<IExperienceService, ExperienceManager>();
+            services.AddScoped<IExperienceTranslationService, ExperienceTranslationManager>();
+            services.AddScoped<IEducationService, EducationManager>();
+            services.AddScoped<IEducationTranslationService,  EducationTranslationManager>();
+
             services.AddScoped<ITopHeaderService, TopHeaderManager>();
             services.AddScoped<IHomeService, HomeManager>();
             services.AddScoped<ICompanyDetailsService, CompanyDetailsManager>();
@@ -74,6 +84,8 @@ namespace JobPortalProject.BL
             services.AddScoped<IUserService, UserManager>();
             services.AddScoped<IEnumService, EnumManager>();
             services.AddScoped<FileService>();
+
+
 
             return services;
         }

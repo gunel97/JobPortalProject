@@ -1,0 +1,118 @@
+﻿  @model ProfileCreateViewModel
+ <!-- ========== Dashboard Area end============= -->
+<div class="dashboard-area pt-120 mb-120">
+    <div class="container">
+        <div class="row g-lg-4 gy-5 mb-90">
+            <div class="col-lg-3">
+                <div class="dashboard-sidebar">
+                    <partial name="_CandidateSidebarPartial" />
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="edit-profile-inner">
+
+                    <div class="form-wrapper">
+                        <partial name="_ResumeSidebarPartial" />
+                        <div class="tab-content" id="myTabContent">
+
+                            <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
+                             
+                            </div>
+                            <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                <form method="post" class="edit-profile-form profile-form">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-inner mb-25">
+                                                <label for="firstname1">First Name*</label>
+                                                <div class="input-area">
+                                                    <img src="~/images/icon/user-2.svg" alt="">
+                                                    <input asp-for="personalInfoTranslationModel.Firstname" id="firstname1" placeholder="Mrs. Jacoline">
+                                                    <span asp-validation-for="personalInfoTranslationModel.Firstname"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-inner mb-25">
+                                                <label for="lastname">Last Name*</label>
+                                                <div class="input-area">
+                                                    <img src="~/images/icon/user-2.svg" alt="">
+                                                    <input asp-for="personalInfoTranslationModel.Lastname" id="lastname" placeholder="Frankly">
+                                                    <span asp-validation-for="personalInfoTranslationModel.Lastname"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-inner mb-25">
+                                                <label for="perAddress">Permanent Address (City/Country)*</label>
+                                                <div class="input-area">
+                                                    <img src="~/images/icon/home-2.svg" alt="">
+                                                    <select asp-items="Model.CitiesList" asp-for="CityId"></select>
+                                                    <span asp-validation-for="CityId"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-inner mb-25">
+                                                <label for="perAddress">Permanent Address*</label>
+                                                <div class="input-area">
+                                                    <img src="~/images/icon/home-2.svg" alt="">
+                                                    <input asp-for="Street" id="perAddress" placeholder="Your Address Here...">
+                                                    <span asp-validation-for="Street"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-inner mb-25">
+                                                <label for="language">Language*</label>
+                                                <div class="input-area">
+                                                    <img src="~/images/icon/language-2.svg" alt="">
+                                                    <input asp-for="resumeTranslationModel.Languages" id="language"  placeholder="Bangla, English, Hindi">
+                                                    <span asp-validation-for="resumeTranslationModel.Languages"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-inner mb-25">
+                                                <label>Special Skills*</label>
+                                                <div class="input-area">
+                                                    <img src="~/images/icon/company-2.svg" alt="">
+                                                    <input asp-for="resumeTranslationModel.Skills" id="skill" placeholder="your skills...">
+                                                    <span asp-validation-for="resumeTranslationModel.Skills"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-inner mb-50">
+                                                <label for="description">Career Objective*</label>
+                                                <textarea asp-for="resumeTranslationModel.About" id="description" placeholder="Something Write Yourself...."></textarea>
+                                                <span asp-validation-for="resumeTranslationModel.About"></span>
+                                            </div>
+                                        </div>
+                                        <div asp-validation-summary="ModelOnly">8</div>
+                                        <div class="col-md-12">
+                                            <div class="form-inner">
+                                                <button class="primry-btn-2 lg-btn w-unset" type="submit">Update Change</button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                     
+                            </div>
+                            <div class="tab-pane fade" id="professional" role="tabpanel" aria-labelledby="professional-tab">
+  
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ========== Dashboard Area end============= -->

@@ -42,6 +42,15 @@ namespace JobPortalProject.DA.DataContext
         public DbSet<JobResponsibilityTranslation> JobResponsibilityTranslations { get; set; }=null!;
         public DbSet<JobMainDuty> JobMainDuties { get; set; }=null!;
         public DbSet<JobMainDutyTranslation> JobMainDutyTranslations { get; set; }=null!;
+        public DbSet<Candidate> Candidates { get; set; }=null!;
+        public DbSet<Resume> Resumes { get; set; } = null!;
+        public DbSet<ResumeTranslation> ResumeTranslations { get; set; } = null!;
+        public DbSet<PersonalInfo> PersonalInfos { get; set; }=null!;
+        public DbSet<PersonalInfoTranslation> PersonalInfoTranslations { get; set; }=null!;
+        public DbSet<Experience> Experiences { get; set; }=null!;
+        public DbSet<ExperienceTranslation> ExperienceTranslations { get; set; }=null!;
+        public DbSet<Education> Educations { get; set; }=null!;
+        public DbSet<EducationTranslation> EducationTranslations { get; set; } = null!;
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -73,6 +82,26 @@ namespace JobPortalProject.DA.DataContext
                 .WithOne(j => j.Address)
                 .HasForeignKey(j => j.AddressId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<PersonalInfo>()
+                .HasOne(p => p.Resume)
+                .WithOne(r => r.PersonalInfo)
+                .HasForeignKey<PersonalInfo>(p => p.ResumeId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Resume>()
+                .HasOne(r => r.Candidate)
+                .WithOne(c => c.Resume)
+                .HasForeignKey<Resume>(r => r.CandidateId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<PersonalInfo>()
+                .HasOne(p => p.Address)
+                .WithMany()
+                .HasForeignKey(p => p.AddressId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            base.OnModelCreating(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
         }

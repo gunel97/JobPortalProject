@@ -50,7 +50,16 @@ namespace JobPortalProject.DA
             services.AddScoped<IJobMainDutyTranslationRepository, JobMainDutyTranslationRepository>();
             services.AddScoped<IJobExtraBenefitRepository, JobExtraBenefitRepository>();
             services.AddScoped<IJobExtraBenefitTranslationRepository, JobExtraBenefitTranslationRepository>();
-            
+            services.AddScoped<ICandidateRepository, CandidateRepository>();
+            services.AddScoped<IResumeRepository, ResumeRepository>();
+            services.AddScoped<IResumeTranslationRepository, ResumeTranslationRepository>();
+            services.AddScoped<IPersonalInfoRepository, PersonalInfoRepository>();
+            services.AddScoped<IPersonalInfoTranslationRepository, PersonalInfoTranslationRepository>();
+            services.AddScoped<IEducationRepository, EducationRepository>();
+            services.AddScoped<IEducationTranslationRepository, EducationTranslationRepository>();
+            services.AddScoped<IExperienceRepository, ExperienceRepository>();
+            services.AddScoped<IExperienceTranslationRepository, ExperienceTranslationRepository>();
+
 
             return services;
         }

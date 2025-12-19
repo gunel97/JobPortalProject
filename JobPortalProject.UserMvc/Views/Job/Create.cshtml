@@ -129,16 +129,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+@*                             <div class="col-md-6">
                                 <div class="form-inner mb-25">
-                                    <label for="vacancies">Vacancies*</label>
+                                    <label >Vacancies*</label>
                                     <div class="input-area">
                                         <img src="~/images/icon/user-2.svg" alt="">
                                         <input asp-for="VacancyCount" id="vacancies" placeholder="07 Person">
                                         <span asp-validation-for="VacancyCount"></span>
                                     </div>
                                 </div>
-                            </div>
+                            </div> *@
                             @for (int i=0; i< Model.TranslationCreateViewModels.Count(); i++)
                             {
                                 <div class="col-lg-12">

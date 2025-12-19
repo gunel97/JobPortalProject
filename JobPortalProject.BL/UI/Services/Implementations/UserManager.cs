@@ -1,6 +1,7 @@
 ﻿using JobPortalProject.BL.Services.Contracts;
 using JobPortalProject.BL.UI.Services.Abstracts;
 using JobPortalProject.BL.UI.ViewModels;
+using JobPortalProject.BL.ViewModels.CandidateViewModels;
 using JobPortalProject.BL.ViewModels.CompanyViewModels;
 using JobPortalProject.BL.ViewModels.UserViewModels;
 using JobPortalProject.DA.DataContext.Entities;
@@ -18,8 +19,9 @@ namespace JobPortalProject.BL.UI.Services.Implementations
         private readonly ICompanyService _companyService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ICompanyTypeService _companyTypeService;
+        private readonly ICandidateService _candidateService;
 
-        public UserManager(UserManager<AppUser> userManager, ICompanyTranslationService companyTranslationService, ICookieService cookieService, SignInManager<AppUser> signInManager, ICompanyService companyService, IHttpContextAccessor httpContextAccessor, ICompanyTypeService companyTypeService)
+        public UserManager(UserManager<AppUser> userManager, ICompanyTranslationService companyTranslationService, ICookieService cookieService, SignInManager<AppUser> signInManager, ICompanyService companyService, IHttpContextAccessor httpContextAccessor, ICompanyTypeService companyTypeService, ICandidateService candidateManager)
         {
             _userManager = userManager;
             _companyTranslationService = companyTranslationService;
@@ -28,6 +30,7 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             _companyService = companyService;
             _httpContextAccessor = httpContextAccessor;
             _companyTypeService = companyTypeService;
+            _candidateService = candidateManager;
         }
 
         public async Task<string> GetUserRoleAsync(string username)
@@ -114,6 +117,44 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             }
 
             return result;
+        }
+
+        public async Task<IdentityResult> RegisterCandidateAsync(UserRegisterViewModel model)
+        {
+            var user = new AppUser
+            {
+                UserName = model.Username,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email
+            };
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user, "Candidate");
+
+                var candidateModel = new CandidateCreateViewModel
+                {
+                    AppUserId = user.Id,
+                };
+
+                var candidate = await _candidateService.CreateAsync(candidateModel);
+
+                if (candidate == null)
+                {
+                    await _userManager.DeleteAsync(user);
+                    return IdentityResult.Failed(new IdentityError
+                    {
+                        Code = "CompanyCreationFailed",
+                        Description = "Failed to create company."
+                    });
+                }
+
+            }
+
+                return result;     
         }
 
         public async Task<CompanyRegisterViewModel> GetCompanyRegisterViewModel()

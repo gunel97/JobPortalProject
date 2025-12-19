@@ -1170,15 +1170,6 @@ $(function() {
         styleEle.remove();
     })
   })
-//===== Nice number js
-
-
-if ($('input[type="number').length) {
-  $('input[type="number"]').niceNumber({
-    buttonDecrement:'<i class="bi bi-dash"></i>',
-    buttonIncrement:'<i class="bi bi-plus"></i>',
-  });
-}
 
 
 

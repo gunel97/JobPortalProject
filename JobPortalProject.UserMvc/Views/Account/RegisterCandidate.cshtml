@@ -1,5 +1,96 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model UserRegisterViewModel
+
+<div class="register-area pt-120 mb-120">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-wrapper">
+                    <div class="form-title">
+                        <h3>Register Account</h3>
+                        <span></span>
+                    </div>
+                    <div class="register-tab">
+                        <nav>
+                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Candidate</button>
+                                <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Company</button>
+                            </div>
+                        </nav>
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <form method="post">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-inner mb-25">
+                                                <label for="firstname1">First Name*</label>
+                                                <div class="input-area">
+                                                    <img src="~/images/icon/user-2.svg" alt="">
+                                                    <input asp-for="FirstName" id="firstname1" placeholder="Mr. Robert">
+                                                    <span asp-validation-for="FirstName"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-inner mb-25">
+                                                <label for="lastname1">Last Name*</label>
+                                                <div class="input-area">
+                                                    <img src="~/images/icon/user-2.svg" alt="">
+                                                    <input asp-for="LastName" id="lastname1" placeholder="Jonson">
+                                                    <span asp-validation-for="LastName"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-inner mb-25">
+                                                <label for="username">User Name*</label>
+                                                <div class="input-area">
+                                                    <img src="~/images/icon/user-2.svg" alt="">
+                                                    <input asp-for="Username" id="username" placeholder="robertjonson">
+                                                    <span asp-validation-for="Username"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-inner mb-25">
+                                                <label for="email">Email*</label>
+                                                <div class="input-area">
+                                                    <img src="~/images/icon/email-2.svg" alt="">
+                                                    <input asp-for="Email" id="email" placeholder="info@example.com">
+                                                    <span asp-validation-for="Email"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-inner mb-25">
+                                                <label for="password">Password*</label>
+                                                <input asp-for="Password" id="password" placeholder="Password" />
+                                                <i class="bi bi-eye-slash" id="togglePassword"></i>
+                                                <span asp-validation-for="Password"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-inner">
+                                                <label for="password2">Confirm Password*</label>
+                                                <input asp-for="ConfirmPassword" id="password2" placeholder="Confirm Password" />
+                                                <i class="bi bi-eye-slash" id="togglePassword2"></i>
+                                                <span asp-validation-for="ConfirmPassword"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-inner">
+                                                <button class="primry-btn-2" type="submit">Sign Up</button>
+                                            </div>
+                                        </div>
+                                        <div asp-validation-summary="All"></div>
+                                        <h6>Already have an account? <a asp-controller="account" asp-action="Login"> Login</a> Here</h6>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

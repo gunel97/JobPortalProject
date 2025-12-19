@@ -1,7 +1,9 @@
 ﻿using JobPortalProject.DA.DataContext.Enums;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -159,6 +161,101 @@ namespace JobPortalProject.DA.DataContext.Entities
         public AppUser? AppUser { get; set; }
     }
 
+    public class Candidate:TimeStample
+    {
+        public string AppUserId { get; set; } = null!;
+        public AppUser? AppUser { get; set; }
+        public Resume? Resume { get; set; }      
+    }
+
+    public class PersonalInfo : TimeStample
+    {
+        public string WorkEmail { get; set; } = null!; 
+        public string ImageUrl { get; set; } = null!;
+        public string ImagePublicId { get; set; } = null!;
+        public string PhoneNumber { get; set; } = null!;
+        public DateTime BirthDate { get; set; }
+        public Gender Gender { get; set; }
+        public int ResumeId { get; set; }
+        public Resume? Resume { get; set; }
+        public int? AddressId { get; set; }
+        public Address? Address { get; set; }
+        public List<PersonalInfoTranslation> Translations { get; set; } = [];
+    }
+
+    public class PersonalInfoTranslation : TimeStample
+    {
+        public string FirstName { get; set; } = null!;
+        public string LastName { get; set; } = null!;
+        public int LanguageId { get; set; }
+        public Language? Language { get; set; }
+        public int PersonalInfoId {  get; set; }
+        public PersonalInfo? PersonalInfo { get; set; }
+    }
+
+    public class Resume : TimeStample
+    {
+        public int CandidateId { get; set; }
+        public Candidate? Candidate { get; set; }
+        public PersonalInfo? PersonalInfo { get; set; }
+        public List<Experience> Experiences { get; set; } = [];
+        public List<Education> Educations { get; set; } = [];
+        public List<ResumeTranslation> Translations { get; set; } = [];
+
+    }
+
+    public class ResumeTranslation : TimeStample
+    {
+        public string About { get; set; } = null!;
+        public List<string> Skills { get; set; } = [];
+        public List<string> Languages { get; set; } = [];
+        public int ResumeId { get; set; }
+        public Resume? Resume { get; set; }
+        public int LanguageId { get; set; }
+        public Language? Language {  get; set; }
+
+    }
+
+    public class Experience : TimeStample
+    {
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public int ResumeId { get; set; }
+        public Resume? Resume { get; set; }
+        public List<ExperienceTranslation> Translations { get; set; } = [];
+    }
+
+    public class ExperienceTranslation : TimeStample
+    {
+        public string CompanyName { get; set; } = null!;
+        public string Responsibility { get; set; } = null!;
+        public string Position { get; set; } = null!;
+        public int ExperienceId { get; set; }
+        public Experience? Experience {  get; set; }
+        public int LanguageId { get; set; }
+        public Language? Language { get; set; }
+    }
+
+    public class Education : TimeStample
+    {
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public EducationType EducationType { get; set; }
+        public int ResumeId { get; set; }
+        public Resume? Resume { get; set; }
+        public List<EducationTranslation> Translations { get; set; } = [];
+    }
+
+    public class EducationTranslation : TimeStample
+    {
+        public string SchoolName { get; set; } = null!;
+        public string MajorName { get; set; } = null!;
+        public int EducationId { get; set; }
+        public Education? Education { get; set; }
+        public int LanguageId { get; set; }
+        public Language? Language { get; set; }
+    }
+
     public class CompanyTranslation : TimeStample
     {
         public string Name { get; set; } = null!;
@@ -248,6 +345,7 @@ namespace JobPortalProject.DA.DataContext.Entities
         public string? LastName { get; set; }
         //public int? CompanyId { get; set; }
         public Company? Company { get; set; } 
+        public Candidate? Candidate { get; set; }
     }
 
     public class Country : TimeStample
@@ -292,6 +390,7 @@ namespace JobPortalProject.DA.DataContext.Entities
         public City? City { get; set; }
         public int CompanyId { get; set; }
         public Company? Company { get; set; }
+        public PersonalInfo? PersonalInfo { get; set; }
         public List<AddressTranslation> AddressTranslations { get; set; } = [];
         public List<Job> Jobs { get; set; } = [];
     }

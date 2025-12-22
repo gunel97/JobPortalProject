@@ -1,0 +1,121 @@
+﻿@model PersonalInfoUpdateViewModel
+@inject StringLocalizerManager localizer;
+<!-- ========== Dashboard Area end============= -->
+<div class="dashboard-area pt-120 mb-120">
+    <div class="container">
+        <div class="row g-lg-4 gy-5 mb-90">
+            <div class="col-lg-3">
+                <div class="dashboard-sidebar">
+                    <partial name="_CandidateSidebarPartial" model="@Model.DashboardModel" />
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="edit-profile-inner">
+
+                    <div class="form-wrapper">
+                        <partial name="_ResumeSidebarPartial" />
+                        <div class="tab-content" id="myTabContent">
+
+                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                <form method="post" class="edit-profile-form profile-form  mb-60" enctype="multipart/form-data">
+                                    <input asp-for="LanguageId" value="@Model.LanguageId" type="hidden" />
+                                    <div class="row">
+                                     
+                                        <div class="col-xxl-4 col-lg-6 position-relative">
+                                            <div class="drag-area">
+                                                <img src="@Model.ImageUrl" />
+                                            </div>
+                                        </div>
+                                        <div class="col-xxl-2 col-lg-6 position-relative">
+                                            <div class="drag-area">
+                                                <p>Upload Images</p>
+                                                <button type="button" class="upload-btn"><i class="bi bi-plus-lg"></i></button>
+                                                <input asp-for="ImageFile" type="file" accept="image/*">
+                                                <span asp-validation-for="ImageFile"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-inner mb-25">
+                                                <label>Gender*</label>
+                                                <div class="input-area">
+                                                    <img src="~/images/icon/gender.svg" alt="">
+                                                    <select asp-items="Model.GenderItems" asp-for="GenderId" class="select1">
+                                                    
+                                                    </select>
+                                                    <span asp-validation-for="GenderId"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-inner mb-25">
+                                                <label for="datepicker5">Date of Birth*</label>
+                                                <div class="input-area">
+                                                    <img src="~/images/icon/calender2.svg" alt="">
+                                                    <input asp-for="BirthDate" id="datepicker5" placeholder="03/08/1986">
+                                                    <span asp-validation-for="BirthDate"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                       
+                                        <div class="col-md-6">
+                                            <div class="form-inner mb-25">
+                                                <label for="email1">Email*</label>
+                                                <div class="input-area">
+                                                    <img src="~/images/icon/email-2.svg" alt="">
+                                                    <input asp-for="WorkEmail" id="email1" placeholder="info@example.com">
+                                                    <span asp-validation-for="WorkEmail"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-inner mb-25">
+                                                <label for="phonenumber">Phone Number*</label>
+                                                <div class="input-area">
+                                                    <img src="~/images/icon/phone-2.svg" alt="">
+                                                    <input asp-for="PhoneNumber" id="phonenumber" placeholder="+880-17 *** *** **">
+                                                    <span asp-validation-for="PhoneNumber"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="form-inner">
+                                                <button class="primry-btn-2 lg-btn w-unset" type="submit">Save</button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                            </div>
+                            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                            </div>
+                            <div class="tab-pane fade" id="professional" role="tabpanel" aria-labelledby="professional-tab">
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ========== Dashboard Area end============= -->
+
+<script>
+    function profile(){
+        console.log("profileTest");
+         const profileDiv = document.getElementById("profile");
+    fetch(`/candidate/createProfile`)
+        .then(response => response.text())
+        .then(html => {
+            console.log(html);
+            profileDiv.innerHTML = "";
+            profileDiv.innerHTML = html;
+        });
+    }
+</script>

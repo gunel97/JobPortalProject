@@ -5,5 +5,6 @@ namespace JobPortalProject.BL.Services.Contracts
 {
     public interface IEducationService:ICrudService<Education, EducationViewModel, EducationCreateViewModel, EducationUpdateViewModel>
     {
+        public Task<Education> Create(int resumeId, EducationCreateViewModel model);
     }
 }

@@ -38,12 +38,14 @@ namespace JobPortalProject.BL.ViewModels.AddressViewModels
         public bool IsMainAddress { get; set; }
         public int CityId { get; set; }
         public List<SelectListItem> CityListItems { get; set; } = [];
-        public int CompanyId { get; set; }
+        public int? CompanyId { get; set; }
         public int AddressTranslationId { get; set; }
         public string? Street { get; set; }
     }
 
-    public class AddressTranslationViewModel { }
+    public class AddressTranslationViewModel {
+    public int Id { get; set; }
+    }
 
     public class AddressTranslationCreateViewModel
     {

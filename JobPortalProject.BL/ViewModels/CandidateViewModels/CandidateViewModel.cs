@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JobPortalProject.BL.ViewModels.LanguageViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,5 +19,10 @@ namespace JobPortalProject.BL.ViewModels.CandidateViewModels
 
     public class CandidateUpdateViewModel { }
 
+    public class CandidateDashboardViewModel
+    {
+        public List<LanguageViewModel> EmptyLanguages { get; set; } = new List<LanguageViewModel>();
+        public List<LanguageViewModel> ReadyLanguages { get; set; } = new List<LanguageViewModel>();
+    }
  
 }

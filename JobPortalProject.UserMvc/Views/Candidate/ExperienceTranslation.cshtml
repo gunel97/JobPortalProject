@@ -1,0 +1,105 @@
+﻿@model ExperiencePageCreateViewModel
+
+<!-- ========== Dashboard Area end============= -->
+<div class="dashboard-area pt-120 mb-120">
+    <div class="container">
+        <div class="row g-lg-4 gy-5 mb-90">
+            <div class="col-lg-3">
+                <div class="dashboard-sidebar">
+                    <partial name="_CandidateSidebarPartial" model="@Model.DashboardViewModel" />
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="edit-profile-inner">
+
+                    <div class="form-wrapper">
+                        <partial name="_ResumeSidebarPartial" />
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            </div>
+                            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                            </div>
+                            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                            </div>
+                            <div class="tab-pane fade show active" id="professional" role="tabpanel" aria-labelledby="professional-tab">
+                                <form method="post" class="edit-profile-form profile-form">
+                                    <input asp-for="LanguageId" asp-items="@Model.LanguageId" type="hidden" />
+                                    <div class="section-title2">
+                                        <h5>Employment Information:</h5>
+                                    </div>
+                                    <div id="experienceRow" class="experiences-row">
+                                        @for (int i=0; i<Model.Models.Count(); i++)
+                                        {
+                                            <input asp-for="Models[i].Translation.ExperienceId" value="@Model.Models[i].Translation.ExperienceId" type="hidden" />
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="info-title">
+                                                        <h6>Add Your Experiences</h6>
+                                                        <div class="dash"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-inner mb-25">
+                                                        <label for="companies">Company Name*</label>
+                                                        <div class="input-area">
+                                                            <img src="/images/icon/company-2.svg" alt="">
+                                                            <input asp-for="Models[i].Translation.CompanyName" id="companies"  placeholder="Egenslab">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-inner mb-25">
+                                                        <label for="companies">Position*</label>
+                                                        <div class="input-area">
+                                                            <img src="/images/icon/designation-2.svg" alt="">
+                                                            <input asp-for="Models[i].Translation.Position" id="companies" placeholder="Position">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-inner mb-20">
+                                                        <label for="datepicker6">Starting Period*</label>
+                                                        <div class="input-area">
+                                                            <img src="/images/icon/calender2.svg" alt="">
+                                                            <label>@Model.Models[i].StartDate.Date.ToShortDateString()</label>
+                                                         </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-inner mb-20">
+                                                        <label for="datepicker7">Ending Period*</label>
+                                                        <div class="input-area">
+                                                            <img src="/images/icon/calender2.svg" alt="">
+                                                            <label>@Model.Models[i].EndDate.Date.ToShortDateString()</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-inner mb-20">
+                                                        <label for="description1">Responsibility**</label>
+                                                        <textarea asp-for="Models[i].Translation.Responsibility" id="description1" placeholder="Write Your Responsibility..."></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                    <div id="saveButtonExp" class="col-md-12">
+                                        <div class="form-inner">
+                                            <button class="primry-btn-2 lg-btn w-unset" type="submit">Save</button>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ========== Dashboard Area end============= -->

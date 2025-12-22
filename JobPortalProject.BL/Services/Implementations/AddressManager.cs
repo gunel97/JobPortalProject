@@ -107,6 +107,8 @@ namespace JobPortalProject.BL.Services.Implementations
                 Include(c => c.City!).ThenInclude(ct => ct.CityTranslations.Where(t => t.LanguageId == selectedLanguageId)));
             var cityListItems = await _cityService.GetCitySelectListItemsWithCountry(selectedLanguageId);
 
+            
+
             var addressUpdateViewModels = addresses.Select(x => new AddressUpdateViewModel
             {
                 Id = x.Id,

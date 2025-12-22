@@ -1,5 +1,5 @@
-﻿  @model ProfileCreateViewModel
- <!-- ========== Dashboard Area end============= -->
+﻿@model ProfileTranslationCreateViewModel
+<!-- ========== Dashboard Area end============= -->
 <div class="dashboard-area pt-120 mb-120">
     <div class="container">
         <div class="row g-lg-4 gy-5 mb-90">
@@ -12,11 +12,10 @@
                 <div class="edit-profile-inner">
 
                     <div class="form-wrapper">
-                        <partial name="_ResumeSidebarPartial"  />
+                        <partial name="_ResumeSidebarPartial" />
                         <div class="tab-content" id="myTabContent">
 
                             <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
-                             
                             </div>
                             <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                                 <form method="post" class="edit-profile-form profile-form">
@@ -44,20 +43,11 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-inner mb-25">
-                                                <label for="perAddress">Permanent Address (City/Country)*</label>
-                                                <div class="input-area">
-                                                    <img src="~/images/icon/home-2.svg" alt="">
-                                                    <select asp-items="Model.CitiesList" asp-for="CityId"></select>
-                                                    <span asp-validation-for="CityId"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-inner mb-25">
                                                 <label for="perAddress">Permanent Address*</label>
+                                                <label>Your city/country: @Model.City</label>
                                                 <div class="input-area">
                                                     <img src="~/images/icon/home-2.svg" alt="">
-                                                    <input asp-for="Street" id="perAddress" placeholder="Your Address Here...">
+                                                    <input asp-for="Street" id="perAddress" placeholder="Street ...">
                                                     <span asp-validation-for="Street"></span>
                                                 </div>
                                             </div>
@@ -67,7 +57,7 @@
                                                 <label for="language">Language*</label>
                                                 <div class="input-area">
                                                     <img src="~/images/icon/language-2.svg" alt="">
-                                                    <input asp-for="resumeTranslationModel.Languages" id="language"  placeholder="Bangla, English, Hindi">
+                                                    <input asp-for="resumeTranslationModel.Languages" id="language" placeholder="Bangla, English, Hindi">
                                                     <span asp-validation-for="resumeTranslationModel.Languages"></span>
                                                 </div>
                                             </div>
@@ -92,25 +82,18 @@
                                         <div asp-validation-summary="ModelOnly"></div>
                                         <div class="col-md-12">
                                             <div class="form-inner">
-                                                <button class="primry-btn-2 lg-btn w-unset" type="submit">Update Change</button>
+                                                <button class="primry-btn-2 lg-btn w-unset" type="submit">Save</button>
                                             </div>
                                         </div>
-
                                     </div>
                                 </form>
                             </div>
                             <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                     
                             </div>
                             <div class="tab-pane fade" id="professional" role="tabpanel" aria-labelledby="professional-tab">
-  
                             </div>
                         </div>
-
                     </div>
-
-
-
                 </div>
             </div>
         </div>

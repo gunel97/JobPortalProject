@@ -2,7 +2,15 @@
 const removeButtonEdu = document.getElementById('removeButtonEdu');
 const saveButtonEdu = document.getElementById('saveButtonEdu');
 
+
+
 function addEducation(models) {
+
+    let optionsHtml = '<option value="">-- Select Education Level --</option>';
+    educationLevelOptions.forEach(option => {
+        optionsHtml += `<option value="${option.value}">${option.text}</option>`;
+    });
+    console.log(optionsHtml);
     console.log(models);
     const educationRow = document.getElementById("educationRow");
     const divElement = document.createElement('div');
@@ -20,7 +28,9 @@ function addEducation(models) {
                                                     <label>Education Level*</label>
                                                     <div class="input-area">
                                                         <img src="/images/icon/qualification-2.svg" alt="">
-                                                     <input name="models[${eduIndex}].EducationTypeId" />
+                                                      <select name="models[${eduIndex}].EducationTypeId" class="form-control">
+                                            ${optionsHtml}
+                                        </select>
                                                     </div>
                                                 </div>
                                             </div>

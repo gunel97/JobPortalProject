@@ -242,14 +242,14 @@ namespace JobPortalProject.UserMvc.Controllers
             if (!ModelState.IsValid)
             {
                 TempData["Error"] = "Please fill in all required fields";
-                return RedirectToAction("EditCompanyProfile", companyUpdateModel);
+                return RedirectToAction(nameof(EditCompanyProfile), companyUpdateModel);
             }
 
             var created = await _companySocialService.CreateAsync(model);
             if (created==null)
             {
                 TempData["Error"] = "Cant create";
-                return RedirectToAction("Edit company profile", companyUpdateModel);
+                return RedirectToAction(nameof(EditCompanyProfile), companyUpdateModel);
             }
 
             TempData["Success"] = "Address added successfully!";

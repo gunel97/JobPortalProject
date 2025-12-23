@@ -1,0 +1,247 @@
+﻿@model List<EducationUpdateViewModel>
+<!-- ========== Dashboard Area end============= -->
+<div class="dashboard-area pt-120 mb-120">
+    <div class="container">
+        <div class="row g-lg-4 gy-5 mb-90">
+            <div class="col-lg-3">
+                <div class="dashboard-sidebar">
+                    <partial name="_CandidateSidebarPartial" model="@Model.FirstOrDefault().DashboardModel" />
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="edit-profile-inner">
+
+                    <div class="form-wrapper">
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <a asp-controller="candidate" asp-action="personalInfoUpdate" class="nav-link" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
+                                        role="tab" aria-controls="home" aria-selected="true">
+                                    <span></span>Basic Information:
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a asp-controller="candidate" asp-action="profileUpdate" class="nav-link" id="profile-tab" type="button"
+                                   role="tab" aria-controls="profile" aria-selected="false">
+                                    <span></span>Profile
+                                </a>
+
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a asp-controller="candidate" asp-action="educationUpdate" class="nav-link active" id="contact-tab" type="button"
+                                        role="tab" aria-controls="contact" aria-selected="false">
+                                    <span></span>Education
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a asp-controller="candidate" asp-action="experienceUpdate" class="nav-link" id="professional-tab" type="button"
+                                        role="tab" aria-controls="professional" aria-selected="false">
+                                    <span></span>Professional Info
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+
+                            <div class="tab-pane fade show active" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                                <form method="post" class="edit-profile-form profile-form">
+                                    @for(int i=0; i<Model.Count(); i++){
+                                        <input asp-for="@Model[i].Id" value="@Model[i].Id" type="hidden" />
+                                        <div class="section-title2">
+                                            <h5>Educational Qualification:</h5>
+                                        </div>
+                                        <div class="education-row">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="info-title">
+                                                        <h6>Academic Information:</h6>
+                                                        <div class="dash"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-inner mb-25">
+                                                        <label>Education Level*</label>
+                                                        <div class="input-area">
+                                                            <img src="~/images/icon/qualification-2.svg" alt="">
+                                                            <select asp-items="@Model[i].EducationTypes" asp-for="@Model[i].EducationTypeId" class="select1">
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @for(int t=0; t<Model[i].Translations.Count(); t++)
+                                                {
+                                                    <input asp-for="@Model[i].Translations[t].EducationId" value="@Model[i].Id" type="hidden" />
+                                                    <input asp-for="@Model[i].Translations[t].Id" value="@Model[i].Translations[t].Id" type="hidden" />
+                                                    <input asp-for="@Model[i].Translations[t].LanguageId" value="@Model[i].Translations[t].LanguageId" type="hidden" />
+                                                    <div class="col-md-6">
+                                                        <div class="form-inner mb-25">
+                                                            <label for="institute">Institute/University* <img src="@Model[i].Translations[t].LangIcon" /></label>
+                                                            <div class="input-area">
+                                                                <img src="~/images/icon/univercity.svg" alt="">
+                                                                <input asp-for="@Model[i].Translations[t].SchoolName" id="institute" placeholder="Type Your Institute Name...">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-inner mb-25">
+                                                            <label>My Major* <img src="@Model[i].Translations[t].LangIcon"/></label>
+                                                            <div class="input-area">
+                                                                <img src="~/images/icon/major.svg" alt="">
+                                                                <input asp-for="@Model[i].Translations[t].MajorName" id="institute" placeholder="Type Your Major Name...">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                <div class="col-md-6">
+                                                    <div class="form-inner mb-20">
+                                                        <label for="datepicker10">Starting Period*</label>
+                                                        <div class="input-area">
+                                                            <img src="~/images/icon/calender2.svg" alt="">
+                                                            <input asp-for="@Model[i].StartDate" id="datepicker10" placeholder="DD/MM/YY">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-inner mb-20">
+                                                        <label for="datepicker11">Ending Period*</label>
+                                                        <div class="input-area">
+                                                            <img src="~/images/icon/calender2.svg" alt="">
+                                                            <input asp-for="@Model[i].EndDate" id="datepicker11" placeholder="DD/MM/YY">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    <div class="col-md-6">
+                                        <div class="form-inner">
+                                            <button class="primry-btn-2 lg-btn w-unset" type="submit">Update Change</button>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <div class="action-btn-group">
+                                        <div class="add-row">
+                                            <a data-bs-toggle="modal" data-bs-target="#addEducation" class="primry-btn-2 lg-btn w-unset">Add New +</a>
+                                        </div>
+                                    </div>
+                                </form>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ========== Dashboard Area end============= -->
+
+<!-- ========== Add education modal============= -->
+<div class="modal fade" id="addEducation" tabindex="-1" aria-labelledby="addEducationLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+            </div>
+            <div class="form-wrapper">
+            <form method="post" asp-action="AddEducationToResume" asp-controller="Candidate" class="edit-profile-form profile-form">
+                <div class="modal-body">
+                    <div class="section-title2">
+                        <h5>Educational Qualification:</h5>
+                    </div>
+                    <div class="education-row">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="info-title">
+                                    <h6>Academic Information:</h6>
+                                    <div class="dash"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                    <div class="form-inner mb-25">
+                                        <label>Education Level*</label>
+                                        <div class="input-area">
+                                            <img src="~/images/icon/qualification-2.svg" alt="">
+                                            <select name="EducationTypeId" asp-items="@Model.FirstOrDefault()?.EducationTypes" class="select1">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                @if (Model.Any() && Model.FirstOrDefault().Translations.Any())
+                                {
+                                @for (int i = 0; i < Model.FirstOrDefault()?.Translations.Count(); i++)
+                                {
+                                    <input name="Translations[@i].LanguageId" value="@Model.FirstOrDefault()?.Translations[i].LanguageId" type="hidden" />
+                                    <div class="col-md-6">
+                                        <div class="form-inner mb-25">
+                                            <label>My Major* <img src="@Model.FirstOrDefault()?.Translations[i].LangIcon"/></label>
+                                            <div class="input-area">
+                                                <img src="~/images/icon/major.svg" alt="">
+                                                <input name="Translations[@i].MajorName" id="institute" placeholder="Type Your Major Name...">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-inner mb-25">
+                                            <label for="institute">Institute/University* <img src="@Model.FirstOrDefault()?.Translations[i].LangIcon" /></label>
+                                            <div class="input-area">
+                                                <img src="~/images/icon/univercity.svg" alt="">
+                                                <input name="Translations[@i].SchoolName" id="institute" placeholder="Type Your Institute Name...">
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                                <div class="col-md-6">
+                                    <div class="form-inner mb-20">
+                                        <label for="datepicker10">Starting Period*</label>
+                                        <div class="input-area">
+                                            <img src="~/images/icon/calender2.svg" alt="">
+                                            <input name="StartDate" id="datepicker10"  placeholder="DD/MM/YY">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-inner mb-20">
+                                        <label for="datepicker11">Ending Period*</label>
+                                        <div class="input-area">
+                                            <img src="~/images/icon/calender2.svg" alt="">
+                                            <input name="EndDate" id="datepicker11" placeholder="DD/MM/YY">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                        <button type="button" class="primry-btn-2 lg-btn w-unset" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="primry-btn-2 lg-btn w-unset">Save</button>
+                </div>
+            </form>
+       </div>
+        </div>
+    </div>
+</div>
+<!-- ========== Add education modal end============= -->
+@if (TempData["CloseModal"] != null)
+{
+    <script>
+        // Close the modal on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            var modal = bootstrap.Modal.getInstance(document.getElementById('addEducation'));
+            if (modal) {
+                modal.hide();
+            }
+
+            // Optional: Show success message
+            @if (TempData["Success"] != null)
+            {
+                            <text>
+                            alert('@TempData["Success"]');
+                            </text>
+            }
+        });
+
+
+
+
+
+
+    </script>
+}

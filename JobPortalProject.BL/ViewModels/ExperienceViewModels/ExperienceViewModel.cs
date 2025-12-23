@@ -1,6 +1,8 @@
 ﻿using JobPortalProject.BL.ViewModels.CandidateViewModels;
+using JobPortalProject.BL.ViewModels.EducationViewModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,7 +27,25 @@ namespace JobPortalProject.BL.ViewModels.ExperienceViewModels
         public ExperienceTranslationCreateViewModel Translation { get; set; } = null!;
     }
 
-    public class ExperienceUpdateViewModel { }
+    public class ExperienceUpdateViewModel
+    {
+        public int Id { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime StartDate { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime EndDate { get; set; }
+        public CandidateDashboardViewModel? Dashboard { get; set; }
+        public List<ExperienceTranslationUpdateViewModel> Translations { get; set; } = [];
+    }
+
+    public class ExperienceAddViewModel
+    {
+        [DataType(DataType.Date)]
+        public DateTime StartDate { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime EndDate { get; set; }
+        public List<ExperienceTranslationCreateViewModel> Translations { get; set; } = [];
+    }
 
     public class ExperienceTranslationViewModel
     {
@@ -45,7 +65,16 @@ namespace JobPortalProject.BL.ViewModels.ExperienceViewModels
         public string Responsibility { get; set; } = null!;
     }
 
-    public class ExperienceTranslationUpdateViewModel { }
+    public class ExperienceTranslationUpdateViewModel
+    {
+        public int Id { get; set; }
+        public string? LangIcon { get; set; }
+        public int LanguageId { get; set; }
+        public int ExperienceId { get; set; }
+        public string CompanyName { get; set; } = null!;
+        public string Position { get; set; } = null!;
+        public string Responsibility { get; set; } = null!;
+    }
 
     public class ExperiencePageCreateViewModel
     {

@@ -1,4 +1,5 @@
-﻿@model PersonalInfoCreateViewModel
+﻿@inject StringLocalizerManager localizer;
+@model PersonalInfoCreateViewModel
 <!-- ========== Dashboard Area end============= -->
 <div class="dashboard-area pt-120 mb-120">
     <div class="container">
@@ -24,7 +25,9 @@
                                                 <label>Gender*</label>
                                                 <div class="input-area">
                                                     <img src="~/images/icon/gender.svg" alt="">
-                                                    <select asp-items="Model.GenderItems" asp-for ="GenderId" class="select1">
+                                                    <select asp-for ="GenderId" class="select1">
+                                                        <option value="1">@localizer.GetValue("male")</option>
+                                                        <option value="2">@localizer.GetValue("female")</option>
                                                     </select>
                                                     <span asp-validation-for="GenderId"></span>
                                                 </div>

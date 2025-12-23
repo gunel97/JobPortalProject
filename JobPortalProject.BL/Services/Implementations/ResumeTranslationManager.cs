@@ -32,5 +32,24 @@ namespace JobPortalProject.BL.Services.Implementations
 
             return resumeTranslationViewModel;
         }
+
+        public async Task<bool> Update(ResumeTranslationUpdateViewModel model)
+        {
+            string[] languages = model.Languages.Split(',');
+            string[] skills = model.Skills.Split(',');
+
+            var resumeTranslation = await Repository.GetByIdAsync(model.Id);
+            if (resumeTranslation == null)
+                return false;
+
+            resumeTranslation.Skills = skills.ToList();
+            resumeTranslation.Languages=languages.ToList();
+            resumeTranslation.About= model.About;
+
+            var result = await Repository.UpdateAsync(resumeTranslation);
+            if (result == null)
+                return false;
+            return true;
+        }
     }
 }

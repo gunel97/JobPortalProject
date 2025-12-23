@@ -30,13 +30,22 @@ namespace JobPortalProject.BL.ViewModels.ResumeViewModels
         public List<string> Skills { get; set; } = [];
     }
 
-    public class ResumeTranslationCreateViewModel {
+    public class ResumeTranslationCreateViewModel
+    {
         public string? About { get; set; }
-        public string? Skills { get; set; } 
-        public string? Languages { get; set; } 
+        public string? Skills { get; set; }
+        public string? Languages { get; set; }
         public int ResumeId { get; set; }
         public int LanguageId { get; set; }
     }
 
-    public class ResumeTranslationUpdateViewModel { }
+    public class ResumeTranslationUpdateViewModel
+    {
+        public int Id { get; set; }
+        public string About { get; set; } = null!;
+        public string Skills { get; set; }=null!;
+        public string Languages { get; set; } = null!;
+        public int ResumeId { get; set; }
+        public int LanguageId { get; set; }
+    }
 }

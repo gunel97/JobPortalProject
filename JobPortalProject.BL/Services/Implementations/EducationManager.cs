@@ -10,7 +10,11 @@ namespace JobPortalProject.BL.Services.Implementations
     public class EducationManager:CrudManager<Education, EducationViewModel, EducationCreateViewModel, EducationUpdateViewModel>
         , IEducationService
     {
-        public EducationManager(IRepositoryAsync<Education> repository, IMapper mapper):base(repository, mapper) { }
+        private readonly IEducationTranslationService _educationTranslationService;
+        public EducationManager(IRepositoryAsync<Education> repository, IMapper mapper, IEducationTranslationService educationTranslationService) : base(repository, mapper)
+        {
+            _educationTranslationService = educationTranslationService;
+        }
 
         public async Task<Education> Create(int resumeId, EducationCreateViewModel model)
         {
@@ -26,6 +30,30 @@ namespace JobPortalProject.BL.Services.Implementations
 
             var result = await Repository.AddAsync(education);
             return result;
+        }
+
+        public async Task<bool> AddEducationToResume(EducationAddViewModel model, int resumeId)
+        {
+            var education = new Education
+            {
+                ResumeId = resumeId,
+                StartDate = model.StartDate,
+                EndDate = model.EndDate,
+                EducationType = (EducationType)model.EducationTypeId
+            };
+
+            var result = await Repository.AddAsync(education);
+
+            if (result == null)
+                return false;
+
+            foreach (var translation in model.Translations)
+            {
+                translation.EducationId = result.Id;
+                var translationResult = await _educationTranslationService.CreateAsync(translation);
+            }
+
+            return true;
         }
     }
 }

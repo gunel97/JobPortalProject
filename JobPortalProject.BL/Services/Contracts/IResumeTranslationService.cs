@@ -6,5 +6,6 @@ namespace JobPortalProject.BL.Services.Contracts
     public interface IResumeTranslationService:ICrudService<ResumeTranslation, ResumeTranslationViewModel,ResumeTranslationCreateViewModel, ResumeTranslationUpdateViewModel>
     {
         public Task<ResumeTranslationViewModel> Create(ResumeTranslationCreateViewModel model, int resumeId);
+        public Task<bool> Update(ResumeTranslationUpdateViewModel model);
     }
 }

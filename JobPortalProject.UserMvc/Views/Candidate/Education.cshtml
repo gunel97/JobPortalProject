@@ -58,3 +58,9 @@
     </div>
 </div>
 <!-- ========== Dashboard Area end============= -->
+
+<script>
+    var educationLevelOptions = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                    Model.EducationTypes.Select(x => new { value = x.Value, text = x.Text })
+            ))
+</script>

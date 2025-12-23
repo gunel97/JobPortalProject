@@ -1,0 +1,85 @@
+﻿@model ProfileTranslationUpdateViewModel
+<div class="col-lg-12">
+    
+</div>
+    <input asp-for="LanguageId" value="@Model.LanguageId" type="hidden" />
+
+    @if (Model.PersonalInfoTranslation != null)
+    {
+    <div class="section-title">
+        <h5>Translation <img src="@Model.Icon" /> : </h5>
+    </div>
+        <div class="col-md-6">
+            <div class="form-inner mb-25">
+                <label for="firstname1">First Name*</label>
+                <div class="input-area">
+                    <img src="~/images/icon/user-2.svg" alt="">
+                    <input asp-for="PersonalInfoTranslation.Firstname" id="firstname1" placeholder="Mrs. Jacoline">
+                    <span asp-validation-for="PersonalInfoTranslation.Firstname"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-inner mb-25">
+                <label for="lastname">Last Name*</label>
+                <div class="input-area">
+                    <img src="~/images/icon/user-2.svg" alt="">
+                    <input asp-for="PersonalInfoTranslation.Lastname" id="lastname" placeholder="Frankly">
+                    <span asp-validation-for="PersonalInfoTranslation.Lastname"></span>
+                </div>
+            </div>
+        </div>
+        <input asp-for="PersonalInfoTranslation.Id" value="@Model.PersonalInfoTranslation.Id" type="hidden" />
+        <input asp-for="PersonalInfoTranslation.LanguageId" value="@Model.PersonalInfoTranslation.LanguageId" type="hidden" />
+        <div class="col-md-6">
+            <div class="form-inner mb-25">
+                <label for="perAddress">Permanent Address*</label>
+                <div class="input-area">
+                    <img src="~/images/icon/home-2.svg" alt="">
+                    <input asp-for="Street" id="perAddress" placeholder="Your Address Here...">
+                    <span asp-validation-for="Street"></span>
+                </div>
+            </div>
+        </div>
+    }
+    @if (Model.ResumeTranslation != null)
+    {
+        <input asp-for="ResumeTranslation.Id" value="@Model.ResumeTranslation.Id" type="hidden" />
+        <input asp-for="ResumeTranslation.LanguageId" value="@Model.ResumeTranslation.LanguageId" type="hidden" />
+        <div class="col-md-12">
+            <div class="form-inner mb-25">
+                <label for="language">Language*</label>
+                <div class="input-area">
+                    <img src="~/images/icon/language-2.svg" alt="">
+                    <input asp-for="ResumeTranslation.Languages" id="language" placeholder="Bangla, English, Hindi">
+                    <span asp-validation-for="ResumeTranslation.Languages"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-inner mb-25">
+                <label>Special Skills*</label>
+                <div class="input-area">
+                    <img src="~/images/icon/company-2.svg" alt="">
+                    <input asp-for="ResumeTranslation.Skills" id="skill" placeholder="your skills...">
+                    <span asp-validation-for="ResumeTranslation.Skills"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-inner mb-50">
+                <label for="description">Career Objective*</label>
+                <textarea asp-for="ResumeTranslation.About" id="description" placeholder="Something Write Yourself...."></textarea>
+                <span asp-validation-for="ResumeTranslation.About"></span>
+            </div>
+        </div>
+    <div asp-validation-summary="ModelOnly"></div>
+    }
+    <div class="col-md-12">
+        <div class="form-inner">
+            <button class="primry-btn-2 lg-btn w-unset" type="submit">Update Change</button>
+        <button class="primry-btn-2 lg-btn w-unset" onclick="cancelProfileTranslationUpdate()" type="button">Cancel</button>
+        </div>
+    </div>
+   
+   

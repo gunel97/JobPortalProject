@@ -1,0 +1,212 @@
+﻿@model List<ExperienceUpdateViewModel>
+<!-- ========== Dashboard Area end============= -->
+<div class="dashboard-area pt-120 mb-120">
+    <div class="container">
+        <div class="row g-lg-4 gy-5 mb-90">
+            <div class="col-lg-3">
+                <div class="dashboard-sidebar">
+                    <partial name="_CandidateSidebarPartial" model="@Model.FirstOrDefault()?.Dashboard" />
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="edit-profile-inner">
+                    <div class="form-wrapper">
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <a asp-controller="candidate" asp-action="personalInfoUpdate" class="nav-link" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
+                                   role="tab" aria-controls="home" aria-selected="true">
+                                    <span></span>Basic Information:
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a asp-controller="candidate" asp-action="profileUpdate" class="nav-link" id="profile-tab" type="button"
+                                   role="tab" aria-controls="profile" aria-selected="false">
+                                    <span></span>Profile
+                                </a>
+
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a asp-controller="candidate" asp-action="educationUpdate" class="nav-link" id="contact-tab" type="button"
+                                   role="tab" aria-controls="contact" aria-selected="false">
+                                    <span></span>Education
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a asp-controller="candidate" asp-action="experienceUpdate" class="nav-link active" id="professional-tab" type="button"
+                                        role="tab" aria-controls="professional" aria-selected="false">
+                                    <span></span>Professional Info
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="professional" role="tabpanel" aria-labelledby="professional-tab">
+                                <form method="post" class="edit-profile-form profile-form">
+                                    @for (int i = 0; i < Model.Count(); i++)
+                                    {
+                                        <input asp-for="@Model[i].Id" value="@Model[i].Id" type="hidden" />
+                                        <div class="section-title2">
+                                            <h5>Employment Information:</h5>
+                                        </div>
+                                        <div class="experiences-row">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="info-title">
+                                                        <h6>Add Your Experiences</h6>
+                                                        <div class="dash"></div>
+                                                    </div>
+                                                </div>
+                                                @for (int t = 0; t < Model[i].Translations.Count(); t++) {
+                                                    <input asp-for="@Model[i].Translations[t].ExperienceId" value="@Model[i].Id" type="hidden" />
+                                                    <input asp-for="@Model[i].Translations[t].LanguageId" value="@Model[i].Translations[t].LanguageId" type="hidden" />
+                                                    <div class="col-md-6">
+                                                        <div class="form-inner mb-25">
+                                                            <label for="companies">Company Name*<img src="@Model[i].Translations[t].LangIcon"/></label>
+                                                            <div class="input-area">
+                                                                <img src="~/images/icon/company-2.svg" alt="">
+                                                                <input asp-for="@Model[i].Translations[t].CompanyName" id="companies" placeholder="Egenslab">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-inner mb-25">
+                                                            <label for="desigation">Position* <img src="@Model[i].Translations[t].LangIcon" /></label>
+                                                            <div class="input-area">
+                                                                <img src="~/images/icon/designation-2.svg" alt="">
+                                                                <input asp-for="@Model[i].Translations[t].Position" id="companies" placeholder="Software Developer...">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <div class="form-inner mb-20">
+                                                            <label for="description1">Responsibility* <img src="@Model[i].Translations[t].LangIcon"/></label>
+                                                            <textarea asp-for="@Model[i].Translations[t].Responsibility" id="description1" placeholder="Write Your Responsibility..."></textarea>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                <div class="col-md-6">
+                                                    <div class="form-inner mb-20">
+                                                        <label for="datepicker6">Starting Period*</label>
+                                                        <div class="input-area">
+                                                            <img src="~/images/icon/calender2.svg" alt="">
+                                                            <input asp-for="@Model[i].StartDate" id="datepicker6" placeholder="DD/MM/YY">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-inner mb-20">
+                                                        <label for="datepicker7">Ending Period*</label>
+                                                        <div class="input-area">
+                                                            <img src="~/images/icon/calender2.svg" alt="">
+                                                            <input asp-for="@Model[i].EndDate" id="datepicker7"  placeholder="DD/MM/YY">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    <div class="col-md-12">
+                                        <div class="form-inner">
+                                            <button class="primry-btn-2 lg-btn w-unset" type="submit">Update Change</button>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="action-btn-group">
+                                        <div class="add-row">
+                                            <a data-bs-toggle="modal" data-bs-target="#addExperience" class="primry-btn-2 lg-btn w-unset">Add New +</a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ========== Dashboard Area end============= -->
+
+<!-- ========== Add experience modal============= -->
+<div class="modal fade" id="addExperience" tabindex="-1" aria-labelledby="addExperienceLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+            </div>
+            <div class="form-wrapper">
+                <form method="post" asp-action="AddExperienceToResume" asp-controller="Candidate" class="edit-profile-form profile-form">
+                    <div class="modal-body">
+                        <div class="section-title2">
+                            <h5>Employment Information:</h5>
+                        </div>
+                        <div class="experiences-row">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="info-title">
+                                        <h6>Add Your Experiences</h6>
+                                        <div class="dash"></div>
+                                    </div>
+                                </div>
+                                @if (Model.Any())
+                                {
+                                    @for (int i = 0; i < Model.FirstOrDefault()?.Translations.Count(); i++)
+                                    {
+                                        <input name="Translations[@i].LanguageId" value="@Model.FirstOrDefault()?.Translations[i].LanguageId" type="hidden" />
+                                        <div class="col-md-6">
+                                            <div class="form-inner mb-25">
+                                                <label for="companies">Company Name*<img src="@Model.FirstOrDefault()?.Translations[i].LangIcon" /></label>
+                                                <div class="input-area">
+                                                    <img src="~/images/icon/company-2.svg" alt="">
+                                                    <input name="Translations[@i].CompanyName" id="companies" placeholder="Egenslab">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-inner mb-25">
+                                                <label for="desigation">Position* <img src="@Model.FirstOrDefault()?.Translations[i].LangIcon" /></label>
+                                                <div class="input-area">
+                                                    <img src="~/images/icon/designation-2.svg" alt="">
+                                                    <input name="Translations[@i].Position" id="companies" placeholder="Software Developer...">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="form-inner mb-20">
+                                                <label for="description1">Responsibility* <img src="@Model.FirstOrDefault()?.Translations[i].LangIcon" /></label>
+                                                <textarea name="Translations[@i].Responsibility" id="description1" placeholder="Write Your Responsibility..."></textarea>
+                                            </div>
+                                        </div>
+                                    }
+                                    <div class="col-md-6">
+                                        <div class="form-inner mb-20">
+                                            <label for="datepicker6">Starting Period*</label>
+                                            <div class="input-area">
+                                                <img src="~/images/icon/calender2.svg" alt="">
+                                                <input name="StartDate" id="datepicker6" placeholder="DD/MM/YY">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-inner mb-20">
+                                            <label for="datepicker7">Ending Period*</label>
+                                            <div class="input-area">
+                                                <img src="~/images/icon/calender2.svg" alt="">
+                                                <input name="EndDate" id="datepicker7" placeholder="DD/MM/YY">
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="primry-btn-2 lg-btn w-unset" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="primry-btn-2 lg-btn w-unset">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ========== Add experience modal end============= -->

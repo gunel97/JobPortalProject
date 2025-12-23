@@ -48,12 +48,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FuZGlkYXRlXEVkdWNhdGlvblRyYW5zbGF0aW9uLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Lenovo/source/repos/JobPortalProject/JobPortalProject.UserMvc/Views/Candidate/EducationUpdate.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FuZGlkYXRlXEVkdWNhdGlvblVwZGF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Lenovo/source/repos/JobPortalProject/JobPortalProject.UserMvc/Views/Candidate/Experience.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FuZGlkYXRlXEV4cGVyaWVuY2UuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Lenovo/source/repos/JobPortalProject/JobPortalProject.UserMvc/Views/Candidate/ExperienceTranslation.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FuZGlkYXRlXEV4cGVyaWVuY2VUcmFuc2xhdGlvbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Lenovo/source/repos/JobPortalProject/JobPortalProject.UserMvc/Views/Candidate/ExperienceUpdate.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FuZGlkYXRlXEV4cGVyaWVuY2VVcGRhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Lenovo/source/repos/JobPortalProject/JobPortalProject.UserMvc/Views/Candidate/PersonalInfo.cshtml]
@@ -70,6 +78,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Lenovo/source/repos/JobPortalProject/JobPortalProject.UserMvc/Views/Candidate/ProfileTranslation.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FuZGlkYXRlXFByb2ZpbGVUcmFuc2xhdGlvbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Lenovo/source/repos/JobPortalProject/JobPortalProject.UserMvc/Views/Candidate/ProfileUpdate.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FuZGlkYXRlXFByb2ZpbGVVcGRhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Lenovo/source/repos/JobPortalProject/JobPortalProject.UserMvc/Views/Company/CompanyDashboard.cshtml]
@@ -146,6 +158,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Lenovo/source/repos/JobPortalProject/JobPortalProject.UserMvc/Views/Shared/_CompanyTranslateUpdateViewPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Db21wYW55VHJhbnNsYXRlVXBkYXRlVmlld1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Lenovo/source/repos/JobPortalProject/JobPortalProject.UserMvc/Views/Shared/_ProfileTranslationUpdatePartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Qcm9maWxlVHJhbnNsYXRpb25VcGRhdGVQYXJ0aWFsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Lenovo/source/repos/JobPortalProject/JobPortalProject.UserMvc/Views/Shared/_RegisterSidebarPartial.cshtml]

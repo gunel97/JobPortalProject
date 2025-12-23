@@ -1,4 +1,5 @@
-﻿  @model ProfileCreateViewModel
+﻿
+  @model ProfileCreateViewModel
  <!-- ========== Dashboard Area end============= -->
 <div class="dashboard-area pt-120 mb-120">
     <div class="container">
@@ -14,10 +15,6 @@
                     <div class="form-wrapper">
                         <partial name="_ResumeSidebarPartial"  />
                         <div class="tab-content" id="myTabContent">
-
-                            <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
-                             
-                            </div>
                             <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                                 <form method="post" class="edit-profile-form profile-form">
                                     <input asp-for="LanguageId" value="@Model.LanguageId" type="hidden" />
@@ -98,12 +95,6 @@
 
                                     </div>
                                 </form>
-                            </div>
-                            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                     
-                            </div>
-                            <div class="tab-pane fade" id="professional" role="tabpanel" aria-labelledby="professional-tab">
-  
                             </div>
                         </div>
 

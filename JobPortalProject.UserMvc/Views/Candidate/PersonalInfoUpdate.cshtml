@@ -13,39 +13,39 @@
                 <div class="edit-profile-inner">
 
                     <div class="form-wrapper">
-                        <partial name="_ResumeSidebarPartial" />
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <a asp-controller="candidate" asp-action="personalInfoUpdate" class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
+                                        role="tab" aria-controls="home" aria-selected="true">
+                                    <span></span>Basic Information:
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a asp-controller="candidate" asp-action="profileUpdate" class="nav-link" id="profile-tab" type="button"
+                                        role="tab" aria-controls="profile" aria-selected="false">
+                                    <span></span>Profile
+                                </a>
+                                
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a asp-controller="candidate" asp-action="EducationUpdate" class="nav-link" id="contact-tab"  type="button"
+                                        role="tab" aria-controls="contact" aria-selected="false">
+                                    <span></span>Education
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a asp-controller="candidate" asp-action="experienceUpdate" class="nav-link" id="professional-tab" type="button"
+                                        role="tab" aria-controls="professional" aria-selected="false">
+                                    <span></span>Professional Info
+                                </a>
+                            </li>
+                        </ul>
                         <div class="tab-content" id="myTabContent">
-
                             <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                                 <form method="post" class="edit-profile-form profile-form  mb-60" enctype="multipart/form-data">
+                                    <input asp-for="Id" value="@Model.Id" type="hidden" />
                                     <input asp-for="LanguageId" value="@Model.LanguageId" type="hidden" />
                                     <div class="row">
-                                     
-                                        <div class="col-xxl-4 col-lg-6 position-relative">
-                                            <div class="drag-area">
-                                                <img src="@Model.ImageUrl" />
-                                            </div>
-                                        </div>
-                                        <div class="col-xxl-2 col-lg-6 position-relative">
-                                            <div class="drag-area">
-                                                <p>Upload Images</p>
-                                                <button type="button" class="upload-btn"><i class="bi bi-plus-lg"></i></button>
-                                                <input asp-for="ImageFile" type="file" accept="image/*">
-                                                <span asp-validation-for="ImageFile"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-inner mb-25">
-                                                <label>Gender*</label>
-                                                <div class="input-area">
-                                                    <img src="~/images/icon/gender.svg" alt="">
-                                                    <select asp-items="Model.GenderItems" asp-for="GenderId" class="select1">
-                                                    
-                                                    </select>
-                                                    <span asp-validation-for="GenderId"></span>
-                                                </div>
-                                            </div>
-                                        </div>
                                         <div class="col-md-6">
                                             <div class="form-inner mb-25">
                                                 <label for="datepicker5">Date of Birth*</label>
@@ -56,7 +56,42 @@
                                                 </div>
                                             </div>
                                         </div>
-                                       
+                                        <div class="col-xxl-4 col-lg-6 position-relative">
+                                            <div class="drag-area">
+                                                <p>Upload Images</p>
+                                                <button type="button" class="upload-btn"><i class="bi bi-plus-lg"></i></button>
+                                                <input asp-for="ImageFile" type="file" accept="image/*">
+                                                <span asp-validation-for="ImageFile"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xxl-2 col-lg-6 position-relative">
+                                            <div class="drag-area">
+                                                <img src="@Model.ImageUrl" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-inner mb-25">
+                                                <label for="perAddress">Permanent Address (City/Country)*</label>
+                                                <div class="input-area">
+                                                    <img src="~/images/icon/home-2.svg" alt="">
+                                                    <select asp-items="Model.CitiesList" asp-for="CityId"></select>
+                                                    <span asp-validation-for="CityId"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-inner mb-25">
+                                                <label>Gender*</label>
+                                                <div class="input-area">
+                                                    <img src="~/images/icon/gender.svg" alt="">
+                                                    <select asp-for="GenderId" class="select1">
+                                                        <option value="1">@localizer.GetValue("male")</option>
+                                                        <option value="2">@localizer.GetValue("female")</option>
+                                                    </select>
+                                                    <span asp-validation-for="GenderId"></span>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="col-md-6">
                                             <div class="form-inner mb-25">
                                                 <label for="email1">Email*</label>
@@ -87,18 +122,8 @@
                                     </div>
                                 </form>
                             </div>
-                            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                            </div>
-                            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                            </div>
-                            <div class="tab-pane fade" id="professional" role="tabpanel" aria-labelledby="professional-tab">
-                            </div>
                         </div>
-
                     </div>
-
-
-
                 </div>
             </div>
         </div>

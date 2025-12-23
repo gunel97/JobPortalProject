@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,6 +40,7 @@ namespace JobPortalProject.BL.ViewModels.PersonalInfoViewModels
         public IFormFile? ImageFile {  get; set; }
         public string? ImageUrl { get; set; }
         public string? ImagePublicId { get; set; }
+        [DataType(DataType.Date)]
         public DateTime BirthDate { get; set; }
         public CandidateDashboardViewModel? DashboardModel { get; set; }
     }
@@ -46,6 +48,8 @@ namespace JobPortalProject.BL.ViewModels.PersonalInfoViewModels
     public class PersonalInfoUpdateViewModel
     {
         public int Id { get; set; }
+        public int CityId { get; set; }
+        public List<SelectListItem> CitiesList { get; set; } = [];
         public int LanguageId { get; set; }
         public int ResumeId { get; set;}
         public string? WorkEmail { get; set; }
@@ -56,9 +60,11 @@ namespace JobPortalProject.BL.ViewModels.PersonalInfoViewModels
         public IFormFile? ImageFile { get; set; }
         public string? ImageUrl { get; set; }
         public string? ImagePublicId { get; set; }
+        [DataType(DataType.Date)]
         public DateTime BirthDate { get; set; }
         public CandidateDashboardViewModel? DashboardModel { get; set; }
     }
+
     public class PersonalInfoTranslationViewModel
     {
         public int Id { get; set; }
@@ -73,38 +79,13 @@ namespace JobPortalProject.BL.ViewModels.PersonalInfoViewModels
         public int PersonalInfoId { get; set; }
     }
 
-    public class PersonalInfoTranslationUpdateViewModel { }
-
-    public class ProfileCreateViewModel
+    public class PersonalInfoTranslationUpdateViewModel
     {
+        public int Id { get; set; }
         public int LanguageId { get; set; }
-        public int CityId { get; set; }
-        public List<SelectListItem> CitiesList { get; set; } = [];
-        public string? Street { get; set; }
-        public PersonalInfoTranslationCreateViewModel personalInfoTranslationModel { get; set; } = null!;
-        public ResumeTranslationCreateViewModel resumeTranslationModel { get; set; }= null!;
-        public CandidateDashboardViewModel? DashboardModel { get; set; }
-    }
-
-    public class ProfileUpdateViewModel
-    {
-        public int LanguageId { get; set; }
-         }
-
-    public class ProfileTranslationCreateViewModel
-    {
-        public int LanguageId { get; set; }
-        public int CityId { get; set; }
-        public string? City { get; set; }
-        public string? Street { get; set; }
-        public PersonalInfoTranslationCreateViewModel personalInfoTranslationModel { get; set; } = null!;
-        public ResumeTranslationCreateViewModel resumeTranslationModel { get; set; } = null!;
-        public CandidateDashboardViewModel? DashboardModel { get; set; }
-    }
-
-    public class ProfileTranslationUpdateViewModel
-    {
-
+        public string? Firstname { get; set; }
+        public string? Lastname { get; set; }
+        public int PersonalInfoId { get; set; }
     }
 
 }

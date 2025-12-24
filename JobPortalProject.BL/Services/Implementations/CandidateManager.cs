@@ -297,7 +297,7 @@ namespace JobPortalProject.BL.Services.Implementations
 
             var empty = new List<LanguageViewModel>();
             var ready = new List<LanguageViewModel>();
-
+            var resumeId = 0;
             if (candidate.Resume == null)
             {
                 foreach (var language in languages)
@@ -308,6 +308,7 @@ namespace JobPortalProject.BL.Services.Implementations
 
             else
             {
+                resumeId=candidate.Resume.Id;   
                 foreach (var translation in candidate.Resume.Translations)
                 {
                     ready.Add(languages.FirstOrDefault(x => x.Id == translation.LanguageId)!);
@@ -323,6 +324,7 @@ namespace JobPortalProject.BL.Services.Implementations
 
             var model = new CandidateDashboardViewModel
             {
+                ResumeId=resumeId,
                 EmptyLanguages = empty,
                 ReadyLanguages = ready
             };

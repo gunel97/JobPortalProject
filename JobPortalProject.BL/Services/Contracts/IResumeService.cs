@@ -5,5 +5,6 @@ namespace JobPortalProject.BL.Services.Contracts
 {
     public interface IResumeService:ICrudService<Resume, ResumeViewModel,ResumeCreateViewModel, ResumeUpdateViewModel>
     {
+        public Task<Resume> GetResumeWithDetailsAsync(int resumeId, int languageId);
     }
 }

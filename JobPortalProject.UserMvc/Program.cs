@@ -1,5 +1,7 @@
 using JobPortalProject.BL;
 using JobPortalProject.BL.Constants;
+using JobPortalProject.BL.Services.Contracts;
+using JobPortalProject.BL.Services.Implementations;
 using JobPortalProject.BL.Settings;
 using JobPortalProject.DA;
 using JobPortalProject.DA.DataContext;
@@ -18,9 +20,10 @@ namespace JobPortalProject.UserMvc
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
             builder.Services.AddMvc().AddViewLocalization();
+            builder.Services.AddHttpClient();
 
             // Add services to the container.
-          //  builder.Services.AddControllersWithViews();
+            //  builder.Services.AddControllersWithViews();
 
             builder.Services.AddDataAccessLayerServices(builder.Configuration);
             builder.Services.AddBusinessLogicLayerServices();

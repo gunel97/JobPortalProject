@@ -83,6 +83,7 @@ namespace JobPortalProject.BL
             services.AddScoped<ICookieService, CookieManager>();
             services.AddScoped<IUserService, UserManager>();
             services.AddScoped<IEnumService, EnumManager>();
+            services.AddScoped<IResumePdfService, ResumePdfService>();
             services.AddScoped<FileService>();
 
 

@@ -1,4 +1,5 @@
 ﻿using JobPortalProject.DA.DataContext;
+using JobPortalProject.DA.DataContext.Entities;
 using JobPortalProject.DA.Repositories;
 using JobPortalProject.DA.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
@@ -59,6 +60,7 @@ namespace JobPortalProject.DA
             services.AddScoped<IEducationTranslationRepository, EducationTranslationRepository>();
             services.AddScoped<IExperienceRepository, ExperienceRepository>();
             services.AddScoped<IExperienceTranslationRepository, ExperienceTranslationRepository>();
+            services.AddScoped<IJobApplicationRepository, JobApplicationRepository>();
 
 
             return services;

@@ -1,10 +1,16 @@
 ﻿using AspNetCoreGeneratedDocument;
 using JobPortalProject.BL.Services.Contracts;
+using JobPortalProject.BL.UI.Services.Abstracts;
+using JobPortalProject.BL.UI.ViewModels;
+using JobPortalProject.BL.ViewModels.CandidateViewModels;
 using JobPortalProject.BL.ViewModels.EducationViewModels;
 using JobPortalProject.BL.ViewModels.ExperienceViewModels;
 using JobPortalProject.BL.ViewModels.PersonalInfoViewModels;
 using JobPortalProject.BL.ViewModels.ProfileViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Identity.Client;
 using System.Threading.Tasks;
 
@@ -16,12 +22,19 @@ namespace JobPortalProject.UserMvc.Controllers
         private readonly IPersonalInfoService _personalInfoService;
         private readonly IEducationService _educationService;
         private readonly IExperienceService _experienceService;
-        public CandidateController(ICandidateService candidateService, IPersonalInfoService personalInfoService, IEducationService educationService, IExperienceService experienceService)
+        private readonly ICookieService _cookieService;
+        private readonly IJobApplicationService _jobApplicationService;
+        private readonly IResumeService _resumeService;
+
+        public CandidateController(ICandidateService candidateService, IPersonalInfoService personalInfoService, IEducationService educationService, IExperienceService experienceService, ICookieService cookieService, IJobApplicationService jobApplicationService, IResumeService resumeService)
         {
             _candidateService = candidateService;
             _personalInfoService = personalInfoService;
             _educationService = educationService;
             _experienceService = experienceService;
+            _cookieService = cookieService;
+            _jobApplicationService = jobApplicationService;
+            _resumeService = resumeService;
         }
 
         public async Task<IActionResult> Dashboard()
@@ -29,6 +42,11 @@ namespace JobPortalProject.UserMvc.Controllers
             var model = await _candidateService.GetDashboardViewModel();
 
             return View(model);
+        }
+
+        public IActionResult Settings()
+        {
+          return View();
         }
 
         public async Task<IActionResult> PersonalInfo(int languageId)
@@ -53,12 +71,18 @@ namespace JobPortalProject.UserMvc.Controllers
         [HttpPost]
         public async Task<IActionResult> PersonalInfo(PersonalInfoCreateViewModel model) 
         {
+            var candidate = await _candidateService.GetCandidate();
+            if (candidate == null)
+                return BadRequest();
+            var resume = await _resumeService.CreateResume(candidate.Id);
+            var dashboardModel = await _candidateService.GetDashboardViewModel();
+            model.DashboardModel = dashboardModel;
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            var result = await _personalInfoService.CreatePersonalInfo(model);
+            var result = await _personalInfoService.CreatePersonalInfo(model, resume.Id);
 
             if (result)
             {
@@ -68,9 +92,10 @@ namespace JobPortalProject.UserMvc.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> PersonalInfoUpdate(int languageId)
+        public async Task<IActionResult> PersonalInfoUpdate()
         {
-            var model = await _personalInfoService.GetPersonalInfoUpdateViewModel(languageId);
+            var language = await _cookieService.GetLanguageAsync();
+            var model = await _personalInfoService.GetPersonalInfoUpdateViewModel(language.Id);
 
             return View(model);
         }
@@ -161,7 +186,7 @@ namespace JobPortalProject.UserMvc.Controllers
 
         public async Task<IActionResult> EducationTranslation(int languageId)
         {
-            var model = await _candidateService.GetEducationTranslationPageCreateViewModel(languageId);
+            var model = await _educationService.GetEducationTranslationPageCreateViewModel(languageId);
          
             return View(model);
         }
@@ -172,7 +197,7 @@ namespace JobPortalProject.UserMvc.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var result = await _candidateService.CreateEducationTranslation(model.LanguageId, model);
+            var result = await _educationService.CreateEducationTranslation(model.LanguageId, model);
             if (result)
                 return RedirectToAction(nameof(ExperienceTranslation), new { languageId = model.LanguageId });
 
@@ -181,7 +206,7 @@ namespace JobPortalProject.UserMvc.Controllers
 
         public async Task<IActionResult> ExperienceTranslation(int languageId)
         {
-            var model = await _candidateService.GetExperienceTranslationPageCreateViewModel(languageId);
+            var model = await _experienceService.GetExperienceTranslationPageCreateViewModel(languageId);
 
             return View(model);
         }
@@ -192,7 +217,7 @@ namespace JobPortalProject.UserMvc.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var result = await _candidateService.CreateExperienceTranslation(model.LanguageId, model);
+            var result = await _experienceService.CreateExperienceTranslation(model.LanguageId, model);
             if (result)
                 return RedirectToAction(nameof(Dashboard));
             return View(model);
@@ -200,7 +225,7 @@ namespace JobPortalProject.UserMvc.Controllers
 
         public async Task<IActionResult> Education(int languageId)
         {
-            var model = await _candidateService.GetEducationPageCreateViewModel(languageId);
+            var model = await _educationService.GetEducationPageCreateViewModel(languageId);
            
             return View(model);
         }
@@ -208,11 +233,13 @@ namespace JobPortalProject.UserMvc.Controllers
         [HttpPost]
         public async Task<IActionResult> Education(EducationPageCreateViewModel model)
         {
+            var dashboard = await _candidateService.GetDashboardViewModel();
+            model.DashboardModel = dashboard;
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-            var result = await _candidateService.CreateEducation(model.LanguageId, model);
+            var result = await _educationService.CreateEducation(model.LanguageId, model);
             if (result)
                 return RedirectToAction(nameof(Experience), new { languageId = model.LanguageId });
             else
@@ -222,7 +249,7 @@ namespace JobPortalProject.UserMvc.Controllers
         [HttpPost]
         public async Task<IActionResult> AddEducationToResume(EducationAddViewModel model)
         {
-            var educationUpdateModel = await _personalInfoService.GetEducationUpdateViewModel();
+            var educationUpdateModel = await _educationService.GetEducationUpdateViewModel();
             if (!ModelState.IsValid)
             {
                 TempData["Error"] = "Please fill in all required fields";
@@ -241,7 +268,7 @@ namespace JobPortalProject.UserMvc.Controllers
                 return RedirectToAction(nameof(EducationUpdate), educationUpdateModel);
             }
 
-            educationUpdateModel = await _personalInfoService.GetEducationUpdateViewModel();
+            educationUpdateModel = await _educationService.GetEducationUpdateViewModel();
             TempData["Success"] = "Added successfully!";
             TempData["CloseModal"] = "true";
             return RedirectToAction(nameof(EducationUpdate), educationUpdateModel);
@@ -249,32 +276,32 @@ namespace JobPortalProject.UserMvc.Controllers
 
         public async Task<IActionResult> EducationUpdate()
         {
-            var model = await _personalInfoService.GetEducationUpdateViewModel();
+            var model = await _educationService.GetEducationUpdateViewModel();
 
             return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> EducationUpdate(List<EducationUpdateViewModel> model)
+        public async Task<IActionResult> EducationUpdate(EducationUpdatePageViewModel model)
         {
-            foreach (var item in model)
+            foreach (var item in model.UpdateModels)
             {
                 if (!ModelState.IsValid)
                     return View(model);
             }
 
-            foreach (var education in model)
+            foreach (var education in model.UpdateModels)
             {
               var result =  await _educationService.UpdateAsync(education.Id, education);
             }
 
-            model = await _personalInfoService.GetEducationUpdateViewModel();
+            model = await _educationService.GetEducationUpdateViewModel();
             return View(model);
         }
 
         public async Task<IActionResult> Experience(int languageId)
         {
-            var model = await _candidateService.GetExperiencePageCreateViewModel(languageId);
+            var model = await _experienceService.GetExperiencePageCreateViewModel(languageId);
 
             return View(model);
         }
@@ -282,11 +309,13 @@ namespace JobPortalProject.UserMvc.Controllers
         [HttpPost]
         public async Task<IActionResult> Experience(ExperiencePageCreateViewModel model)
         {
+            var dashboard = await _candidateService.GetDashboardViewModel();
+            model.DashboardViewModel = dashboard;
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-            var result = await _candidateService.CreateExperience(model.LanguageId, model);
+            var result = await _experienceService.CreateExperience(model.LanguageId, model);
             if (result)
                 return RedirectToAction(nameof(Dashboard));
             else
@@ -296,35 +325,35 @@ namespace JobPortalProject.UserMvc.Controllers
 
         public async Task<IActionResult> ExperienceUpdate()
         {
-            var model = await _personalInfoService.GetExperienceUpdateViewModel();
+            var model = await _experienceService.GetExperienceUpdateViewModel();
             return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> ExperienceUpdate(List<ExperienceUpdateViewModel> model)
+        public async Task<IActionResult> ExperienceUpdate(ExperienceUpdatePageViewModel model)
         {
             var dashboardModel = await _candidateService.GetDashboardViewModel();
-            
-            foreach (var item in model)
+            model.Dashboard = dashboardModel;
+
+            foreach (var item in model.Models)
             {
-                item.Dashboard=dashboardModel;
                 if (!ModelState.IsValid)
                     return View(model);
             }
 
-            foreach (var experience in model)
+            foreach (var experience in model.Models)
             {
                 var result = await _experienceService.UpdateAsync(experience.Id, experience);
             }
 
-            model = await _personalInfoService.GetExperienceUpdateViewModel();
+            model = await _experienceService.GetExperienceUpdateViewModel();
             return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> AddExperienceToResume(ExperienceAddViewModel model)
         {
-            var experienceUpdateModel = await _personalInfoService.GetExperienceUpdateViewModel();
+            var experienceUpdateModel = await _experienceService.GetExperienceUpdateViewModel();
             if (!ModelState.IsValid)
             {
                 TempData["Error"] = "Please fill in all required fields";
@@ -343,11 +372,143 @@ namespace JobPortalProject.UserMvc.Controllers
                 return RedirectToAction(nameof(ExperienceUpdate), experienceUpdateModel);
             }
 
-            experienceUpdateModel = await _personalInfoService.GetExperienceUpdateViewModel();
+            experienceUpdateModel = await _experienceService.GetExperienceUpdateViewModel();
             TempData["Success"] = "Added successfully!";
             TempData["CloseModal"] = "true";
             return RedirectToAction(nameof(ExperienceUpdate), experienceUpdateModel);
         }
-        
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteEducation(int id)
+        {
+            var education = await _educationService.GetByIdAsync(id);
+            if (education == null)
+                return BadRequest();
+
+            var deleted = await _educationService.DeleteAsync(id);
+            if (deleted)
+            {
+                var model = await _educationService.GetEducationUpdateViewModel();
+                var educationHtml = await RenderPartialViewToString("_EducationUpdatePartial", model);
+
+                return Json(new
+                {
+                    success = true,
+                    educationHtml
+                });
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteExperience(int id)
+        {
+            var experience = await _experienceService.GetByIdAsync(id);
+            if (experience == null)
+                return BadRequest();
+
+            var deleted = await _experienceService.DeleteAsync(id);
+            if (deleted)
+            {
+                var model = await _experienceService.GetExperienceUpdateViewModel();
+                var experienceHtml = await RenderPartialViewToString("_ExperienceUpdatePartial", model.Models);
+
+                return Json(new
+                {
+                    success = true,
+                    experienceHtml
+                });
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        private async Task<string> RenderPartialViewToString(string viewName, object model)
+        {
+            ViewData.Model = model;
+            using var writer = new StringWriter();
+
+            var viewEngine = HttpContext.RequestServices.GetService<ICompositeViewEngine>();
+            var viewResult = viewEngine.FindView(ControllerContext, viewName, false);
+
+            if (!viewResult.Success)
+            {
+                throw new InvalidOperationException($"Could not find view '{viewName}'");
+            }
+
+            var viewContext = new ViewContext(
+                ControllerContext,  // This provides the ViewContext data
+                viewResult.View,
+                ViewData,
+                TempData,
+                writer,
+                new HtmlHelperOptions()
+            );
+
+            await viewResult.View.RenderAsync(viewContext);
+            return writer.ToString();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ApplyJob(int id)
+        {
+            var candidate = await _candidateService.GetCandidate();
+            var message = "";
+            if (candidate.Resume == null)
+            {
+                message = "Create resume";
+                return Json(new
+                {
+                    success = false,
+                    message
+                });
+            }
+
+            var result= await _jobApplicationService.ApplyJob(id, candidate.Id);
+
+            if (result)
+                return Json(new
+                {
+                    success = true
+                });
+
+            else
+            {
+                message = "An error occured";
+                return Json(new
+                {
+                    success = false,
+                    message
+                });
+            }
+        }
+
+        public async Task<IActionResult> AppliedJobs()
+        {
+            var candidate = await _candidateService.GetCandidate();
+            if (candidate == null)
+                return BadRequest();
+            var model = await _jobApplicationService.GetAppliedJobsPageOfCandidateViewModel(candidate.Id);
+            return View(model);
+        }
+
+        public async Task<IActionResult> Resume()
+        {
+            var candidate = await _candidateService.GetCandidate();
+            if (candidate == null || candidate.Resume == null)
+                return BadRequest();
+
+            var resumeModel = await _resumeService.GetResumeBase(candidate.Resume.Id);
+            resumeModel.PersonalInfo = await _personalInfoService.GetPersonalInfoViewModel(resumeModel.Id);
+            resumeModel.Educations = await _educationService.GetEducationModelsOfResume(resumeModel.Id);
+            resumeModel.Experiences = await _experienceService.GetExperienceModelsOfResume(resumeModel.Id);
+
+            return View(resumeModel);
+        }
     }
 }

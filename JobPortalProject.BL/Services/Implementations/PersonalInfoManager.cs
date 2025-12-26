@@ -21,7 +21,6 @@ namespace JobPortalProject.BL.Services.Implementations
     {
         private readonly ICandidateService _candidateService;
         private readonly IEnumService _enumService;
-        private readonly IResumeService _resumeService;
         private readonly FileService _fileService;
         private readonly ICloudinaryService _cloudinaryService;
         private readonly IPersonalInfoTranslationService _personalInfoTranslationService;
@@ -31,11 +30,10 @@ namespace JobPortalProject.BL.Services.Implementations
         private readonly ICityService _cityService;
         private readonly ICookieService _cookieService;
 
-        public PersonalInfoManager(IRepositoryAsync<PersonalInfo> repository, IMapper mapper, ICandidateService candidateService, IEnumService enumService, IResumeService resumeService, FileService fileService, ICloudinaryService cloudinaryService, IPersonalInfoTranslationService personalInfoTranslationService, IResumeTranslationService resumeTranslationService, IAddressService addressService, IAddressTranslationService addressTranslationService, ICityService cityService, ICookieService cookieService) : base(repository, mapper)
+        public PersonalInfoManager(IRepositoryAsync<PersonalInfo> repository, IMapper mapper, ICandidateService candidateService, IEnumService enumService, FileService fileService, ICloudinaryService cloudinaryService, IPersonalInfoTranslationService personalInfoTranslationService, IResumeTranslationService resumeTranslationService, IAddressService addressService, IAddressTranslationService addressTranslationService, ICityService cityService, ICookieService cookieService) : base(repository, mapper)
         {
             _candidateService = candidateService;
             _enumService = enumService;
-            _resumeService = resumeService;
             _fileService = fileService;
             _cloudinaryService = cloudinaryService;
             _personalInfoTranslationService = personalInfoTranslationService;
@@ -44,6 +42,36 @@ namespace JobPortalProject.BL.Services.Implementations
             _addressTranslationService = addressTranslationService;
             _cityService = cityService;
             _cookieService = cookieService;
+        }
+
+        public async Task<PersonalInfoViewModel> GetPersonalInfoViewModel(int resumeId)
+        {
+            var language = await _cookieService.GetLanguageAsync();
+            var personalInfo = await Repository.GetAsync(predicate: x => x.ResumeId == resumeId,
+                include: x => x.Include(x => x.Translations.Where(t => t.LanguageId==language.Id)).Include(x=>x.Address!));
+
+            if (personalInfo == null || personalInfo.Translations.FirstOrDefault() == null || personalInfo.Address==null)
+                return null!;
+            var address = await _addressService.GetAsync(predicate: x => x.Id == personalInfo.AddressId,
+                include: x => x.Include(x => x.AddressTranslations)
+                .Include(x => x.City).ThenInclude(x => x.CityTranslations.Where(t => t.LanguageId==language.Id))
+                .Include(x=>x.City).ThenInclude(x=>x.Country).ThenInclude(x=>x.Translations.Where(t=>t.LanguageId==language.Id)));
+
+            var model = new PersonalInfoViewModel
+            {
+                Id = personalInfo.Id,
+                ResumeId = personalInfo.ResumeId,
+                FirstName = personalInfo.Translations.FirstOrDefault().FirstName,
+                LastName = personalInfo.Translations.FirstOrDefault().LastName,
+                ImageUrl = personalInfo.ImageUrl,
+                PhoneNumber = personalInfo.PhoneNumber,
+                WorkEmail = personalInfo.WorkEmail,
+                Gender = personalInfo.Gender.ToString(),
+                BirthDate = personalInfo.BirthDate,
+                Address = address,
+            };
+
+            return model;
         }
 
         public async Task<bool> AddAddressToPersonalInfo(int personalInfoId, Address address)
@@ -149,23 +177,9 @@ namespace JobPortalProject.BL.Services.Implementations
             return model;
         }
 
-        public async Task<bool> CreatePersonalInfo(PersonalInfoCreateViewModel model)
+        public async Task<bool> CreatePersonalInfo(PersonalInfoCreateViewModel model, int resumeId)
         {
-            var candidate = await _candidateService.GetCandidate();
-            if (candidate == null)
-                return false;
-
-
-            var resumeCreateViewModel = new ResumeCreateViewModel
-            {
-                CandidateId = candidate.Id,
-            };
-
-            var resume = await _resumeService.CreateAsync(resumeCreateViewModel);
-            if (resume == null)
-                return false;
-
-            model.ResumeId = resume.Id;
+            model.ResumeId = resumeId;
 
             if (model.ImageFile != null)
             {
@@ -451,76 +465,6 @@ namespace JobPortalProject.BL.Services.Implementations
 
             return model;
         }
-
-        public async Task<List<EducationUpdateViewModel>> GetEducationUpdateViewModel()
-        {
-            var candidate = await _candidateService.GetCandidate();
-            if (candidate == null || candidate.Resume == null
-                || candidate.Resume.Educations == null)
-                return null!;
-            var dashboard = await _candidateService.GetDashboardViewModel();
-            var educationTypes = _enumService.GetEducationTypeListItems();
-            var models = new List<EducationUpdateViewModel>();
-            foreach(var education in candidate.Resume.Educations)
-            {
-                models.Add(new EducationUpdateViewModel
-                {
-                    Id = education.Id,
-                    EducationTypeId=(int)education.EducationType,
-                    EducationTypes=educationTypes,
-                    StartDate=education.StartDate,
-                    EndDate=education.EndDate,
-                    DashboardModel=dashboard,
-                    Translations= education.Translations.Select(x=> new EducationTranslationUpdateViewModel
-                    {
-                        Id=x.Id,
-                        LangIcon=dashboard.ReadyLanguages.FirstOrDefault(t=>t.Id==x.LanguageId)!.IconUrl,
-                        EducationId=education.Id,
-                        LanguageId=x.LanguageId,
-                        MajorName=x.MajorName,
-                        SchoolName=x.SchoolName,
-                    }).ToList()
-                });
-            }
-
-            return models;
-        }
-
-       public async Task<List<ExperienceUpdateViewModel>> GetExperienceUpdateViewModel()
-        {
-            var candidate  = await _candidateService.GetCandidate();
-            if (candidate == null || candidate.Resume == null
-               || candidate.Resume.Experiences == null)
-                return null!;
-            var dashboard = await _candidateService.GetDashboardViewModel();
-            var models = new List<ExperienceUpdateViewModel>();
-
-            foreach(var experience in candidate.Resume.Experiences)
-            {
-                var model = new ExperienceUpdateViewModel
-                {
-                    Id = experience.Id,
-                    StartDate = experience.StartDate,
-                    EndDate = experience.EndDate,
-                    Dashboard = dashboard,
-                    Translations = experience.Translations.Select(x => new ExperienceTranslationUpdateViewModel
-                    {
-                        ExperienceId = experience.Id,
-                        LanguageId = x.LanguageId,
-                        Responsibility = x.Responsibility,
-                        CompanyName = x.CompanyName,
-                        Position = x.Position,
-                        LangIcon = dashboard.ReadyLanguages.FirstOrDefault(t => t.Id == x.LanguageId).IconUrl
-                    }).ToList()
-                };
-
-                models.Add(model);
-            }
-
-            return models;
-
-        }
-
         public ResumeTranslation GetResumeTranslation (int languageId, Candidate candidate)
         {
             return candidate.Resume!.Translations.FirstOrDefault(x => x.LanguageId == languageId)!;

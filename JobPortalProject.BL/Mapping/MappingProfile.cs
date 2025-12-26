@@ -8,6 +8,7 @@ using JobPortalProject.BL.ViewModels.CompanyViewModels;
 using JobPortalProject.BL.ViewModels.CountryViewModels;
 using JobPortalProject.BL.ViewModels.EducationViewModels;
 using JobPortalProject.BL.ViewModels.ExperienceViewModels;
+using JobPortalProject.BL.ViewModels.JobApplicationViewModels;
 using JobPortalProject.BL.ViewModels.JobCategoryViewModels;
 using JobPortalProject.BL.ViewModels.JobExtraBenefitViewModels;
 using JobPortalProject.BL.ViewModels.JobResponsibilityViewModels;
@@ -205,6 +206,9 @@ namespace JobPortalProject.BL.Mapping
             CreateMap<EducationTranslation, EducationTranslationCreateViewModel>().ReverseMap();
             CreateMap<EducationTranslation, EducationTranslationUpdateViewModel>().ReverseMap();
 
+            CreateMap<JobApplication, JobApplicationsOfCandidateViewModel>().ReverseMap();
+            CreateMap<JobApplication, JobApplicationCreateViewModel>().ReverseMap();
+            CreateMap<JobApplication, JobApplicationUpdateViewModel>().ReverseMap();
 
         }
     }

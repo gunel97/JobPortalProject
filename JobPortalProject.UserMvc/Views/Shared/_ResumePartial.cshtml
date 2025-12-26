@@ -1,0 +1,117 @@
+﻿@model ResumeViewModel
+
+<div class="resume-area">
+    <div class="row g-4 mb-40">
+        <div class="col-lg-6">
+            <div class="author-area">
+                <div class="author-img">
+                    <img src="@Model.PersonalInfo.ImageUrl" alt="">
+                </div>
+                <div class="name-degination">
+                    <h4>@Model.PersonalInfo.FirstName @Model.PersonalInfo.LastName</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="contact-area">
+                <h4>Contact Info</h4>
+                <ul>
+                    <li>Phone:<a href="#">@Model.PersonalInfo.PhoneNumber <span><img src="~/images/icon/phone-5.svg" alt=""></span></a></li>
+                    <li>Email:<a href="#">@Model.PersonalInfo.WorkEmail<span><img src="~/images/icon/envlop-5.svg" alt=""></span></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="single-information-area">
+            <div class="section-title">
+                <h6>Career Objective</h6>
+                <div class="dash"></div>
+            </div>
+            <div class="description">
+                <p>@Model.About</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="single-information-area">
+            <div class="section-title">
+                <h6>Personal Information</h6>
+                <div class="dash"></div>
+            </div>
+            <div class="row g-4">
+                <div class="informations">
+                    <ul>
+                        <li><span>Date of Birth:</span>  @Model.PersonalInfo.BirthDate.Date.ToShortDateString()</li>
+                        <li><span>Permanent Address:</span>  @Model.PersonalInfo.Address?.CityName , @Model.PersonalInfo.Address?.CountryName , @Model.PersonalInfo.Address.Street .</li>
+                        <li><span>Gender:</span>  @localizer.GetValue(Model.PersonalInfo.Gender ?? "")</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    @if (Model.Educations.Count() != 0)
+    {
+        <div class="col-lg-12">
+            <div class="single-information-area">
+                <div class="section-title">
+                    <h6>Educational Qualification</h6>
+                    <div class="dash"></div>
+                </div>
+                @for (int i = 0; i < Model.Educations.Count(); i++)
+                {
+                    <div class="educational-qualification mb-30">
+                        <div class="passing-year">
+                            <p><span>@(i + 1).</span>@Model.Educations[i].StartDate.ToString("MMM yyyy") - @Model.Educations[i].EndDate.ToString("MMM yyyy") </p>
+                            <span></span>
+                        </div>
+                        <div class="education-dt">
+                            <h6>@Model.Educations[i].SchoolName</h6>
+                            <ul>
+                                <li><span>Education Level:</span> @localizer.GetValue(Model.Educations[i].EducationType)</li>
+                                <li><span>My Major:</span> @Model.Educations[i].MajorName</li>
+                            </ul>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+    @if (Model.Experiences.Count() != 0)
+    {
+        <div class="col-lg-12">
+            <div class="single-information-area">
+                <div class="section-title">
+                    <h6>Professionals Information</h6>
+                    <div class="dash"></div>
+                </div>
+                @for (int i = 0; i < Model.Experiences.Count(); i++)
+                {
+                    <div class="educational-qualification mb-30">
+                        <div class="passing-year">
+                            <p><span>@(i + 1).</span>@Model.Experiences[i].StartDate.ToString("MMM yyyy") - @Model.Experiences[i].EndDate.ToString("MMM yyyy") </p>
+                            <span></span>
+                        </div>
+                        <div class="education-dt">
+                            <h6>@Model.Experiences[i].CompanyName</h6>
+                            <p class="position"><span>Position:</span> @Model.Experiences[i].Position</p>
+                            <p class="position"><span>Responsibility:</span> @Model.Experiences[i].Responsibility</p>
+
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    <div class="col-lg-12">
+        <div class="declaration-area">
+            <h6>Declaration & Authentication-</h6>
+            <p>I do hereby declare that the information given above is true of my knowledge.</p>
+        </div>
+        <div class="gratitude-area">
+            <span>Yours Faithful,</span>
+            <h6>@Model.PersonalInfo.FirstName @Model.PersonalInfo.LastName</h6>
+        </div>
+    </div>
+</div>

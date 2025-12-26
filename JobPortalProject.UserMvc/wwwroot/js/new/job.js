@@ -5,7 +5,7 @@
         .then(data => {
             row.remove();
         });
-}
+};
 
 function deactivateJob(id, element) {
     const checkboxText = document.getElementById(`checkboxText${id}`);
@@ -19,7 +19,7 @@ function deactivateJob(id, element) {
                 checkboxText.innerText = 'Deactive';
             }
         });
-}
+};
 
 function deleteJobBenefit(id) {
     console.log(id);
@@ -34,7 +34,7 @@ function deleteJobBenefit(id) {
             row.innerHTML = data.benefitHtml;
         })
         .catch(error => console.error('Error:', error));
-}
+};
 
 function deleteJobResponsibility(id) {
     console.log(id);
@@ -49,4 +49,5 @@ function deleteJobResponsibility(id) {
             row.innerHTML = data.responsibilityHtml;
         })
         .catch(error => console.error('Error:', error));
-}
+};
+

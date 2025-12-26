@@ -225,6 +225,8 @@
 
 
 <script>
+    let addedBenIndex=0;
+    let isDeleted=0;
     let respIndex = 0;
     let benIndex=0;
 
@@ -249,18 +251,28 @@
             console.log(htmlTextR);
     }
     respIndex++;
-    }
+    };
 
     function addB(translations){
-        console.log(translations);
-        console.log("test");
+       
+              if(benIndex>0){
+            const removeButtonBenefit = document.getElementById("removeButtonBenefit");
+            removeButtonBenefit.remove();
+        };
+        if(isDeleted==1){
+            isDeleted=0;
+            benIndex++;
+        };
+  
 
     const bContainer = document.getElementById("bContainer");
     const benefitTitle = document.getElementById("benefitTitle");
-    benefitTitle.innerText="Job Extra Benefits"
+    benefitTitle.innerText="Job Extra Benefits:";
+    const divForRemove = document.createElement('div');
+    divForRemove.id=`divB${benIndex}`;
     for(let i=0; i<translations.length; i++){
         const divElement =document.createElement('div');
-                divElement.className='form-inner mb-25';
+        divElement.className='form-inner mb-25';
                     var htmlTextB = `<label for="jobtitle">
                     Job Benefit <img src="${translations[i].languageIcon}" alt=""> *</label>
                                         <div class="input-area">
@@ -269,11 +281,55 @@
                                             <input type="hidden" name="ExtraBenefits[${benIndex}].JobExtraBenefitTranslations[${i}].LanguageId" value="${i + 1}" />
                                             </div>`;
             divElement.innerHTML+=htmlTextB;
-            bContainer.appendChild(divElement);
-            console.log(htmlTextB);
-    }
+            divForRemove.appendChild(divElement);
+    };
+    bContainer.appendChild(divForRemove);
+            bContainer.innerHTML+=`<div id="removeButtonBenefit">
+        <div class="add-row" onclick="removeBenefitRow(${benIndex},this)">
+                                            <button
+                                            type="button" class="remove-work-area-row remove">
+                                                Remove
+                                            </button>
+                                       </div>
+                                       </div>`;
+                                       console.log(`elave edenden sonra ${benIndex}`);
     benIndex++;
-    }
+    console.log(`++dan sonra ${benIndex}`);
+    addedBenIndex=1;
+    };
+
+    function removeBenefitRow(rowId){
+        const row = document.getElementById(`divB${rowId}`);
+        var removeButtonBenefit = document.getElementById("removeButtonBenefit");
+        row.remove();
+        console.log(benIndex);
+
+        if(benIndex==0){
+            const bContainer = document.getElementById('bContainer');
+            bContainer.innerHTML="";
+            return;
+        };
+       
+        if(addedBenIndex==1)
+        {
+        benIndex-=2;
+        };
+        if(addedBenIndex==0)
+        {
+        benIndex-=1;
+        }
+
+        console.log(benIndex);
+        removeButtonBenefit.innerHTML=`<div class="add-row" id="removeButtonBenefit" onclick="removeBenefitRow(${benIndex},this)">
+                                            <button
+                                            type="button" class="remove-work-area-row remove">
+                                                Remove
+                                            </button>
+                                       </div>`;
+        console.log(benIndex);
+        isDeleted=1;
+        addedBenIndex=0;
+    };
 
 
 </script>

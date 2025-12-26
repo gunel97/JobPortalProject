@@ -61,6 +61,7 @@ namespace JobPortalProject.BL
             services.AddScoped<IJobResponsibilityTranslationService, JobResponsibilityTranslationManager>();
             services.AddScoped<IJobExtraBenefitService, JobExtraBenefitManager>();
             services.AddScoped<IJobExtraBenefitTranslationService, JobExtraBenefitTranslationManager>();
+            services.AddScoped<IJobApplicationService, JobApplicationManager>();
 
             services.AddScoped<ICandidateService, CandidateManager>();
             services.AddScoped<IResumeService, ResumeManager>();

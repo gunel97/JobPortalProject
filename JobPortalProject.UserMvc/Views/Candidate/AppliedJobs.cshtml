@@ -1,0 +1,88 @@
+﻿@model AppliedJobsOfCandidatePageViewModel
+@inject StringLocalizerManager localizer;
+
+<div class="dashboard-area pt-120 mb-120">
+    <div class="container">
+        <div class="row g-lg-4 gy-5 mb-90">
+            <div class="col-lg-3">
+                <partial name="_CandidateSidebarPartial" model="@Model.Dashboard"/>
+            </div>
+            <div class="col-lg-9">
+                <div class="applied-job-area">
+                    <div class="table-wrapper">
+                        <div class="table-title-filter">
+                            <div class="section-title">
+                                <h5>Applied Jobs:</h5>
+                            </div>
+                        </div>
+                        <table class="eg-table table category-table mb-40">
+                            <thead>
+                                <tr>
+                                    <th>Job Information</th>
+                                    <th>Apply Date</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.JobApplicationsModels.Any())
+                                {
+                                    @foreach (var item in Model.JobApplicationsModels)
+                                    {
+                                        <tr>
+                                            <td data-label="Job Title">
+                                                <div class="company-info">
+                                                    <div class="logo">
+                                                        <img src="@item.CompanyLogo" alt="">
+                                                    </div>
+                                                    <div class="company-details">
+                                                        <div class="top">
+                                                            <h6><a href="job-details.html">@item.JobTitle</a></h6>
+                                                            <span><img src="~/images/icon/calender2.svg" alt="">@item.JobCreatedAt.Date.ToShortDateString()</span>
+                                                        </div>
+                                                        <div class="top">
+                                                            <a class="view-btn" href="company-details.html">@item.CompanyName </a>
+                                                        </div>
+                                                        <ul>
+                                                            <li><img src="~/images/icon/location.svg" alt="">@item.JobAddress</li>
+                                                            <li>
+                                                                <img src="~/images/icon/arrow2.svg" alt="">
+                                                                <p><span class="title">Salary:</span> $@item.MinSalary-$@item.MaxSalary / <span class="time">@localizer.GetValue(item.SalaryType ?? "")</span></p>
+                                                            </li>
+                                                            
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td data-label="Apply Job">@item.AppliedAt.Date.ToShortDateString()</td>
+                                            <td data-label="Status"><a class="eg-btn purple-btn">@localizer.GetValue(item.Status ?? "")</a></td>
+                                            <td data-label="Status"><button class="eg-btn orenge-btn">Cancel</button></td>
+                                           
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                        <div class="pagination-table-info">
+                            <div class="table-info">
+                                <span>06 Results Showing In 20 Jobs</span>
+                            </div>
+                            <div class="pagination-area">
+                                <nav aria-label="...">
+                                    <ul class="pagination">
+                                        <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1"></a></li>
+                                        <li class="page-item active" aria-current="page"><a class="page-link" href="#">01</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">02</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">03</a></li>
+                                        <li class="page-item"><a class="page-link" href="#"></a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

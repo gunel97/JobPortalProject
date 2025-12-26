@@ -810,6 +810,41 @@ namespace JobPortalProject.DA.Migrations
                     b.ToTable("Jobs");
                 });
 
+            modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.JobApplication", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CandidateId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("JobId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("JobStatus")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CandidateId");
+
+                    b.HasIndex("JobId");
+
+                    b.ToTable("JobApplications");
+                });
+
             modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.JobCategory", b =>
                 {
                     b.Property<int>("Id")
@@ -1869,6 +1904,25 @@ namespace JobPortalProject.DA.Migrations
                     b.Navigation("JobCategory");
                 });
 
+            modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.JobApplication", b =>
+                {
+                    b.HasOne("JobPortalProject.DA.DataContext.Entities.Candidate", "Candidate")
+                        .WithMany("JobApplications")
+                        .HasForeignKey("CandidateId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("JobPortalProject.DA.DataContext.Entities.Job", "Job")
+                        .WithMany("JobApplications")
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Candidate");
+
+                    b.Navigation("Job");
+                });
+
             modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.JobCategoryTranslation", b =>
                 {
                     b.HasOne("JobPortalProject.DA.DataContext.Entities.JobCategory", "JobCategory")
@@ -2167,6 +2221,8 @@ namespace JobPortalProject.DA.Migrations
 
             modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.Candidate", b =>
                 {
+                    b.Navigation("JobApplications");
+
                     b.Navigation("Resume");
                 });
 
@@ -2219,6 +2275,8 @@ namespace JobPortalProject.DA.Migrations
             modelBuilder.Entity("JobPortalProject.DA.DataContext.Entities.Job", b =>
                 {
                     b.Navigation("ExtraBenefits");
+
+                    b.Navigation("JobApplications");
 
                     b.Navigation("JobTranslations");
 

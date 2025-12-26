@@ -70,7 +70,7 @@
                                 <tr id=@("jobListRow"+job.Id)>
                                     <td data-label="Job Title">
                                         <div class="job-content">
-                                            <h5><a asp-controller="job" asp-action="details" asp-route-id="@job.DetailsUrl">@job.Title</a></h5>
+                                            <h5><a asp-controller="job" asp-action="applicants" asp-route-id="@job.DetailsUrl">@job.Title</a></h5>
                                             <p><img src="~/images/icon/calender2.svg" alt=""><span>Deadline:</span>@job.ExpirationDate!.Value.ToShortDateString()</p>
                                             <div class="form-check form-switch">
                                                 <input asp-for="@job.IsActive" class="form-check-input" 

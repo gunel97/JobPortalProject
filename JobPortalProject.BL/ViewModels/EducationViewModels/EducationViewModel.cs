@@ -1,4 +1,5 @@
 ﻿using JobPortalProject.BL.ViewModels.CandidateViewModels;
+using JobPortalProject.DA.DataContext.Enums;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
@@ -12,6 +13,13 @@ namespace JobPortalProject.BL.ViewModels.EducationViewModels
 {
     public class EducationViewModel
     {
+        public int Id { get; set; }
+        public int ResumeId { get; set; }
+        public string SchoolName { get; set; } = null!;
+        public string MajorName { get; set; } = null!;
+        public string EducationType { get; set; } = null!;
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
     }
 
     public class EducationCreateViewModel
@@ -41,13 +49,18 @@ namespace JobPortalProject.BL.ViewModels.EducationViewModels
     {
         public int Id { get; set; }
         public int EducationTypeId { get; set; }
-        public List<SelectListItem> EducationTypes { get; set; } = [];
         [DataType(DataType.Date)]
         public DateTime StartDate { get; set; }
         [DataType(DataType.Date)]
         public DateTime EndDate { get; set; }
         public List<EducationTranslationUpdateViewModel> Translations { get; set; } = [];
+    }
+
+    public class EducationUpdatePageViewModel
+    {
+        public List<SelectListItem> EducationTypes { get; set; } = [];
         public CandidateDashboardViewModel? DashboardModel { get; set; }
+        public List<EducationUpdateViewModel> UpdateModels { get; set; } = [];
     }
 
     public class EducationTranslationViewModel { }

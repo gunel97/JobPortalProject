@@ -11,15 +11,16 @@ namespace JobPortalProject.BL.Services.Contracts
         public Task<bool> AddAddressToPersonalInfo(int personalInfoId, Address address);
         public Task<PersonalInfoUpdateViewModel> GetPersonalInfoUpdateViewModel(int languageId);
         public Task<PersonalInfoCreateViewModel> GetPersonalInfoCreateViewModel(int languageId);
-        public Task<bool> CreatePersonalInfo(PersonalInfoCreateViewModel model);
+        public Task<bool> CreatePersonalInfo(PersonalInfoCreateViewModel model, int resumeId);
+        public Task<bool> UpdatePersonalInfo(PersonalInfoUpdateViewModel model);
+        public Task<PersonalInfoViewModel> GetPersonalInfoViewModel(int resumeId);
         public Task<bool> CreateProfile(int languageId, ProfileCreateViewModel model);
         public Task<ProfileTranslationCreateViewModel> GetProfileTranslationCreateViewModel(int languageId);
         public Task<bool> CreateProfileTranslation(int languageId, ProfileTranslationCreateViewModel model);
         public Task<ProfileCreateViewModel> GetProfileCreateViewModel(int languageId);
-        public Task<bool> UpdatePersonalInfo(PersonalInfoUpdateViewModel model);
         public Task<ProfileUpdateViewModel> GetProfileUpdateViewModel();
         public Task<bool> UpdateProfileTranslation(ProfileTranslationUpdateViewModel model);
-        public Task<List<EducationUpdateViewModel>> GetEducationUpdateViewModel();
-        public Task<List<ExperienceUpdateViewModel>> GetExperienceUpdateViewModel();
+        
+       
     }
 }

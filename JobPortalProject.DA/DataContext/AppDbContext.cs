@@ -51,6 +51,7 @@ namespace JobPortalProject.DA.DataContext
         public DbSet<ExperienceTranslation> ExperienceTranslations { get; set; }=null!;
         public DbSet<Education> Educations { get; set; }=null!;
         public DbSet<EducationTranslation> EducationTranslations { get; set; } = null!;
+        public DbSet<JobApplication> JobApplications { get; set; }=null!;
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -100,8 +101,17 @@ namespace JobPortalProject.DA.DataContext
                 .WithMany()
                 .HasForeignKey(p => p.AddressId)
                 .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<JobApplication>()
+       .HasOne(ja => ja.Job)
+       .WithMany(j => j.JobApplications)
+       .HasForeignKey(ja => ja.JobId)
+       .OnDelete(DeleteBehavior.Cascade);
 
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<JobApplication>()
+                .HasOne(ja => ja.Candidate)
+                .WithMany(c => c.JobApplications)
+                .HasForeignKey(ja => ja.CandidateId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             base.OnModelCreating(modelBuilder);
         }

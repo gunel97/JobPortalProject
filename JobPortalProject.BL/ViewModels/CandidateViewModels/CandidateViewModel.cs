@@ -1,4 +1,5 @@
-﻿using JobPortalProject.BL.ViewModels.LanguageViewModels;
+﻿using JobPortalProject.BL.UI.ViewModels;
+using JobPortalProject.BL.ViewModels.LanguageViewModels;
 using JobPortalProject.BL.ViewModels.ResumeViewModels;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,7 @@ namespace JobPortalProject.BL.ViewModels.CandidateViewModels
     public class CandidateDashboardViewModel
     {
         public int ResumeId { get; set; }
+        public string? UserName { get; set; }
         public List<LanguageViewModel> EmptyLanguages { get; set; } = new List<LanguageViewModel>();
         public List<LanguageViewModel> ReadyLanguages { get; set; } = new List<LanguageViewModel>();
     }

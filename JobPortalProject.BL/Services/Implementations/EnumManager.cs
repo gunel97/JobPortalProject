@@ -55,5 +55,15 @@ namespace JobPortalProject.BL.Services.Implementations
 
             return genderListItems;
         }
+
+        public List<SelectListItem> GetJobApplicationStatusListItems()
+        {
+            var jobApplicationStatusItems =new List<SelectListItem>();
+            var jobApplicationStatuses = Enum.GetValues(typeof(JobApplicationStatus)).Cast<JobApplicationStatus>().ToList();
+            jobApplicationStatuses.ForEach(x => jobApplicationStatusItems.Add(
+            new SelectListItem(_localizer.GetValue(x.ToString()), ((int)x).ToString())));
+
+            return jobApplicationStatusItems;
+        }
     }
 }

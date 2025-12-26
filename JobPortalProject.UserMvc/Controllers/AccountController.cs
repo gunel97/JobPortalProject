@@ -137,7 +137,7 @@ namespace JobPortalProject.UserMvc.Controllers
                 var role = await _userService.GetUserRoleAsync(model.Username);
 
                 if (role == "Company")
-                    return RedirectToAction("CompanyDashboard", "Company");
+                    return RedirectToAction("Dashboard", "Company");
             }
 
             return RedirectToAction("Index", "Home");

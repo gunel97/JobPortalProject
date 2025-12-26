@@ -1,0 +1,97 @@
+﻿@model EducationUpdatePageViewModel
+
+
+<form method="post" class="edit-profile-form profile-form">
+    @if (Model.UpdateModels.Any())
+    {
+        @for (int i = 0; i < Model.UpdateModels.Count(); i++)
+        {
+            <div id="resumeEducationRow" class="row">
+                <input asp-for="@Model.UpdateModels[i].Id" value="@Model.UpdateModels[i].Id" type="hidden" />
+                <div class="section-title2">
+                    <h5>Educational Qualification:</h5>
+                </div>
+                <div class="education-row">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="info-title">
+                                <h6>Academic Information:</h6>
+                                <div class="dash"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-inner mb-25">
+                                <label>Education Level*</label>
+                                <div class="input-area">
+                                    <img src="~/images/icon/qualification-2.svg" alt="">
+                                    <select asp-items="@Model.EducationTypes" asp-for="@Model.UpdateModels[i].EducationTypeId" class="select1">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        @for (int t = 0; t < Model.UpdateModels[i].Translations.Count(); t++)
+                        {
+                            <input asp-for="@Model.UpdateModels[i].Translations[t].EducationId" value="@Model.UpdateModels[i].Id" type="hidden" />
+                            <input asp-for="@Model.UpdateModels[i].Translations[t].Id" value="@Model.UpdateModels[i].Translations[t].Id" type="hidden" />
+                            <input asp-for="@Model.UpdateModels[i].Translations[t].LanguageId" value="@Model.UpdateModels[i].Translations[t].LanguageId" type="hidden" />
+                            <div class="col-md-6">
+                                <div class="form-inner mb-25">
+                                    <label for="institute">Institute/University* <img src="@Model.UpdateModels[i].Translations[t].LangIcon" /></label>
+                                    <div class="input-area">
+                                        <img src="~/images/icon/univercity.svg" alt="">
+                                        <input asp-for="@Model.UpdateModels[i].Translations[t].SchoolName" id="institute" placeholder="Type Your Institute Name...">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-inner mb-25">
+                                    <label>My Major* <img src="@Model.UpdateModels[i].Translations[t].LangIcon" /></label>
+                                    <div class="input-area">
+                                        <img src="~/images/icon/major.svg" alt="">
+                                        <input asp-for="@Model.UpdateModels[i].Translations[t].MajorName" id="institute" placeholder="Type Your Major Name...">
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        <div class="col-md-6">
+                            <div class="form-inner mb-20">
+                                <label for="datepicker10">Starting Period*</label>
+                                <div class="input-area">
+                                    <img src="~/images/icon/calender2.svg" alt="">
+                                    <input asp-for="@Model.UpdateModels[i].StartDate" id="datepicker10" placeholder="DD/MM/YY">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-inner mb-20">
+                                <label for="datepicker11">Ending Period*</label>
+                                <div class="input-area">
+                                    <img src="~/images/icon/calender2.svg" alt="">
+                                    <input asp-for="@Model.UpdateModels[i].EndDate" id="datepicker11" placeholder="DD/MM/YY">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="add-row">
+                    <button type="button"
+                            onclick="deleteEducation(@Model.UpdateModels[i].Id)" class="remove-work-area-row remove">
+                        Remove
+                    </button>
+                </div>
+            </div>
+        }
+        <div class="col-md-6">
+            <div class="form-inner">
+                <button class="primry-btn-2 lg-btn w-unset" type="submit">Update Change</button>
+            </div>
+        </div>
+    }
+    <br />
+    <div class="action-btn-group">
+        <div class="add-row">
+            <a data-bs-toggle="modal" data-bs-target="#addEducation" class="primry-btn-2 lg-btn w-unset">Add New +</a>
+        </div>
+    </div>
+</form>
+

@@ -20,14 +20,16 @@ namespace JobPortalProject.UserMvc.Controllers
         private readonly ICompanyService _companyService;
         private readonly IJobExtraBenefitService _benefitService;
         private readonly IJobResponsibilityService _responsibilityService;
+        private readonly IJobApplicationService _jobApplicationService;
 
-        public JobController(IJobService jobService, IJobListingService jobListingService, ICompanyService companyService, IJobExtraBenefitService benefitService, IJobResponsibilityService responsibilityService)
+        public JobController(IJobService jobService, IJobListingService jobListingService, ICompanyService companyService, IJobExtraBenefitService benefitService, IJobResponsibilityService responsibilityService, IJobApplicationService jobApplicationService)
         {
             _jobService = jobService;
             _jobListingService = jobListingService;
             _companyService = companyService;
             _benefitService = benefitService;
             _responsibilityService = responsibilityService;
+            _jobApplicationService = jobApplicationService;
         }
 
         public async Task<IActionResult> Index()
@@ -80,7 +82,7 @@ namespace JobPortalProject.UserMvc.Controllers
                 return View(model);
             }
 
-            return RedirectToAction("CompanyDashboard", "Company");
+            return RedirectToAction("Dashboard", "Company");
         }
 
         public async Task<IActionResult> Update(string id)
@@ -244,6 +246,19 @@ namespace JobPortalProject.UserMvc.Controllers
             TempData["Success"] = "Extra Benefit added successfully!";
             TempData["CloseModal"] = "true";
             return RedirectToAction("Update", jobUpdateModel);
+        }
+
+        public async Task<IActionResult> Applicants(string id)
+        {
+            int jobId = int.Parse(id.Split('-').Last());
+            var job = await _jobService.GetByIdAsync(jobId);
+            if (job == null)
+                return NotFound();
+
+            var model = await _jobApplicationService.GetApplicantsViewModel(jobId);
+            model.Job = job;
+
+            return View(model);
         }
 
         private async Task<string> RenderPartialViewToString(string viewName, object model)

@@ -12,10 +12,12 @@ namespace JobPortalProject.BL.ViewModels.ExperienceViewModels
     public class ExperienceViewModel
     {
         public int Id { get; set; }
+        public int ResumeId { get; set; } 
+        public string CompanyName { get; set; } = null!;
+        public string Responsibility { get; set; } = null!;
+        public string Position { get; set; } = null!;
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public int ResumeId { get; set; }
-        public List<ExperienceTranslationViewModel> Translations { get; set; } = [];
     }
 
     public class ExperienceCreateViewModel
@@ -34,8 +36,13 @@ namespace JobPortalProject.BL.ViewModels.ExperienceViewModels
         public DateTime StartDate { get; set; }
         [DataType(DataType.Date)]
         public DateTime EndDate { get; set; }
-        public CandidateDashboardViewModel? Dashboard { get; set; }
         public List<ExperienceTranslationUpdateViewModel> Translations { get; set; } = [];
+    }
+
+    public class ExperienceUpdatePageViewModel
+    {
+        public CandidateDashboardViewModel? Dashboard { get; set; }
+        public List<ExperienceUpdateViewModel> Models { get; set; } = [];
     }
 
     public class ExperienceAddViewModel
@@ -60,8 +67,11 @@ namespace JobPortalProject.BL.ViewModels.ExperienceViewModels
     {
         public int LanguageId { get; set; }
         public int ExperienceId { get; set; }
+        [Required(ErrorMessage = "Company name is required")]
         public string CompanyName { get; set; } = null!;
+        [Required(ErrorMessage = "Position is required")]
         public string Position { get; set; } = null!;
+        [Required(ErrorMessage = "Responsibility is required")]
         public string Responsibility { get; set; } = null!;
     }
 

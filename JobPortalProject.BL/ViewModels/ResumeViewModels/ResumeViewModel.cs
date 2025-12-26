@@ -1,4 +1,7 @@
-﻿using JobPortalProject.BL.ViewModels.PersonalInfoViewModels;
+﻿using JobPortalProject.BL.ViewModels.EducationViewModels;
+using JobPortalProject.BL.ViewModels.ExperienceViewModels;
+using JobPortalProject.BL.ViewModels.PersonalInfoViewModels;
+using JobPortalProject.DA.DataContext.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +14,12 @@ namespace JobPortalProject.BL.ViewModels.ResumeViewModels
     {
         public int Id {  get; set; }
         public int CandidateId {  get; set; }
+        public string About { get; set; } = null!;
+        public List<string> Skills { get; set; } = [];
+        public List<string> Languages { get; set; } = [];
+        public PersonalInfoViewModel PersonalInfo { get; set; } = null!;
+        public List<ExperienceViewModel> Experiences { get; set; } = [];
+        public List<EducationViewModel> Educations { get; set; } = [];
     }
 
     public class ResumeCreateViewModel

@@ -1,0 +1,54 @@
+﻿@model CompanyTranslationEditPageViewModel
+
+@if (Model.AddressUpdateViewModels.Any())
+{
+    <div class="section-title2">
+        <h5>Locations:</h5>
+    </div>
+    @for (int i = 0; i < Model.AddressUpdateViewModels.Count; i++)
+    {
+        @if (Model.AddressUpdateViewModels[i].IsMainAddress)
+        {
+            <div class="section-title2">
+                <h5>Main Address:</h5>
+            </div>
+        }
+        <div id="address${@Model.AddressUpdateViewModels[i].Id}">
+            <input asp-for="AddressUpdateViewModels[i].AddressTranslationId" value="@Model.AddressUpdateViewModels[i].AddressTranslationId" type="hidden" />
+            <input asp-for="AddressUpdateViewModels[i].Id" value="@Model.AddressUpdateViewModels[i].Id" type="hidden" />
+            <div class="col-md-6">
+                <div class="form-inner mb-25">
+                    <label for="location">City *</label>
+                    <div class="input-area">
+                        <img src="~/images/icon/map-2.svg" alt="">
+                        <select asp-items="Model.AddressUpdateViewModels[i].CityListItems" asp-for="AddressUpdateViewModels[i].CityId" class="select1"></select>
+                        <span asp-validation-for="AddressUpdateViewModels[i].CityId"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-inner mb-25">
+                    <label for="location">Street *</label>
+                    <div class="input-area">
+                        <img src="~/images/icon/map-2.svg" alt="">
+                        <input asp-for="AddressUpdateViewModels[i].Street" id="location" placeholder="Type Street">
+                        <span asp-validation-for="AddressUpdateViewModels[i].Street"></span>
+                    </div>
+                </div>
+            </div>
+            @if (!Model.AddressUpdateViewModels[i].IsMainAddress)
+            {
+                <div class="add-row">
+                    <button onclick='removeAddress(@Model.AddressUpdateViewModels[i].Id, @Model.LangaugeId)'
+                type="button" class="remove-work-area-row remove">
+                    Remove Address
+                </button>
+            </div>
+            }
+            <div class="section-title two">
+                <div class="dash"></div>
+            </div>
+
+        </div>
+    }
+}

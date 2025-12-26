@@ -4,6 +4,7 @@ using JobPortalProject.BL.UI.ViewModels;
 using JobPortalProject.BL.ViewModels.AddressViewModels;
 using JobPortalProject.BL.ViewModels.CompanySocialViewModels;
 using JobPortalProject.BL.ViewModels.CompanyViewModels;
+using JobPortalProject.BL.ViewModels.JobApplicationViewModels;
 using JobPortalProject.BL.ViewModels.JobExtraBenefitViewModels;
 using JobPortalProject.BL.ViewModels.WorkingFieldViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -24,11 +25,12 @@ namespace JobPortalProject.UserMvc.Controllers
         private readonly IWorkingFieldTranslationService _workingFieldTranslationService;
         private readonly IAddressService _addressService;
         private readonly ICompanySocialService _companySocialService;
+        private readonly IJobApplicationService _jobApplicationService;
 
         public CompanyController(ICompanyDetailsService companyDetailsService, ICompanyListingService companyListingService,
             ICompanyService companyService, ICompanyDashboardService companyDashboardService, ICookieService cookieService,
             IWorkingFieldService workingFieldService, IWorkingFieldTranslationService workingFieldTranslationService,
-            IAddressService addressService, ICompanySocialService companySocialService)
+            IAddressService addressService, ICompanySocialService companySocialService, IJobApplicationService jobApplicationService)
         {
             _companyDetailsService = companyDetailsService;
             _companyListingService = companyListingService;
@@ -39,6 +41,7 @@ namespace JobPortalProject.UserMvc.Controllers
             _workingFieldTranslationService = workingFieldTranslationService;
             _addressService = addressService;
             _companySocialService = companySocialService;
+            _jobApplicationService = jobApplicationService;
         }
 
         public async Task<IActionResult> Index()
@@ -60,7 +63,7 @@ namespace JobPortalProject.UserMvc.Controllers
             return View(companyDetailsViewModel);
         }
 
-        public async Task<IActionResult> CompanyDashboard()
+        public async Task<IActionResult> Dashboard()
         {
             var model = await _companyDashboardService.GetCompanyDashboardViewModelAsync();
             var isActive = await _companyService.IsCompanyActive();
@@ -153,19 +156,35 @@ namespace JobPortalProject.UserMvc.Controllers
             }
         }
 
-        public async Task<IActionResult> DeleteAddress(int id)
+        [HttpPost]
+        public async Task<IActionResult> DeleteAddress(int id, int languageId)
         {
+            var companyId = _companyService.GetCompanyIdOfUser();
             var address = await _addressService.GetByIdAsync(id);
-
             if (address == null)
                 return BadRequest();
 
             var deleted = await _addressService.DeleteAsync(id);
             if (deleted)
-                return NoContent();
-            else return RedirectToAction("CompanyDashboard", "Company");
-        }
+            {
+                var model = await _companyService.GetCompanyTranslationEditPageAsync(languageId);
+                if (model == null)
+                    return NotFound();
 
+                var addressHtml = await RenderPartialViewToString("_AddressUpdatePartial", model);
+
+                return Json(new
+                {
+                    success = true,
+                    addressHtml
+                });
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+        
         public async Task<IActionResult> AddTranslation()
         {
             var model = await _companyService.GetAddTranslationToExistedCompanyViewModel(2);
@@ -256,8 +275,6 @@ namespace JobPortalProject.UserMvc.Controllers
             TempData["CloseModal"] = "true";
             return RedirectToAction("EditCompanyProfile", companyUpdateModel);
         }
-
-
 
         private async Task<string> RenderPartialViewToString(string viewName, object model)
         {

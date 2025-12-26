@@ -72,6 +72,7 @@ namespace JobPortalProject.DA.DataContext.Entities
         public List<JobExtraBenefit> ExtraBenefits { get; set; } = [];
         public List<JobMainDuty> MainDuties { get; set; } = [];
         public List<JobTranslation> JobTranslations { get; set; } = [];
+        public List<JobApplication> JobApplications { get; set; } = [];
 
     }
 
@@ -165,7 +166,8 @@ namespace JobPortalProject.DA.DataContext.Entities
     {
         public string AppUserId { get; set; } = null!;
         public AppUser? AppUser { get; set; }
-        public Resume? Resume { get; set; }      
+        public Resume? Resume { get; set; }
+        public List<JobApplication> JobApplications { get; set; } = [];
     }
 
     public class PersonalInfo : TimeStample
@@ -402,6 +404,15 @@ namespace JobPortalProject.DA.DataContext.Entities
         public Address? Address { get; set; }
         public int LanguageId { get; set; }
         public Language? Language { get; set; }
+    }
+
+    public class JobApplication : TimeStample
+    {
+        public int JobId { get; set; }
+        public Job? Job { get; set; }
+        public int CandidateId { get; set; }
+        public Candidate? Candidate { get; set; }
+        public JobApplicationStatus JobStatus { get; set; } 
     }
 
 }

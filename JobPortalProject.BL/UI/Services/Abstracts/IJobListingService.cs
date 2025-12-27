@@ -9,6 +9,7 @@ namespace JobPortalProject.BL.UI.Services.Abstracts
 {
     public interface IJobListingService
     {
-        public Task<JobListingViewModel> GetJobListingViewModel();
+        //public Task<JobListingViewModel> GetJobListingViewModel();
+        public Task<PagedJobListingViewModel> GetPagedJobListingViewModel(int index=0, int size=10);
     }
 }

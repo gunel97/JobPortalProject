@@ -1,0 +1,68 @@
+﻿
+@model PagedResultBaseModel
+
+<div class="pagination-area">
+    <nav aria-label="...">
+        <ul class="pagination">
+            <li class="page-item @(!Model.HasPrevious ? "disabled" : "")">
+                <a class="page-link" asp-action="Index"
+                   asp-route-index="@(Model.Index - 1)"
+                   asp-route-size="@Model.Size" tabindex="-1"></a>
+            </li>
+            @{
+                var startPage = Math.Max(0, Model.Index - 2);
+                var endPage = Math.Min(Model.Pages - 1, Model.Index + 2);
+            }
+            @if (startPage > 0)
+            {
+                <li class="page-item">
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-index="0"
+                       asp-route-size="@Model.Size">
+                        1
+                    </a>
+                </li>
+                @if (startPage > 1)
+                {
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                }
+            }
+
+            @for (int i = startPage; i <= endPage; i++)
+            {
+                <li class="page-item @(i == Model.Index ? "active" : "")">
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-index="@i"
+                       asp-route-size="@Model.Size">
+                        @(i + 1)
+                    </a>
+                </li>
+            }
+
+            @if (endPage < Model.Pages - 1)
+            {
+                @if (endPage < Model.Pages - 2)
+                {
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                }
+                <li class="page-item">
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-index="@(Model.Pages - 1)"
+                       asp-route-size="@Model.Size">
+                        @Model.Pages
+                    </a>
+                </li>
+            }
+            <li class="page-item @(!Model.HasNext ? "disabled" : "")">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-index="@(Model.Index + 1)"
+                   asp-route-size="@Model.Size">
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>

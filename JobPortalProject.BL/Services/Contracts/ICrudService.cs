@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Query;
+﻿using JobPortalProject.DA.Pagination;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,11 @@ namespace JobPortalProject.BL.Services.Contracts
                                     Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
                                     Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
                                     bool AsNoTracking = false);
+        //Task<PagedResult<TViewModel>> GetPagedListAsync(Expression<Func<TEntity, bool>>? predicate = null,
+        //                                Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        //                                Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        //                                int index = 0, int size = 10, bool enableTracking = false);
+
         Task<TViewModel> CreateAsync(TCreateViewModel createViewModel);
         Task<bool> UpdateAsync(int id, TUpdateViewModel model);
         Task<bool> DeleteAsync(int id);

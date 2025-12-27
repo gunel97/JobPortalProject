@@ -1,6 +1,7 @@
 ﻿using JobPortalProject.BL.ViewModels.JobViewModels;
 using JobPortalProject.DA.DataContext.Entities;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using JobPortalProject.BL.ViewModels.Pagination;
 
 namespace JobPortalProject.BL.Services.Contracts
 {
@@ -14,5 +15,6 @@ namespace JobPortalProject.BL.Services.Contracts
         public Task<JobUpdateViewModel> GetUpdateViewModel(int jobId);
         public Task<bool> SoftDeleteJob(int id);
         public Task<bool> DeactivateJob(int id);
+        public Task<PagedResultModel<JobViewModel>> GetPagedJobsAsync(int index = 0, int size = 10);
     }
 }

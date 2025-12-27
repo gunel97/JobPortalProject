@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using JobPortalProject.BL.Services.Contracts;
 using JobPortalProject.DA.DataContext.Entities;
+using JobPortalProject.DA.Pagination;
 using JobPortalProject.DA.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore.Query;
 using System;
@@ -87,5 +88,5 @@ namespace JobPortalProject.BL.Services.Implementations
 
             return true;
         }
-    }
+    } 
 }

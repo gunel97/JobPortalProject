@@ -5,6 +5,7 @@ using JobPortalProject.BL.ViewModels.AddressViewModels;
 using JobPortalProject.BL.ViewModels.JobViewModels;
 using JobPortalProject.DA.DataContext.Entities;
 using JobPortalProject.DA.DataContext.Enums;
+using JobPortalProject.BL.ViewModels.Pagination;
 using JobPortalProject.DA.Repositories.Contracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -127,7 +128,7 @@ namespace JobPortalProject.BL.Services.Implementations
             var jobs = await Repository.GetAllAsync(
                 predicate: x=>!x.IsDeleted,
                 include: x => x
-               .Include(x => x.JobTranslations.Where(t => t.LanguageId == languageId))
+               .Include(x => x.JobTranslations.Where(t => t.LanguageId == language.Id))
                .Include(x => x.JobCategory!).ThenInclude(x => x.JobCategoryTranslations.Where(t => t.LanguageId == languageId))
                .Include(x => x.Responsibilities).ThenInclude(t => t.JobResponsibilityTranslations.Where(x => x.LanguageId == languageId))
                .Include(x => x.MainDuties).ThenInclude(t => t.JobMainDutyTranslations.Where(x => x.LanguageId == languageId))
@@ -210,6 +211,40 @@ namespace JobPortalProject.BL.Services.Implementations
             var jobViewModels = jobs.Select(x =>MapToJobViewModel(x, languageId)).ToList();
 
             return jobViewModels;
+        }
+
+        public async Task<PagedResultModel<JobViewModel>> GetPagedJobsAsync(int index = 0, int size = 10)
+        {
+            var language = await _cookieService.GetLanguageAsync();
+            var pagedJobs = await Repository.GetPagedListAsync(predicate: x => !x.IsDeleted,
+                orderBy: x=>x.OrderByDescending(j=>j.CreatedAt),
+                include: x => x
+                .Include(x => x.JobTranslations.Where(t => t.LanguageId == language.Id))
+                .Include(x => x.JobCategory!).ThenInclude(x => x.JobCategoryTranslations.Where(t => t.LanguageId == language.Id))
+                .Include(x => x.Responsibilities).ThenInclude(t => t.JobResponsibilityTranslations.Where(x => x.LanguageId == language.Id))
+                .Include(x => x.MainDuties).ThenInclude(t => t.JobMainDutyTranslations.Where(x => x.LanguageId == language.Id))
+                .Include(x => x.ExtraBenefits).ThenInclude(t => t.JobExtraBenefitTranslations.Where(x => x.LanguageId == language.Id))
+                .Include(x => x.Company!).ThenInclude(t => t.CompanyTranslations.Where(x => x.LanguageId == language.Id))
+                .Include(a => a.Address!).ThenInclude(a => a.AddressTranslations.Where(x => x.LanguageId == language.Id))
+                , index:index, size:size);
+
+            var jobViewModels = new List<JobViewModel>();
+            foreach(var item in pagedJobs.Items)
+            {
+                var model = MapToJobViewModel(item, language.Id);
+                jobViewModels.Add(model);
+            }
+
+            var pagedJobModels = new PagedResultModel<JobViewModel>
+            {
+                Items = jobViewModels,
+                Index = pagedJobs.Index,
+                Size = pagedJobs.Size,
+                Count = pagedJobs.Count,
+                Pages = pagedJobs.Pages,
+            };
+
+            return pagedJobModels;
         }
 
         private JobViewModel MapToJobViewModel (Job jobEntity, int languageId)
@@ -311,5 +346,7 @@ namespace JobPortalProject.BL.Services.Implementations
             }
                 return true;
         }
+
+        
     }
 }

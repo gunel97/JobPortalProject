@@ -4,6 +4,6 @@ namespace JobPortalProject.BL.UI.Services.Abstracts
 {
     public interface ICompanyListingService
     {
-        Task<CompanyListingViewModel> GetListsAsync();
+        Task<PagedCompanyListingViewModel> GetListsAsync(int index=0, int size=10);
     }
 }

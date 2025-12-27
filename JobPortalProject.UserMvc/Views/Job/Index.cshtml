@@ -1,5 +1,5 @@
 ﻿@{
-    JobListingViewModel model = Model;
+    PagedJobListingViewModel model = Model;
     var jobs = model.Jobs;
     var genders = model.Genders;
     var jobCategories = model.JobCategories;
@@ -17,7 +17,7 @@
                     <span></span>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item"><a asp-controller="home" asp-action="index">Home</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Job Listing  </li>
                         </ol>
                     </nav>
@@ -175,7 +175,10 @@
                 <div class="job-listing-wrrap">
                     <div class="row g-4 mb-25">
                         <div class="col-lg-6 d-flex align-items-center">
-                            <p class="show-item">Showing results 10 in 200 jobs list</p>
+                            <p class="show-item">@jobs.Count jobs found.</p>
+                            @if(jobs.Count>0){
+                            <p class="show-item">Showing results @((jobs.Index*jobs.Size)+1) - @Math.Min((jobs.Index+1)*jobs.Size, jobs.Count) from @jobs.Count jobs</p>
+                            }
                         </div>
                         <div class="col-lg-6 d-flex align-items-center justify-content-lg-end">
                             <div class="grid-select-area">
@@ -219,7 +222,9 @@
                         </div>
                     </div>
                     <div class="row ">
-                        @foreach (var job in jobs)
+                        @if(jobs.Items.Any())
+                        {
+                        @foreach (var job in jobs.Items)
                         {
                             <div class="col-lg-12 mb-30">
                                 <div class="job-listing-card">
@@ -261,19 +266,16 @@
                                     </div>
                                 </div>
                             </div>
+                            }
+                        }
+                        @{
+                            ViewData["RouteData"] = new Dictionary<string, string>
+                            {
+                             { "size", jobs.Size.ToString() }
+                            };
                         }
                         <div class="col-lg-12 d-flex justify-content-center">
-                            <div class="pagination-area">
-                                <nav aria-label="...">
-                                    <ul class="pagination">
-                                        <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1"></a></li>
-                                        <li class="page-item active" aria-current="page"><a class="page-link" href="#">01</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">02</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">03</a></li>
-                                        <li class="page-item"><a class="page-link" href="#"></a></li>
-                                    </ul>
-                                </nav>
-                            </div>
+                            <partial name="_PaginationPartial" model="@jobs" />
                         </div>
                     </div>
                 </div>

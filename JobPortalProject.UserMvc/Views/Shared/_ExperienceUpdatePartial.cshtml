@@ -1,11 +1,11 @@
-﻿@model List<ExperienceUpdateViewModel>
+﻿@model ExperienceUpdatePageViewModel
 
-<form method="post" class="edit-profile-form profile-form">
-    @if (Model.Count() != 0)
+<form method="post" class=" edit-profile-form profile-form">
+    @if (Model.Models.Any())
     {
-        @for (int i = 0; i < Model.Count(); i++)
+        @for (int i = 0; i < Model.Models.Count(); i++)
         {
-            <input asp-for="@Model[i].Id" value="@Model[i].Id" type="hidden" />
+            <input asp-for="@Model.Models[i].Id" value="@Model.Models.[i].Id" type="hidden" />
             <div class="section-title2">
                 <h5>Employment Information:</h5>
             </div>
@@ -17,33 +17,33 @@
                             <div class="dash"></div>
                         </div>
                     </div>
-                    @for (int t = 0; t < Model[i].Translations.Count(); t++)
+                    @for (int t = 0; t < Model.Models[i].Translations.Count(); t++)
                     {
-                        <input asp-for="@Model[i].Translations[t].ExperienceId" value="@Model[i].Id" type="hidden" />
-                        <input asp-for="@Model[i].Translations[t].LanguageId" value="@Model[i].Translations[t].LanguageId" type="hidden" />
+                        <input asp-for="@Model.Models[i].Translations[t].ExperienceId" value="@Model.Models[i].Id" type="hidden" />
+                        <input asp-for="@Model.Models[i].Translations[t].LanguageId" value="@Model.Models[i].Translations[t].LanguageId" type="hidden" />
                         <div class="col-md-6">
                             <div class="form-inner mb-25">
-                                <label for="companies">Company Name*<img src="@Model[i].Translations[t].LangIcon" /></label>
+                                <label for="companies">Company Name*<img src="@Model.Models[i].Translations[t].LangIcon" /></label>
                                 <div class="input-area">
                                     <img src="~/images/icon/company-2.svg" alt="">
-                                    <input asp-for="@Model[i].Translations[t].CompanyName" id="companies" placeholder="Egenslab">
+                                    <input asp-for="@Model.Models[i].Translations[t].CompanyName" id="companies" placeholder="Egenslab">
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-inner mb-25">
-                                <label for="desigation">Position* <img src="@Model[i].Translations[t].LangIcon" /></label>
+                                <label for="desigation">Position* <img src="@Model.Models[i].Translations[t].LangIcon" /></label>
                                 <div class="input-area">
                                     <img src="~/images/icon/designation-2.svg" alt="">
-                                    <input asp-for="@Model[i].Translations[t].Position" id="companies" placeholder="Software Developer...">
+                                    <input asp-for="@Model.Models[i].Translations[t].Position" id="companies" placeholder="Software Developer...">
                                 </div>
                             </div>
                         </div>
 
                         <div class="col-md-12">
                             <div class="form-inner mb-20">
-                                <label for="description1">Responsibility* <img src="@Model[i].Translations[t].LangIcon" /></label>
-                                <textarea asp-for="@Model[i].Translations[t].Responsibility" id="description1" placeholder="Write Your Responsibility..."></textarea>
+                                <label for="description1">Responsibility* <img src="@Model.Models[i].Translations[t].LangIcon" /></label>
+                                <textarea asp-for="@Model.Models[i].Translations[t].Responsibility" id="description1" placeholder="Write Your Responsibility..."></textarea>
                             </div>
                         </div>
                     }
@@ -52,7 +52,7 @@
                             <label for="datepicker6">Starting Period*</label>
                             <div class="input-area">
                                 <img src="~/images/icon/calender2.svg" alt="">
-                                <input asp-for="@Model[i].StartDate" id="datepicker6" placeholder="DD/MM/YY">
+                                <input asp-for="@Model.Models[i].StartDate" id="datepicker6" placeholder="DD/MM/YY">
                             </div>
                         </div>
                     </div>
@@ -61,7 +61,7 @@
                             <label for="datepicker7">Ending Period*</label>
                             <div class="input-area">
                                 <img src="~/images/icon/calender2.svg" alt="">
-                                <input asp-for="@Model[i].EndDate" id="datepicker7" placeholder="DD/MM/YY">
+                                <input asp-for="@Model.Models[i].EndDate" id="datepicker7" placeholder="DD/MM/YY">
                             </div>
                         </div>
                     </div>
@@ -69,7 +69,7 @@
             </div>
             <div class="add-row">
                 <button type="button"
-                onclick="deleteExperience(@Model[i].Id)" class="remove-work-area-row remove">
+                onclick="deleteExperience(@Model.Models[i].Id)" class="remove-work-area-row remove">
                     Remove
                 </button>
             </div>

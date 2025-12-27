@@ -53,7 +53,7 @@ namespace JobPortalProject.BL.UI.Services.Implementations
                 JobCategories = jobCategories.ToList(),
                 Addresses = addressesByCities.ToList(),
                 Companies = companies.ToList(),
-                Jobs=jobs.ToList(),
+                Jobs=jobs.OrderByDescending(j=>j.CreatedAt).Take(6).ToList(),
             };
 
             return homeViewModel;

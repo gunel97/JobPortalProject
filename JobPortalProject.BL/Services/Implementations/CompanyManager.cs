@@ -6,6 +6,7 @@ using JobPortalProject.BL.ViewModels.AddressViewModels;
 using JobPortalProject.BL.ViewModels.CompanySocialViewModels;
 using JobPortalProject.BL.ViewModels.CompanyViewModels;
 using JobPortalProject.BL.ViewModels.LanguageViewModels;
+using JobPortalProject.BL.ViewModels.Pagination;
 using JobPortalProject.BL.ViewModels.WorkingFieldViewModels;
 using JobPortalProject.DA.DataContext.Entities;
 using JobPortalProject.DA.Repositories.Contracts;
@@ -27,14 +28,12 @@ namespace JobPortalProject.BL.Services.Implementations
         private readonly FileService _fileService;
         private readonly IWorkingFieldService _workingFieldService;
         private readonly ICompanyTranslationService _companyTranslationService;
-        private readonly IWorkingFieldTranslationService _workingFieldTranslationService;
         private readonly IAddressService _addressService;
-        private readonly IAddressTranslationService _addressTranslationService;
         private readonly ILanguageService _languageService;
         private readonly ICityService _cityService;
         private readonly ISocialMediaService _socialMediaService;
 
-        public CompanyManager(IRepositoryAsync<Company> repository, IMapper mapper, ICompanyTypeService companyTypeService, ICookieService cookieService, IHttpContextAccessor httpContextAccessor, ICompanySocialService companySocialService, ICloudinaryService cloudinaryService, FileService fileService, ICompanyTranslationService translationService, IWorkingFieldService workingFieldService, IWorkingFieldTranslationService workingFieldTranslationService, IAddressService addressService, ILanguageService languageService, ICityService cityService, IAddressTranslationService addressTranslationService, ISocialMediaService socialMediaService) : base(repository, mapper)
+        public CompanyManager(IRepositoryAsync<Company> repository, IMapper mapper, ICompanyTypeService companyTypeService, ICookieService cookieService, IHttpContextAccessor httpContextAccessor, ICompanySocialService companySocialService, ICloudinaryService cloudinaryService, FileService fileService, ICompanyTranslationService translationService, IWorkingFieldService workingFieldService, IAddressService addressService, ILanguageService languageService, ICityService cityService, ISocialMediaService socialMediaService) : base(repository, mapper)
         {
             _companyTypeService = companyTypeService;
             _cookieService = cookieService;
@@ -44,11 +43,9 @@ namespace JobPortalProject.BL.Services.Implementations
             _fileService = fileService;
             _companyTranslationService = translationService;
             _workingFieldService = workingFieldService;
-            _workingFieldTranslationService = workingFieldTranslationService;
             _addressService = addressService;
             _languageService = languageService;
             _cityService = cityService;
-            _addressTranslationService = addressTranslationService;
             _socialMediaService = socialMediaService;
         }
 
@@ -70,9 +67,9 @@ namespace JobPortalProject.BL.Services.Implementations
         {
             var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
             var company = await Repository.GetAsync(predicate: x => x.AppUserId == userId,
-                include: x=>x.Include(x=>x.CompanyTranslations)
-                .Include(x=>x.WorkingFields).ThenInclude(x=>x.Translations)
-                .Include(x=>x.Addresses).ThenInclude(x=>x.AddressTranslations));
+                include: x => x.Include(x => x.CompanyTranslations)
+                .Include(x => x.WorkingFields).ThenInclude(x => x.Translations)
+                .Include(x => x.Addresses).ThenInclude(x => x.AddressTranslations));
 
             return company!;
         }
@@ -106,10 +103,10 @@ namespace JobPortalProject.BL.Services.Implementations
             var addressesList = await _addressService.GetAddressSelectListItems(existedCompany.Id, selectedLanguageId);
             var socialMediasList = await _socialMediaService.GetSocialMediaListItems();
             var emptyLanguages = new List<LanguageViewModel>();
-            
+
             foreach (var item in languages)
             {
-                if(!company.CompanyTranslations.Any(x=>x.LanguageId==item.Id))
+                if (!company.CompanyTranslations.Any(x => x.LanguageId == item.Id))
                     emptyLanguages.Add(item);
             }
 
@@ -119,16 +116,16 @@ namespace JobPortalProject.BL.Services.Implementations
                 SelectedUpdateLanguageId = selectedLanguageId,
                 CompanySize = company.CompanySize,
                 CompanyEmail = company.CompanyEmail,
-                PrimaryPhone=company.PrimaryPhone,
-                SecondaryPhone=company.SecondaryPhone,
+                PrimaryPhone = company.PrimaryPhone,
+                SecondaryPhone = company.SecondaryPhone,
                 CoverPhotoUrl = company.CoverPhotoUrl,
                 LogoUrl = company.LogoUrl,
                 CompanyTypeId = company.CompanyTypeId,
                 CompanyTypeList = companyTypeSelectListItems,
-                AddressesOfCompany=addressesList,
-                CitiesList=citiesList,
-                SocialMediasList=socialMediasList,
-                EmptyLanguages=emptyLanguages,
+                AddressesOfCompany = addressesList,
+                CitiesList = citiesList,
+                SocialMediasList = socialMediasList,
+                EmptyLanguages = emptyLanguages,
                 CompanyTranslations = company.CompanyTranslations.Select(x => new CompanyTranslationUpdateViewModel
                 {
                     TranslationId = x.Id,
@@ -162,14 +159,14 @@ namespace JobPortalProject.BL.Services.Implementations
             if (company == null)
                 return false;
 
-            foreach(var address in model.addressTranslationCreateModels)
+            foreach (var address in model.addressTranslationCreateModels)
             {
                 var resultAddress = await _addressService.AddTranslationToExistingAddress(address);
                 if (!resultAddress)
                     return false;
             }
 
-            foreach(var workingField in model.workingFieldTranslationCreateModels)
+            foreach (var workingField in model.workingFieldTranslationCreateModels)
             {
                 var resultField = await _workingFieldService.AddTranslationToExistingWorkingField(workingField);
                 if (!resultField)
@@ -234,7 +231,7 @@ namespace JobPortalProject.BL.Services.Implementations
 
             var images = new List<string>();
             var translation = company.CompanyTranslations.FirstOrDefault(x => x.LanguageId != languageId);
-            var workingFields = company.WorkingFields.Where(x => !x.Translations.Any(t => t.LanguageId==languageId)).ToList();
+            var workingFields = company.WorkingFields.Where(x => !x.Translations.Any(t => t.LanguageId == languageId)).ToList();
             var addresses = company.Addresses.Where(x => !x.AddressTranslations.Any(t => t.LanguageId == languageId)).ToList();
 
             if (translation == null)
@@ -252,32 +249,32 @@ namespace JobPortalProject.BL.Services.Implementations
             };
 
             var cities = (await _cityService.GetAllAsync(include:
-                x => x.Include(c => c.CityTranslations.Where(t=>t.LanguageId==languageId))
-                .Include(c => c.Country).ThenInclude(ct => ct.Translations.Where(t=>t.LanguageId==languageId)))).ToList();
-           
+                x => x.Include(c => c.CityTranslations.Where(t => t.LanguageId == languageId))
+                .Include(c => c.Country).ThenInclude(ct => ct.Translations.Where(t => t.LanguageId == languageId)))).ToList();
+
             if (addresses.Any() || addresses != null)
             {
                 model.addressTranslationCreateModels = addresses.Select(x => new AddressTranslationCreateViewModel
                 {
                     AddressId = x.Id,
                     LanguageId = languageId,
-                    ExistingAddress = cities.FirstOrDefault(c=>c.Id==x.CityId)!.Name + ", "+ cities.FirstOrDefault(c=>c.Id==x.CityId)!.Country!.Name 
+                    ExistingAddress = cities.FirstOrDefault(c => c.Id == x.CityId)!.Name + ", " + cities.FirstOrDefault(c => c.Id == x.CityId)!.Country!.Name
                     + ", " + x.AddressTranslations.FirstOrDefault()!.Street,
                 }).ToList();
             }
 
-            if (workingFields.Any() || workingFields!=null)
+            if (workingFields.Any() || workingFields != null)
             {
                 model.workingFieldTranslationCreateModels = workingFields.Select(x => new WorkingFieldTranslationCreateViewModel
                 {
                     WorkingFieldId = x.Id,
                     LanguageId = languageId,
-                    IconUrl=x.IconUrl,
-                    ExistingFieldName=x.Translations.FirstOrDefault()!.Name
+                    IconUrl = x.IconUrl,
+                    ExistingFieldName = x.Translations.FirstOrDefault()!.Name
                 }).ToList();
             }
 
-          
+
             return model;
         }
 
@@ -404,19 +401,52 @@ namespace JobPortalProject.BL.Services.Implementations
         {
             var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
             var existedCompany = await Repository.GetAsync(
-                predicate: x => x.AppUserId == userId && !x.IsDeleted, 
-                include: x=>x
-                .Include(x=>x.CompanySocials).Include(x=>x.CompanyTranslations)
-                .Include(x=>x.Addresses));
+                predicate: x => x.AppUserId == userId && !x.IsDeleted,
+                include: x => x
+                .Include(x => x.CompanySocials).Include(x => x.CompanyTranslations)
+                .Include(x => x.Addresses));
 
             if (existedCompany == null)
                 return false;
 
-            if (existedCompany.CompanyTranslations.Any() && existedCompany.Addresses.Any() 
-                && existedCompany.CompanyEmail!=null)
+            if (existedCompany.CompanyTranslations.Any() && existedCompany.Addresses.Any()
+                && existedCompany.CompanyEmail != null)
                 return true;
             else
                 return false;
+        }
+
+        public async Task<PagedResultModel<CompanyViewModel>> GetPagedCompaniesAsync(int index = 0, int size = 10)
+        {
+            var language = await _cookieService.GetLanguageAsync();
+            var pagedCompanies = await Repository.GetPagedListAsync(predicate: x => !x.IsDeleted && x.IsAccountApproved,
+                orderBy: x => x.OrderBy(c => c.CreatedAt),
+                include: x => x
+                .Include(x => x.CompanyTranslations.Where(t => t.LanguageId == language.Id))
+                .Include(x => x.Addresses.Where(a => a.IsMainAddress)).ThenInclude(x => x.AddressTranslations.Where(t => t.LanguageId == language.Id))
+                .Include(x=>x.Addresses).ThenInclude(x=>x.City).ThenInclude(x=>x.CityTranslations.Where(t=>t.LanguageId==language.Id))
+                .Include(x=>x.Addresses).ThenInclude(x=>x.City).ThenInclude(x=>x.Country).ThenInclude(x=>x.Translations.Where(t=>t.LanguageId==language.Id)),
+                index: index,
+                size: size);
+
+            var companyModels = new List<CompanyViewModel>();
+            foreach(var item in pagedCompanies.Items)
+            {
+                var model = Mapper.Map<CompanyViewModel>(item);
+                companyModels.Add(model);
+            }               
+
+            var pagedCompanyModels = new PagedResultModel<CompanyViewModel>
+            {
+                Items = companyModels,
+                Index = pagedCompanies.Index,
+                Size = pagedCompanies.Size,
+                Count = pagedCompanies.Count,
+                Pages = pagedCompanies.Pages
+            };
+
+            return pagedCompanyModels;
+                
         }
     }
 

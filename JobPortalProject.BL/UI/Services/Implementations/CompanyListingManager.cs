@@ -23,31 +23,34 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             _cityService = cityService;
         }
 
-        public async Task<CompanyListingViewModel> GetListsAsync()
+        public async Task<PagedCompanyListingViewModel> GetListsAsync(int index=0, int size=10)
         {
             var language = await _cookieService.GetLanguageAsync();
 
-            var addresses = await _addressService.GetAllAsync();
+            var addresses = await _addressService.GetAllAsync(predicate: x=>x.Company!=null);
 
             var addressesByCities = addresses.DistinctBy(x => x.CityName).ToList();
             var addressesCitiesGroup = addresses.GroupBy(a => a.CityName).ToList();
 
-            var companies = await _companyService.GetAllAsync(
-                                        predicate: x => !x.IsDeleted,
-                                        include: c => c
-                                        .Include(ct => ct.CompanyTranslations!
-                                        .Where(c => c.LanguageId == language.Id))
-                                        .Include(c => c.Addresses!.Where(x => x.IsMainAddress))
-                                        .ThenInclude(x => x.AddressTranslations!.Where(x => x.LanguageId == language.Id)!));
+            //var companies = await _companyService.GetAllAsync(
+            //                            predicate: x => !x.IsDeleted,
+            //                            include: c => c
+            //                            .Include(ct => ct.CompanyTranslations!
+            //                            .Where(c => c.LanguageId == language.Id))
+            //                            .Include(c => c.Addresses!.Where(x => x.IsMainAddress))
+            //                            .ThenInclude(x => x.AddressTranslations!.Where(x => x.LanguageId == language.Id)!));
+
+            var pagedCompanies = await _companyService.GetPagedCompaniesAsync(index, size);
 
             var companyTypes = await _companyTypeService.GetAllAsync(
-                                        predicate: x => !x.IsDeleted && x.CompanyTypeTranslations.Any(),
+                                        predicate: x => !x.IsDeleted && x.CompanyTypeTranslations.Any() && x.Companies.Count!=0,
                                         include: x => x
-                                        .Include(c => c.CompanyTypeTranslations.Where(ct => ct.LanguageId == language.Id)));
+                                        .Include(c => c.CompanyTypeTranslations.Where(ct => ct.LanguageId == language.Id))
+                                        .Include(c=>c.Companies));
 
-            var companyListingViewModel = new CompanyListingViewModel
+            var companyListingViewModel = new PagedCompanyListingViewModel
             {
-                Companies = companies.ToList(),
+                Companies = pagedCompanies,
                 CompanyTypes = companyTypes.ToList(),
                 AddressesCitiesGroup=addressesCitiesGroup
             };

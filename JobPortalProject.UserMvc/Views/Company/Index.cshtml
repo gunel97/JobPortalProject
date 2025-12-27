@@ -1,5 +1,5 @@
 ﻿@{
-    CompanyListingViewModel model = Model;
+    PagedCompanyListingViewModel model = Model;
     var companyTypes = model.CompanyTypes;
     var companies = model.Companies;
     var addressesCitiesGroup = model.AddressesCitiesGroup;
@@ -14,7 +14,7 @@
                     <span></span>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item"><a asp-asp-controller="home" asp-action="index">Home</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Company Listing</li>
                         </ol>
                     </nav>
@@ -83,91 +83,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="job-widget mb-20">
-                        <div class="check-box-item">
-                            <h5 class="job-widget-title">Type of Company</h5>
-                            <div class="checkbox-container">
-                                <ul>
-                                    <li>
-                                        <label class="containerss">
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                            <span class="text">Start-up</span>
-                                            <span class="qty">(30)</span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="containerss">
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                            <span class="text">Mid-Level</span>
-                                            <span class="qty">(60)</span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="containerss">
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                            <span class="text">Top Level</span>
-                                            <span class="qty">(100)</span>
-                                        </label>
-                                    </li>
-                                </ul>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="job-widget mb-20">
-                        <div class="check-box-item">
-                            <h5 class="job-widget-title">Company Size</h5>
-                            <div class="checkbox-container">
-                                <ul>
-                                    <li>
-                                        <label class="containerss">
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                            <span class="text">05-20 Person</span>
-                                            <span class="qty">(80)</span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="containerss">
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                            <span class="text">15-25 Person</span>
-                                            <span class="qty">(100)</span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="containerss">
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                            <span class="text">25-40 Person</span>
-                                            <span class="qty">(100)</span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="containerss">
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                            <span class="text">35-50 Person</span>
-                                            <span class="qty">(30)</span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="containerss">
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                            <span class="text">80-100 Person</span>
-                                            <span class="qty">(30)</span>
-                                        </label>
-                                    </li>
-                                </ul>
-
-                            </div>
-                        </div>
-                    </div>
                     <div class="job-widget-btn">
                         <a class="primry-btn-2 lg-btn text-center" href="#">Make A Job Post</a>
                     </div>
@@ -177,7 +92,11 @@
                 <div class="company-listing-wrap">
                     <div class="row g-4 mb-25">
                         <div class="col-lg-6 d-flex align-items-center">
-                            <p class="show-item">Showing results 10 in 200 jobs list</p>
+                            <p class="show-item">@companies.Count jobs found.</p>
+                            @if (companies.Count > 0)
+                            {
+                                <p class="show-item">Showing results @((companies.Index * companies.Size) + 1) - @Math.Min((companies.Index + 1) * companies.Size, companies.Count) from @companies.Count jobs</p>
+                            }
                         </div>
                         <div class="col-lg-6 d-flex align-items-center justify-content-lg-end">
                             <div class="grid-select-area">
@@ -221,7 +140,9 @@
                         </div>
                     </div>
                     <div class="row g-4 mb-70">
-                        @foreach (var company in companies ?? [])
+                        @if(companies.Items.Any())
+                        {
+                            @foreach (var company in companies.Items)
                         {
                             <div class="col-md-6">
                                 <div class="company-list-card1">
@@ -252,20 +173,17 @@
                                 </div>
                             </div>
                         }
+                        }
                     </div>
                     <div class="row">
                         <div class="col-lg-12 d-flex justify-content-center">
-                            <div class="pagination-area">
-                                <nav aria-label="...">
-                                    <ul class="pagination">
-                                        <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1"></a></li>
-                                        <li class="page-item active" aria-current="page"><a class="page-link" href="#">01</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">02</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">03</a></li>
-                                        <li class="page-item"><a class="page-link" href="#"></a></li>
-                                    </ul>
-                                </nav>
-                            </div>
+                            @{
+                                ViewData["RouteData"] = new Dictionary<string, string>
+                                {
+                                    { "size", companies.Size.ToString() }
+                                };
+                            }
+                            <partial name="_PaginationPartial" model="@companies" />
                         </div>
                     </div>
                 </div>

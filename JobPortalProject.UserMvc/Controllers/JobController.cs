@@ -32,11 +32,17 @@ namespace JobPortalProject.UserMvc.Controllers
             _jobApplicationService = jobApplicationService;
         }
 
-        public async Task<IActionResult> Index(int index=0, int size=10)
+        public async Task<IActionResult> Index(JobFilterViewModel filter)
         {
-            var jobListingViewModel = await _jobListingService.GetPagedJobListingViewModel(index, size);
+            var jobListingViewModel = await _jobListingService.GetPagedJobListingViewModel(filter);
 
             return View(jobListingViewModel);
+        }
+
+        [HttpGet]
+        public IActionResult ClearFilters()
+        {
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Details(string id)

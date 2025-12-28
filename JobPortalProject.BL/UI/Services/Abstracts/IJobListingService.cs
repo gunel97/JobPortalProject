@@ -1,4 +1,5 @@
 ﻿using JobPortalProject.BL.UI.ViewModels;
+using JobPortalProject.BL.ViewModels.JobViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,6 @@ namespace JobPortalProject.BL.UI.Services.Abstracts
 {
     public interface IJobListingService
     {
-        //public Task<JobListingViewModel> GetJobListingViewModel();
-        public Task<PagedJobListingViewModel> GetPagedJobListingViewModel(int index=0, int size=10);
+        public Task<PagedJobListingViewModel> GetPagedJobListingViewModel(JobFilterViewModel filter);
     }
 }

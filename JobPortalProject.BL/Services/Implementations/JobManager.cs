@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
+using Microsoft.AspNetCore.Mvc.Internal;
 
 namespace JobPortalProject.BL.Services.Implementations
 {
@@ -213,10 +214,11 @@ namespace JobPortalProject.BL.Services.Implementations
             return jobViewModels;
         }
 
-        public async Task<PagedResultModel<JobViewModel>> GetPagedJobsAsync(int index = 0, int size = 10)
+        public async Task<PagedResultModel<JobViewModel>> GetPagedJobsAsync(JobFilterViewModel filter)
         {
             var language = await _cookieService.GetLanguageAsync();
-            var pagedJobs = await Repository.GetPagedListAsync(predicate: x => !x.IsDeleted,
+            Expression<Func<Job, bool>> predicate = BuildPredicate(filter, language.Id);
+            var pagedJobs = await Repository.GetPagedListAsync(predicate: predicate,
                 orderBy: x=>x.OrderByDescending(j=>j.CreatedAt),
                 include: x => x
                 .Include(x => x.JobTranslations.Where(t => t.LanguageId == language.Id))
@@ -226,7 +228,7 @@ namespace JobPortalProject.BL.Services.Implementations
                 .Include(x => x.ExtraBenefits).ThenInclude(t => t.JobExtraBenefitTranslations.Where(x => x.LanguageId == language.Id))
                 .Include(x => x.Company!).ThenInclude(t => t.CompanyTranslations.Where(x => x.LanguageId == language.Id))
                 .Include(a => a.Address!).ThenInclude(a => a.AddressTranslations.Where(x => x.LanguageId == language.Id))
-                , index:index, size:size);
+                , index:filter.Index, size:filter.Size);
 
             var jobViewModels = new List<JobViewModel>();
             foreach(var item in pagedJobs.Items)
@@ -245,6 +247,22 @@ namespace JobPortalProject.BL.Services.Implementations
             };
 
             return pagedJobModels;
+        }
+
+        public async Task<Dictionary<int, int>> GetJobCountGender()
+        {
+            var jobs = await Repository.GetAllAsync(predicate: x=>!x.IsDeleted  && x.IsActive);
+            var result = jobs.GroupBy(x => (int)x.Gender).ToDictionary(g => g.Key, g => g.Count());
+
+            return result;
+        }
+
+        public async Task<Dictionary<int, int>> GetJobCountJobType()
+        {
+            var jobs = await Repository.GetAllAsync(predicate: x=>!x.IsDeleted  && x.IsActive);
+            var result = jobs.GroupBy(x => (int)x.JobType).ToDictionary(g => g.Key, g => g.Count());
+
+            return result;
         }
 
         private JobViewModel MapToJobViewModel (Job jobEntity, int languageId)
@@ -347,6 +365,24 @@ namespace JobPortalProject.BL.Services.Implementations
                 return true;
         }
 
-        
-    }
+        private Expression<Func<Job, bool>> BuildPredicate(JobFilterViewModel filter, int languageId)
+        {
+            Expression<Func<Job, bool>> predicate = x => !x.IsDeleted && x.IsActive &&
+            (string.IsNullOrEmpty(filter.SearchTerm) ||
+            x.JobTranslations.Any(t => t.LanguageId == languageId && (t.Title.Contains(filter.SearchTerm) ||
+            t.Description.Contains(filter.SearchTerm))) ||
+            x.Company.CompanyTranslations.Any(t => t.LanguageId == languageId && t.Name.Contains(filter.SearchTerm))) &&
+            ((!filter.MinSalary.HasValue || x.MaxSalary >= filter.MinSalary.Value) &&
+            (!filter.MaxSalary.HasValue || x.MinSalary <= filter.MaxSalary.Value) &&
+            (filter.CategoryIds == null || filter.CategoryIds.Count == 0 ||
+            filter.CategoryIds.Contains(x.JobCategoryId)) &&
+            (filter.JobTypeIds == null || filter.JobTypeIds.Count == 0 ||
+            filter.JobTypeIds.Contains((int)x.JobType)) && 
+            (filter.GenderIds==null || filter.GenderIds.Count==0 ||
+            filter.GenderIds.Contains((int)x.Gender)));
+
+            return predicate;
+        }
+
+        }
 }

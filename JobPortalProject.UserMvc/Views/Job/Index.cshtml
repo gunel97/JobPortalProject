@@ -1,5 +1,6 @@
 ﻿@{
     PagedJobListingViewModel model = Model;
+    var filter = model.Filter;
     var jobs = model.Jobs;
     var genders = model.Genders;
     var jobCategories = model.JobCategories;
@@ -30,6 +31,7 @@
 <!-- ========== Job Listing Start============= -->
 <div class="job-listing-area pt-120 mb-120">
     <div class="container">
+         <form asp-action="Index" method="get" id="filterForm">
         <div class="row g-lg-4 gy-5">
             <div class="col-lg-4 order-lg-1 order-2">
                 <div class="job-sidebar">
@@ -42,7 +44,11 @@
                                     {
                                         <li>
                                             <label class="containerss">
-                                                <input type="checkbox">
+                                                <input type="checkbox"
+                                                    name="CategoryIds"
+                                                value="@category.Id"
+                                                @(filter.CategoryIds.Contains(category.Id) ? "checked": "")
+                                                       onchange="document.getElementById('Index').value=0;  document.getElementById('filterForm').submit();">
                                                 <span class="checkmark"></span>
                                                 <span class="text">@category.Name</span>
                                                 <span class="qty">(@category.JobIds.Count())</span>
@@ -61,14 +67,23 @@
                                 <ul>
                                     @foreach (var type in jobTypes)
                                     {
+                                           var count =  model.JobTypeCounts.ContainsKey(int.Parse(type.Value))
+                                            ? model.JobTypeCounts[int.Parse(type.Value)]
+                                            : 0;
+                                            if(count!=0){
                                         <li>
                                             <label class="containerss">
-                                                <input type="checkbox">
-                                                <span class="checkmark"></span>
-                                                <span class="text">@localizer.GetValue(type)</span>
-                                                <span class="qty">(30)</span>
+                                                    <input type="checkbox"
+                                                    name="JobTypeIds"
+                                                    value="@type.Value"
+                                                    @(filter.JobTypeIds.Contains(int.Parse(type.Value)) ? "checked" : "")
+                                                    onchange="document.getElementById('Index').value = 0; document.getElementById('filterForm').submit();">
+                                                    <span class="checkmark"></span>
+                                                    <span class="text">@localizer.GetValue(@type.Text)</span>
+                                                <span class="qty">(@count)</span>
                                             </label>
                                         </li>
+                                        }
                                     }
                                 </ul>
 
@@ -82,14 +97,23 @@
                                 <ul>
                                     @foreach (var gender in genders)
                                     {
+                                            var count = model.GenderCounts.ContainsKey(int.Parse(gender.Value))
+                                            ? model.GenderCounts[int.Parse(gender.Value)]
+                                            : 0;
+                                            if(count!=0){
                                         <li>
                                             <label class="containerss">
-                                                <input type="checkbox">
+                                            <input type="checkbox"
+                                                    name="GenderIds"
+                                                    value="@gender.Value"
+                                                    @(filter.GenderIds.Contains(int.Parse(gender.Value)) ? "checked" : "")
+                                                    onchange="document.getElementById('Index').value = 0; document.getElementById('filterForm').submit();">
                                                 <span class="checkmark"></span>
-                                                <span class="text">@localizer.GetValue(gender)</span>
-                                                <span class="qty">(80)</span>
+                                                <span class="text">@localizer.GetValue(gender.Text)</span>
+                                                <span class="qty">(@count)</span>
                                             </label>
                                         </li>
+                                        }
                                     }
                                 </ul>
 
@@ -102,72 +126,77 @@
                             <div class="range-wrap">
                                 <div class="slider-labels">
                                     <div class="caption">
-                                        <span id="slider-range-value1"></span>K
+                                        <span id="slider-range-value1">@(filter.MinSalary ?? Model.MinSalary ?? "0") </span>$
                                     </div>
                                     -
                                     <div class="text-right caption">
-                                        <span id="slider-range-value2"></span>K
+                                        <span id="slider-range-value2">@(filter.MaxSalary ?? Model.MaxSalary ?? "100000")</span>$
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <form>
-                                            <input type="hidden" name="min-value" value="">
-                                            <input type="hidden" name="max-value" value="">
-                                        </form>
+                                            <input type="hidden" name="MinSalary" id="MinSalary" value="@filter.MinSalary">
+                                            <input type="hidden" name="MaxSalary" id="MaxSalary" value="@filter.MaxSalary">                                       
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <div id="slider-range"></div>
+                                    <div class="row mb-3">
+                                        <div class="col-sm-6">
+                                            <label class="form-label small">Min: <span id="minDisplay">@(filter.MinSalary ?? Model.MinSalary)</span>$</label>
+                                            <input type="range" class="form-range" id="minSlider" min="@Model.MinSalary" max="@Model.MaxSalary" step="@((Model.MaxSalary-Model.MinSalary)/100)" value="@(filter.MinSalary ?? Model.MinSalary)">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label class="form-label small">Max: <span id="maxDisplay">@(filter.MaxSalary ?? Model.MaxSalary)</span>$</label>
+                                            <input type="range" class="form-range" id="maxSlider" min="@Model.MinSalary" max="@Model.MaxSalary" step="@((Model.MaxSalary - Model.MinSalary) / 100)" value="@(filter.MaxSalary ?? Model.MaxSalary)">
+                                        </div>
                                     </div>
-                                </div>
 
                             </div>
-                            <div class="salary-container">
+                        @*     <div class="salary-container">
                                 <ul>
                                     <li>
-                                        <input class="form-check-input" type="radio" id="salary-1" name="showInputBox" value="salary-1">
+                                        <input class="form-check-input" type="radio" id="salary-1" name="salaryRange" value="5-15"
+                                               onchange="setSalaryRange(5, 15)">
                                         <div class="content">
-                                            <span class="text">$5K-$15K</span>
+                                            <span class="text">$5-$15</span>
                                             <span class="qty">(80)</span>
                                         </div>
                                     </li>
                                     <li>
-                                        <input class="form-check-input" type="radio" id="salary-2" name="showInputBox" value="salary-2">
-                                        <div class="content">
-                                            <span class="text">$20K-$30K</span>
+                                        <input class="form-check-input" type="radio" id="salary-2" name="salaryRange" value="20-30"
+                                               onchange="setSalaryRange(20, 30)">
+                                               <div class="content">
+                                            <span class="text">$20-$30</span>
                                             <span class="qty">(100)</span>
                                         </div>
                                     </li>
                                     <li>
-                                        <input class="form-check-input" type="radio" id="salary-3" name="showInputBox" value="salary-3">
-                                        <div class="content">
-                                            <span class="text">$35K-$50K</span>
+                                        <input class="form-check-input" type="radio" id="salary-3" name="salaryRange" value="35-50"
+                                               onchange="setSalaryRange(35, 50)">   <div class="content">
+                                            <span class="text">$35-$50</span>
                                             <span class="qty">(100)</span>
                                         </div>
                                     </li>
                                     <li>
-                                        <input class="form-check-input" type="radio" id="salary-4" name="showInputBox" value="salary-4">
-                                        <div class="content">
-                                            <span class="text">$55K-$70K</span>
+                                        <input class="form-check-input" type="radio" id="salary-4" name="salaryRange" value="55-70"
+                                               onchange="setSalaryRange(55, 70)">  <div class="content">
+                                            <span class="text">$55-$70</span>
                                             <span class="qty">(120)</span>
                                         </div>
                                     </li>
                                     <li>
-                                        <input class="form-check-input" type="radio" id="salary-5" name="showInputBox" value="salary-5">
-                                        <div class="content">
-                                            <span class="text">$75K-$100K</span>
+                                        <input class="form-check-input" type="radio" id="salary-5" name="salaryRange" value="75-100"
+                                               onchange="setSalaryRange(75, 100)">   <div class="content">
+                                            <span class="text">$75-$100</span>
                                             <span class="qty">(30)</span>
                                         </div>
                                     </li>
                                 </ul>
 
-                            </div>
+                            </div> *@
                         </div>
                     </div>
                     <div class="job-widget-btn">
-                        <a class="primry-btn-2 lg-btn text-center" href="#">Go to Job Alert</a>
+                        <a class="primry-btn-2 lg-btn text-center" asp-action="Index">Clear filter</a>
                     </div>
                 </div>
             </div>
@@ -175,7 +204,9 @@
                 <div class="job-listing-wrrap">
                     <div class="row g-4 mb-25">
                         <div class="col-lg-6 d-flex align-items-center">
-                            <p class="show-item">@jobs.Count jobs found.</p>
+                            @if(jobs.Count==0){
+                            <p class="show-item">No jobs found.</p>
+                            }
                             @if(jobs.Count>0){
                             <p class="show-item">Showing results @((jobs.Index*jobs.Size)+1) - @Math.Min((jobs.Index+1)*jobs.Size, jobs.Count) from @jobs.Count jobs</p>
                             }
@@ -191,32 +222,6 @@
                                         <option value="3">Internship</option>
                                         <option value="3">Freelance</option>
                                     </select>
-                                </div>
-                                <div class="grid-area">
-                                    <ul>
-                                        <li>
-                                            <a href="job-listing2.html">
-                                                <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M6.26106 6.95674H0.695674C0.311464 6.95674 0 6.64527 0 6.26106V0.695674C0 0.311464 0.311464 0 0.695674 0H6.26106C6.64527 0 6.95674 0.311464 6.95674 0.695674V6.26106C6.95674 6.64527 6.64527 6.95674 6.26106 6.95674Z" />
-                                                    <path d="M15.304 6.95674H9.73864C9.35443 6.95674 9.04297 6.64527 9.04297 6.26106V0.695674C9.04297 0.311464 9.35443 0 9.73864 0H15.304C15.6882 0 15.9997 0.311464 15.9997 0.695674V6.26106C15.9997 6.64527 15.6882 6.95674 15.304 6.95674Z" />
-                                                    <path d="M6.26106 16.0004H0.695674C0.311464 16.0004 0 15.689 0 15.3048V9.73937C0 9.35517 0.311464 9.0437 0.695674 9.0437H6.26106C6.64527 9.0437 6.95674 9.35517 6.95674 9.73937V15.3048C6.95674 15.689 6.64527 16.0004 6.26106 16.0004Z" />
-                                                    <path d="M15.304 16.0004H9.73864C9.35443 16.0004 9.04297 15.689 9.04297 15.3048V9.73937C9.04297 9.35517 9.35443 9.0437 9.73864 9.0437H15.304C15.6882 9.0437 15.9997 9.35517 15.9997 9.73937V15.3048C15.9997 15.689 15.6882 16.0004 15.304 16.0004Z" />
-                                                </svg>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="active" href="job-listing1.html">
-                                                <svg width="22" height="16" viewBox="0 0 22 16" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M1.91313 0C0.856731 0 0 0.893707 0 1.99656C0 3.09861 0.856731 3.99157 1.91313 3.99157C2.96953 3.99157 3.82626 3.09861 3.82626 1.99656C3.82626 0.893707 2.96953 0 1.91313 0Z" />
-                                                    <path d="M1.91313 6.00464C0.856731 6.00464 0 6.8976 0 8.00045C0 9.1025 0.856731 9.99621 1.91313 9.99621C2.96953 9.99621 3.82626 9.1025 3.82626 8.00045C3.82626 6.8976 2.96953 6.00464 1.91313 6.00464Z" />
-                                                    <path d="M1.91313 12.0085C0.856731 12.0085 0 12.9023 0 14.0043C0 15.1064 0.856731 16.0001 1.91313 16.0001C2.96953 16.0001 3.82626 15.1064 3.82626 14.0043C3.82626 12.9023 2.96953 12.0085 1.91313 12.0085Z" />
-                                                    <path d="M20.561 0.495117H6.95229C6.15787 0.495117 5.51367 1.16716 5.51367 1.99665C5.51367 2.82545 6.15782 3.49744 6.95229 3.49744H20.561C21.3554 3.49744 21.9996 2.82545 21.9996 1.99665C21.9996 1.16716 21.3554 0.495117 20.561 0.495117Z" />
-                                                    <path d="M20.561 6.49878H6.95229C6.15787 6.49878 5.51367 7.17077 5.51367 8.00032C5.51367 8.82911 6.15782 9.5011 6.95229 9.5011H20.561C21.3554 9.5011 21.9996 8.82911 21.9996 8.00032C21.9996 7.17077 21.3554 6.49878 20.561 6.49878Z" />
-                                                    <path d="M20.561 12.5034H6.95229C6.15787 12.5034 5.51367 13.1754 5.51367 14.0042C5.51367 14.833 6.15782 15.5049 6.95229 15.5049H20.561C21.3554 15.5049 21.9996 14.833 21.9996 14.0042C21.9996 13.1754 21.3554 12.5034 20.561 12.5034Z" />
-                                                </svg>
-                                            </a>
-                                        </li>
-                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -244,7 +249,7 @@
                                             <div class="job-discription">
                                                 <ul>
                                                     <li>
-                                                        <p><span class="title">Salary:</span>  $@job.MinSalary K-$@job.MaxSalary K / <span class="time">@localizer.GetValue(job.SalaryTypeDuration ?? "")</span></p>
+                                                        <p><span class="title">Salary:</span>  $@job.MinSalary -$@job.MaxSalary / <span class="time">@localizer.GetValue(job.SalaryTypeDuration ?? "")</span></p>
                                                     </li>
                                                     <li>
                                                         <p><span class="title">Deadline: @job.ExpirationDate?.Date.ToShortDateString()</span> </p>
@@ -269,11 +274,32 @@
                             }
                         }
                         @{
-                            ViewData["RouteData"] = new Dictionary<string, string>
+                            var routeData = new Dictionary<string, string>
+                                                {
+                                                { "size", jobs.Size.ToString() },
+                                                { "MinSalary", filter.MinSalary?.ToString() ?? "" },
+                                                { "MaxSalary", filter.MaxSalary?.ToString() ?? "" },
+                                                { "SortBy", filter.SortBy ?? "" },
+                                                { "SortOrder", filter.SortOrder ?? "" }
+                                                };
+
+                            // Add multi-select arrays
+                            for (int i = 0; i < filter.CategoryIds.Count; i++)
                             {
-                             { "size", jobs.Size.ToString() }
-                            };
+                                routeData[$"CategoryIds[{i}]"] = filter.CategoryIds[i].ToString();
+                            }
+                                for (int i = 0; i < filter.JobTypeIds.Count; i++)
+                                {
+                                    routeData[$"JobTypeIds[{i}]"] = filter.JobTypeIds[i].ToString();
+                                }
+                                for (int i = 0; i < filter.GenderIds.Count; i++)
+                                {
+                                    routeData[$"GenderIds[{i}]"] = filter.GenderIds[i].ToString();
+                                }
+
+                            ViewData["RouteData"] = routeData;
                         }
+
                         <div class="col-lg-12 d-flex justify-content-center">
                             <partial name="_PaginationPartial" model="@jobs" />
                         </div>
@@ -281,6 +307,84 @@
                 </div>
             </div>
         </div>
+            <input type="hidden" name="Index" id="Index" value="@filter.Index" />
+            <input type="hidden" name="Size" value="@filter.Size" />
+            <input type="hidden" name="SortOrder" value="@filter.SortOrder" />
+        </form>
     </div>
 </div>
 <!-- ========== Job Listing e nd============= -->
+
+    <script>
+        console.log("test");
+        // Vanilla JavaScript Salary Range Sliders
+        const minSlider = document.getElementById('minSlider');
+        const maxSlider = document.getElementById('maxSlider');
+        const minDisplay = document.getElementById('minDisplay');
+        const maxDisplay = document.getElementById('maxDisplay');
+        const minInput = document.getElementById('MinSalary');
+        const maxInput = document.getElementById('MaxSalary');
+        const sliderValue1 = document.getElementById('slider-range-value1');
+        const sliderValue2 = document.getElementById('slider-range-value2');
+        const filterForm = document.getElementById('filterForm');
+
+        // Update displays when sliders move
+        if (minSlider && maxSlider) {
+            minSlider.addEventListener('input', function() {
+                let minVal = parseInt(this.value);
+                let maxVal = parseInt(maxSlider.value);
+
+                // Ensure min doesn't exceed max
+                if (minVal > maxVal) {
+                    minVal = maxVal;
+                    this.value = minVal;
+                }
+
+                minDisplay.textContent = minVal;
+                sliderValue1.textContent = minVal;
+                minInput.value = minVal;
+            });
+
+            maxSlider.addEventListener('input', function() {
+                let maxVal = parseInt(this.value);
+                let minVal = parseInt(minSlider.value);
+
+                // Ensure max doesn't go below min
+                if (maxVal < minVal) {
+                    maxVal = minVal;
+                    this.value = maxVal;
+                }
+
+                maxDisplay.textContent = maxVal;
+                sliderValue2.textContent = maxVal;
+                maxInput.value = maxVal;
+            });
+
+            // Submit form when user releases slider
+            minSlider.addEventListener('change', function() {
+                document.getElementById('Index').value = 0;
+                filterForm.submit();
+            });
+
+            maxSlider.addEventListener('change', function() {
+                document.getElementById('Index').value = 0;
+                filterForm.submit();
+            });
+        }
+
+        // Preset salary range function
+        function setSalaryRange(min, max) {
+            if (minSlider && maxSlider) {
+                minSlider.value = min;
+                maxSlider.value = max;
+                minDisplay.textContent = min;
+                maxDisplay.textContent = max;
+            }
+            minInput.value = min;
+            maxInput.value = max;
+            sliderValue1.textContent = min;
+            sliderValue2.textContent = max;
+            document.getElementById('Index').value = 0;
+            filterForm.submit();
+        }
+    </script>

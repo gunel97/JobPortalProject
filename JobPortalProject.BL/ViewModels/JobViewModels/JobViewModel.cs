@@ -18,7 +18,7 @@ namespace JobPortalProject.BL.ViewModels.JobViewModels
         public string? Title { get; set; }
         public string DetailsUrl => $"{Title?.Replace(" ", "-").Replace("/", "-")}-{Id}";
         public string? Description { get; set; }
-        public string? RequiredExperience {  get; set; }
+        public string? RequiredExperience { get; set; }
         public int VacancyCount { get; set; }
         public double MinSalary { get; set; }
         public double MaxSalary { get; set; }
@@ -29,7 +29,7 @@ namespace JobPortalProject.BL.ViewModels.JobViewModels
         public string? JobType { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? ExpirationDate { get; set; }
-        public int JobCategoryId {get;set;}
+        public int JobCategoryId { get; set; }
         public string? JobCategoryName { get; set; }
         public int CompanyId { get; set; }
         public string? CompanyName { get; set; }
@@ -39,6 +39,20 @@ namespace JobPortalProject.BL.ViewModels.JobViewModels
         public List<string> ExtraBenefits { get; set; } = [];
         public List<string> MainDuties { get; set; } = [];
         public List<string> CompanyImages { get; set; } = [];
+    }
+
+    public class JobFilterViewModel
+    {
+        public string? SearchTerm { get; set; }
+        public double? MinSalary { get; set; }
+        public double? MaxSalary { get; set; }
+        public List<int> CategoryIds { get; set; } = new List<int>();
+        public List<int> JobTypeIds { get; set; } = new List<int>();
+        public List<int> GenderIds { get; set; } = new List<int>();
+        public string SortBy { get; set; } = "PostedDate";
+        public string SortOrder { get; set; } = "desc";
+        public int Index { get; set; } = 0;
+        public int Size { get; set; } = 10;
     }
 
     public class JobPagedViewModel
@@ -74,7 +88,6 @@ namespace JobPortalProject.BL.ViewModels.JobViewModels
         public List<JobResponsibilityCreateViewModel> Responsibilities { get; set; } = [];
         public List<JobExtraBenefitCreateViewModel> ExtraBenefits { get; set; } = [];
     }
-
 
     public class JobUpdateViewModel
     {
@@ -114,7 +127,7 @@ namespace JobPortalProject.BL.ViewModels.JobViewModels
         public int JobId { get; set; }
         public int LanguageId { get; set; }
         public string Title { get; set; } = null!;
-        public string Description { get;set; } = null!;
+        public string Description { get; set; } = null!;
         public string RequiredExperience { get; set; } = null!;
         public string? LanguageIcon { get; set; }
     }
@@ -128,5 +141,4 @@ namespace JobPortalProject.BL.ViewModels.JobViewModels
         public string? RequiredExperience { get; set; }
         public string? LanguageIcon { get; set; }
     }
-
 }

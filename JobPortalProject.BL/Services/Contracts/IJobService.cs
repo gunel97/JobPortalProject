@@ -15,6 +15,9 @@ namespace JobPortalProject.BL.Services.Contracts
         public Task<JobUpdateViewModel> GetUpdateViewModel(int jobId);
         public Task<bool> SoftDeleteJob(int id);
         public Task<bool> DeactivateJob(int id);
-        public Task<PagedResultModel<JobViewModel>> GetPagedJobsAsync(int index = 0, int size = 10);
+        public Task<PagedResultModel<JobViewModel>> GetPagedJobsAsync(JobFilterViewModel filter);
+        public Task<Dictionary<int, int>> GetJobCountJobType();
+        public Task<Dictionary<int, int>> GetJobCountGender();
+        //public Task<PagedResultModel<JobViewModel>> GetPagedJobsAsync(int index = 0, int size = 10);
     }
 }

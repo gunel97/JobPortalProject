@@ -28,6 +28,16 @@ namespace JobPortalProject.BL.Services.Implementations
             return jobTypeListItems;
         }
 
+        public List<SelectListItem> GetGenderListItems()
+        {
+            var genderListItems = new List<SelectListItem>();
+            var genders = Enum.GetValues(typeof(Gender)).Cast<Gender>().ToList();
+            genders.ForEach(x => genderListItems.Add(
+                new SelectListItem(_localizer.GetValue(x.ToString()), ((int)x).ToString())));
+
+            return genderListItems;
+        }
+
         public List<SelectListItem> GetSalaryTypeListItems()
         {
             var salaryTypeListItems = new List<SelectListItem>();
@@ -46,15 +56,7 @@ namespace JobPortalProject.BL.Services.Implementations
             return educationTypeListItems;
         }
 
-        public List<SelectListItem> GetGenderListItems()
-        {
-            var genderListItems = new List<SelectListItem>();
-            var genders = Enum.GetValues(typeof(Gender)).Cast<Gender>().ToList();
-            genders.ForEach(x => genderListItems.Add(
-                new SelectListItem(_localizer.GetValue(x.ToString()), ((int)x).ToString())));
-
-            return genderListItems;
-        }
+      
 
         public List<SelectListItem> GetJobApplicationStatusListItems()
         {

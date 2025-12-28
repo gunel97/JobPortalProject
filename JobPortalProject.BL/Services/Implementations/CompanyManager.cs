@@ -5,6 +5,7 @@ using JobPortalProject.BL.UI.Services.Abstracts;
 using JobPortalProject.BL.ViewModels.AddressViewModels;
 using JobPortalProject.BL.ViewModels.CompanySocialViewModels;
 using JobPortalProject.BL.ViewModels.CompanyViewModels;
+using JobPortalProject.BL.ViewModels.JobViewModels;
 using JobPortalProject.BL.ViewModels.LanguageViewModels;
 using JobPortalProject.BL.ViewModels.Pagination;
 using JobPortalProject.BL.ViewModels.WorkingFieldViewModels;
@@ -13,6 +14,7 @@ using JobPortalProject.DA.Repositories.Contracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using System.Linq.Expressions;
 using System.Security.Claims;
 
 namespace JobPortalProject.BL.Services.Implementations
@@ -416,18 +418,20 @@ namespace JobPortalProject.BL.Services.Implementations
                 return false;
         }
 
-        public async Task<PagedResultModel<CompanyViewModel>> GetPagedCompaniesAsync(int index = 0, int size = 10)
+        public async Task<PagedResultModel<CompanyViewModel>> GetPagedCompaniesAsync(CompanyFilterViewModel filter)
         {
             var language = await _cookieService.GetLanguageAsync();
-            var pagedCompanies = await Repository.GetPagedListAsync(predicate: x => !x.IsDeleted && x.IsAccountApproved,
-                orderBy: x => x.OrderBy(c => c.CreatedAt),
+            var predicate = BuildPredicate(filter, language.Id);
+            var orderBy = BuildOrderBy(filter, language.Id);
+            var pagedCompanies = await Repository.GetPagedListAsync(predicate: predicate,
+                orderBy: orderBy,
                 include: x => x
                 .Include(x => x.CompanyTranslations.Where(t => t.LanguageId == language.Id))
                 .Include(x => x.Addresses.Where(a => a.IsMainAddress)).ThenInclude(x => x.AddressTranslations.Where(t => t.LanguageId == language.Id))
                 .Include(x=>x.Addresses).ThenInclude(x=>x.City).ThenInclude(x=>x.CityTranslations.Where(t=>t.LanguageId==language.Id))
                 .Include(x=>x.Addresses).ThenInclude(x=>x.City).ThenInclude(x=>x.Country).ThenInclude(x=>x.Translations.Where(t=>t.LanguageId==language.Id)),
-                index: index,
-                size: size);
+                index: filter.Index,
+                size: filter.Size);
 
             var companyModels = new List<CompanyViewModel>();
             foreach(var item in pagedCompanies.Items)
@@ -447,6 +451,59 @@ namespace JobPortalProject.BL.Services.Implementations
 
             return pagedCompanyModels;
                 
+        }
+
+        private Expression<Func<Company, bool>> BuildPredicate(CompanyFilterViewModel filter, int languageId)
+        {
+            Expression<Func<Company, bool>> predicate = x => !x.IsDeleted && x.IsAccountApproved &&
+            (string.IsNullOrEmpty(filter.SearchTerm) ||
+            x.CompanyTranslations.Any(t => t.LanguageId == languageId && (t.Name.Contains(filter.SearchTerm) ||
+            t.Description.Contains(filter.SearchTerm)))) &&
+            ((filter.TypeIds == null || filter.TypeIds.Count == 0 ||
+            filter.TypeIds.Contains(x.CompanyTypeId)) &&
+            (filter.CityIds == null || filter.CityIds.Count == 0 ||
+            x.Addresses.Any(a => filter.CityIds.Contains(a.CityId))));
+
+            return predicate;
+        }
+
+        private Func<IQueryable<Company>, IOrderedQueryable<Company>> BuildOrderBy(CompanyFilterViewModel filter, int languageId)
+        {
+            var sortBy = filter.SortBy?.ToLower() ?? "title";
+            var sortOrder = filter.SortOrder?.ToLower() ?? "desc";
+
+            // 1. NEW: Split combined values (e.g., "title_asc" -> "title" & "asc")
+            if (sortBy.Contains('_'))
+            {
+                var parts = sortBy.Split('_');
+                sortBy = parts[0];      // becomes "title" or "lastpostedjob"
+                sortOrder = parts[1];   // becomes "asc" or "desc"
+            }
+
+            return queryable =>
+            {
+                IOrderedQueryable<Company> ordered = sortBy switch
+                {
+                    "title" or "name" => sortOrder == "asc"
+                        ? queryable.OrderBy(c => c.CompanyTranslations
+                            .Where(t => t.LanguageId == languageId)
+                            .Select(t => t.Name)
+                            .FirstOrDefault())
+                        : queryable.OrderByDescending(c => c.CompanyTranslations
+                            .Where(t => t.LanguageId == languageId)
+                            .Select(t => t.Name)
+                            .FirstOrDefault()),
+
+                    "lastpostedjob" => sortOrder == "asc"
+                        ? queryable.OrderBy(c => c.LastPostedJob)
+                        : queryable.OrderByDescending(c => c.LastPostedJob),
+
+                    _ => sortOrder == "asc"
+                        ? queryable.OrderBy(c => c.CreatedAt)
+                        : queryable.OrderByDescending(c => c.CreatedAt)
+                };
+                return ordered;
+            };
         }
     }
 

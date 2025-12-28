@@ -1,6 +1,7 @@
 ﻿using JobPortalProject.BL.Services.Contracts;
 using JobPortalProject.BL.UI.Services.Abstracts;
 using JobPortalProject.BL.UI.ViewModels;
+using JobPortalProject.BL.ViewModels.CompanyViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace JobPortalProject.BL.UI.Services.Implementations
@@ -23,7 +24,7 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             _cityService = cityService;
         }
 
-        public async Task<PagedCompanyListingViewModel> GetListsAsync(int index=0, int size=10)
+        public async Task<PagedCompanyListingViewModel> GetListsAsync(CompanyFilterViewModel filter)
         {
             var language = await _cookieService.GetLanguageAsync();
 
@@ -32,15 +33,7 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             var addressesByCities = addresses.DistinctBy(x => x.CityName).ToList();
             var addressesCitiesGroup = addresses.GroupBy(a => a.CityName).ToList();
 
-            //var companies = await _companyService.GetAllAsync(
-            //                            predicate: x => !x.IsDeleted,
-            //                            include: c => c
-            //                            .Include(ct => ct.CompanyTranslations!
-            //                            .Where(c => c.LanguageId == language.Id))
-            //                            .Include(c => c.Addresses!.Where(x => x.IsMainAddress))
-            //                            .ThenInclude(x => x.AddressTranslations!.Where(x => x.LanguageId == language.Id)!));
-
-            var pagedCompanies = await _companyService.GetPagedCompaniesAsync(index, size);
+            var pagedCompanies = await _companyService.GetPagedCompaniesAsync(filter);
 
             var companyTypes = await _companyTypeService.GetAllAsync(
                                         predicate: x => !x.IsDeleted && x.CompanyTypeTranslations.Any() && x.Companies.Count!=0,
@@ -52,7 +45,8 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             {
                 Companies = pagedCompanies,
                 CompanyTypes = companyTypes.ToList(),
-                AddressesCitiesGroup=addressesCitiesGroup
+                AddressesCitiesGroup=addressesCitiesGroup,
+                Filter = filter
             };
 
             return companyListingViewModel;

@@ -4,6 +4,7 @@ using JobPortalProject.BL.ViewModels.LanguageViewModels;
 using JobPortalProject.BL.ViewModels.WorkingFieldViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,17 @@ namespace JobPortalProject.BL.ViewModels.CompanyViewModels
         public AddressViewModel MainAddress { get; set; } = null!;
         public List<AddressViewModel> Addresses { get; set; } = [];
         public List<WorkingFieldViewModel> WorkingFields { get; set; } = [];
+    }
+
+    public class CompanyFilterViewModel
+    {
+        public List<int> TypeIds { get; set; } = [];
+        public List<int> CityIds { get; set; } = [];
+        public string? SearchTerm { get; set; }
+        public string SortBy { get; set; } = "title";
+        public string SortOrder { get; set; } = "desc";
+        public int Index { get; set; } = 0;
+        public int Size { get; set; } = 10;
     }
 
     public class CompanyCreateViewModel

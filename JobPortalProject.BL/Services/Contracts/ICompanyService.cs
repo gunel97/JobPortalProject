@@ -17,6 +17,6 @@ namespace JobPortalProject.BL.Services.Contracts
         public Task<int> GetCompanyIdOfUser();
         public Task<bool> AddTranslationToExistingCompany(AddTranslationToExistedCompanyViewModel model);
         public Task<AddTranslationToExistedCompanyViewModel> GetAddTranslationToExistedCompanyViewModel(int languageId);
-        public Task<PagedResultModel<CompanyViewModel>> GetPagedCompaniesAsync(int index = 0, int size = 10);
+        public Task<PagedResultModel<CompanyViewModel>> GetPagedCompaniesAsync(CompanyFilterViewModel filter);
     }
 }

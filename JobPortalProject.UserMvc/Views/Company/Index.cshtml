@@ -1,5 +1,6 @@
 ﻿@{
     PagedCompanyListingViewModel model = Model;
+    var filter = model.Filter;
     var companyTypes = model.CompanyTypes;
     var companies = model.Companies;
     var addressesCitiesGroup = model.AddressesCitiesGroup;
@@ -27,9 +28,22 @@
 <!-- ========== Company Listing Start============= -->
 <div class="company-listing-area pt-120 mb-120">
     <div class="container">
+        <form asp-action="Index" method="get" id="filterForm">
         <div class="row g-lg-4 gy-5">
             <div class="col-lg-4 order-lg-1 order-2">
                 <div class="job-sidebar">
+                        <div class="job-widget mb-20">
+                            <div class="check-box-item">
+                                <h5 class="job-widget-title">Search</h5>
+                                <div class="form-inner">
+                                    <input type="text"
+                                           name="SearchTerm"
+                                           value="@filter.SearchTerm"
+                                           placeholder="Search job..."
+                                           class="form-control">
+                                </div>
+                            </div>
+                        </div>
                     <div class="job-widget style-1 mb-20">
                         <div class="check-box-item">
                             <h5 class="job-widget-title">Company Category</h5>
@@ -39,7 +53,11 @@
                                     {
                                         <li>
                                             <label class="containerss">
-                                                <input type="checkbox">
+                                                <input type="checkbox"
+                                                        name="TypeIds"
+                                                        value="@type.Id"
+                                                        @(filter.TypeIds.Contains(type.Id) ? "checked" : "")
+                                                        onchange="document.getElementById('Index').value=0; document.getElementById('filterForm').submit();">
                                                 <span class="checkmark"></span>
                                                 <span class="text">@type?.Name</span>
                                                 <span class="qty">(@type?.CompanyIds.Count())</span>
@@ -58,56 +76,55 @@
                                 <ul>
                                      @foreach (var group in addressesCitiesGroup ?? [])
                                     {
+                                        var city = group.FirstOrDefault();
                                         <li>
                                             <label class="containerss">
-                                                <input type="checkbox">
-                                                <span class="checkmark"></span>
+                                            <input type="checkbox"
+                                                    name="CityIds"
+                                                    value="@city.City.Id"
+                                                    @(filter.CityIds.Contains(city.City.Id) ? "checked" : "")
+                                                    onchange="document.getElementById('Index').value=0; document.getElementById('filterForm').submit();">
+                                                        <span class="checkmark"></span>
                                                 <span class="text">@group.FirstOrDefault()?.CityName, @group.FirstOrDefault()?.CountryName</span>
                                                 <span class="qty">(@group.Count())</span>
                                             </label>
                                         </li>
                                     } 
-                                @*      @foreach (var address in addresses ?? [])
-                                    {
-                                        <li>
-                                            <label class="containerss">
-                                                <input type="checkbox">
-                                                <span class="checkmark"></span>
-                                                <span class="text">@address?.CityName, @address?.CountryName</span>
-                                                <span class="qty">(30)</span>
-                                            </label>
-                                        </li>
-                                    }  *@
                                 </ul>
 
                             </div>
                         </div>
                     </div>
                     <div class="job-widget-btn">
-                        <a class="primry-btn-2 lg-btn text-center" href="#">Make A Job Post</a>
-                    </div>
+                        <a class="primry-btn-2 lg-btn text-center" asp-action="Index">Clear Filters</a>
+                    </div> 
                 </div>
             </div>
             <div class="col-lg-8 order-lg-2 order-1">
                 <div class="company-listing-wrap">
                     <div class="row g-4 mb-25">
-                        <div class="col-lg-6 d-flex align-items-center">
-                            <p class="show-item">@companies.Count jobs found.</p>
-                            @if (companies.Count > 0)
+                        <div class="col-lg-6 d-flex align-items-center">                            
+                                @if (companies.Count == 0)
+                                {
+                                    <p class="show-item">No companies found.</p>
+                                }
+                                @if (companies.Count > 0)
                             {
-                                <p class="show-item">Showing results @((companies.Index * companies.Size) + 1) - @Math.Min((companies.Index + 1) * companies.Size, companies.Count) from @companies.Count jobs</p>
+                                <p class="show-item">Showing results @((companies.Index * companies.Size) + 1) - @Math.Min((companies.Index + 1) * companies.Size, companies.Count) from @companies.Count companies</p>
                             }
                         </div>
                         <div class="col-lg-6 d-flex align-items-center justify-content-lg-end">
                             <div class="grid-select-area">
                                 <div class="select-area">
-                                    <select class="select1">
-                                        <option value="0">Sort By(Default)</option>
-                                        <option value="1">Full Time</option>
-                                        <option value="2">Part Time</option>
-                                        <option value="3">Remote</option>
-                                        <option value="3">Internship</option>
-                                        <option value="3">Freelance</option>
+                                    <select class="select1" name="SortBy" onchange="document.getElementById('Index').value = 0; document.getElementById('filterForm').submit();">
+                                        <option value="title_asc"
+                                                selected="@(filter.SortBy == "title_asc")">Name (A-Z)</option>
+                                        <option value="title_desc"
+                                                selected="@(filter.SortBy == "title_desc" || string.IsNullOrEmpty(filter.SortBy))">Name (Z-A)</option>
+                                        <option value="lastpostedjob_desc"
+                                                selected="@(filter.SortBy == "lastpostedjob_desc")">Last Posted Job (Newest First)</option>
+                                        <option value="lastpostedjob_asc"
+                                                selected="@(filter.SortBy == "lastpostedjob_asc")">Last Posted Job (Oldest First)</option>
                                     </select>
                                 </div>
                                 <div class="grid-area">
@@ -178,10 +195,27 @@
                     <div class="row">
                         <div class="col-lg-12 d-flex justify-content-center">
                             @{
-                                ViewData["RouteData"] = new Dictionary<string, string>
+                                var routeData = new Dictionary<string, string>
+                                                                {
+                                                                { "size", companies.Size.ToString() },
+                                                                { "SearchTerm", filter.SearchTerm ?? "" },
+                                                                { "SortBy", filter.SortBy ?? "" },
+                                                                { "SortOrder", filter.SortOrder ?? "" }
+                                                                };
+
+                                // Add TypeIds
+                                for (int i = 0; i < filter.TypeIds.Count; i++)
                                 {
-                                    { "size", companies.Size.ToString() }
-                                };
+                                    routeData[$"TypeIds[{i}]"] = filter.TypeIds[i].ToString();
+                                }
+
+                                // Add CityIds
+                                for (int i = 0; i < filter.CityIds.Count; i++)
+                                {
+                                    routeData[$"CityIds[{i}]"] = filter.CityIds[i].ToString();
+                                }
+
+                                ViewData["RouteData"] = routeData;
                             }
                             <partial name="_PaginationPartial" model="@companies" />
                         </div>
@@ -189,6 +223,10 @@
                 </div>
             </div>
         </div>
+                <input type="hidden" name="Index" id="Index" value="@filter.Index" />
+                <input type="hidden" name="Size" value="@filter.Size" />
+                <input type="hidden" name="SortOrder" value="@filter.SortOrder" />
+        </form>
     </div>
 </div>
 <!-- ========== Company Listing e nd============= -->

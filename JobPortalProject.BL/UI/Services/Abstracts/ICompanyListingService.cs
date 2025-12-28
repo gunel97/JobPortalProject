@@ -1,9 +1,10 @@
 ﻿using JobPortalProject.BL.UI.ViewModels;
+using JobPortalProject.BL.ViewModels.CompanyViewModels;
 
 namespace JobPortalProject.BL.UI.Services.Abstracts
 {
     public interface ICompanyListingService
     {
-        Task<PagedCompanyListingViewModel> GetListsAsync(int index=0, int size=10);
+        Task<PagedCompanyListingViewModel> GetListsAsync(CompanyFilterViewModel filter);
     }
 }

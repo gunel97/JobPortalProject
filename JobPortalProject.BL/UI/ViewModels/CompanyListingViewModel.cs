@@ -8,16 +8,10 @@ namespace JobPortalProject.BL.UI.ViewModels
 {
     public class PagedCompanyListingViewModel
     {
+        public CompanyFilterViewModel? Filter { get; set; }
         public List<AddressViewModel> Addresses { get; set; } = [];
         public List<CompanyTypeViewModel> CompanyTypes { get; set; } = [];
         public PagedResultModel<CompanyViewModel> Companies { get; set; } = null!;
         public IEnumerable<IGrouping<string?, AddressViewModel>> AddressesCitiesGroup { get; set; } = [];
     }
-    //public class CompanyListingViewModel
-    //{
-    //    public List<AddressViewModel> Addresses { get; set; } = [];
-    //    public List<CompanyTypeViewModel> CompanyTypes { get; set; } = [];
-    //    public List<CompanyViewModel> Companies { get; set; } = [];
-    //    public IEnumerable<IGrouping<string?, AddressViewModel>> AddressesCitiesGroup { get; set; } = [];
-    //}
 }

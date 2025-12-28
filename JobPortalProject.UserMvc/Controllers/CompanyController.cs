@@ -44,9 +44,9 @@ namespace JobPortalProject.UserMvc.Controllers
             _jobApplicationService = jobApplicationService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(CompanyFilterViewModel filter)
         {
-            var model = await _companyListingService.GetListsAsync();
+            var model = await _companyListingService.GetListsAsync(filter);
 
             return View(model);
         }

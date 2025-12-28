@@ -35,6 +35,18 @@
         <div class="row g-lg-4 gy-5">
             <div class="col-lg-4 order-lg-1 order-2">
                 <div class="job-sidebar">
+                        <div class="job-widget mb-20">
+                            <div class="check-box-item">
+                                <h5 class="job-widget-title">Search</h5>
+                                <div class="form-inner">
+                                    <input type="text"
+                                           name="SearchTerm"
+                                           value="@filter.SearchTerm"
+                                           placeholder="Search job name..."
+                                           class="form-control">
+                                </div>
+                            </div>
+                        </div>
                     <div class="job-widget style-1 mb-20">
                         <div class="check-box-item">
                             <h5 class="job-widget-title">Job Category</h5>
@@ -151,48 +163,6 @@
                                     </div>
 
                             </div>
-                        @*     <div class="salary-container">
-                                <ul>
-                                    <li>
-                                        <input class="form-check-input" type="radio" id="salary-1" name="salaryRange" value="5-15"
-                                               onchange="setSalaryRange(5, 15)">
-                                        <div class="content">
-                                            <span class="text">$5-$15</span>
-                                            <span class="qty">(80)</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <input class="form-check-input" type="radio" id="salary-2" name="salaryRange" value="20-30"
-                                               onchange="setSalaryRange(20, 30)">
-                                               <div class="content">
-                                            <span class="text">$20-$30</span>
-                                            <span class="qty">(100)</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <input class="form-check-input" type="radio" id="salary-3" name="salaryRange" value="35-50"
-                                               onchange="setSalaryRange(35, 50)">   <div class="content">
-                                            <span class="text">$35-$50</span>
-                                            <span class="qty">(100)</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <input class="form-check-input" type="radio" id="salary-4" name="salaryRange" value="55-70"
-                                               onchange="setSalaryRange(55, 70)">  <div class="content">
-                                            <span class="text">$55-$70</span>
-                                            <span class="qty">(120)</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <input class="form-check-input" type="radio" id="salary-5" name="salaryRange" value="75-100"
-                                               onchange="setSalaryRange(75, 100)">   <div class="content">
-                                            <span class="text">$75-$100</span>
-                                            <span class="qty">(30)</span>
-                                        </div>
-                                    </li>
-                                </ul>
-
-                            </div> *@
                         </div>
                     </div>
                     <div class="job-widget-btn">
@@ -214,13 +184,17 @@
                         <div class="col-lg-6 d-flex align-items-center justify-content-lg-end">
                             <div class="grid-select-area">
                                 <div class="select-area">
-                                    <select class="select1">
-                                        <option value="0">Sort By(Default)</option>
-                                        <option value="1">Full Time</option>
-                                        <option value="2">Part Time</option>
-                                        <option value="3">Remote</option>
-                                        <option value="3">Internship</option>
-                                        <option value="3">Freelance</option>
+                                    <select class="select1" name="SortBy" onchange="document.getElementById('Index').value = 0; document.getElementById('filterForm').submit();">
+                                        <option value="PostedDate"
+                                                selected="@(filter.SortBy == "PostedDate")">Sort By (Default)</option>
+                                        <option value="Title_asc"
+                                                selected="@(filter.SortBy == "Title_asc")">Title (A-Z)</option>
+                                        <option value="Title_desc"
+                                                selected="@(filter.SortBy == "Title_desc")">Title (Z-A)</option>
+                                        <option value="Salary_asc"
+                                                selected="@(filter.SortBy == "Salary_asc")">Salary (Low to High)</option>
+                                        <option value="Salary_desc"
+                                                selected="@(filter.SortBy == "Salary_desc")">Salary (High to Low)</option>
                                     </select>
                                 </div>
                             </div>
@@ -264,9 +238,10 @@
                                     <div class="job-type-apply">
                                         <div class="job-type">
                                             <span class="light-green">@localizer.GetValue(job.JobType ?? "")</span>
+                                            <span class="light-green">@localizer.GetValue(job.Gender ?? "")</span>
                                         </div>
                                         <div class="apply-btn">
-                                            <a href="job-details.html"><span><img src="~/images/icon/apply-ellipse.svg" alt=""></span>Apply Now</a>
+                                            <a href="job-details.html "><span><img src="~/images/icon/apply-ellipse.svg" alt=""></span>Apply Now</a>
                                         </div>
                                     </div>
                                 </div>

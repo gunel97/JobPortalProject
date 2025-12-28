@@ -184,13 +184,18 @@
                                 </div>
                             </div>
                             <div id ="bContainer" class="col-md-12">
+
                             </div>
-                                <div class="col-md-12">
-                                    <div class="form-inner">
-                                        <button onclick='addB(@Html.Raw(Json.Serialize(Model.TranslationCreateViewModels)))' class="primry-btn-2 lg-btn w-unset" type="button">Add Extra Benefits</button>
-                                    </div>
+                            <div id="removeButtonBen" class="col-md-6">
+                                <br/>
+                            </div>
+                            <br/>
+                            <div class="col-md-12">
+                                <div class="form-inner">
+                                    <button onclick='addB(@Html.Raw(Json.Serialize(Model.TranslationCreateViewModels)))' class="primry-btn-2 lg-btn w-unset" type="button">Add Extra Benefits</button>
                                 </div>
-                                <br />
+                            </div>
+                            <br />
                             </div>
                             <div class="row">
                             <div class="col-lg-12">
@@ -199,15 +204,19 @@
                                 </div>
                             </div>
                             <div id ="rContainer" class="col-md-12">
+                                    
                             </div>
-                                <div class="col-md-12">
-                                    <div class="form-inner">
-                                        <button onclick='addR(@Html.Raw(Json.Serialize(Model.TranslationCreateViewModels)))' class="primry-btn-2 lg-btn w-unset" type="button">Add Job Responsibility</button>
-                                    </div>
+                            <div id="removeButtonResp" class="col-md-6">
+                                <br/>
+                            </div>
+                            <br/>
+                            <div class="col-md-12">
+                                <div class="form-inner">
+                                    <button onclick='addR(@Html.Raw(Json.Serialize(Model.TranslationCreateViewModels)))' class="primry-btn-2 lg-btn w-unset" type="button">Add Job Responsibility</button>
                                 </div>
-                                <br />
                             </div>
-
+                            <br />
+                            </div>
                             <br/>
                             <div class="col-md-12">
                                 <br />
@@ -221,115 +230,99 @@
             </div>
         </div>
     </div>
+</div>
 <!-- ========== Login Area end============= -->
-
-
 <script>
-    let addedBenIndex=0;
-    let isDeleted=0;
-    let respIndex = 0;
+      let respIndex = 0;
     let benIndex=0;
+    const removeButtonResp = document.getElementById('removeButtonResp');
+    const removeButtonBen = document.getElementById('removeButtonBen');
+    const responsibilityTitle = document.getElementById("responsibilityTitle");
+    const benefitTitle = document.getElementById("benefitTitle");
 
     function addR(translations){
         console.log(translations);
         console.log("test");
-    const rContainer = document.getElementById("rContainer");
-    const responsibilityTitle = document.getElementById("responsibilityTitle");
-    responsibilityTitle.innerText="Job Responsibilities"
-    for(let i=0; i<translations.length; i++){
-        const divElement =document.createElement('div');
-                divElement.className='form-inner mb-25';
-                    var htmlTextR = `<label for="jobtitle">
-                    Job Responsibility <img src="${translations[i].languageIcon}" alt=""> *</label>
-                                        <div class="input-area">
-                                            <img src="/images/icon/company-2.svg" alt="">
-                                            <input name="Responsibilities[${respIndex}].JobResponsibilityTranslations[${i}].Value" placeholder="Senior UI/UX Engineer">
-                                            <input type="hidden" name="Responsibilities[${respIndex}].JobResponsibilityTranslations[${i}].LanguageId" value="${i + 1}" />
-                                            </div>`;
+        const rContainer = document.getElementById("rContainer");
+
+        responsibilityTitle.innerText="Job Responsibilities"
+        const divElementOfRespTranslations =document.createElement('div');
+        divElementOfRespTranslations.className='col-md-12';
+        divElementOfRespTranslations.id=`respRow${respIndex}`;
+
+        for(let i=0; i<translations.length; i++){
+            const divElement =document.createElement('div');
+            divElement.className='form-inner mb-25';
+            var htmlTextR = `<label for="jobtitle">
+            Job Responsibility <img src="${translations[i].languageIcon}" alt=""> *</label>
+                                <div class="input-area">
+                                    <img src="/images/icon/company-2.svg" alt="">
+                                    <input name="Responsibilities[${respIndex}].JobResponsibilityTranslations[${i}].Value" placeholder="Senior UI/UX Engineer">
+                                    <input type="hidden" name="Responsibilities[${respIndex}].JobResponsibilityTranslations[${i}].LanguageId" value="${i + 1}" />
+                                    </div>`;
             divElement.innerHTML+=htmlTextR;
-            rContainer.appendChild(divElement);
+            divElementOfRespTranslations.appendChild(divElement);
             console.log(htmlTextR);
-    }
-    respIndex++;
+        }
+        respIndex++;
+        rContainer.appendChild(divElementOfRespTranslations);
+
+        removeButtonResp.innerHTML=`<div class="form-inner">
+            <button onclick='removeResp()'  class="primry-btn-2 lg-btn w-unset" type="button">Remove </button>
+            </div>`;
+
+    };
+
+    function removeResp(){
+        var testR = respIndex-1;
+        var rowResp = document.getElementById(`respRow${testR}`);
+        rowResp.remove();
+        respIndex--;
+        console.log(testR);
+        if(testR==0){
+            removeButtonResp.innerHTML="";
+            responsibilityTitle.innerHTML="";
+        }
     };
 
     function addB(translations){
-       
-              if(benIndex>0){
-            const removeButtonBenefit = document.getElementById("removeButtonBenefit");
-            removeButtonBenefit.remove();
-        };
-        if(isDeleted==1){
-            isDeleted=0;
-            benIndex++;
-        };
-  
+        const bContainer = document.getElementById("bContainer");
+        benefitTitle.innerText="Job Extra Benefits:";
 
-    const bContainer = document.getElementById("bContainer");
-    const benefitTitle = document.getElementById("benefitTitle");
-    benefitTitle.innerText="Job Extra Benefits:";
-    const divForRemove = document.createElement('div');
-    divForRemove.id=`divB${benIndex}`;
-    for(let i=0; i<translations.length; i++){
-        const divElement =document.createElement('div');
-        divElement.className='form-inner mb-25';
-                    var htmlTextB = `<label for="jobtitle">
-                    Job Benefit <img src="${translations[i].languageIcon}" alt=""> *</label>
-                                        <div class="input-area">
-                                            <img src="/images/icon/company-2.svg" alt="">
-                                            <input name="ExtraBenefits[${benIndex}].JobExtraBenefitTranslations[${i}].Value" placeholder="Senior UI/UX Engineer">
-                                            <input type="hidden" name="ExtraBenefits[${benIndex}].JobExtraBenefitTranslations[${i}].LanguageId" value="${i + 1}" />
-                                            </div>`;
+        const divElementOfBenTranslations =document.createElement('div');
+        divElementOfBenTranslations.className='col-md-12';
+        divElementOfBenTranslations.id=`benRow${benIndex}`;
+
+        for(let i=0; i<translations.length; i++){
+            const divElement =document.createElement('div');
+            divElement.className='form-inner mb-25';
+            var htmlTextB = `<label for="jobtitle">
+            Job Benefit <img src="${translations[i].languageIcon}" alt=""> *</label>
+                                <div class="input-area">
+                                    <img src="/images/icon/company-2.svg" alt="">
+                                    <input name="ExtraBenefits[${benIndex}].JobExtraBenefitTranslations[${i}].Value" placeholder="Senior UI/UX Engineer">
+                                    <input type="hidden" name="ExtraBenefits[${benIndex}].JobExtraBenefitTranslations[${i}].LanguageId" value="${i + 1}" />
+                                    </div>`;
             divElement.innerHTML+=htmlTextB;
-            divForRemove.appendChild(divElement);
-    };
-    bContainer.appendChild(divForRemove);
-            bContainer.innerHTML+=`<div id="removeButtonBenefit">
-        <div class="add-row" onclick="removeBenefitRow(${benIndex},this)">
-                                            <button
-                                            type="button" class="remove-work-area-row remove">
-                                                Remove
-                                            </button>
-                                       </div>
-                                       </div>`;
-                                       console.log(`elave edenden sonra ${benIndex}`);
-    benIndex++;
-    console.log(`++dan sonra ${benIndex}`);
-    addedBenIndex=1;
+            divElementOfBenTranslations.appendChild(divElement);
+        };
+
+        benIndex++;
+        bContainer.appendChild(divElementOfBenTranslations);
+
+         removeButtonBen.innerHTML=`<div class="form-inner">
+            <button onclick='removeBen()'  class="primry-btn-2 lg-btn w-unset" type="button">Remove </button>
+            </div>`;
     };
 
-    function removeBenefitRow(rowId){
-        const row = document.getElementById(`divB${rowId}`);
-        var removeButtonBenefit = document.getElementById("removeButtonBenefit");
-        row.remove();
-        console.log(benIndex);
-
-        if(benIndex==0){
-            const bContainer = document.getElementById('bContainer');
-            bContainer.innerHTML="";
-            return;
-        };
-       
-        if(addedBenIndex==1)
-        {
-        benIndex-=2;
-        };
-        if(addedBenIndex==0)
-        {
-        benIndex-=1;
+    function removeBen(){
+        var testB = benIndex-1;
+        var benRow = document.getElementById(`benRow${testB}`);
+        benRow.remove();
+        benIndex--;;
+        if(testB==0){
+            removeButtonBen.innerHTML="";
+            benefitTitle.innerHTML="";
         }
-
-        console.log(benIndex);
-        removeButtonBenefit.innerHTML=`<div class="add-row" id="removeButtonBenefit" onclick="removeBenefitRow(${benIndex},this)">
-                                            <button
-                                            type="button" class="remove-work-area-row remove">
-                                                Remove
-                                            </button>
-                                       </div>`;
-        console.log(benIndex);
-        isDeleted=1;
-        addedBenIndex=0;
     };
-
-
 </script>

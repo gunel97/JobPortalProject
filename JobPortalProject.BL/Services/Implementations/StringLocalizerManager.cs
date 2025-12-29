@@ -13,7 +13,7 @@ namespace JobPortalProject.BL.Services.Implementations
 
         public StringLocalizerManager(IStringLocalizerFactory stringLocalizerFactory)
         {
-            _stringLocalizer = stringLocalizerFactory.Create("SharedResources", "JobPortalProject.UserMvc");
+            _stringLocalizer = stringLocalizerFactory.Create("SharedResources", "JobPortalProject.BL");
         }
 
         public string GetValue(string key)

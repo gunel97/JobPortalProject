@@ -1,4 +1,6 @@
-﻿using JobPortalProject.BL.Mapping;
+﻿using JobPortalProject.BL.Admin.Services.Abstracts;
+using JobPortalProject.BL.Admin.Services.Implementations;
+using JobPortalProject.BL.Mapping;
 using JobPortalProject.BL.Services.Contracts;
 using JobPortalProject.BL.Services.Implementations;
 using JobPortalProject.BL.UI.Services.Abstracts;
@@ -86,6 +88,9 @@ namespace JobPortalProject.BL
             services.AddScoped<IEnumService, EnumManager>();
             services.AddScoped<IResumePdfService, ResumePdfService>();
             services.AddScoped<FileService>();
+
+            services.AddScoped<ISidebarLanguageService, SidebarLanguageManager>();
+            services.AddScoped<IJobCategoryIndexService, JobCategoryIndexManager>();
 
 
 

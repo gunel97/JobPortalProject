@@ -22,6 +22,14 @@
         },
         "runtime": {
           "JobPortalProject.BL.dll": {}
+        },
+        "resources": {
+          "az/JobPortalProject.BL.resources.dll": {
+            "locale": "az"
+          },
+          "en-US/JobPortalProject.BL.resources.dll": {
+            "locale": "en-US"
+          }
         }
       },
       "AutoMapper/15.1.0": {

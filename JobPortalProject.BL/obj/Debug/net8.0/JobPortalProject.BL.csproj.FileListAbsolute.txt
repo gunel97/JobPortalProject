@@ -33,3 +33,10 @@ C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.BL\obj\Debug\net8
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.BL\obj\Debug\net8.0\refint\JobPortalProject.BL.dll
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.BL\obj\Debug\net8.0\JobPortalProject.BL.pdb
 C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.BL\obj\Debug\net8.0\ref\JobPortalProject.BL.dll
+C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.BL\bin\Debug\net8.0\az\JobPortalProject.BL.resources.dll
+C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.BL\bin\Debug\net8.0\en-US\JobPortalProject.BL.resources.dll
+C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.BL\obj\Debug\net8.0\JobPortalProject.BL.Resources.SharedResources.az.resources
+C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.BL\obj\Debug\net8.0\JobPortalProject.BL.Resources.SharedResources.en-US.resources
+C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.BL\obj\Debug\net8.0\JobPortalProject.BL.csproj.GenerateResource.cache
+C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.BL\obj\Debug\net8.0\az\JobPortalProject.BL.resources.dll
+C:\Users\Lenovo\source\repos\JobPortalProject\JobPortalProject.BL\obj\Debug\net8.0\en-US\JobPortalProject.BL.resources.dll

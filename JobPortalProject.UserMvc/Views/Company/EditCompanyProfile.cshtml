@@ -352,8 +352,6 @@
                     </div>
                     @if (Model.CompanyTranslations != null && Model.CompanyTranslations.Any())
                     {
-
-
                         @for (int i = 0; i < Model.CompanyTranslations.Count; i++)
                         {
                             <input name="WorkingFieldTranslationCreateViewModels[@i].SelectedUpdateLanguageId" value="@Model.SelectedUpdateLanguageId" type="hidden" />

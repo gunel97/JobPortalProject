@@ -2,6 +2,8 @@
 using JobPortalProject.BL.Admin.ViewModels;
 using JobPortalProject.BL.Services.Contracts;
 using JobPortalProject.BL.UI.Services.Abstracts;
+using JobPortalProject.BL.ViewModels.JobCategoryViewModels;
+using JobPortalProject.BL.ViewModels.JobViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -25,21 +27,26 @@ namespace JobPortalProject.BL.Admin.Services.Implementations
             _cookieService = cookieService;
         }
 
-        public async Task<JobCategoryIndexViewModel> GetJobCategoryIndexModel()
+        public async Task<JobCategoryPagedIndexViewModel> GetPagedJobCategoryIndexModel(JobCategoryFilterViewModel filter)
         {
             var languages = await _languageService.GetAllAsync();
             var language = await _cookieService.GetLanguageAsync();
-            var jobCategories = await _jobCategoryService.GetAllAsync(include:
-                x => x.Include(x => x.JobCategoryTranslations.Where(t => t.LanguageId == language.Id))
-                .Include(x => x.Jobs));
+            filter ??= new JobCategoryFilterViewModel();
+            if (filter.Index < 0) filter.Index = 0;
+            if (filter.Size <= 0) filter.Size = 10;
 
-            var model = new JobCategoryIndexViewModel
+            var pagedJobCategories = await _jobCategoryService.GetPagedJobCategoriesAsync(filter);
+
+            var model = new JobCategoryPagedIndexViewModel
             {
                 Languages = languages.ToList(),
-                JobCategories= jobCategories.ToList(),
+                JobCategories = pagedJobCategories
             };
 
             return model;
         }
+
+
     }
+
 }

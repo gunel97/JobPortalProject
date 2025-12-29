@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using JobPortalProject.BL.ViewModels.Pagination;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,20 @@ using System.Threading.Tasks;
 
 namespace JobPortalProject.BL.ViewModels.JobCategoryViewModels
 {
+    public class JobCategoryFilterViewModel
+    {
+        public string? SearchTerm { get; set; }
+        public string SortBy { get; set; } = "CreatedAt";
+        public string SortOrder { get; set; } = "desc";
+        public int Size { get; set; } = 10;
+        public int Index { get; set; } = 0;
+    }
+
+    public class JobCategoryPagedViewModel
+    {
+        public PagedResultModel<JobCategoryViewModel> JobCategories { get; set; } = null!;
+    }
+
     public class JobCategoryViewModel
     {
         public int Id { get; set; }

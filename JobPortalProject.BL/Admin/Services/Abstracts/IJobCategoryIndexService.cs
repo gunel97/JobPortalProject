@@ -10,6 +10,6 @@ namespace JobPortalProject.BL.Admin.Services.Abstracts
 {
     public interface IJobCategoryIndexService
     {
-        public Task<JobCategoryIndexViewModel> GetJobCategoryIndexModel();
+        public Task<JobCategoryPagedIndexViewModel> GetPagedJobCategoryIndexModel(JobCategoryFilterViewModel filter);
     }
 }

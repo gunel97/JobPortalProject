@@ -1,8 +1,7 @@
-﻿@model JobCategoryIndexViewModel
+﻿@model JobCategoryPagedIndexViewModel
 
   <div id="main-content" class="h-full w-full bg-gray-50 relative overflow-y-auto lg:ml-64">
     <main>
-<form method="post">
     <div class="p-4 bg-white block sm:flex items-center justify-between border-b border-gray-200 lg:mt-1.5">
         <div class="mb-1 w-full">
             <div class="mb-4">
@@ -25,15 +24,15 @@
                 <h1 class="text-xl sm:text-2xl font-semibold text-gray-900">All categories</h1>
             </div>
             <div class="block sm:flex items-center md:divide-x md:divide-gray-100">
-                <form class="sm:pr-3 mb-4 sm:mb-0" action="#" method="GET">
+                    <form class="sm:pr-3 mb-4 sm:mb-0" asp-action="Index" method="GET">
                     <label for="products-search" class="sr-only">Search</label>
                     <div class="mt-1 relative sm:w-64 xl:w-96">
-                    <input type="text" name="email" id="products-search" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Search for products">
+                            <input name="SearchTerm" value="@Model.Filter?.SearchTerm" name="email" id="products-search" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Search for products">
                     </div>
                 </form>
                 <div class="flex items-center sm:justify-end w-full">
                     <div class="hidden md:flex pl-2 space-x-1">
-                        <a asp-controller="" class="text-gray-500 hover:text-gray-900 cursor-pointer p-1 hover:bg-gray-100 rounded inline-flex justify-center">
+                        <a class="text-gray-500 hover:text-gray-900 cursor-pointer p-1 hover:bg-gray-100 rounded inline-flex justify-center">
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
                         </a>
                     </div>
@@ -73,9 +72,9 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            @if (Model.JobCategories.Any())
+                            @if (Model.JobCategories.Items.Any())
                             {
-                                @foreach (var category in Model.JobCategories ?? [])
+                                @foreach (var category in Model.JobCategories.Items ?? [])
                                 {
                                     <tr class="hover:bg-gray-100">
                                         <td class="p-4 w-4">
@@ -102,6 +101,14 @@
                                     </tr>
                                 }
                             }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5" class="p-4 text-center text-gray-500">
+                                        No categories found matching your search criteria.
+                                    </td>
+                                </tr>
+                            }
                                 </tbody>
                     </table>
                 </div>
@@ -109,7 +116,73 @@
         </div>
     </div>
 
-    <div class="bg-white sticky sm:flex items-center w-full sm:justify-between bottom-0 right-0 border-t border-gray-200 p-4">
+        <div class="bg-white sticky sm:flex items-center w-full sm:justify-between bottom-0 right-0 border-t border-gray-200 p-4">
+            <div class="flex items-center mb-4 sm:mb-0">
+                @if (Model.JobCategories.HasPrevious)
+                {
+                    <a asp-action="Index" asp-route-index="@(Model.JobCategories.Index - 1)" asp-route-size="@Model.JobCategories.Size" asp-route-searchTerm="@Model.Filter?.SearchTerm" class="text-gray-500 hover:text-gray-900 cursor-pointer p-1 hover:bg-gray-100 rounded inline-flex justify-center">
+                        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                    </a>
+                }
+                else
+                {
+                    <span class="text-gray-300 cursor-not-allowed p-1 rounded inline-flex justify-center">
+                        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                    </span>
+                }
+                @if (Model.JobCategories.HasNext)
+                {
+                    <a asp-action="Index" asp-route-index="@(Model.JobCategories.Index + 1)" asp-route-size="@Model.JobCategories.Size" asp-route-searchTerm="@Model.Filter?.SearchTerm" class="text-gray-500 hover:text-gray-900 cursor-pointer p-1 hover:bg-gray-100 rounded inline-flex justify-center mr-2">
+                        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                    </a>
+                }
+                else
+                {
+                    <span class="text-gray-300 cursor-not-allowed p-1 rounded inline-flex justify-center mr-2">
+                        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                    </span>
+                }
+                <span class="text-sm font-normal text-gray-500">
+                    Showing
+                    <span class="text-gray-900 font-semibold">@(Model.JobCategories.Count > 0 ? (Model.JobCategories.Index * Model.JobCategories.Size + 1) : 0)-@(Math.Min((Model.JobCategories.Index + 1) * Model.JobCategories.Size, Model.JobCategories.Count))</span>
+                    of
+                    <span class="text-gray-900 font-semibold">@Model.JobCategories.Count</span>
+                </span>
+            </div>
+            <div class="flex items-center space-x-3">
+                @if (Model.JobCategories.HasPrevious)
+                {
+                    <a asp-action="Index" asp-route-page="@(Model.JobCategories.Index - 1)" asp-route-searchTerm="@Model.Filter?.SearchTerm" class="flex-1 text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center">
+                        <svg class="-ml-1 mr-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                        Previous
+                    </a>
+                }
+                else
+                {
+                    <span class="flex-1 text-white bg-gray-400 cursor-not-allowed font-medium inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center">
+                        <svg class="-ml-1 mr-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                        Previous
+                    </span>
+                }
+                @if (Model.JobCategories.HasNext)
+                {
+                    <a asp-action="Index" asp-route-page="@(Model.JobCategories.Index + 1)" asp-route-searchTerm="@Model.Filter?.SearchTerm" class="flex-1 text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center">
+                        Next
+                        <svg class="-mr-1 ml-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                    </a>
+                }
+                else
+                {
+                    <span class="flex-1 text-white bg-gray-400 cursor-not-allowed font-medium inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center">
+                        Next
+                        <svg class="-mr-1 ml-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                    </span>
+                }
+            </div>
+        </div>
+
+
+ @*    <div class="bg-white sticky sm:flex items-center w-full sm:justify-between bottom-0 right-0 border-t border-gray-200 p-4">
         <div class="flex items-center mb-4 sm:mb-0">
             <a href="#" class="text-gray-500 hover:text-gray-900 cursor-pointer p-1 hover:bg-gray-100 rounded inline-flex justify-center">
                 <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
@@ -129,8 +202,7 @@
                 <svg class="-mr-1 ml-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
             </a>
         </div>
-    </div>
-</form>
+    </div> *@
 
 <!-- Add Product Modal -->
 <div class="hidden overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 md:inset-0 z-50 justify-center items-center h-modal sm:h-full" id="add-product-modal">
@@ -177,7 +249,7 @@
 </div>
 
 <!-- Delete Product Modal -->
-@foreach (var category in Model.JobCategories ?? [])
+@foreach (var category in Model.JobCategories.Items ?? [])
 {
             <div class="hidden overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 md:inset-0 z-50 justify-center items-center h-modal sm:h-full" id="delete-jobCategory-@category.Id">
         <div class="relative w-full max-w-md px-4 h-full md:h-auto">

@@ -19,12 +19,19 @@ namespace JobPortalProject.AdminMvc.Controllers
             _jobCategoryService = jobCategoryService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(JobCategoryFilterViewModel filter)
         {
-            var model = await _jobCategoryIndexService.GetJobCategoryIndexModel();
+            var model = await _jobCategoryIndexService.GetPagedJobCategoryIndexModel(filter);
 
             return View(model);
         }
+
+        //public async Task<IActionResult> Index()
+        //{
+        //    var model = await _jobCategoryIndexService.GetJobCategoryIndexModel();
+
+        //    return View(model);
+        //}
 
         [HttpPost]
         public async Task<IActionResult> Create(JobCategoryCreateViewModel model)

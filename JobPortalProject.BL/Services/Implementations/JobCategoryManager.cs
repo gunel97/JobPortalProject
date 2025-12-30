@@ -31,6 +31,8 @@ namespace JobPortalProject.BL.Services.Implementations
             _cookieService = cookieService;
         }
 
+
+
         public async Task<List<SelectListItem>> GetJobCategorySelectListItems(int selectedLanguageId)
         {
             var jobCategoryListItems = new List<SelectListItem>();
@@ -150,6 +152,7 @@ namespace JobPortalProject.BL.Services.Implementations
             var pagedJobCategories = await Repository.GetPagedListAsync(predicate: predicate,
                 orderBy: orderBy,
                 include: x => x
+                .Include(x=>x.Jobs)
                 .Include(x => x.JobCategoryTranslations.Where(t => t.LanguageId == language.Id))
                 , index: filter.Index, size: filter.Size);
 

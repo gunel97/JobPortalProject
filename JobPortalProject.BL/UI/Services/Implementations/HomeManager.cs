@@ -30,16 +30,15 @@ namespace JobPortalProject.BL.UI.Services.Implementations
         public async Task<HomeViewModel> GetHomeViewModelAsync()
         {
             var language = await _cookieService.GetLanguageAsync();
-
             var addresses =await  _addressService.GetAllAsync();
-
             var jobs = await _jobService.GetAllJobsAsync();
 
             var jobCategories = await _jobCategoryService.GetAllAsync(
                                                 predicate: x => !x.IsDeleted,
                                                 include: c => c
-                                               .Include(ct => ct.JobCategoryTranslations!
-                                               .Where(j => j.LanguageId == language.Id)));
+                                                .Include(x=>x.Jobs)
+                                                .Include(ct => ct.JobCategoryTranslations!
+                                                .Where(j => j.LanguageId == language.Id)));
 
             var addressesByCities = addresses.DistinctBy(a => a.City!.Name!);
 
@@ -50,7 +49,7 @@ namespace JobPortalProject.BL.UI.Services.Implementations
 
             var homeViewModel = new HomeViewModel
             {
-                JobCategories = jobCategories.ToList(),
+                JobCategories = jobCategories.Where(x=>!x.IsDeleted && x.JobIds.Any()).ToList(),
                 Addresses = addressesByCities.ToList(),
                 Companies = companies.ToList(),
                 Jobs=jobs.OrderByDescending(j=>j.CreatedAt).Take(6).ToList(),

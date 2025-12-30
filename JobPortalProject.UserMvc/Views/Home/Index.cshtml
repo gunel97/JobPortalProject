@@ -126,7 +126,7 @@
                     <div class="job-content-inner">
                         <div class="cart-front">
                             <h5><a href="job-listing1.html">@jobCategory.Name</a></h5>
-                            <p>50 Jobs Available</p>
+                            <p>@(jobCategory.JobIds.Count()) Jobs Available</p>
                             <div class="view-btn1">
                                 <a href="category.html">View All Jobs</a>
                             </div>
@@ -137,7 +137,7 @@
                             </div>
                             <div class="category-content">
                                 <h5><a href="job-listing1.html">@jobCategory.Name</a></h5>
-                                <p>50 Jobs Available</p>
+                                <p>@(jobCategory.JobIds.Count()) Jobs Available</p>
                                 <div class="view-btn1">
                                     <a href="job-listing1.html">View All <i class="bi bi-arrow-right"></i></a>
                                 </div>
@@ -148,12 +148,12 @@
             </div>
             }
        
-            <div class="col">
+         @*    <div class="col">
                 <div class="category-btn-area">
                     <h5>Category List</h5>
                     <a href="category.html">View All Category <i class="bi bi-arrow-right"></i></a>
                 </div>
-            </div>
+            </div> *@
         </div>
     </div>
 </div>

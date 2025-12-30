@@ -28,6 +28,7 @@ namespace JobPortalProject.BL.ViewModels.JobCategoryViewModels
         public string? Name { get; set; }
         public string? ImagePublicId { get; set; }
         public string? ImageUrl { get; set; }
+        public DateTime CreatedAt { get; set; }
         public List<int> JobIds { get; set; } = [];
     }
 

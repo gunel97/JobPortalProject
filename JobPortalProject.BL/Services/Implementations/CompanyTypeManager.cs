@@ -43,39 +43,6 @@ namespace JobPortalProject.BL.Services.Implementations
             return companyTypesSelectListItems;
         }
 
-        public async Task<PagedResultModel<CompanyTypeViewModel>> GetPagedCompanyTypesAsync(CompanyTypeFilterViewModel filter)
-        {
-            var language = await _cookieService.GetLanguageAsync();
-            Expression<Func<CompanyType, bool>> predicate = BuildPredicate(filter, language.Id);
-            Func<IQueryable<CompanyType>, IOrderedQueryable<CompanyType>> orderBy = BuildOrderBy(filter, language.Id);
-
-            var pagedCompanyTypes = await Repository.GetPagedListAsync(predicate: predicate,
-                orderBy: orderBy,
-                include: x => x.
-                Include(x => x.Companies).
-                Include(x => x.CompanyTypeTranslations.Where(t => t.LanguageId == language.Id)),
-                index: filter.Index, size: filter.Size
-                );
-
-            var companyTypeModels = new List<CompanyTypeViewModel>();
-            foreach(var item in pagedCompanyTypes.Items)
-            {
-                var model = Mapper.Map<CompanyTypeViewModel>(item);
-                companyTypeModels.Add(model);
-            }
-
-            var pagedCompanyTypeModels = new PagedResultModel<CompanyTypeViewModel>
-            {
-                Items = companyTypeModels,
-                Index = pagedCompanyTypes.Index,
-                Size = pagedCompanyTypes.Size,
-                Count = pagedCompanyTypes.Count,
-                Pages = pagedCompanyTypes.Pages,
-            };
-
-            return pagedCompanyTypeModels;
-        }
-
         public async Task<CompanyTypeUpdateViewModel> GetUpdateViewModel(int id)
         {
             var type= await Repository.GetAsync(predicate: x=>x.Id==id,
@@ -122,34 +89,86 @@ namespace JobPortalProject.BL.Services.Implementations
             return true;
         }
 
+        public async Task<PagedResultModel<CompanyTypeViewModel>> GetPagedCompanyTypesAsync(CompanyTypeFilterViewModel filter)
+        {
+            var language = await _cookieService.GetLanguageAsync();
+            Expression<Func<CompanyType, bool>> predicate = BuildPredicate(filter, language.Id);
+            Func<IQueryable<CompanyType>, IOrderedQueryable<CompanyType>> orderBy = BuildOrderBy(filter, language.Id);
+
+            var pagedCompanyTypes = await Repository.GetPagedListAsync(predicate: predicate,
+                orderBy: orderBy,
+                include: x => x.
+                Include(x => x.Companies).
+                Include(x => x.CompanyTypeTranslations.Where(t => t.LanguageId == language.Id)),
+                index: filter.Index, size: filter.Size
+                );
+
+            var companyTypeModels = new List<CompanyTypeViewModel>();
+            foreach (var item in pagedCompanyTypes.Items)
+            {
+                var model = Mapper.Map<CompanyTypeViewModel>(item);
+                companyTypeModels.Add(model);
+            }
+
+            var pagedCompanyTypeModels = new PagedResultModel<CompanyTypeViewModel>
+            {
+                Items = companyTypeModels,
+                Index = pagedCompanyTypes.Index,
+                Size = pagedCompanyTypes.Size,
+                Count = pagedCompanyTypes.Count,
+                Pages = pagedCompanyTypes.Pages,
+            };
+
+            return pagedCompanyTypeModels;
+        }
+
         private Func<IQueryable<CompanyType>, IOrderedQueryable<CompanyType>> BuildOrderBy(CompanyTypeFilterViewModel filter, int languageId)
         {
-            var sortBy = filter.SortBy?.ToLower() ?? "createdat";
-            var sortOrder = filter.SortOrder?.ToLower() ?? "desc";
+            var sortBy = filter.SortBy?.ToLower().Trim() ?? "createdat";
+            var sortOrder = filter.SortOrder?.ToLower().Trim() ?? "desc";
 
             if (sortBy.Contains('_'))
             {
                 var parts = sortBy.Split('_');
                 sortBy = parts[0];
-                sortOrder = parts[1];
+                if (parts.Length > 1) sortOrder = parts[1];
             }
 
             return queryable =>
             {
-                IOrderedQueryable<CompanyType> ordered = sortBy switch
+                IOrderedQueryable<CompanyType> ordered;
+
+                switch (sortBy)
                 {
-                    "name" => sortOrder == "asc"
-                    ? queryable.OrderBy(x => x.CompanyTypeTranslations.Where(t => t.LanguageId == languageId)
-                    .Select(t => t.Name).FirstOrDefault())
-                    : queryable.OrderByDescending(x => x.CompanyTypeTranslations.Where(t => t.LanguageId == languageId)
-                    .Select(t => t.Name).FirstOrDefault()),
-                    _ => sortOrder == "asc"
-                    ? queryable.OrderBy(x => x.CreatedAt)
-                    : queryable.OrderByDescending(x => x.CreatedAt)
-                };
+                    case "name":
+                        if (sortOrder == "asc")
+                        {
+                            ordered = queryable.OrderBy(x => x.CompanyTypeTranslations
+                                                .Where(t => t.LanguageId == languageId)
+                                                .Select(t => t.Name)
+                                                .FirstOrDefault());
+                        }
+                        else
+                        {
+                            ordered = queryable.OrderByDescending(x => x.CompanyTypeTranslations
+                                                .Where(t => t.LanguageId == languageId)
+                                                .Select(t => t.Name)
+                                                .FirstOrDefault());
+                        }
+                        break;
+
+                    case "createdat":
+                    default:
+                        ordered = sortOrder == "asc"
+                            ? queryable.OrderBy(x => x.CreatedAt)
+                            : queryable.OrderByDescending(x => x.CreatedAt);
+                        break;
+                }
+
                 return ordered;
             };
         }
+
 
         private Expression<Func<CompanyType, bool>> BuildPredicate(CompanyTypeFilterViewModel filter, int languageId)
         {

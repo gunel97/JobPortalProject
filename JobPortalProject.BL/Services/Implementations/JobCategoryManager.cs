@@ -182,22 +182,40 @@ namespace JobPortalProject.BL.Services.Implementations
             {
                 var parts = sortBy.Split('_');
                 sortBy = parts[0];
-                sortOrder = parts[1];
+                if (parts.Length > 1) sortOrder = parts[1];
             }
 
             return queryable =>
             {
-                IOrderedQueryable<JobCategory> ordered = sortBy switch
+                IOrderedQueryable<JobCategory> ordered;
+
+                switch (sortBy)
                 {
-                    "name" => sortOrder == "asc"
-                    ? queryable.OrderBy(x => x.JobCategoryTranslations.Where(t => t.LanguageId == languageId)
-                    .Select(t => t.Name).FirstOrDefault())
-                    : queryable.OrderByDescending(x => x.JobCategoryTranslations.Where(t => t.LanguageId == languageId)
-                    .Select(t => t.Name).FirstOrDefault()),
-                    _ => sortOrder == "asc"
-                    ? queryable.OrderBy(x => x.CreatedAt)
-                    : queryable.OrderByDescending(x => x.CreatedAt)
-                };
+                    case "name":
+                        if (sortOrder == "asc")
+                        {
+                            ordered = queryable.OrderBy(x => x.JobCategoryTranslations
+                                                .Where(t => t.LanguageId == languageId)
+                                                .Select(t => t.Name)
+                                                .FirstOrDefault());
+                        }
+                        else
+                        {
+                            ordered = queryable.OrderByDescending(x => x.JobCategoryTranslations
+                                                .Where(t => t.LanguageId == languageId)
+                                                .Select(t => t.Name)
+                                                .FirstOrDefault());
+                        }
+                        break;
+
+                    case "createdat":
+                    default:
+                        ordered = sortOrder == "asc"
+                            ? queryable.OrderBy(x => x.CreatedAt)
+                            : queryable.OrderByDescending(x => x.CreatedAt);
+                        break;
+                }
+
                 return ordered;
             };
         }

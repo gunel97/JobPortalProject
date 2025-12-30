@@ -106,7 +106,6 @@ namespace JobPortalProject.BL.Services.Implementations
                     category.ImageUrl = result.Url;
                 }
             }
-            category.IsDeleted = model.IsDeleted;
 
             foreach (var translation in model.Translations)
             {
@@ -130,7 +129,6 @@ namespace JobPortalProject.BL.Services.Implementations
             {
                 Id = category.Id,
                 ImageUrl = category.ImageUrl,
-                IsDeleted = category.IsDeleted,
                 Translations = category.JobCategoryTranslations.Select(x => new JobCategoryTranslationUpdateViewModel
                 {
                     Id = x.Id,

@@ -91,6 +91,7 @@ namespace JobPortalProject.BL
 
             services.AddScoped<ISidebarLanguageService, SidebarLanguageManager>();
             services.AddScoped<IJobCategoryIndexService, JobCategoryIndexManager>();
+            services.AddScoped<ICompanyTypeIndexService, CompanyTypeIndexManager>();
 
 
 

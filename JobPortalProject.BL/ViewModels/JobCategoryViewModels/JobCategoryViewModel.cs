@@ -29,7 +29,6 @@ namespace JobPortalProject.BL.ViewModels.JobCategoryViewModels
         public string? ImagePublicId { get; set; }
         public string? ImageUrl { get; set; }
         public List<int> JobIds { get; set; } = [];
-        public bool IsDeleted { get; set; }
     }
 
     public class JobCategoryCreateViewModel
@@ -42,7 +41,6 @@ namespace JobPortalProject.BL.ViewModels.JobCategoryViewModels
 
     public class JobCategoryUpdateViewModel {
         public int Id { get; set; }
-        public bool IsDeleted { get; set; }
         public IFormFile? ImageFile { get; set; } = null!;
         public string? ImagePublicId { get; set; }
         public string? ImageUrl { get; set; }

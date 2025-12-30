@@ -1,10 +1,7 @@
 ﻿using JobPortalProject.BL.Admin.Services.Abstracts;
 using JobPortalProject.BL.Services.Contracts;
-using JobPortalProject.BL.UI.Services.Abstracts;
 using JobPortalProject.BL.ViewModels.JobCategoryViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 namespace JobPortalProject.AdminMvc.Controllers
 {
@@ -25,13 +22,6 @@ namespace JobPortalProject.AdminMvc.Controllers
 
             return View(model);
         }
-
-        //public async Task<IActionResult> Index()
-        //{
-        //    var model = await _jobCategoryIndexService.GetJobCategoryIndexModel();
-
-        //    return View(model);
-        //}
 
         [HttpPost]
         public async Task<IActionResult> Create(JobCategoryCreateViewModel model)

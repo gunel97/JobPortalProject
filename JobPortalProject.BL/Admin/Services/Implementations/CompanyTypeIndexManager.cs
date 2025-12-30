@@ -2,10 +2,8 @@
 using JobPortalProject.BL.Admin.ViewModels;
 using JobPortalProject.BL.Services.Contracts;
 using JobPortalProject.BL.UI.Services.Abstracts;
+using JobPortalProject.BL.ViewModels.CompanyTypeViewModels;
 using JobPortalProject.BL.ViewModels.JobCategoryViewModels;
-using JobPortalProject.BL.ViewModels.JobViewModels;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,40 +12,37 @@ using System.Threading.Tasks;
 
 namespace JobPortalProject.BL.Admin.Services.Implementations
 {
-    public class JobCategoryIndexManager : IJobCategoryIndexService
+    public class CompanyTypeIndexManager:ICompanyTypeIndexService
     {
-        private readonly IJobCategoryService _jobCategoryService;
+        private readonly ICompanyTypeService _companyTypeService;
         private readonly ILanguageService _languageService;
         private readonly ICookieService _cookieService;
 
-        public JobCategoryIndexManager(IJobCategoryService jobCategoryService, ILanguageService languageService, ICookieService cookieService)
+        public CompanyTypeIndexManager(ICompanyTypeService companyTypeService, ILanguageService languageService, ICookieService cookieService)
         {
-            _jobCategoryService = jobCategoryService;
+            _companyTypeService = companyTypeService;
             _languageService = languageService;
             _cookieService = cookieService;
         }
 
-        public async Task<JobCategoryPagedIndexViewModel> GetPagedJobCategoryIndexModel(JobCategoryFilterViewModel filter)
+        public async Task<CompanyTypePagedIndexViewModel> GetPagedCompanyTypeIndexModel(CompanyTypeFilterViewModel filter)
         {
             var languages = await _languageService.GetAllAsync();
             var language = await _cookieService.GetLanguageAsync();
-            filter ??= new JobCategoryFilterViewModel();
+            filter ??= new CompanyTypeFilterViewModel();
             if (filter.Index < 0) filter.Index = 0;
             if (filter.Size <= 0) filter.Size = 10;
 
-            var pagedJobCategories = await _jobCategoryService.GetPagedJobCategoriesAsync(filter);
+            var pagedCompanyTypes = await _companyTypeService.GetPagedCompanyTypesAsync(filter);
 
-            var model = new JobCategoryPagedIndexViewModel
+            var model = new CompanyTypePagedIndexViewModel
             {
                 Languages = languages.ToList(),
                 Filter=filter,
-                JobCategories = pagedJobCategories
+                CompanyTypes = pagedCompanyTypes
             };
 
             return model;
         }
-
-
     }
-
 }

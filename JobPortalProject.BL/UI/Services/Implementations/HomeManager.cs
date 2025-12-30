@@ -49,7 +49,7 @@ namespace JobPortalProject.BL.UI.Services.Implementations
 
             var homeViewModel = new HomeViewModel
             {
-                JobCategories = jobCategories.Where(x=>!x.IsDeleted && x.JobIds.Any()).ToList(),
+                JobCategories = jobCategories.Where(x=> x.JobIds.Any()).ToList(),
                 Addresses = addressesByCities.ToList(),
                 Companies = companies.ToList(),
                 Jobs=jobs.OrderByDescending(j=>j.CreatedAt).Take(6).ToList(),

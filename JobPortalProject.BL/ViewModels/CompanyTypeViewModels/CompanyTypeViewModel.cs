@@ -10,6 +10,7 @@ namespace JobPortalProject.BL.ViewModels.CompanyTypeViewModels
     public class CompanyTypeViewModel
     {
         public int Id { get;set; }
+        public string DetailsUrl => $"{Name?.Replace(" ", "-").Replace("/", "-")}-{Id}";
         public string? Name { get;set; }
         public DateTime CreatedAt { get; set; }
         public List<int> CompanyIds { get; set; } = [];
@@ -31,7 +32,7 @@ namespace JobPortalProject.BL.ViewModels.CompanyTypeViewModels
 
     public class CompanyTypeCreateViewModel 
     {
-        public List<CompanyTypeCreateViewModel> Translations { get; set; } = [];
+        public List<CompanyTypeTranslationCreateViewModel> CompanyTypeTranslations { get; set; } = [];
     }
 
     public class CompanyTypeUpdateViewModel
@@ -40,9 +41,23 @@ namespace JobPortalProject.BL.ViewModels.CompanyTypeViewModels
         public List<CompanyTypeTranslationUpdateViewModel> Translations { get; set; } = [];
     }
 
+    public class CompanyTypeDetailsViewModel
+    {
+        public int Id { get; set; }
+        public List<CompanyTypeTranslationViewModel> Translations { get; set; } = [];
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+        public int CompanyCount { get; set; }
+    }
+
     public class CompanyTypeTranslationViewModel
     {
-
+        public int Id { get; set; }
+        public int CompanyTypeId { get; set; }
+        public int LanguageId { get; set; }
+        public string? Name { get; set; }
+        public string? LanguageIcon { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 
     public class CompanyTypeTranslationCreateViewModel

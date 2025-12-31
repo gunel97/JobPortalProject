@@ -12,5 +12,7 @@ namespace JobPortalProject.BL.Constants
         public static string WorkingFieldImagePath = "";
         public static string CandidateProfilImagePath = "";
         public static string JobCategoryImagePath = "";
+        public static string IconImagePath = "";
+        public static string CityImagePath = "";
     }
 }

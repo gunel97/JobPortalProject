@@ -2,6 +2,7 @@
 using JobPortalProject.BL.Services.Contracts;
 using JobPortalProject.BL.ViewModels.JobCategoryViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace JobPortalProject.AdminMvc.Controllers
 {
@@ -23,12 +24,20 @@ namespace JobPortalProject.AdminMvc.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> Details(string id)
+        {
+            int Id = int.Parse(id.Split('-').Last());
+            var model = await _jobCategoryService.GetDetailsViewModel(Id);
+
+            return View(model);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create(JobCategoryCreateViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                return View(model);
             }
 
            var result =  await _jobCategoryService.CreateJobCategoryAsync(model);
@@ -65,6 +74,11 @@ namespace JobPortalProject.AdminMvc.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
+            var jobCategory = await _jobCategoryService.GetAsync(predicate: x => x.Id == id, include: x => x.Include(x => x.Jobs));
+
+            if (jobCategory.JobIds.Any())
+                return BadRequest();
+
             var isDeleted = await _jobCategoryService.DeleteAsync(id);
 
             if (!isDeleted)

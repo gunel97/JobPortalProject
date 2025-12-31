@@ -24,6 +24,14 @@ namespace JobPortalProject.AdminMvc.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> Details (string id)
+        {
+            int Id = int.Parse(id.Split('-').Last());
+            var model = await _companyTypeService.GetDetailsViewModel(Id);
+
+            return View(model);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
@@ -58,6 +66,18 @@ namespace JobPortalProject.AdminMvc.Controllers
                 model = await _companyTypeService.GetUpdateViewModel(model.Id);
                 return View(model);
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CompanyTypeCreateViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            var result = await _companyTypeService.CreateAsync(model);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

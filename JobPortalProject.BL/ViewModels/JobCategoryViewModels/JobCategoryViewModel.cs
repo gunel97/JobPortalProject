@@ -1,4 +1,5 @@
-﻿using JobPortalProject.BL.ViewModels.Pagination;
+﻿using JobPortalProject.BL.ViewModels.CompanyTypeViewModels;
+using JobPortalProject.BL.ViewModels.Pagination;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -26,9 +27,11 @@ namespace JobPortalProject.BL.ViewModels.JobCategoryViewModels
     {
         public int Id { get; set; }
         public string? Name { get; set; }
+        public string DetailsUrl => $"{Name?.Replace(" ", "-").Replace("/", "-")}-{Id}";
         public string? ImagePublicId { get; set; }
         public string? ImageUrl { get; set; }
         public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
         public List<int> JobIds { get; set; } = [];
     }
 
@@ -48,11 +51,24 @@ namespace JobPortalProject.BL.ViewModels.JobCategoryViewModels
         public List<JobCategoryTranslationUpdateViewModel> Translations { get; set; } = [];
     }
 
+    public class JobCategoryDetailsViewModel
+    {
+        public int Id { get;set; }
+        public string? ImageUrl { get; set; }
+        public List<JobCategoryTranslationViewModel> Translations { get; set; } = [];
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+        public int JobCount { get; set; }
+    }
+
     public class JobCategoryTranslationViewModel
     {
         public int Id { get; set; }
+        public int JobCategoryId { get; set; }
         public int LanguageId { get; set; }
         public string? Name { get; set; }
+        public string? LanguageIcon { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 
     public class JobCategoryTranslationCreateViewModel

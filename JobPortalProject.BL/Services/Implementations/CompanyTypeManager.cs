@@ -8,6 +8,7 @@ using JobPortalProject.DA.DataContext.Entities;
 using JobPortalProject.DA.Repositories.Contracts;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using System.Linq.Expressions;
 
 namespace JobPortalProject.BL.Services.Implementations
@@ -27,6 +28,20 @@ namespace JobPortalProject.BL.Services.Implementations
             _companyTypeTranslationService = companyTypeTranslationService;
         }
 
+        //public async Task<CompanyTypeViewModel> CreateWithTranslations(CompanyTypeCreateViewModel model)
+        //{
+        //    var result = await CreateAsync(model);
+        //    if (result == null)
+        //        return null!;
+        //    else
+        //    {
+        //        foreach (var translationModel in model.CompanyTypeTranslations)
+        //        {
+        //            translationModel.
+        //        }
+        //    }
+        //}
+
         public async Task<List<SelectListItem>> GetCompanyTypeSelectListItems(int selectedLanguageId)
         {
             var companyTypesSelectListItems = new List<SelectListItem>();
@@ -41,6 +56,34 @@ namespace JobPortalProject.BL.Services.Implementations
 
 
             return companyTypesSelectListItems;
+        }
+
+        public async Task<CompanyTypeDetailsViewModel> GetDetailsViewModel(int id)
+        {
+            var type = await Repository.GetAsync(predicate: x => x.Id == id,
+                include: x => x.Include(x => x.CompanyTypeTranslations)
+                .Include(x=>x.Companies));
+            var languages = await _languageService.GetAllAsync();
+            if (type == null)
+                return null!;
+
+            var model = new CompanyTypeDetailsViewModel
+            {
+                Id = id,
+                CreatedAt = type.CreatedAt,
+                UpdatedAt= type.UpdatedAt,
+                CompanyCount=type.Companies.Count(),
+                Translations = type.CompanyTypeTranslations.Select(x => new CompanyTypeTranslationViewModel
+                {
+                    Id = x.Id,
+                    CompanyTypeId=type.Id,
+                    LanguageIcon = languages.FirstOrDefault(l => l.Id == x.LanguageId).IconUrl,
+                    Name=x.Name,
+                    UpdatedAt=x.UpdatedAt,
+                }).ToList()
+            };
+
+            return model;
         }
 
         public async Task<CompanyTypeUpdateViewModel> GetUpdateViewModel(int id)
@@ -156,7 +199,11 @@ namespace JobPortalProject.BL.Services.Implementations
                                                 .FirstOrDefault());
                         }
                         break;
-
+                    case "companycount":
+                        ordered = sortOrder == "asc"
+                            ? queryable.OrderBy(x => x.Companies.Count())
+                            : queryable.OrderByDescending(x => x.Companies.Count());
+                        break;
                     case "createdat":
                     default:
                         ordered = sortOrder == "asc"
@@ -168,7 +215,6 @@ namespace JobPortalProject.BL.Services.Implementations
                 return ordered;
             };
         }
-
 
         private Expression<Func<CompanyType, bool>> BuildPredicate(CompanyTypeFilterViewModel filter, int languageId)
         {

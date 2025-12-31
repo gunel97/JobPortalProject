@@ -31,7 +31,33 @@ namespace JobPortalProject.BL.Services.Implementations
             _cookieService = cookieService;
         }
 
+        public async Task<JobCategoryDetailsViewModel> GetDetailsViewModel(int id)
+        {
+            var category = await Repository.GetAsync(predicate: x=>x.Id== id, 
+                include: x=>x.Include(x=>x.JobCategoryTranslations).Include(x=>x.Jobs));
+            var languages = await _languageService.GetAllAsync();
+            if (category == null)
+                return null!;
 
+            var model = new JobCategoryDetailsViewModel
+            {
+                Id = id,
+                CreatedAt = category.CreatedAt,
+                UpdatedAt = category.UpdatedAt,
+                JobCount = category.Jobs.Count(),
+                ImageUrl=category.ImageUrl,
+                Translations = category.JobCategoryTranslations.Select(x => new JobCategoryTranslationViewModel
+                {
+                    Id = x.Id,
+                    JobCategoryId = id,
+                    LanguageIcon = languages.FirstOrDefault(l => l.Id == x.LanguageId).IconUrl,
+                    Name = x.Name,
+                    UpdatedAt = x.UpdatedAt
+                }).ToList()
+            };
+
+            return model;
+        }
 
         public async Task<List<SelectListItem>> GetJobCategorySelectListItems(int selectedLanguageId)
         {
@@ -206,6 +232,11 @@ namespace JobPortalProject.BL.Services.Implementations
                                                 .Select(t => t.Name)
                                                 .FirstOrDefault());
                         }
+                        break;
+                    case "jobcount":
+                        ordered = sortOrder == "asc"
+                            ? queryable.OrderBy(x => x.Jobs.Count())
+                            : queryable.OrderByDescending(x => x.Jobs.Count());
                         break;
 
                     case "createdat":

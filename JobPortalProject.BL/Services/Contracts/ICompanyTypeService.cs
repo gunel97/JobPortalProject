@@ -11,5 +11,6 @@ namespace JobPortalProject.BL.Services.Contracts
         public Task<PagedResultModel<CompanyTypeViewModel>> GetPagedCompanyTypesAsync(CompanyTypeFilterViewModel filter);
         public Task<bool> UpdateCompanyTypeAsync(CompanyTypeUpdateViewModel model);
         public Task<CompanyTypeUpdateViewModel> GetUpdateViewModel(int id);
+        public Task<CompanyTypeDetailsViewModel> GetDetailsViewModel(int id);
     }
 }

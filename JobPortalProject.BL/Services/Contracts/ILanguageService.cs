@@ -11,5 +11,6 @@ namespace JobPortalProject.BL.Services.Contracts
 {
     public interface ILanguageService:ICrudService<Language, LanguageViewModel,LanguageCreateViewModel, LanguageUpdateViewModel>
     {
+        public Task<LanguageUpdateViewModel> GetUpdateViewModel(int id);
     }
 }

@@ -3,14 +3,6 @@ using JobPortalProject.BL.Admin.ViewModels;
 using JobPortalProject.BL.Services.Contracts;
 using JobPortalProject.BL.UI.Services.Abstracts;
 using JobPortalProject.BL.ViewModels.JobCategoryViewModels;
-using JobPortalProject.BL.ViewModels.JobViewModels;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JobPortalProject.BL.Admin.Services.Implementations
 {

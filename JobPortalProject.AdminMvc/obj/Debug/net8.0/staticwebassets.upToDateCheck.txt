@@ -243,6 +243,7 @@ wwwroot\admin\images\illustrations\sign-in.svg
 wwwroot\admin\images\kanban\task-1.jpg
 wwwroot\admin\images\kanban\task-2.jpg
 wwwroot\admin\images\kanban\task-3.jpg
+wwwroot\admin\images\language.svg
 wwwroot\admin\images\logo.svg
 wwwroot\admin\images\og-image.jpg
 wwwroot\admin\images\products\apple-imac-1.png

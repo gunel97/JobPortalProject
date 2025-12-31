@@ -1,0 +1,60 @@
+﻿@model CityDetailsViewModel
+
+<div id="main-content" class="h-full w-full bg-gray-50 relative overflow-y-auto lg:ml-64">
+    <main>
+
+        <br />
+        <div class="relative w-full max-w-2xl px-4 h-full md:h-auto">
+            <div class="bg-white rounded-lg shadow relative">
+                <div class="flex items-start justify-between p-5 border-b rounded-t">
+                    <h3 class="text-xl font-semibold">
+                    </h3>
+                </div>
+                <!-- Modal body -->
+                <div class="p-6 space-y-6">
+                    <div class="grid grid-cols-6 gap-6">
+                        <div class="col-span-6 sm:col-span-3">
+                            <label id="product-name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
+                                <b>Created At: </b> @Model.CreatedAt.Date.ToShortDateString()
+                            </label>
+                        </div>
+                        <div class="col-span-6 sm:col-span-3">
+                            <label id="product-name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
+                                <b>Updated At: </b> @Model.UpdatedAt.Date.ToShortDateString()
+                            </label>
+                        </div>
+
+                        @if (Model.CityTranslations.Any())
+                        {
+                            @for (int i = 0; i < Model.CityTranslations.Count; i++)
+                            {
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label for="product-name" class="text-sm font-medium text-gray-900 block mb-2"><img src="@Model.CityTranslations[i].LanguageIcon">  <b>Translation</b></label>
+                                    <label id="product-name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
+                                        <b>Name: </b> @Model.CityTranslations[i].Name
+                                    </label>
+                                    <label id="product-name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
+                                        <b>UpdatedAt:</b> @Model.CityTranslations[i].UpdatedAt.Date.ToShortDateString()
+                                    </label>
+                                </div>
+                            }
+                        }
+                    </div>
+                    <br />
+                    <div class="col-span-6 sm:col-span-3">
+                        <label id="product-name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
+                            <b>Image</b>
+                            <img src="@Model.CoverPhotoUrl" />
+                        </label>
+                    </div>
+                    <div class="p-6 border-t border-gray-200 rounded-b">
+                        <a asp-controller="city" asp-action="update" asp-route-id="@Model.Id" class="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm inline-flex items-center px-3 py-2 text-center">
+                            Edit item
+                        </a>
+                        <a asp-controller="city" asp-action="index" class="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm inline-flex items-center px-3 py-2 text-center">
+                            Back to list
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>

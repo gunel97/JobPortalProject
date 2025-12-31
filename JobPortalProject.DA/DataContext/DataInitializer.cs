@@ -23,21 +23,10 @@ namespace JobPortalProject.DA.DataContext
         public async Task InitializeAsync()
         {
             await _dbContext.Database.MigrateAsync();
-            await CreateRoles();
         }
 
-        public async Task CreateRoles()
-        {
-            List<string> roles = ["Admin", "Company", "Candidate"];
+       
 
-            foreach (var role in roles)
-            {
-                var hasRole = await _roleManager.RoleExistsAsync(role);
 
-                if (hasRole) continue;
-
-                await _roleManager.CreateAsync(new IdentityRole { Name = role });
-            }
-        }
     }
 }

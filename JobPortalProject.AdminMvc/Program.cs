@@ -1,5 +1,6 @@
 using JobPortalProject.BL;
 using JobPortalProject.BL.Constants;
+using JobPortalProject.BL.Services.Implementations;
 using JobPortalProject.BL.Settings;
 using JobPortalProject.DA;
 using JobPortalProject.DA.DataContext;
@@ -10,7 +11,7 @@ namespace JobPortalProject.AdminMvc
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -54,6 +55,15 @@ namespace JobPortalProject.AdminMvc
                 app.UseHsts();
             }
 
+            using (var scope = app.Services.CreateScope())
+            {
+                var dataInitializer = scope.ServiceProvider.GetRequiredService<DataInitializer>();
+                await dataInitializer.InitializeAsync();
+
+                var authSeeder = scope.ServiceProvider.GetRequiredService<AuthSeeder>();
+                await authSeeder.SeedAsync();
+            }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -67,9 +77,9 @@ namespace JobPortalProject.AdminMvc
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Account}/{action=Login}/{id?}");
 
-            app.Run();
+            await app.RunAsync();
         }
     }
 }

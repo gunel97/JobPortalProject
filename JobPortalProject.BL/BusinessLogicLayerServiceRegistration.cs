@@ -88,6 +88,7 @@ namespace JobPortalProject.BL
             services.AddScoped<IEnumService, EnumManager>();
             services.AddScoped<IResumePdfService, ResumePdfService>();
             services.AddScoped<FileService>();
+            services.AddScoped<AuthSeeder>();
 
             services.AddScoped<ISidebarLanguageService, SidebarLanguageManager>();
             services.AddScoped<IJobCategoryIndexService, JobCategoryIndexManager>();

@@ -12,16 +12,14 @@ namespace JobPortalProject.UserMvc.Controllers
     public class AccountController : Controller
     {
         private readonly ICompanyService _companyService;
-        private readonly ICompanyDashboardService _companyDashboardService;
         private readonly IUserService _userService;
         private readonly ICookieService _cookieService;
 
-        public AccountController(IUserService userService, ICompanyService companyService, ICookieService cookieService, ICompanyDashboardService companyDashboardService)
+        public AccountController(IUserService userService, ICompanyService companyService, ICookieService cookieService)
         {
             _userService = userService;
             _companyService = companyService;
             _cookieService = cookieService;
-            _companyDashboardService = companyDashboardService;
         }
 
         public IActionResult Index()

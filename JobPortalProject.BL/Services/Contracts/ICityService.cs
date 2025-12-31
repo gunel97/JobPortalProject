@@ -12,4 +12,5 @@ namespace JobPortalProject.BL.Services.Contracts
         public Task<PagedResultModel<CityViewModel>> GetPagedCitiesAsync(CityFilterViewModel filter);
         public Task<List<SelectListItem>> GetCitySelectListItemsWithCountry(int selectedLanguageId);
     }
+
 }

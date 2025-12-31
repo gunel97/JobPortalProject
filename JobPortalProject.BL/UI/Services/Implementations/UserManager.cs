@@ -2,11 +2,16 @@
 using JobPortalProject.BL.UI.Services.Abstracts;
 using JobPortalProject.BL.UI.ViewModels;
 using JobPortalProject.BL.ViewModels.CandidateViewModels;
+using JobPortalProject.BL.ViewModels.CompanyTypeViewModels;
 using JobPortalProject.BL.ViewModels.CompanyViewModels;
+using JobPortalProject.BL.ViewModels.Pagination;
 using JobPortalProject.BL.ViewModels.UserViewModels;
 using JobPortalProject.DA.DataContext.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace JobPortalProject.BL.UI.Services.Implementations
 {
@@ -31,6 +36,163 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             _httpContextAccessor = httpContextAccessor;
             _companyTypeService = companyTypeService;
             _candidateService = candidateManager;
+        }
+
+        //public async Task<List<UserViewModel>> GetUsers()
+        //{
+        //    var users = await _userManager.Users.ToListAsync();
+
+        //    var models = new List<UserViewModel>();
+
+        //    foreach(var user in users)
+        //    {
+        //        if (await GetUserRoleAsync(user.UserName) != "SuperAdmin")
+        //        {
+        //            var model = new UserViewModel
+        //            {
+        //                Id = user.Id,
+        //                UserName = user.UserName,
+        //                FirstName = user.FirstName,
+        //                LastName = user.LastName,
+        //                Email = user.Email,
+        //                Role = await GetUserRoleAsync(user.UserName)
+        //            };
+
+        //            models.Add(model);
+        //        }
+        //    }
+
+        //    return models;
+        //}
+
+        public async Task<PagedResultModel<UserViewModel>> GetUsers(UserFilterViewModel filter)
+        {
+            // 1. Build Predicate and OrderBy
+            Expression<Func<AppUser, bool>> predicate = BuildPredicate(filter);
+            Func<IQueryable<AppUser>, IOrderedQueryable<AppUser>> orderBy = BuildOrderBy(filter);
+
+            // 2. Prepare the Query
+            var query = _userManager.Users.AsQueryable();
+
+            // 3. Apply Filtering
+            query = query.Where(predicate);
+
+            // 4. Apply Sorting
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
+
+            // 5. Get Count for Pagination
+            var totalCount = await query.CountAsync();
+
+            // 6. Get the Paged Data
+            var users = await query
+                .Skip(filter.Index * filter.Size)
+                .Take(filter.Size)
+                .ToListAsync();
+
+            // 7. Map to ViewModel
+            var userModels = new List<UserViewModel>();
+
+            foreach (var user in users)
+            {
+                // NOTE: Role filtering "!= SuperAdmin" is best done in the database, 
+                // but since GetUserRoleAsync is an async helper, we do it here. 
+                // Ideally, you should filter this in the SQL query above using .Where() if possible.
+                var role = await GetUserRoleAsync(user.UserName);
+
+                if (role != "SuperAdmin")
+                {
+                    var model = new UserViewModel
+                    {
+                        Id = user.Id,
+                        UserName = user.UserName,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        Email = user.Email,
+                        Role = role
+                    };
+                    userModels.Add(model);
+                }
+            }
+
+            // 8. Return Result
+
+            var Users = new PagedResultModel<UserViewModel>
+            {
+                Items = userModels,
+                Index = filter.Index,
+                Size = filter.Size,
+                Count = totalCount,
+                // Calculate pages: Ceiling(Total / Size)
+                Pages = (int)Math.Ceiling(totalCount / (double)filter.Size)
+            };
+
+            return Users;
+        }
+
+
+        private Func<IQueryable<AppUser>, IOrderedQueryable<AppUser>> BuildOrderBy(UserFilterViewModel filter)
+        {
+            var sortBy = filter.SortBy?.ToLower().Trim() ?? "createdat";
+            var sortOrder = filter.SortOrder?.ToLower().Trim() ?? "desc";
+
+            return queryable =>
+            {
+                IOrderedQueryable<AppUser> ordered;
+
+                switch (sortBy)
+                {
+                    case "name":
+                        // Sort by First Name, then Last Name
+                        if (sortOrder == "asc")
+                        {
+                            ordered = queryable.OrderBy(x => x.FirstName).ThenBy(x => x.LastName);
+                        }
+                        else
+                        {
+                            ordered = queryable.OrderByDescending(x => x.FirstName).ThenByDescending(x => x.LastName);
+                        }
+                        break;
+
+                    case "username":
+                        ordered = sortOrder == "asc"
+                            ? queryable.OrderBy(x => x.UserName)
+                            : queryable.OrderByDescending(x => x.UserName);
+                        break;
+
+                    case "email":
+                        ordered = sortOrder == "asc"
+                            ? queryable.OrderBy(x => x.Email)
+                            : queryable.OrderByDescending(x => x.Email);
+                        break;
+
+                    case "createdat":
+                    default:
+                        // Assuming you have an Id or CreatedAt to sort by default
+                        ordered = sortOrder == "asc"
+                            ? queryable.OrderBy(x => x.Id)
+                            : queryable.OrderByDescending(x => x.Id);
+                        break;
+                }
+
+                return ordered;
+            };
+        }
+
+        private Expression<Func<AppUser, bool>> BuildPredicate(UserFilterViewModel filter)
+        {
+            var term = filter.SearchTerm?.ToLower().Trim();
+
+            Expression<Func<AppUser, bool>> predicate = x =>
+                string.IsNullOrEmpty(term) ||
+                (x.FirstName != null && x.FirstName.ToLower().Contains(term)) ||
+                (x.LastName != null && x.LastName.ToLower().Contains(term)) ||
+                (x.Email != null && x.Email.ToLower().Contains(term)) ||
+                (x.UserName != null && x.UserName.ToLower().Contains(term));
+
+            return predicate;
         }
 
         public async Task<string> GetUserRoleAsync(string username)
@@ -191,5 +353,6 @@ namespace JobPortalProject.BL.UI.Services.Implementations
 
             return await _userManager.GetUserAsync(user);
         }
+
     }
 }

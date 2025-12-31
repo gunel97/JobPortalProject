@@ -1,6 +1,7 @@
 ﻿using JobPortalProject.BL.ViewModels.AddressViewModels;
 using JobPortalProject.BL.ViewModels.CompanyViewModels;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using JobPortalProject.BL.ViewModels.CountryViewModels;
+using JobPortalProject.BL.ViewModels.Pagination;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -25,7 +26,7 @@ namespace JobPortalProject.BL.ViewModels.UserViewModels
 
         [Required(ErrorMessage = "Email is required")]
         [DataType(DataType.EmailAddress)]
-        public  string? Email { get; set; }
+        public string? Email { get; set; }
 
         [Required(ErrorMessage = "Password is required")]
         [DataType(DataType.Password)]
@@ -34,31 +35,5 @@ namespace JobPortalProject.BL.ViewModels.UserViewModels
         [DataType(DataType.Password)]
         [Compare(nameof(Password))]
         public string? ConfirmPassword { get; set; }
-    }
-
-    public class CompanyRegisterViewModel : UserRegisterViewModel
-    {
-        [Required(ErrorMessage = "Company name is required")]
-        public string? CompanyName { get; set; }
-        public int CompanyTypeId { get; set; }
-        public List<SelectListItem> CompanyTypesList { get; set; } = [];
-    }
-
-    public class LoginViewModel
-    {
-        public required string Username { get; set; }
-
-        [DataType(DataType.Password)]
-        public required string Password { get; set; }
-        public string? ReturnUrl { get; set; }
-        public bool RememberMe { get; set; }
-    }
-
-    public class LoginResultViewModel
-    {
-        public bool IsSuccess { get; set; }
-        public string? UserId { get; set; }
-        public string? Username { get; set; }
-        public string? Role { get; set; }
     }
 }

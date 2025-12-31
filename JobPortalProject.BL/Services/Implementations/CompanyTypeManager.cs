@@ -28,20 +28,6 @@ namespace JobPortalProject.BL.Services.Implementations
             _companyTypeTranslationService = companyTypeTranslationService;
         }
 
-        //public async Task<CompanyTypeViewModel> CreateWithTranslations(CompanyTypeCreateViewModel model)
-        //{
-        //    var result = await CreateAsync(model);
-        //    if (result == null)
-        //        return null!;
-        //    else
-        //    {
-        //        foreach (var translationModel in model.CompanyTypeTranslations)
-        //        {
-        //            translationModel.
-        //        }
-        //    }
-        //}
-
         public async Task<List<SelectListItem>> GetCompanyTypeSelectListItems(int selectedLanguageId)
         {
             var companyTypesSelectListItems = new List<SelectListItem>();

@@ -2,7 +2,6 @@
 using JobPortalProject.BL.UI.Services.Abstracts;
 using JobPortalProject.BL.UI.ViewModels;
 using JobPortalProject.BL.ViewModels.CandidateViewModels;
-using JobPortalProject.BL.ViewModels.CompanyTypeViewModels;
 using JobPortalProject.BL.ViewModels.CompanyViewModels;
 using JobPortalProject.BL.ViewModels.Pagination;
 using JobPortalProject.BL.ViewModels.UserViewModels;
@@ -10,7 +9,6 @@ using JobPortalProject.DA.DataContext.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System.Linq.Expressions;
 
 namespace JobPortalProject.BL.UI.Services.Implementations
@@ -38,32 +36,6 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             _candidateService = candidateManager;
         }
 
-        //public async Task<List<UserViewModel>> GetUsers()
-        //{
-        //    var users = await _userManager.Users.ToListAsync();
-
-        //    var models = new List<UserViewModel>();
-
-        //    foreach(var user in users)
-        //    {
-        //        if (await GetUserRoleAsync(user.UserName) != "SuperAdmin")
-        //        {
-        //            var model = new UserViewModel
-        //            {
-        //                Id = user.Id,
-        //                UserName = user.UserName,
-        //                FirstName = user.FirstName,
-        //                LastName = user.LastName,
-        //                Email = user.Email,
-        //                Role = await GetUserRoleAsync(user.UserName)
-        //            };
-
-        //            models.Add(model);
-        //        }
-        //    }
-
-        //    return models;
-        //}
 
         public async Task<PagedResultModel<UserViewModel>> GetUsers(UserFilterViewModel filter)
         {
@@ -131,7 +103,6 @@ namespace JobPortalProject.BL.UI.Services.Implementations
 
             return Users;
         }
-
 
         private Func<IQueryable<AppUser>, IOrderedQueryable<AppUser>> BuildOrderBy(UserFilterViewModel filter)
         {

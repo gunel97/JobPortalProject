@@ -23,5 +23,14 @@ namespace JobPortalProject.AdminMvc.Controllers
             var model = await _userIndexService.GetPagedUserIndexModel(filter);
             return View(model);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(UserRegisterViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return RedirectToAction(nameof(Index));
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

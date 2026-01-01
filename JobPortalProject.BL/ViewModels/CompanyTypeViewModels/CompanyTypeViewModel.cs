@@ -73,7 +73,7 @@ namespace JobPortalProject.BL.ViewModels.CompanyTypeViewModels
         public int Id { get; set; }
         public int CompanyTypeId { get; set; }
         public int LanguageId { get; set; }
-        public string? Name { get; set; }
+        public string Name { get; set; } = null!;
         public string? LanguageIcon { get; set; }
     }
 }

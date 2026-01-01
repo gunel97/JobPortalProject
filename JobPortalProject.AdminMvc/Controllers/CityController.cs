@@ -29,14 +29,20 @@ namespace JobPortalProject.AdminMvc.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CityCreateViewModel model)
         {
+            var indexModel = await _cityIndexService.GetPagedCityIndexModel(new CityFilterViewModel());
             if (!ModelState.IsValid)
-                return RedirectToAction(nameof(Index));
-
+            {
+                ViewBag.ShowCreateModal = true;
+                return View(nameof(Index), indexModel);
+            }
             var result = await _cityService.CreateAsync(model);
             if (result == null)
-                return RedirectToAction(nameof(Index));
+            {
+                ViewBag.ShowCreateModal = true;
+                return View(nameof(Index), indexModel);
+            }
 
-            return RedirectToAction(nameof(Index));
+            return View(nameof(Index), indexModel);
         }
 
         public async Task<IActionResult> Details(string id)
@@ -57,7 +63,8 @@ namespace JobPortalProject.AdminMvc.Controllers
             if (!isDeleted)
                 return NotFound();
 
-            return RedirectToAction(nameof(Index));
+            var indexModel = await _cityIndexService.GetPagedCityIndexModel(new CityFilterViewModel());
+            return View(nameof(Index), indexModel);
         }
 
         public async Task<IActionResult> Update(int id)
@@ -80,7 +87,10 @@ namespace JobPortalProject.AdminMvc.Controllers
             if (!result)
                 return View(model);
             else
-                return RedirectToAction(nameof(Index));
+            {
+                var indexModel = await _cityIndexService.GetPagedCityIndexModel(new CityFilterViewModel());
+                return View(nameof(Index), indexModel);
+            }
         }
     }
 }

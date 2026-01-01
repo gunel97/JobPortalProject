@@ -6,6 +6,7 @@ using JobPortalProject.BL.ViewModels.JobApplicationViewModels;
 using JobPortalProject.DA.DataContext.Entities;
 using JobPortalProject.DA.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using System.Threading.Tasks;
 
 namespace JobPortalProject.BL.Services.Implementations
@@ -26,8 +27,12 @@ namespace JobPortalProject.BL.Services.Implementations
             _resumeService = resumeService;
         }
 
-        public async Task<List<JobApplication>> GetAppliedJobsOfCandidate(int candidateId, int languageId)
+
+
+        public async Task<List<JobApplication>> GetAppliedJobsOfCandidate(int candidateId)
         {
+            var language = await _cookieService.GetLanguageAsync();
+            var languageId = language.Id;
             var appliedJobs = await Repository.GetAllAsync(predicate: x => x.CandidateId == candidateId,
               include: x => x
               .Include(x => x.Job).ThenInclude(x => x.JobTranslations.Where(t => t.LanguageId == languageId))
@@ -39,8 +44,10 @@ namespace JobPortalProject.BL.Services.Implementations
             return appliedJobs.ToList();
         }
 
-        public async Task<List<JobApplication>> GetApplicantsOfJob(int jobId, int languageId)
+        public async Task<List<JobApplication>> GetApplicantsOfJob(int jobId)
         {
+            var language = await _cookieService.GetLanguageAsync();
+            var languageId = language.Id;
             var appliedJobs = await Repository.GetAllAsync(predicate: x => x.JobId == jobId,
               include: x => x
               .Include(x=>x.Candidate).ThenInclude(x=>x.Resume).ThenInclude(x=>x.PersonalInfo).ThenInclude(x=>x.Translations.Where(t=>t.LanguageId==languageId))
@@ -52,6 +59,13 @@ namespace JobPortalProject.BL.Services.Implementations
 
         public async Task<bool> ApplyJob(int jobId, int candidateId)
         {
+            var appliedJobs = await GetAppliedJobsOfCandidate(candidateId);
+            foreach(var appliedJob in appliedJobs)
+            {
+                if (appliedJob.Id == jobId)
+                    return false;
+            }
+
             var model = new JobApplicationCreateViewModel
             {
                 CandidateId = candidateId,
@@ -116,7 +130,7 @@ namespace JobPortalProject.BL.Services.Implementations
         {
             var dashboard = await _candidateService.GetDashboardViewModel();
             var language = await _cookieService.GetLanguageAsync();
-            var jobApplications = await GetAppliedJobsOfCandidate(candidateId, language.Id);
+            var jobApplications = await GetAppliedJobsOfCandidate(candidateId);
 
             var model = new AppliedJobsOfCandidatePageViewModel();
 
@@ -133,7 +147,7 @@ namespace JobPortalProject.BL.Services.Implementations
         public async Task<ApplicantsOfJobViewModel> GetApplicantsViewModel(int jobId)
         {
             var language = await _cookieService.GetLanguageAsync();
-            var entities = await GetApplicantsOfJob(jobId, language.Id);
+            var entities = await GetApplicantsOfJob(jobId);
             var job = await _jobService.GetByIdAsync(jobId);
             var model = new ApplicantsOfJobViewModel();
             foreach(var entity in entities)

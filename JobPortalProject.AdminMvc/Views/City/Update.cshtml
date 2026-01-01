@@ -14,6 +14,7 @@
                 <!-- Modal body -->
                 <div class="p-6 space-y-6">
                     <form method="post" enctype="multipart/form-data" asp-controller="city" asp-action="Update">
+                        <div asp-validation-summary="ModelOnly"></div>
                         <input asp-for="Id" value="@Model.Id" type="hidden" />
                         <div class="grid grid-cols-6 gap-6">
                             @if (Model.CityTranslations.Any())
@@ -25,6 +26,7 @@
                                         <input asp-for="CityTranslations[i].LanguageId" value="@Model.CityTranslations[i].LanguageId" type="hidden" />
                                         <input asp-for="CityTranslations[i].Id" value="@Model.CityTranslations[i].Id" type="hidden" />
                                         <input asp-for="CityTranslations[i].Name" id="product-name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Category name....">
+                                    <span asp-validation-for="CityTranslations[i].Name"></span>
                                     </div>
                                 }
                             }
@@ -40,6 +42,7 @@
                             <div class="col-span-6 sm:col-span-3">
                                 <label class="text-sm font-medium text-gray-900 block mb-2">Country:</label>
                                 <select name="CountryId" asp-items="@Model.CountryItems" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="City name...."></select>
+                        <span asp-validation-for="CountryId"></span>
                             </div>                          
                         </div>
                         <br />

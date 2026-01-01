@@ -35,12 +35,19 @@ namespace JobPortalProject.AdminMvc.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(JobCategoryCreateViewModel model)
         {
+            var indexModel = await _jobCategoryIndexService.GetPagedJobCategoryIndexModel(new JobCategoryFilterViewModel());
             if (!ModelState.IsValid)
             {
-                return View(model);
+                ViewBag.ShowCreateModal = true;
+                return View(nameof(Index), indexModel);
             }
 
-           var result =  await _jobCategoryService.CreateJobCategoryAsync(model);
+            var result = await _jobCategoryService.CreateJobCategoryAsync(model);
+            if (result == null)
+            {
+                ViewBag.ShowCreateModal = true;
+                return View(nameof(Index), indexModel);
+            }
             return RedirectToAction(nameof(Index));
         }
 

@@ -422,6 +422,7 @@ wwwroot\js\main.js
 wwwroot\js\new\candidateEducation.js
 wwwroot\js\new\company.js
 wwwroot\js\new\job.js
+wwwroot\js\new\jobFunctions.js
 wwwroot\js\range-slider.js
 wwwroot\js\select2.min.js
 wwwroot\js\slick.js

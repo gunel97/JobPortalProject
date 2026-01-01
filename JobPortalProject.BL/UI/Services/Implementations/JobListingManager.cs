@@ -19,18 +19,30 @@ namespace JobPortalProject.BL.UI.Services.Implementations
         private readonly IJobCategoryService _jobCategoryService;
         private readonly ICookieService _cookieService;
         private readonly IEnumService _enumService;
+        private readonly IJobApplicationService _jobApplicationService;
+        private readonly ICandidateService _candidateService;
 
-        public JobListingManager(IJobService jobService, IJobCategoryService jobCategoryService, ICookieService cookieService, IEnumService enumService)
+        public JobListingManager(IJobService jobService, IJobCategoryService jobCategoryService, ICookieService cookieService, IEnumService enumService, IJobApplicationService jobApplicationService, ICandidateService candidateService)
         {
             _jobService = jobService;
             _jobCategoryService = jobCategoryService;
             _cookieService = cookieService;
             _enumService = enumService;
+            _jobApplicationService = jobApplicationService;
+            _candidateService = candidateService;
         }
 
         public async Task<PagedJobListingViewModel> GetPagedJobListingViewModel(JobFilterViewModel filter)
         {
             var language = await _cookieService.GetLanguageAsync();
+            var candidate = await _candidateService.GetCandidate();
+            var appliedJobIds = new List<int>();
+            if (candidate != null)
+            {
+                var jobIds = await _jobApplicationService.GetAppliedJobsOfCandidate(candidate.Id);
+                jobIds.ForEach(x => appliedJobIds.Add(x.JobId));
+            }
+
             filter ??= new JobFilterViewModel();
             if (filter.Index < 0) filter.Index = 0;
             if (filter.Size <= 0) filter.Size = 10;
@@ -63,7 +75,8 @@ namespace JobPortalProject.BL.UI.Services.Implementations
                 JobTypes = jobTypes,
                 Genders = genders,
                 JobTypeCounts = jobTypesCounts,
-                GenderCounts = genderCounts
+                GenderCounts = genderCounts,
+                AppliedJobIds=appliedJobIds,
             };
 
             return jobListingViewModel;

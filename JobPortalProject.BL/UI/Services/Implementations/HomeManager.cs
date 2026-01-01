@@ -17,14 +17,18 @@ namespace JobPortalProject.BL.UI.Services.Implementations
         private readonly IAddressService _addressService;
         private readonly ICompanyService _companyService;
         private readonly IJobService _jobService;
+        private readonly ICandidateService _candidateService;
+        private readonly IJobApplicationService _jobApplicationService;
 
-        public HomeManager(IJobCategoryService jobCategoryService, ICookieService cookieService, IAddressService addressService, ICompanyService companyService, IJobService jobService)
+        public HomeManager(IJobCategoryService jobCategoryService, ICookieService cookieService, IAddressService addressService, ICompanyService companyService, IJobService jobService, ICandidateService candidateService, IJobApplicationService jobApplicationService)
         {
             _jobCategoryService = jobCategoryService;
             _cookieService = cookieService;
             _addressService = addressService;
             _companyService = companyService;
             _jobService = jobService;
+            _candidateService = candidateService;
+            _jobApplicationService = jobApplicationService;
         }
 
         public async Task<HomeViewModel> GetHomeViewModelAsync()
@@ -32,6 +36,15 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             var language = await _cookieService.GetLanguageAsync();
             var addresses =await  _addressService.GetAllAsync();
             var jobs = await _jobService.GetAllJobsAsync();
+            var candidate = await _candidateService.GetCandidate();
+            var jobIds = new List<int>();
+            var jobCategoryListItems = await _jobCategoryService.GetJobCategorySelectListItems(language.Id);
+
+            if (candidate != null)
+            {
+                var appliedJobs = await _jobApplicationService.GetAppliedJobsOfCandidate(candidate.Id);
+                appliedJobs.ForEach(x => jobIds.Add(x.JobId));
+            }
 
             var jobCategories = await _jobCategoryService.GetAllAsync(
                                                 predicate: x => !x.IsDeleted,
@@ -49,10 +62,12 @@ namespace JobPortalProject.BL.UI.Services.Implementations
 
             var homeViewModel = new HomeViewModel
             {
-                JobCategories = jobCategories.Where(x=> x.JobIds.Any()).ToList(),
+                JobCategories = jobCategories.Where(x => x.JobIds.Any()).ToList(),
                 Addresses = addressesByCities.ToList(),
                 Companies = companies.ToList(),
-                Jobs=jobs.OrderByDescending(j=>j.CreatedAt).Take(6).ToList(),
+                Jobs = jobs.OrderByDescending(j => j.CreatedAt).Take(6).ToList(),
+                AppliedJobIds = jobIds,
+                JobCategoryListItems=jobCategoryListItems
             };
 
             return homeViewModel;

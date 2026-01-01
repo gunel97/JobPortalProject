@@ -14,6 +14,7 @@
                 <!-- Modal body -->
                 <div class="p-6 space-y-6">
                     <form method="post" enctype="multipart/form-data" asp-controller="jobCategory" asp-action="Update">
+                        <div asp-validation-summary="ModelOnly"></div>
                        <input asp-for="Id" value="@Model.Id" type="hidden" />
                         <div class="grid grid-cols-6 gap-6">
                             @if (Model.Translations.Any())
@@ -25,6 +26,7 @@
                                         <input asp-for="Translations[i].LanguageId" value="@Model.Translations[i].LanguageId" type="hidden" />
                                         <input asp-for="Translations[i].Id" value="@Model.Translations[i].Id" type="hidden" />
                                         <input asp-for="Translations[i].Name" id="product-name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Category name....">
+                                  <span asp-validation-for="Translations[i].Name"></span>
                                     </div>
                                 }
                             }
@@ -36,6 +38,7 @@
                             <div class="col-span-6 sm:col-span-3">
                                 <br/>
                                 <input type="file" asp-for="ImageFile" id="category" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Electronics">
+                            <span asp-validation-for="ImageFile"></span>
                             </div>     
                         </div>
                         <br/>

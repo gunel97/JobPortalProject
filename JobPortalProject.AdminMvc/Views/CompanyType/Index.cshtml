@@ -228,13 +228,23 @@
                         <h3 class="text-xl font-semibold">
                             Add company type
                         </h3>
-                        <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="add-companyType-modal">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                        </button>
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <a asp-action="Index" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                            </a>
+                        }
+                        else
+                        {
+                            <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="add-companyType-modal">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                            </button>
+                        }
                     </div>
                     <!-- Modal body -->
                     <div class="p-6 space-y-6">
                         <form method="post" asp-controller="CompanyType" asp-action="Create">
+                            <div asp-validation-summary="ModelOnly" class="text-red-500 text-sm mb-4"></div>
                             <div class="grid grid-cols-6 gap-6">
                                 @if (Model.Languages.Any())
                                 {
@@ -243,7 +253,12 @@
                                         <div class="col-span-6 sm:col-span-3">
                                             <label for="product-name" class="text-sm font-medium text-gray-900 block mb-2"><img src="@Model.Languages[i].IconUrl">  Name:</label>
                                             <input name="CompanyTypeTranslations[@i].LanguageId" value="@Model.Languages[i].Id" type="hidden" />
-                                            <input name="CompanyTypeTranslations[@i].Name" id="product-name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Name....">
+                                            <input name="CompanyTypeTranslations[@i].Name" id="product-name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" 
+                                            placeholder="Name...."
+                                            value="@(ViewData.ModelState[$"CompanyTypeTranslations[{i}].Name"]?.RawValue ?? "")">
+                                            <span class="text-red-500 text-xs mt-1 block">
+                                                @Html.ValidationMessage($"CompanyTypeTranslations[{i}].Name")
+                                            </span>
                                         </div>
                                     }
                                 }
@@ -301,3 +316,22 @@
             </div>
         }
     </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function(event) {
+            var showModal = '@(ViewBag.ShowCreateModal ?? false)';
+
+            if (showModal.toLowerCase() === 'true') {
+                const modal = document.getElementById('add-companyType-modal');
+                if(modal) {
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                    modal.setAttribute('aria-modal', 'true');
+                    modal.setAttribute('role', 'dialog');
+
+                     const modalObj = new Modal(document.getElementById('add-companyType-modal'));
+                     modalObj.show();
+                }
+            }
+        });
+    </script>

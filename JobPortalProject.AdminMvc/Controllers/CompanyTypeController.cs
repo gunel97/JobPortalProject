@@ -71,13 +71,21 @@ namespace JobPortalProject.AdminMvc.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CompanyTypeCreateViewModel model)
         {
+            var indexModel = await _companyTypeIndexService.GetPagedCompanyTypeIndexModel(new CompanyTypeFilterViewModel());
             if (!ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                ViewBag.ShowCreateModal = true;
+                return View(nameof(Index), indexModel);
             }
 
             var result = await _companyTypeService.CreateAsync(model);
-            return RedirectToAction(nameof(Index));
+            if (result == null)
+            {
+                ViewBag.ShowCreateModal = true;
+                return View(nameof(Index), indexModel);
+            }
+
+            return View(nameof(Index), indexModel);
         }
     }
 }

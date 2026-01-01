@@ -14,6 +14,7 @@ namespace JobPortalProject.BL.UI.Services.Abstracts
 {
     public interface IUserService
     {
+        public Task<IdentityResult> Register(UserRegisterViewModel model);
         public Task<PagedResultModel<UserViewModel>> GetUsers(UserFilterViewModel filter);
         public Task<IdentityResult> RegisterCompanyAsync(CompanyRegisterViewModel model);
         public Task<IdentityResult> RegisterCandidateAsync(UserRegisterViewModel model);

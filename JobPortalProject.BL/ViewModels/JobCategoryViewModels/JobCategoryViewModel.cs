@@ -45,7 +45,7 @@ namespace JobPortalProject.BL.ViewModels.JobCategoryViewModels
 
     public class JobCategoryUpdateViewModel {
         public int Id { get; set; }
-        public IFormFile? ImageFile { get; set; } = null!;
+        public IFormFile? ImageFile { get; set; }
         public string? ImagePublicId { get; set; }
         public string? ImageUrl { get; set; }
         public List<JobCategoryTranslationUpdateViewModel> Translations { get; set; } = [];

@@ -4,6 +4,8 @@
     var addresses = model.Addresses;
     var companies = model.Companies;
     var jobs = model.Jobs;
+    var appliedJobs = model.AppliedJobIds;
+    var jobCategoryItems = model.JobCategoryListItems;
 }
 @inject StringLocalizerManager localizer;
 
@@ -88,12 +90,7 @@
                                 <input type="text" placeholder="Job Title">
                             </div>
                             <div class="form-inner category">
-                                <select class="select1">
-                                    <option value="0">Category</option>
-                                    <option value="1">UI/UX </option>
-                                    <option value="2">Closed</option>
-                                    <option value="4">Closed</option>
-                                    <option value="5">Closed</option>
+                                <select asp-items="@jobCategoryItems" class="select1">
                                 </select>
                             </div>
                             <div class="form-inner">
@@ -147,13 +144,6 @@
                 </div>
             </div>
             }
-       
-         @*    <div class="col">
-                <div class="category-btn-area">
-                    <h5>Category List</h5>
-                    <a href="category.html">View All Category <i class="bi bi-arrow-right"></i></a>
-                </div>
-            </div> *@
         </div>
     </div>
 </div>
@@ -209,7 +199,14 @@
                     </div>
                     <div class="job-type-apply">
                         <div class="apply-btn">
-                            <a onclick="applyJob(@job.Id)"><span><img src="~/images/icon/apply-ellipse.svg" alt=""></span>Apply Now</a>
+                            @if (appliedJobs.Any() && appliedJobs.Contains(job.Id))
+                            {
+                                <a asp-controller="candidate" asp-action="appliedJobs"><span><img src="~/images/icon/apply-ellipse.svg" alt=""></span>Applied</a>
+                            }
+                            else
+                            {
+                                <a onclick="applyJob(@job.Id, this)"><span><img src="~/images/icon/apply-ellipse.svg" alt=""></span>Apply Now</a>
+                            }
                         </div>
                     </div>
                 </div>
@@ -237,7 +234,7 @@
                         <img src="~/images/icon/account-create.svg" alt="">
                     </div>
                     <div class="work-content">
-                        <h5><a href="register.html">Account Create</a></h5>
+                        <h5><a>Account Create</a></h5>
                         <p>To create your account be confident & safely.</p>
                     </div>
                 </div>
@@ -248,7 +245,7 @@
                         <img src="~/images/icon/create-resume.svg" alt="">
                     </div>
                     <div class="work-content">
-                        <h5><a href="edit-profile.html">Create Resume</a></h5>
+                        <h5><a>Create Resume</a></h5>
                         <p>To create your account be confident & safely.</p>
                     </div>
                 </div>
@@ -259,7 +256,7 @@
                         <img src="~/images/icon/job-find.svg" alt="">
                     </div>
                     <div class="work-content">
-                        <h5><a href="job-listing1.html">Find Jobs </a></h5>
+                        <h5><a>Find Jobs </a></h5>
                         <p>To create your account be confident & safely.</p>
                     </div>
                 </div>
@@ -270,7 +267,7 @@
                         <img src="~/images/icon/job-apply.svg" alt="">
                     </div>
                     <div class="work-content">
-                        <h5><a href="job-listing1.html">Apply Jobs</a></h5>
+                        <h5><a>Apply Jobs</a></h5>
                         <p>To create your account be confident & safely.</p>
                     </div>
                 </div>
@@ -411,29 +408,7 @@
              </div>
         </div>
 </div>
+</div>
 <br/>
 <br/>
 <!-- ========== Home1 Top Recruiters area end============= -->
-
-<script>
-        function applyJob(id) {
-            console.log(id);
-        fetch(`/candidate/applyJob/${id}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application-json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Applied');
-                return;
-            }
-            else {
-                alert(data.message);
-            }
-        })
-        .catch(error => console.error('Error:', error));
-    };
-</script>

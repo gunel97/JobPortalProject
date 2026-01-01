@@ -193,6 +193,23 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             await _signInManager.SignOutAsync();
         }
         
+        public async Task<IdentityResult> Register(UserRegisterViewModel model)
+        {
+            var user = new AppUser
+            {
+                UserName = model.Username,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email
+            };
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if (result.Succeeded)
+                await _userManager.AddToRoleAsync(user, model.UserType);
+            
+            return result;
+        }
+
         public async Task<IdentityResult> RegisterCompanyAsync(CompanyRegisterViewModel model)
         {
             var language = await _cookieService.GetLanguageAsync();

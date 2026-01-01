@@ -54,9 +54,15 @@ namespace JobPortalProject.AdminMvc.Controllers
 
                 if (role == "SuperAdmin" || role=="Admin")
                     return RedirectToAction("Index", "Home");
+                else
+                {
+                    ModelState.AddModelError("", "Username or password is incorrect.");
+
+                    return View(model);
+                }
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Account");
         }
 
         public async Task<IActionResult> Logout()

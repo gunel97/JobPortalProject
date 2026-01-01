@@ -5,6 +5,7 @@
     var genders = model.Genders;
     var jobCategories = model.JobCategories;
     var jobTypes = model.JobTypes;
+    var appliedJobs = model.AppliedJobIds;
 }  
 @inject StringLocalizerManager localizer;
 
@@ -241,7 +242,14 @@
                                             <span class="light-green">@localizer.GetValue(job.Gender ?? "")</span>
                                         </div>
                                         <div class="apply-btn">
-                                            <a href="job-details.html "><span><img src="~/images/icon/apply-ellipse.svg" alt=""></span>Apply Now</a>
+                                            @if (appliedJobs.Any() && appliedJobs.Contains(job.Id))
+                                            {
+                                                <a asp-controller="candidate" asp-action="appliedJobs"><span><img src="~/images/icon/apply-ellipse.svg" alt=""></span>Applied</a>
+                                            }
+                                            else
+                                            {
+                                                <a onclick="applyJob(@job.Id, this)"><span><img src="~/images/icon/apply-ellipse.svg" alt=""></span>Apply Now</a>
+                                            }
                                         </div>
                                     </div>
                                 </div>

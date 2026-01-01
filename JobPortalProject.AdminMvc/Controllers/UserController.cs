@@ -11,11 +11,13 @@ namespace JobPortalProject.AdminMvc.Controllers
     {
         private readonly IUserIndexService _userIndexService;
         private readonly ILanguageService _languageService;
+        private readonly IUserService _userService;
 
-        public UserController(IUserIndexService userIndexService, ILanguageService languageService)
+        public UserController(IUserIndexService userIndexService, ILanguageService languageService, IUserService userService)
         {
             _userIndexService = userIndexService;
             _languageService = languageService;
+            _userService = userService;
         }
 
         public async Task<IActionResult> Index(UserFilterViewModel filter)
@@ -27,10 +29,14 @@ namespace JobPortalProject.AdminMvc.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(UserRegisterViewModel model)
         {
+            var indexModel = await _userIndexService.GetPagedUserIndexModel(new UserFilterViewModel());
             if (!ModelState.IsValid)
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), indexModel);
+            var result = await _userService.Register(model);
+            if(result.Succeeded) 
+            return RedirectToAction(nameof(Index), indexModel);
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), indexModel);
         }
     }
 }

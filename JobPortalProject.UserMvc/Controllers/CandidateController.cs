@@ -457,8 +457,18 @@ namespace JobPortalProject.UserMvc.Controllers
         [HttpPost]
         public async Task<IActionResult> ApplyJob(int id)
         {
+            
             var candidate = await _candidateService.GetCandidate();
             var message = "";
+            if(candidate==null)
+            {
+                message = "Login/Register to create resume";
+                return Json(new
+                {
+                    success = false,
+                    message
+                });
+            }
             if (candidate.Resume == null)
             {
                 message = "Create resume";

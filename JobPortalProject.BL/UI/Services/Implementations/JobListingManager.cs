@@ -35,27 +35,20 @@ namespace JobPortalProject.BL.UI.Services.Implementations
         public async Task<PagedJobListingViewModel> GetPagedJobListingViewModel(JobFilterViewModel filter)
         {
             var language = await _cookieService.GetLanguageAsync();
-            var candidate = await _candidateService.GetCandidate();
-            var appliedJobIds = new List<int>();
-            if (candidate != null)
-            {
-                var jobIds = await _jobApplicationService.GetAppliedJobsOfCandidate(candidate.Id);
-                jobIds.ForEach(x => appliedJobIds.Add(x.JobId));
-            }
 
             filter ??= new JobFilterViewModel();
             if (filter.Index < 0) filter.Index = 0;
             if (filter.Size <= 0) filter.Size = 10;
             var pagedJobs = await _jobService.GetPagedJobsAsync(filter);
-            var jobCategories = await _jobCategoryService.GetAllAsync(predicate: x=>x.Jobs.Count!=0,
+            var jobCategories = await _jobCategoryService.GetAllAsync(predicate: x => x.Jobs.Count != 0,
                 include: x => x
                 .Include(x => x.JobCategoryTranslations.Where(x => x.LanguageId == language.Id))
-                .Include(x=>x.Jobs).ThenInclude(x=>x.JobTranslations.Where(t=>t.LanguageId==language.Id))
+                .Include(x => x.Jobs).ThenInclude(x => x.JobTranslations.Where(t => t.LanguageId == language.Id))
                 );
             var jobTypes = _enumService.GetJobTypeListItems();
             var genders = _enumService.GetGenderListItems();
             var jobTypesCounts = await _jobService.GetJobCountJobType();
-            var genderCounts =await _jobService.GetJobCountGender();
+            var genderCounts = await _jobService.GetJobCountGender();
             double minSalary = 0;
             double maxSalary = 0;
 
@@ -63,6 +56,12 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             {
                 minSalary = pagedJobs.Items.MinBy(x => x.MinSalary).MinSalary;
                 maxSalary = pagedJobs.Items.MaxBy(x => x.MaxSalary).MaxSalary;
+            }
+
+            foreach (var job in pagedJobs.Items)
+            {
+                if (await _jobApplicationService.CheckIfJobApplied(job.Id))
+                    job.IsApplied = true;
             }
 
             var jobListingViewModel = new PagedJobListingViewModel
@@ -76,11 +75,9 @@ namespace JobPortalProject.BL.UI.Services.Implementations
                 Genders = genders,
                 JobTypeCounts = jobTypesCounts,
                 GenderCounts = genderCounts,
-                AppliedJobIds=appliedJobIds,
             };
 
             return jobListingViewModel;
         }
-
     }
 }

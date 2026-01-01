@@ -10,7 +10,7 @@
                     <span></span>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item"><a asp-controller="home" asp-action="index">Home</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Job Details</li>
                         </ol>
                     </nav>
@@ -107,7 +107,14 @@
                     <div class="save-apply-btn d-flex justify-content-end mb-50">
                         <ul>
                             <li><a class="save-btn" href="#">Save Job <span><i class="bi bi-bookmark-fill"></i></span></a></li>
-                            <li><a class="primry-btn-2 lg-btn" href="#">Apply Position</a></li>
+                            @if (Model.IsApplied)
+                            {
+                                <li><a class="primry-btn-2 lg-btn" href="#">Applied</a></li>
+                            }
+                            else
+                            {
+                                <li><a onclick="applyJob(@Model.Id, this)" class="primry-btn-2 lg-btn" href="#">Apply Position</a></li>
+                            }
                         </ul>
                     </div>
                     <div class="job-summary-area mb-50">

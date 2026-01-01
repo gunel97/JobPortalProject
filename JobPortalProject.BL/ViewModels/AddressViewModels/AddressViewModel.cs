@@ -14,6 +14,7 @@ namespace JobPortalProject.BL.ViewModels.AddressViewModels
     {
         public int Id { get; set; }
         public int CompanyId { get; set; }
+        public int ActiveJobCount { get; set; }
         public bool IsMainAddress { get; set; }
         public string? Street { get; set; }
         public string? CityName { get; set; }

@@ -1,5 +1,4 @@
 ﻿@model AppliedJobsOfCandidatePageViewModel
-@inject StringLocalizerManager localizer;
 
 <div class="dashboard-area pt-120 mb-120">
     <div class="container">
@@ -12,7 +11,7 @@
                     <div class="table-wrapper">
                         <div class="table-title-filter">
                             <div class="section-title">
-                                <h5>Applied Jobs:</h5>
+                                <h5>Applied Jobs</h5>
                             </div>
                         </div>
                         <table class="eg-table table category-table mb-40">
@@ -55,8 +54,20 @@
                                                 </div>
                                             </td>
                                             <td data-label="Apply Job">@item.AppliedAt.Date.ToShortDateString()</td>
-                                            <td data-label="Status"><a class="eg-btn purple-btn">@localizer.GetValue(item.Status ?? "")</a></td>
-                                            <td data-label="Status"><button class="eg-btn orenge-btn">Cancel</button></td>
+                                            <td data-label="Status">
+                                                @if(item.Status=="cancelled"){
+                                                    <a class="eg-btn orenge-btn" id=@("jobStatus"+item.JobId)>@localizer.GetValue(item.Status ?? "")</a>
+                                                }
+                                                else
+                                                {
+                                                    <a class="eg-btn purple-btn" id=@("jobStatus" + item.JobId)>@localizer.GetValue(item.Status ?? "")</a>
+                                                }
+                                            </td>
+                                            <td data-label="Status">
+                                                @if(item.Status!="cancelled"){
+                                                    <button onclick="deleteJobApplication(@item.JobId, this)" class="eg-btn orenge-btn">Cancel</button>
+                                                }
+                                            </td>
                                            
                                         </tr>
                                     }
@@ -86,3 +97,38 @@
         </div>
     </div>
 </div>
+
+@section Scripts{
+<script>
+    function cancelJobApplication(id, element) {
+            if (!confirm("Are you sure you want to cancel this application?")) {
+                    return;
+                }
+        console.log("cancel");
+        console.log(id);
+        const jobStatus = document.getElementById(`jobStatus${id}`);
+        fetch(`/candidate/cancelJobApplication/${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application-json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Cancelled');
+                    element.remove();
+                    jobStatus.innerHTML = "Cancelled";
+                        jobStatus.classList.remove('purple-btn'); // Optional: change color
+                            jobStatus.classList.add('orenge-btn');
+                    return;
+                }
+                else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    };
+
+</script>
+}

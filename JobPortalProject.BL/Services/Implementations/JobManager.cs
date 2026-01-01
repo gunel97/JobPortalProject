@@ -121,6 +121,17 @@ namespace JobPortalProject.BL.Services.Implementations
             return jobViewModels.ToList();
         }
 
+        public async Task<List<JobViewModel>> GetActiveJobsOfCompanyAsync(int companyId)
+        {
+            var language = await _cookieService.GetLanguageAsync();
+
+            var jobs = await Repository.GetAllAsync(predicate: x => x.CompanyId == companyId && !x.IsDeleted && x.IsActive,
+                include: x => x.Include(t => t.JobTranslations.Where(x => x.LanguageId == language.Id)));
+            var jobViewModels = jobs.Select(x => MapToJobViewModel(x, language.Id));
+
+            return jobViewModels.ToList();
+        }
+
         public async Task<IEnumerable<JobViewModel>> GetAllJobsAsync()
         {
             var language = await _cookieService.GetLanguageAsync();
@@ -228,7 +239,9 @@ namespace JobPortalProject.BL.Services.Implementations
                 .Include(x => x.MainDuties).ThenInclude(t => t.JobMainDutyTranslations.Where(x => x.LanguageId == language.Id))
                 .Include(x => x.ExtraBenefits).ThenInclude(t => t.JobExtraBenefitTranslations.Where(x => x.LanguageId == language.Id))
                 .Include(x => x.Company!).ThenInclude(t => t.CompanyTranslations.Where(x => x.LanguageId == language.Id))
-                .Include(a => a.Address!).ThenInclude(a => a.AddressTranslations.Where(x => x.LanguageId == language.Id))
+                .Include(x => x.Address!).ThenInclude(x => x.AddressTranslations.Where(x => x.LanguageId == language.Id))
+                .Include(x=>x.Address).ThenInclude(x=>x.City).ThenInclude(x=>x.CityTranslations)
+                .Include(x=>x.Address).ThenInclude(x=>x.City).ThenInclude(x=>x.Country).ThenInclude(x=>x.Translations)
                 , index: filter.Index, size: filter.Size);
 
             var jobViewModels = new List<JobViewModel>();
@@ -264,45 +277,6 @@ namespace JobPortalProject.BL.Services.Implementations
             var result = jobs.GroupBy(x => (int)x.JobType).ToDictionary(g => g.Key, g => g.Count());
 
             return result;
-        }
-
-        private JobViewModel MapToJobViewModel(Job jobEntity, int languageId)
-        {
-            var jobViewModel = new JobViewModel
-            {
-                Id = jobEntity.Id,
-                Title = jobEntity.JobTranslations.FirstOrDefault()?.Title,
-                Description = jobEntity.JobTranslations.FirstOrDefault()?.Description,
-                RequiredExperience = jobEntity.JobTranslations.FirstOrDefault()?.RequiredExperience,
-                VacancyCount = jobEntity.VacancyCount,
-                MinSalary = jobEntity.MinSalary,
-                MaxSalary = jobEntity.MaxSalary,
-                IsActive = jobEntity.IsActive,
-                ExpirationDate = jobEntity.ExpirationDate,
-                CreatedAt = jobEntity.CreatedAt,
-                JobCategoryId = jobEntity.JobCategoryId,
-                Gender = jobEntity.Gender.ToString(),
-                RequiredMinEducationType = jobEntity.RequiredMinEducationType.ToString(),
-                SalaryTypeDuration = jobEntity.SalaryTypeDuration.ToString(),
-                JobType = jobEntity.JobType.ToString(),
-                Address = Mapper.Map<AddressViewModel>(jobEntity.Address),
-                JobCategoryName = jobEntity.JobCategory?.JobCategoryTranslations.FirstOrDefault(x => x.LanguageId == languageId)?.Name,
-                CompanyId = jobEntity.CompanyId,
-                CompanyName = jobEntity.Company?.CompanyTranslations.FirstOrDefault(x => x.LanguageId == languageId)?.Name,
-                CompanyLogoUrl = jobEntity.Company?.LogoUrl,
-                Responsibilities = jobEntity.Responsibilities.SelectMany(r => r.JobResponsibilityTranslations
-                                                   .Where(t => t.LanguageId == languageId)
-                                                   .Select(t => t.Value!)).Where(x => !string.IsNullOrWhiteSpace(x)).ToList(),
-                MainDuties = jobEntity.MainDuties.SelectMany(r => r.JobMainDutyTranslations
-                                                  .Where(t => t.LanguageId == languageId)
-                                                  .Select(t => t.Value!)).Where(x => !string.IsNullOrWhiteSpace(x)).ToList(),
-                ExtraBenefits = jobEntity.ExtraBenefits.SelectMany(r => r.JobExtraBenefitTranslations
-                                                  .Where(t => t.LanguageId == languageId)
-                                                  .Select(t => t.Value!)).Where(x => !string.IsNullOrWhiteSpace(x)).ToList(),
-                CompanyImages = jobEntity.Company!.CompanyImages.Select(x => x.ImageUrl).ToList()
-            };
-
-            return jobViewModel;
         }
 
         public async Task<JobUpdateViewModel> GetUpdateViewModel(int jobId)
@@ -415,6 +389,45 @@ namespace JobPortalProject.BL.Services.Implementations
                 };
                 return ordered;
             };
+        }
+
+        private JobViewModel MapToJobViewModel(Job jobEntity, int languageId)
+        {
+            var jobViewModel = new JobViewModel
+            {
+                Id = jobEntity.Id,
+                Title = jobEntity.JobTranslations.FirstOrDefault()?.Title,
+                Description = jobEntity.JobTranslations.FirstOrDefault()?.Description,
+                RequiredExperience = jobEntity.JobTranslations.FirstOrDefault()?.RequiredExperience,
+                VacancyCount = jobEntity.VacancyCount,
+                MinSalary = jobEntity.MinSalary,
+                MaxSalary = jobEntity.MaxSalary,
+                IsActive = jobEntity.IsActive,
+                ExpirationDate = jobEntity.ExpirationDate,
+                CreatedAt = jobEntity.CreatedAt,
+                JobCategoryId = jobEntity.JobCategoryId,
+                Gender = jobEntity.Gender.ToString(),
+                RequiredMinEducationType = jobEntity.RequiredMinEducationType.ToString(),
+                SalaryTypeDuration = jobEntity.SalaryTypeDuration.ToString(),
+                JobType = jobEntity.JobType.ToString(),
+                Address = Mapper.Map<AddressViewModel>(jobEntity.Address),
+                JobCategoryName = jobEntity.JobCategory?.JobCategoryTranslations.FirstOrDefault(x => x.LanguageId == languageId)?.Name,
+                CompanyId = jobEntity.CompanyId,
+                CompanyName = jobEntity.Company?.CompanyTranslations.FirstOrDefault(x => x.LanguageId == languageId)?.Name,
+                CompanyLogoUrl = jobEntity.Company?.LogoUrl,
+                Responsibilities = jobEntity.Responsibilities.SelectMany(r => r.JobResponsibilityTranslations
+                                                   .Where(t => t.LanguageId == languageId)
+                                                   .Select(t => t.Value!)).Where(x => !string.IsNullOrWhiteSpace(x)).ToList(),
+                MainDuties = jobEntity.MainDuties.SelectMany(r => r.JobMainDutyTranslations
+                                                  .Where(t => t.LanguageId == languageId)
+                                                  .Select(t => t.Value!)).Where(x => !string.IsNullOrWhiteSpace(x)).ToList(),
+                ExtraBenefits = jobEntity.ExtraBenefits.SelectMany(r => r.JobExtraBenefitTranslations
+                                                  .Where(t => t.LanguageId == languageId)
+                                                  .Select(t => t.Value!)).Where(x => !string.IsNullOrWhiteSpace(x)).ToList(),
+                CompanyImages = jobEntity.Company!.CompanyImages.Select(x => x.ImageUrl).ToList()
+            };
+
+            return jobViewModel;
         }
     }
 }

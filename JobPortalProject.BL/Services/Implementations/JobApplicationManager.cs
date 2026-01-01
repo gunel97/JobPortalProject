@@ -4,6 +4,7 @@ using JobPortalProject.BL.Services.Contracts;
 using JobPortalProject.BL.UI.Services.Abstracts;
 using JobPortalProject.BL.ViewModels.JobApplicationViewModels;
 using JobPortalProject.DA.DataContext.Entities;
+using JobPortalProject.DA.DataContext.Enums;
 using JobPortalProject.DA.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.Internal;
@@ -27,7 +28,21 @@ namespace JobPortalProject.BL.Services.Implementations
             _resumeService = resumeService;
         }
 
+        public async Task<bool> CheckIfJobApplied(int jobId)
+        {
+            var candidate = await _candidateService.GetCandidate();
+            if (candidate == null)
+                return false;
 
+            var appliedJobs = await GetAppliedJobsOfCandidate(candidate.Id);
+            var appliedIds = new List<int>();
+            appliedJobs.ForEach(x => appliedIds.Add(x.JobId));
+
+            if (appliedIds.Contains(jobId))
+                return true;
+            else
+                return false;
+        }
 
         public async Task<List<JobApplication>> GetAppliedJobsOfCandidate(int candidateId)
         {
@@ -55,6 +70,19 @@ namespace JobPortalProject.BL.Services.Implementations
               .Include(x => x.Job).ThenInclude(x => x.JobTranslations.Where(t => t.LanguageId == languageId)));
 
             return appliedJobs.ToList();
+        }
+
+        public async Task<bool> CancelJobApplication(int jobId, int candidateId)
+        {
+            var jobApplication = await Repository.GetAsync(predicate: x => x.JobId == jobId && x.CandidateId == candidateId);
+            if (jobApplication == null)
+                return false;
+            jobApplication.JobStatus = (JobApplicationStatus)5;
+            var result = await Repository.UpdateAsync(jobApplication);
+            
+            if (result == null)
+                return false;
+            return true;
         }
 
         public async Task<bool> ApplyJob(int jobId, int candidateId)
@@ -166,4 +194,5 @@ namespace JobPortalProject.BL.Services.Implementations
             return model;
         }
     }
+
 }

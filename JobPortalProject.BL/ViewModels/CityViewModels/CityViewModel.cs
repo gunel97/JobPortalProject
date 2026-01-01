@@ -37,6 +37,7 @@ namespace JobPortalProject.BL.ViewModels.CityViewModels
     public class CityViewModel
     {
         public int Id { get; set; }
+        public int ActiveJobCount { get; set; }
         public string? Name { get; set; }
         public string DetailsUrl => $"{Name?.Replace(" ", "-").Replace("/", "-")}-{Id}";
         public string? CoverPhotoUrl { get; set; }

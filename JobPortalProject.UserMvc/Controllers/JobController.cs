@@ -50,9 +50,12 @@ namespace JobPortalProject.UserMvc.Controllers
             int jobId = int.Parse(id.Split('-').Last());
 
             var job = await _jobService.GetByIdAsync(jobId);
-
+           
             if (job == null)
                 return NotFound();
+
+            if (await _jobApplicationService.CheckIfJobApplied(jobId))
+                job.IsApplied = true;
 
             return View(job);
         }

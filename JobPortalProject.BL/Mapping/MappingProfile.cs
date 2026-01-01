@@ -80,6 +80,9 @@ namespace JobPortalProject.BL.Mapping
                 .ForMember(x => x.Name, opt => opt
                 .MapFrom(src => src.CompanyTranslations!.FirstOrDefault() == null ? "" :
                 src.CompanyTranslations!.FirstOrDefault()!.Name))
+                .ForMember(x => x.Description, opt => opt
+                .MapFrom(src => src.CompanyTranslations!.FirstOrDefault() == null ? "" :
+                src.CompanyTranslations!.FirstOrDefault()!.Description))
                 .ForMember(x=>x.MainAddress, opt=>opt
                 .MapFrom(src=>src.Addresses.FirstOrDefault(x=>x.IsMainAddress)))
                 .ForMember(x => x.CategoryName, opt => opt
@@ -87,6 +90,8 @@ namespace JobPortalProject.BL.Mapping
                 src.CompanyType.CompanyTypeTranslations.FirstOrDefault()!.Name))
                 .ForMember(x=>x.TranslationsCount, opt=> opt
                 .MapFrom(src=>src.CompanyTranslations.Count()))
+                .ForMember(x=>x.ActiveJobCount, opt=> opt
+                .MapFrom(src=>src.Jobs.Select(j=>j.IsActive).Count()))
                 .ReverseMap();
             CreateMap<Company, CompanyCreateViewModel>().ReverseMap();
             CreateMap<Company, CompanyUpdateViewModel>().ReverseMap();

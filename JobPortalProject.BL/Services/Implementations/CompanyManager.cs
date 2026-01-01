@@ -426,6 +426,7 @@ namespace JobPortalProject.BL.Services.Implementations
             var pagedCompanies = await Repository.GetPagedListAsync(predicate: predicate,
                 orderBy: orderBy,
                 include: x => x
+                .Include(x=>x.Jobs)
                 .Include(x => x.CompanyTranslations.Where(t => t.LanguageId == language.Id))
                 .Include(x => x.Addresses.Where(a => a.IsMainAddress)).ThenInclude(x => x.AddressTranslations.Where(t => t.LanguageId == language.Id))
                 .Include(x=>x.Addresses).ThenInclude(x=>x.City).ThenInclude(x=>x.CityTranslations.Where(t=>t.LanguageId==language.Id))
@@ -472,12 +473,11 @@ namespace JobPortalProject.BL.Services.Implementations
             var sortBy = filter.SortBy?.ToLower() ?? "title";
             var sortOrder = filter.SortOrder?.ToLower() ?? "desc";
 
-            // 1. NEW: Split combined values (e.g., "title_asc" -> "title" & "asc")
             if (sortBy.Contains('_'))
             {
                 var parts = sortBy.Split('_');
-                sortBy = parts[0];      // becomes "title" or "lastpostedjob"
-                sortOrder = parts[1];   // becomes "asc" or "desc"
+                sortBy = parts[0];      
+                sortOrder = parts[1];   
             }
 
             return queryable =>

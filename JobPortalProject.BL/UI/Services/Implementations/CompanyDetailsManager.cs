@@ -17,12 +17,19 @@ namespace JobPortalProject.BL.UI.Services.Implementations
         private readonly ICompanyService _companyService;
         private readonly IAddressService _addressService;
         private readonly ICompanySocialService _companySocialService;
-        public CompanyDetailsManager(ICompanyService companyService, ICookieService cookieService, IAddressService addressService, ICompanySocialService companySocialService)
+        private readonly IJobService _jobService;
+        private readonly ICandidateService _candidateService;
+        private readonly IJobApplicationService _jobApplicationService;
+
+        public CompanyDetailsManager(ICompanyService companyService, ICookieService cookieService, IAddressService addressService, ICompanySocialService companySocialService, IJobService jobService, ICandidateService candidateService, IJobApplicationService jobApplicationService)
         {
             _companyService = companyService;
             _cookieService = cookieService;
             _addressService = addressService;
             _companySocialService = companySocialService;
+            _jobService = jobService;
+            _candidateService = candidateService;
+            _jobApplicationService = jobApplicationService;
         }
 
         public async Task<CompanyDetailsViewModel> GetCompanyDetailsAsync(int id)
@@ -31,13 +38,11 @@ namespace JobPortalProject.BL.UI.Services.Implementations
 
             var addresses = await _addressService.GetAllAsync();
 
-            //var addresses = await _addressService.GetAsync(predicate: x=>x.AddressTranslations.Any(t=>t.LanguageId==language.Id) && x.CompanyId==id,
-            //    include: x=>x.Include(x=>x.AddressTranslations.Where(t=>t.LanguageId==language.Id)!));
-
             var company = await _companyService.GetAsync(
                                             predicate: x => !x.IsDeleted && x.Id == id,
                                             include: x => x
                                             .Include(ct => ct.CompanyTranslations!.Where(x => x.LanguageId == language.Id))
+                                            .Include(x=>x.Jobs)
                                             .Include(x=>x.Addresses).ThenInclude(x=>x.AddressTranslations.Where(x=>x.LanguageId==language.Id))
                                             .Include(t => t.CompanyType!).ThenInclude(ct => ct.CompanyTypeTranslations!.Where(x => x.LanguageId == language.Id))
                                             .Include(w => w.WorkingFields).ThenInclude(wt => wt.Translations.Where(x => x.LanguageId == language.Id)));
@@ -48,11 +53,27 @@ namespace JobPortalProject.BL.UI.Services.Implementations
                                             .Include(s => s.SocialMedia!));
 
             //var website =  companySocials.FirstOrDefault(x => x.SocialMedia!.Title == "web");
+            var jobs = await _jobService.GetActiveJobsOfCompanyAsync(company.Id);
+            var activeJobModels = jobs.Where(x => x.IsActive).ToList();
+            var candidate = await _candidateService.GetCandidate();
+            if (candidate != null)
+            {
+                var appliedIds = new List<int>();
+                var appliedJobs = await _jobApplicationService.GetAppliedJobsOfCandidate(candidate.Id);
+                appliedJobs.ForEach(x=>  appliedIds.Add(x.JobId));
 
+                foreach(var job in activeJobModels)
+                {
+                    if (appliedIds.Contains(job.Id))
+                        job.IsApplied = true;
+                }
+
+            }
             var companyDetailsViewModel = new CompanyDetailsViewModel
             {
                 Company = company,
                 CompanySocials = companySocials.ToList(),
+                ActiveJobs = activeJobModels.OrderBy(x=>x.CreatedAt).Take(5).ToList(),
                 //Website = website
             };
 

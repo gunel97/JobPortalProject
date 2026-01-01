@@ -17,8 +17,10 @@ namespace JobPortalProject.BL.ViewModels.CompanyViewModels
     {
         public int Id { get; set; }
         public int CompanySize { get; set; }
+        public int ActiveJobCount { get; set; }
         public int TranslationsCount { get; set; }
         public string? Name { get; set; }
+        public string? Description { get; set; }
         public string DetailsUrl => $"{Name?.Replace(" ", "-").Replace("/", "-")}-{Id}";
         public string? LogoUrl {  get; set; }
         public string? CoverPhotoUrl { get; set; }

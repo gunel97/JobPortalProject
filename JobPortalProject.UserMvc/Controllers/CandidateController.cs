@@ -455,9 +455,37 @@ namespace JobPortalProject.UserMvc.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> CancelJobApplication(int id)
+        {
+            var candidate = await _candidateService.GetCandidate();
+            if (candidate == null)
+                return BadRequest();
+
+            var message = "";
+            var result = await _jobApplicationService.CancelJobApplication(id, candidate.Id);
+            if (result)
+            {
+                message = "Job Application Cancelled";
+                return Json(new
+                {
+                    success = true,
+                    message
+                });
+            }
+            else
+            {
+                message = "Error occurred";
+                return Json(new
+                {
+                    success = false,
+                    message
+                });
+            }
+        }
+
+        [HttpPost]
         public async Task<IActionResult> ApplyJob(int id)
         {
-            
             var candidate = await _candidateService.GetCandidate();
             var message = "";
             if(candidate==null)
@@ -489,7 +517,7 @@ namespace JobPortalProject.UserMvc.Controllers
 
             else
             {
-                message = "An error occured";
+                message = "An error occurred";
                 return Json(new
                 {
                     success = false,

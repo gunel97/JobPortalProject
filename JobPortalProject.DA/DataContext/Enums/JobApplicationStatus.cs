@@ -5,7 +5,8 @@
         applied=1,
         interview=2,
         accepted=3,
-        rejected=4
+        rejected=4,
+        cancelled=5
     }
 
 }

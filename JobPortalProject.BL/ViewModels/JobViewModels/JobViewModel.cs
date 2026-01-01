@@ -16,12 +16,14 @@ namespace JobPortalProject.BL.ViewModels.JobViewModels
     {
         public int Id { get; set; }
         public string? Title { get; set; }
+        public string? CompanyDetailsUrl=> $"{Title?.Replace(" ", "-").Replace("/", "-")}-{CompanyId}";
         public string DetailsUrl => $"{Title?.Replace(" ", "-").Replace("/", "-")}-{Id}";
         public string? Description { get; set; }
         public string? RequiredExperience { get; set; }
         public int VacancyCount { get; set; }
         public double MinSalary { get; set; }
         public double MaxSalary { get; set; }
+        public bool IsApplied { get; set; }
         public bool IsActive { get; set; }
         public string? Gender { get; set; }
         public string? SalaryTypeDuration { get; set; }

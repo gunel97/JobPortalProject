@@ -20,7 +20,6 @@ namespace JobPortalProject.BL.UI.ViewModels
         public List<SelectListItem> Genders = [];
         public Dictionary<int, int> JobTypeCounts { get; set; } = [];
         public Dictionary<int, int> GenderCounts { get; set; } = [];
-        public List<int> AppliedJobIds { get; set; } = [];
         public double MinSalary { get; set; }
         public double MaxSalary { get; set; }
     }

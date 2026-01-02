@@ -1,6 +1,6 @@
 ﻿function applyJob(id, element) {
     console.log(id);
-    fetch(`/candidate/applyJob/${id}`, {
+    fetch(`/jobApplication/apply/${id}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application-json'

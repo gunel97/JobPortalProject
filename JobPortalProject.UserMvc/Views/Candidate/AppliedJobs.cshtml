@@ -36,11 +36,11 @@
                                                     </div>
                                                     <div class="company-details">
                                                         <div class="top">
-                                                            <h6><a href="job-details.html">@item.JobTitle</a></h6>
+                                                            <h6><a asp-controller="job" asp-action="details" asp-route-id="@item.JobDetailsUrl">@item.JobTitle</a></h6>
                                                             <span><img src="~/images/icon/calender2.svg" alt="">@item.JobCreatedAt.Date.ToShortDateString()</span>
                                                         </div>
                                                         <div class="top">
-                                                            <a class="view-btn" href="company-details.html">@item.CompanyName </a>
+                                                            <a class="view-btn" asp-controller="company" asp-action="details" asp-route-id="@item.CompanyDetailsUrl">@item.CompanyName </a>
                                                         </div>
                                                         <ul>
                                                             <li><img src="~/images/icon/location.svg" alt="">@item.JobAddress</li>
@@ -64,7 +64,7 @@
                                                 }
                                             </td>
                                             <td data-label="Status">
-                                                @if(item.Status!="cancelled"){
+                                                @if(item.Status=="applied"){
                                                     <button onclick="deleteJobApplication(@item.JobId, this)" class="eg-btn orenge-btn">Cancel</button>
                                                 }
                                             </td>
@@ -107,7 +107,7 @@
         console.log("cancel");
         console.log(id);
         const jobStatus = document.getElementById(`jobStatus${id}`);
-        fetch(`/candidate/cancelJobApplication/${id}`, {
+        fetch(`/jobApplication/cancel/${id}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application-json'

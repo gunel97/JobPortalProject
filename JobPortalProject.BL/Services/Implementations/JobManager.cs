@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 using Microsoft.AspNetCore.Mvc.Internal;
+using System.Threading.Tasks;
 
 namespace JobPortalProject.BL.Services.Implementations
 {
@@ -115,21 +116,37 @@ namespace JobPortalProject.BL.Services.Implementations
             var language = await _cookieService.GetLanguageAsync();
 
             var jobs = await Repository.GetAllAsync(predicate: x => x.CompanyId == companyId && !x.IsDeleted,
-                include: x => x.Include(t => t.JobTranslations.Where(x => x.LanguageId == language.Id)));
-            var jobViewModels = jobs.Select(x => MapToJobViewModel(x, language.Id));
+                include: x => x
+                .Include(x=>x.JobApplications)
+                .Include(t => t.JobTranslations.Where(x => x.LanguageId == language.Id)));
+            var jobViewModels = new List<JobViewModel>();
 
-            return jobViewModels.ToList();
+            foreach(var job in jobs)
+            {
+                var model = await MapToJobViewModel(job, language.Id);
+                jobViewModels.Add(model);
+            }
+
+            return jobViewModels;
         }
 
         public async Task<List<JobViewModel>> GetActiveJobsOfCompanyAsync(int companyId)
         {
             var language = await _cookieService.GetLanguageAsync();
 
-            var jobs = await Repository.GetAllAsync(predicate: x => x.CompanyId == companyId && !x.IsDeleted && x.IsActive,
+            var jobs = await Repository.GetAllAsync(predicate: x => x.CompanyId == companyId && !x.IsDeleted 
+            && x.IsActive,
                 include: x => x.Include(t => t.JobTranslations.Where(x => x.LanguageId == language.Id)));
-            var jobViewModels = jobs.Select(x => MapToJobViewModel(x, language.Id));
 
-            return jobViewModels.ToList();
+            var jobViewModels = new List<JobViewModel>();
+
+            foreach(var job in jobs)
+            {
+                var model = await MapToJobViewModel(job, language.Id);
+                jobViewModels.Add(model);
+            }
+
+            return jobViewModels;
         }
 
         public async Task<IEnumerable<JobViewModel>> GetAllJobsAsync()
@@ -149,7 +166,13 @@ namespace JobPortalProject.BL.Services.Implementations
                .Include(a => a.Address!).ThenInclude(a => a.AddressTranslations.Where(x => x.LanguageId == languageId))
                 );
 
-            var jobViewModels = jobs.Select(x => MapToJobViewModel(x, languageId));
+            var jobViewModels = new List<JobViewModel>();
+           
+            foreach(var job in jobs)
+            {
+                var model = await MapToJobViewModel(job, languageId);
+                jobViewModels.Add(model);
+            }
 
             return jobViewModels;
         }
@@ -161,6 +184,7 @@ namespace JobPortalProject.BL.Services.Implementations
 
             var job = await Repository.GetAsync(predicate: x => !x.IsDeleted && x.Id == id,
                 include: x => x
+                .Include(x=>x.JobApplications)
                .Include(x => x.JobTranslations.Where(t => t.LanguageId == languageId))
                .Include(x => x.JobCategory!).ThenInclude(x => x.JobCategoryTranslations.Where(t => t.LanguageId == languageId))
                .Include(x => x.Responsibilities).ThenInclude(t => t.JobResponsibilityTranslations.Where(x => x.LanguageId == languageId))
@@ -175,8 +199,7 @@ namespace JobPortalProject.BL.Services.Implementations
             if (job == null)
                 return null!;
 
-            var jobViewModel = MapToJobViewModel(job, languageId);
-
+            var jobViewModel = await MapToJobViewModel(job, languageId);
             return jobViewModel;
         }
 
@@ -187,6 +210,7 @@ namespace JobPortalProject.BL.Services.Implementations
 
             var job = await Repository.GetAsync(predicate: x => !x.IsDeleted,
                 include: x => x
+                .Include(x=>x.JobApplications)
                .Include(x => x.JobTranslations.Where(t => t.LanguageId == languageId))
                .Include(x => x.JobCategory!).ThenInclude(x => x.JobCategoryTranslations.Where(t => t.LanguageId == languageId))
                .Include(x => x.Responsibilities).ThenInclude(t => t.JobResponsibilityTranslations.Where(x => x.LanguageId == languageId))
@@ -202,8 +226,7 @@ namespace JobPortalProject.BL.Services.Implementations
             if (job == null)
                 return null!;
 
-            var jobViewModel = MapToJobViewModel(job, languageId);
-
+            var jobViewModel = await MapToJobViewModel(job, languageId);
             return jobViewModel;
         }
 
@@ -211,6 +234,7 @@ namespace JobPortalProject.BL.Services.Implementations
         {
             var jobs = await Repository.GetAllAsync(predicate: x => !x.IsDeleted,
                 include: x => x
+                .Include(x=>x.JobApplications)
                 .Include(x => x.JobTranslations.Where(t => t.LanguageId == languageId))
                 .Include(x => x.JobCategory!).ThenInclude(x => x.JobCategoryTranslations.Where(t => t.LanguageId == languageId))
                 .Include(x => x.Responsibilities).ThenInclude(t => t.JobResponsibilityTranslations.Where(x => x.LanguageId == languageId))
@@ -220,8 +244,12 @@ namespace JobPortalProject.BL.Services.Implementations
                 .Include(a => a.Address!).ThenInclude(a => a.AddressTranslations.Where(x => x.LanguageId == languageId))
                  );
 
-            var jobViewModels = jobs.Select(x => MapToJobViewModel(x, languageId)).ToList();
-
+            var jobViewModels = new List<JobViewModel>();
+            foreach(var job in jobs)
+            {
+                var model = await MapToJobViewModel(job, languageId);
+                jobViewModels.Add(model);
+            }
             return jobViewModels;
         }
 
@@ -233,6 +261,7 @@ namespace JobPortalProject.BL.Services.Implementations
             var pagedJobs = await Repository.GetPagedListAsync(predicate: predicate,
                 orderBy: orderBy,
                 include: x => x
+                .Include(x=>x.JobApplications)
                 .Include(x => x.JobTranslations.Where(t => t.LanguageId == language.Id))
                 .Include(x => x.JobCategory!).ThenInclude(x => x.JobCategoryTranslations.Where(t => t.LanguageId == language.Id))
                 .Include(x => x.Responsibilities).ThenInclude(t => t.JobResponsibilityTranslations.Where(x => x.LanguageId == language.Id))
@@ -247,7 +276,7 @@ namespace JobPortalProject.BL.Services.Implementations
             var jobViewModels = new List<JobViewModel>();
             foreach (var item in pagedJobs.Items)
             {
-                var model = MapToJobViewModel(item, language.Id);
+                var model = await MapToJobViewModel(item, language.Id);
                 jobViewModels.Add(model);
             }
 
@@ -340,9 +369,20 @@ namespace JobPortalProject.BL.Services.Implementations
             return true;
         }
 
+        public async Task<bool> CheckHasExpired(int jobId)
+        {
+            var job = await Repository.GetByIdAsync(jobId);
+            if (job!.ExpirationDate < DateTime.UtcNow)
+                return true;
+
+            return false;
+        }
+
+
         private Expression<Func<Job, bool>> BuildPredicate(JobFilterViewModel filter, int languageId)
         {
             Expression<Func<Job, bool>> predicate = x => !x.IsDeleted && x.IsActive &&
+            x.ExpirationDate>DateTime.UtcNow &&
             (string.IsNullOrEmpty(filter.SearchTerm) ||
             x.JobTranslations.Any(t => t.LanguageId == languageId && (t.Title.Contains(filter.SearchTerm) ||
             t.Description.Contains(filter.SearchTerm))) ||
@@ -391,8 +431,12 @@ namespace JobPortalProject.BL.Services.Implementations
             };
         }
 
-        private JobViewModel MapToJobViewModel(Job jobEntity, int languageId)
+        private async Task<JobViewModel> MapToJobViewModel(Job jobEntity, int languageId)
         {
+            bool expired = false ;
+            if (await CheckHasExpired(jobEntity.Id))
+                expired = true;
+
             var jobViewModel = new JobViewModel
             {
                 Id = jobEntity.Id,
@@ -400,10 +444,15 @@ namespace JobPortalProject.BL.Services.Implementations
                 Description = jobEntity.JobTranslations.FirstOrDefault()?.Description,
                 RequiredExperience = jobEntity.JobTranslations.FirstOrDefault()?.RequiredExperience,
                 VacancyCount = jobEntity.VacancyCount,
+                ApplicationCount=jobEntity.JobApplications.Where(x=>x.JobId==jobEntity.Id && x.JobStatus!=(JobApplicationStatus)5).Count(),
+                InterviewCount=jobEntity.JobApplications.Where(x=>x.JobId==jobEntity.Id && x.JobStatus==(JobApplicationStatus)2).Count(),
+                RejectedApplicationCount=jobEntity.JobApplications.Where(x=>x.JobId==jobEntity.Id && x.JobStatus==(JobApplicationStatus)4).Count(),
+                AcceptedApplicationCount = jobEntity.JobApplications.Where(x => x.JobId == jobEntity.Id && x.JobStatus == (JobApplicationStatus)3).Count(),
                 MinSalary = jobEntity.MinSalary,
                 MaxSalary = jobEntity.MaxSalary,
                 IsActive = jobEntity.IsActive,
                 ExpirationDate = jobEntity.ExpirationDate,
+                Expired=expired,
                 CreatedAt = jobEntity.CreatedAt,
                 JobCategoryId = jobEntity.JobCategoryId,
                 Gender = jobEntity.Gender.ToString(),
@@ -429,5 +478,6 @@ namespace JobPortalProject.BL.Services.Implementations
 
             return jobViewModel;
         }
+
     }
 }

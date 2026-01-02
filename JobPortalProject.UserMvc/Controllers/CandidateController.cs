@@ -454,77 +454,7 @@ namespace JobPortalProject.UserMvc.Controllers
             return writer.ToString();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CancelJobApplication(int id)
-        {
-            var candidate = await _candidateService.GetCandidate();
-            if (candidate == null)
-                return BadRequest();
-
-            var message = "";
-            var result = await _jobApplicationService.CancelJobApplication(id, candidate.Id);
-            if (result)
-            {
-                message = "Job Application Cancelled";
-                return Json(new
-                {
-                    success = true,
-                    message
-                });
-            }
-            else
-            {
-                message = "Error occurred";
-                return Json(new
-                {
-                    success = false,
-                    message
-                });
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> ApplyJob(int id)
-        {
-            var candidate = await _candidateService.GetCandidate();
-            var message = "";
-            if(candidate==null)
-            {
-                message = "Login/Register to create resume";
-                return Json(new
-                {
-                    success = false,
-                    message
-                });
-            }
-            if (candidate.Resume == null)
-            {
-                message = "Create resume";
-                return Json(new
-                {
-                    success = false,
-                    message
-                });
-            }
-
-            var result= await _jobApplicationService.ApplyJob(id, candidate.Id);
-
-            if (result)
-                return Json(new
-                {
-                    success = true
-                });
-
-            else
-            {
-                message = "An error occurred";
-                return Json(new
-                {
-                    success = false,
-                    message
-                });
-            }
-        }
+       
 
         public async Task<IActionResult> AppliedJobs()
         {

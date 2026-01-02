@@ -14,6 +14,10 @@ namespace JobPortalProject.BL.ViewModels.JobApplicationViewModels
     {
         public int JobApplicationId { get; set; }
         public int JobId { get; set; }
+        public string JobDetailsUrl => $"{JobTitle?.Replace(" ", "-").Replace("/", "-")}-{JobId}";
+        public string CompanyDetailsUrl => $"{CompanyName?.Replace(" ", "-").Replace("/", "-")}-{CompanyId}";
+
+        public int CompanyId { get; set; }
         public int CandidateId { get; set; }
         public string? JobTitle { get; set; }
         public string? JobAddress { get; set; }
@@ -31,6 +35,7 @@ namespace JobPortalProject.BL.ViewModels.JobApplicationViewModels
     {
         public int JobApplicationId { get; set; }
         public string? ResumeViewModel { get; set; }
+        public int CandidateId { get; set; }
         public string? CandidateName { get; set; }
         public string? CandidateImageUrl { get; set; }
         public DateTime CandidateBirthDate { get; set; }
@@ -43,10 +48,6 @@ namespace JobPortalProject.BL.ViewModels.JobApplicationViewModels
     {
         public List<ApplicantOfJobViewModel> Applications { get; set; } = [];
         public JobViewModel Job { get; set; } = null!;
-        public int TotalApplicantsCount { get; set; }
-        public int InterviewCount { get; set; }
-        public int RejectedCount { get; set; }
-        public int AcceptedCount { get; set; }
         public string? JobTitle { get; set; }
         public DateTime JobPostedDate { get; set; }
         public DateTime JobExpireDate { get; set; }

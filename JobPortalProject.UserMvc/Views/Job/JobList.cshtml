@@ -57,10 +57,9 @@
                             <tr>
                                 <th>Job Title</th>
                                 <th>Applications</th>
-                                <th>Matched</th>
-                                <th>Shortlisted</th>
-                                <th>Viewed</th>
-                                <th>Not Viewed</th>
+                                <th>Interview</th>
+                                <th>Rejected</th>
+                                <th>Accepted</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -70,7 +69,14 @@
                                 <tr id=@("jobListRow"+job.Id)>
                                     <td data-label="Job Title">
                                         <div class="job-content">
-                                            <h5><a asp-controller="job" asp-action="applicants" asp-route-id="@job.DetailsUrl">@job.Title</a></h5>
+                                            @if (job.Expired)
+                                            {
+                                                <h5><a asp-controller="job" asp-action="applicants" asp-route-id="@job.Id">@job.Title</a> - Expired</h5>
+
+                                            }
+                                            else{
+                                            <h5><a asp-controller="job" asp-action="applicants" asp-route-id="@job.Id">@job.Title</a></h5>
+                                            }
                                             <p><img src="~/images/icon/calender2.svg" alt=""><span>Deadline:</span>@job.ExpirationDate!.Value.ToShortDateString()</p>
                                             <div class="form-check form-switch">
                                                 <input asp-for="@job.IsActive" class="form-check-input" 
@@ -88,19 +94,16 @@
                                         </div>
                                     </td>
                                     <td data-label="Applications">
-                                        <span class="total-number">1000</span>
+                                        <span class="total-number">@job.ApplicationCount</span>
                                     </td>
-                                    <td data-label="Matched">
-                                        <span class="total-number light-orange">400</span>
+                                    <td data-label="Interview">
+                                        <span class="total-number light-orange">@job.InterviewCount</span>
                                     </td>
-                                    <td data-label="Shortlisted">
-                                        <span class="total-number">700</span>
+                                    <td data-label="Rejected">
+                                        <span class="total-number">@job.RejectedApplicationCount</span>
                                     </td>
-                                    <td data-label="Viewed">
-                                        <span class="total-number light-yellow">300</span>
-                                    </td>
-                                    <td data-label="Not Viewed">
-                                        <span class="total-number deep-pink">100</span>
+                                    <td data-label="Accepted">
+                                        <span class="total-number light-yellow">@job.AcceptedApplicationCount</span>
                                     </td>
                                     <td data-label="Action">
                                         <div class="action-btn-group">

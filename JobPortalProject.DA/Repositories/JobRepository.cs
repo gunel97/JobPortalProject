@@ -1,6 +1,8 @@
 ﻿using JobPortalProject.DA.DataContext;
 using JobPortalProject.DA.DataContext.Entities;
 using JobPortalProject.DA.Repositories.Contracts;
+using Microsoft.EntityFrameworkCore.Query;
+using System.Linq.Expressions;
 
 namespace JobPortalProject.DA.Repositories
 {

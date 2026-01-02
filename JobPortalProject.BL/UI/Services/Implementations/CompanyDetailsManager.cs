@@ -54,7 +54,7 @@ namespace JobPortalProject.BL.UI.Services.Implementations
 
             //var website =  companySocials.FirstOrDefault(x => x.SocialMedia!.Title == "web");
             var jobs = await _jobService.GetActiveJobsOfCompanyAsync(company.Id);
-            var activeJobModels = jobs.Where(x => x.IsActive).ToList();
+            var activeJobModels = jobs.Where(x=>!x.Expired).ToList();
             var candidate = await _candidateService.GetCandidate();
             if (candidate != null)
             {

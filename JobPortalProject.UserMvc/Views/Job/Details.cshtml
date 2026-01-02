@@ -72,15 +72,18 @@
                         }
                     </ul>
                     }
-               
-                    <h6>Educational Requirements:</h6>
-                    <ul>
-                        <li>@localizer.GetValue(Model.RequiredMinEducationType ?? "")</li>
-                    </ul>
+                    @if(Model.RequiredMinEducationType!=null && Model.RequiredMinEducationType.Any()){
+                        <h6>Educational Requirements:</h6>
+                        <ul>
+                            <li>@localizer.GetValue(Model.RequiredMinEducationType ?? "")</li>
+                        </ul>
+                    }
+                    @if(Model.RequiredExperience!=null){
                     <h6>Experiences:</h6>
                     <ul>
                         <li>@Model.RequiredExperience</li>
                     </ul>
+                    }
                     @if (Model.MainDuties.Any()){
                     <p><span>Main Duties:</span> Some specific tasks that a UI/UX designer might be responsible for include:</p>
                     <ul>
@@ -124,9 +127,12 @@
                         <ul>
                             <li><p><span class="title">Job Posted:</span> @Model.CreatedAt?.Date.ToShortDateString() .</p></li>
                             <li><p><span class="title">Expiration:</span> @Model.ExpirationDate?.Date.ToShortDateString() .</p></li>
-                            <li><p><span class="title">Vacancy:</span> @Model.VacancyCount Person.</p></li>
-                            <li><p><span class="title">Experiences:</span> 2-3 Years.</p></li>
+                            @if(Model.RequiredExperience!=null || string.IsNullOrWhiteSpace(Model.RequiredExperience)){
+                            <li><p><span class="title">Experiences:</span> @Model.RequiredExperience</p></li>
+                            }
+                            @if(Model.RequiredMinEducationType!=null && Model.RequiredMinEducationType.Any()){
                             <li><p><span class="title">Education:</span> @localizer.GetValue(Model.RequiredMinEducationType ?? "")</p></li>
+                            }
                             <li><p><span class="title">Gender:</span> @localizer.GetValue(Model.Gender!) .</p></li>
                         </ul>
                     </div>
@@ -153,7 +159,7 @@
             </div>
 
         </div>
-        <div class="row">
+      @*   <div class="row">
             <div class="col-lg-12 mb-120">
                 <div class="company-gallery">
                     <div class="title">
@@ -316,7 +322,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> *@
     </div>
 </div>
 <!-- ========== Job Details End============= -->

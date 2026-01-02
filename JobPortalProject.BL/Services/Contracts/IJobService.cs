@@ -7,6 +7,7 @@ namespace JobPortalProject.BL.Services.Contracts
 {
     public interface IJobService : ICrudService<Job, JobViewModel, JobCreateViewModel, JobUpdateViewModel>
     {
+        public Task<bool> CheckHasExpired(int jobId);
         public Task<List<JobViewModel>> GetActiveJobsOfCompanyAsync(int companyId);
         public Task<IEnumerable<JobViewModel>> GetAllWithLanguageAsync(int languageId);
         public Task<JobCreateViewModel> GetJobCreateViewModelAsync(int companyId);

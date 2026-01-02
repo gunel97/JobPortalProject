@@ -34,18 +34,18 @@ namespace JobPortalProject.BL.UI.Services.Implementations
         public async Task<HomeViewModel> GetHomeViewModelAsync()
         {
             var language = await _cookieService.GetLanguageAsync();
+            
+            var addresses =await  _addressService.GetAllAsync();
+            var jobs = await _jobService.GetAllJobsAsync();
+            var jobModels = jobs.ToList();
+            var jobCategoryListItems = await _jobCategoryService.GetJobCategorySelectListItems(language.Id);
             var companies = await _companyService.GetAllAsync(
                                              include: c => c
                                              .Include(c => c.Jobs)
                                              .Include(ct => ct.CompanyTranslations!
                                              .Where(c => c.LanguageId == language.Id)));
-            var addresses =await  _addressService.GetAllAsync();
 
-            var jobs = await _jobService.GetAllJobsAsync();
-            var jobModels = jobs.ToList();
-            var jobCategoryListItems = await _jobCategoryService.GetJobCategorySelectListItems(language.Id);
-
-            foreach(var job in jobModels)
+            foreach (var job in jobModels)
             {
                 if (await _jobApplicationService.CheckIfJobApplied(job.Id))
                     job.IsApplied = true;
@@ -61,21 +61,16 @@ namespace JobPortalProject.BL.UI.Services.Implementations
 
             var addressesByCities = addresses.DistinctBy(a => a.City!.Name!);
 
-          
-
-
             var homeViewModel = new HomeViewModel
             {
                 JobCategories = jobCategories.Where(x => x.JobIds.Any()).ToList(),
                 Addresses = addressesByCities.ToList(),
                 Companies = companies.ToList(),
-                Jobs = jobModels.OrderByDescending(j => j.CreatedAt).Take(6).ToList(),
+                Jobs = jobModels.Where(x=>!x.Expired).OrderByDescending(j => j.CreatedAt).Take(6).ToList(),
                 JobCategoryListItems=jobCategoryListItems
             };
 
             return homeViewModel;
         }
-
-
     }
 }

@@ -95,6 +95,9 @@ namespace JobPortalProject.BL.Services.Implementations
                                            .Include(t => t.CompanyType!).ThenInclude(ct => ct.CompanyTypeTranslations!.Where(x => x.LanguageId == selectedLanguageId))
                                            .Include(w => w.WorkingFields).ThenInclude(wt => wt.Translations));
 
+            if (company == null)
+                return null!;
+
             var companySocials = await _companySocialService.GetAllAsync(
                                             predicate: x => !x.IsDeleted && x.CompanyId == existedCompany.Id,
                                             include: x => x
@@ -121,6 +124,7 @@ namespace JobPortalProject.BL.Services.Implementations
                 PrimaryPhone = company.PrimaryPhone,
                 SecondaryPhone = company.SecondaryPhone,
                 CoverPhotoUrl = company.CoverPhotoUrl,
+                MainAddressId=company.Addresses.FirstOrDefault(x=>x.IsMainAddress).Id,
                 LogoUrl = company.LogoUrl,
                 CompanyTypeId = company.CompanyTypeId,
                 CompanyTypeList = companyTypeSelectListItems,
@@ -393,6 +397,7 @@ namespace JobPortalProject.BL.Services.Implementations
                 await _companySocialService.UpdateAsync(companySocialModel.Id, companySocialModel);
             }
 
+            existedCompany.IsAccountApproved = await IsCompanyActive();
 
             await Repository.UpdateAsync(existedCompany);
 
@@ -438,6 +443,7 @@ namespace JobPortalProject.BL.Services.Implementations
             foreach(var item in pagedCompanies.Items)
             {
                 var model = Mapper.Map<CompanyViewModel>(item);
+                
                 companyModels.Add(model);
             }               
 

@@ -5,6 +5,9 @@ namespace JobPortalProject.BL.Services.Contracts
 {
     public interface IJobApplicationService:ICrudService<JobApplication, JobApplicationsOfCandidateViewModel,JobApplicationCreateViewModel, JobApplicationUpdateViewModel>
     {
+        public Task<bool> InterviewJobApplication(int jobId, int candidateId);
+        public Task<bool> AcceptJobApplication(int jobId, int candidateId);
+        public Task<bool> RejectJobApplication(int jobId, int candidateId);
         public Task<bool> CancelJobApplication(int jobId, int candidateId);
         public Task<bool> CheckIfJobApplied(int jobId);
         public Task<bool> ApplyJob(int jobId, int candidateId);

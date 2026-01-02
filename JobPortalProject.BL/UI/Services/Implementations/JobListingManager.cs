@@ -60,8 +60,11 @@ namespace JobPortalProject.BL.UI.Services.Implementations
 
             foreach (var job in pagedJobs.Items)
             {
-                if (await _jobApplicationService.CheckIfJobApplied(job.Id))
-                    job.IsApplied = true;
+                if (job != null)
+                {
+                    if (await _jobApplicationService.CheckIfJobApplied(job.Id))
+                        job.IsApplied = true;
+                }
             }
 
             var jobListingViewModel = new PagedJobListingViewModel

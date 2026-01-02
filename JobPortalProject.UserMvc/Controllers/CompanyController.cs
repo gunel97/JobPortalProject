@@ -99,7 +99,7 @@ namespace JobPortalProject.UserMvc.Controllers
             if (!isUpdated)
                 return NotFound();
 
-            return RedirectToAction("CompanyDashboard", "Company");
+            return RedirectToAction("Dashboard", "Company");
         }
 
         public async Task<IActionResult> UpdateCompanyTranslation(int id)

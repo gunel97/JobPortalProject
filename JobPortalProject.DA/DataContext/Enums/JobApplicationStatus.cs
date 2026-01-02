@@ -6,7 +6,8 @@
         interview=2,
         accepted=3,
         rejected=4,
-        cancelled=5
+        cancelled=5,
+        expired=6
     }
 
 }

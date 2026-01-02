@@ -257,14 +257,13 @@ namespace JobPortalProject.UserMvc.Controllers
             return RedirectToAction("Update", jobUpdateModel);
         }
 
-        public async Task<IActionResult> Applicants(string id)
+        public async Task<IActionResult> Applicants(int id)
         {
-            int jobId = int.Parse(id.Split('-').Last());
-            var job = await _jobService.GetByIdAsync(jobId);
+            var job = await _jobService.GetByIdAsync(id);
             if (job == null)
                 return NotFound();
 
-            var model = await _jobApplicationService.GetApplicantsViewModel(jobId);
+            var model = await _jobApplicationService.GetApplicantsViewModel(id);
             model.Job = job;
 
             return View(model);

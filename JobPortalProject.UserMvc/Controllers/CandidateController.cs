@@ -5,8 +5,10 @@ using JobPortalProject.BL.UI.ViewModels;
 using JobPortalProject.BL.ViewModels.CandidateViewModels;
 using JobPortalProject.BL.ViewModels.EducationViewModels;
 using JobPortalProject.BL.ViewModels.ExperienceViewModels;
+using JobPortalProject.BL.ViewModels.JobApplicationViewModels;
 using JobPortalProject.BL.ViewModels.PersonalInfoViewModels;
 using JobPortalProject.BL.ViewModels.ProfileViewModels;
+using JobPortalProject.DA.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
@@ -39,7 +41,11 @@ namespace JobPortalProject.UserMvc.Controllers
 
         public async Task<IActionResult> Dashboard()
         {
+
             var model = await _candidateService.GetDashboardViewModel();
+            var candidate = await _candidateService.GetCandidate();
+            var applications = await _jobApplicationService.GetAppliedJobModelsOfCandidate(model.CandidateId);
+            model.Applications = applications.OrderByDescending(x=>x.AppliedAt).Take(5).ToList();
 
             return View(model);
         }
@@ -452,16 +458,14 @@ namespace JobPortalProject.UserMvc.Controllers
 
             await viewResult.View.RenderAsync(viewContext);
             return writer.ToString();
-        }
+        }      
 
-       
-
-        public async Task<IActionResult> AppliedJobs()
+        public async Task<IActionResult> AppliedJobs(JobApplicationsOfCandidateFilterViewModel filter)
         {
             var candidate = await _candidateService.GetCandidate();
             if (candidate == null)
                 return BadRequest();
-            var model = await _jobApplicationService.GetAppliedJobsPageOfCandidateViewModel(candidate.Id);
+            var model = await _jobApplicationService.GetAppliedJobsPageOfCandidateViewModel(filter,candidate.Id);
             return View(model);
         }
 

@@ -13,5 +13,9 @@ namespace JobPortalProject.BL.UI.ViewModels
         public List<AddressViewModel> Addresses { get; set; } = [];
         public List<CompanyViewModel> Companies { get; set; } = [];
         public List<JobViewModel> Jobs {  get; set; } = [];
+        public int ActiveJobCount { get; set; }
+        public int ActiveCompanyCount { get; set; }
+        public int NewJobCount { get; set; }
+        public int CandidateCount { get; set; }
     }
 }

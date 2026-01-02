@@ -1,5 +1,20 @@
-﻿@model AppliedJobsOfCandidatePageViewModel
+﻿ @{
+    AppliedJobsOfCandidatePageViewModel model = Model;
+    var applications = model.JobApplicationsModels;   
+    var filter = Model.Filter ?? new JobApplicationsOfCandidateFilterViewModel();
 
+    var currentSortBy = filter.SortBy?.ToLower() ?? "";
+    var currentSortOrder = filter.SortOrder?.ToLower() ?? "desc";
+
+    var nextSortOrder = (currentSortBy == "appliedat" && currentSortOrder == "desc") ? "asc" : "desc";
+
+    string sortIconClass;
+    if (currentSortBy == "appliedat")
+        sortIconClass = currentSortOrder == "asc" ? "bi bi-arrow-up-short" : "bi bi-arrow-down-short";
+    else
+        sortIconClass = "bi bi-arrow-down-up"; 
+}
+ 
 <div class="dashboard-area pt-120 mb-120">
     <div class="container">
         <div class="row g-lg-4 gy-5 mb-90">
@@ -13,20 +28,38 @@
                             <div class="section-title">
                                 <h5>Applied Jobs</h5>
                             </div>
-                        </div>
+                        </div>                             
                         <table class="eg-table table category-table mb-40">
                             <thead>
                                 <tr>
                                     <th>Job Information</th>
-                                    <th>Apply Date</th>
+
+                                    <th>
+                                        <a asp-action="appliedJobs"
+                                           asp-route-searchTerm="@filter.SearchTerm"
+                                           asp-route-index="0"
+                                           asp-route-size="@filter.Size"
+                                           asp-route-sortBy="appliedat"
+                                           asp-route-sortOrder="@nextSortOrder"
+                                           style="color: inherit; text-decoration: none; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+
+                                            <span>Apply Date</span>
+                                            <span class="d-flex align-items-center justify-content-center shadow-sm"
+                                                  style="width: 24px; height: 24px; background: #fff; border-radius: 50%; color: #000000;">
+
+                                                <i class="@sortIconClass" style="font-size: 16px; font-weight: bold;"></i>
+                                            </span>
+                                        </a>
+                                    </th>
+
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @if (Model.JobApplicationsModels.Any())
+                                @if (applications.Items.Any())
                                 {
-                                    @foreach (var item in Model.JobApplicationsModels)
+                                    @foreach (var item in applications.Items)
                                     {
                                         <tr>
                                             <td data-label="Job Title">
@@ -76,16 +109,55 @@
                         </table>
                         <div class="pagination-table-info">
                             <div class="table-info">
-                                <span>06 Results Showing In 20 Jobs</span>
+                                @{
+                                    var startRecord = (applications.Index * applications.Size) + 1;
+                                    var endRecord = startRecord + applications.Items.Count() - 1;
+                                    if (applications.Count == 0) { startRecord = 0; endRecord = 0; }
+                                }
+                                <span>@startRecord - @endRecord Results Showing In @applications.Count Jobs</span>
                             </div>
+
                             <div class="pagination-area">
                                 <nav aria-label="...">
                                     <ul class="pagination">
-                                        <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1"></a></li>
-                                        <li class="page-item active" aria-current="page"><a class="page-link" href="#">01</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">02</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">03</a></li>
-                                        <li class="page-item"><a class="page-link" href="#"></a></li>
+                                        <li class="page-item @(applications.Index == 0 ? "disabled" : "")">
+                                            <a class="page-link"
+                                               asp-action="Index"
+                                               asp-route-index="@(applications.Index - 1)"
+                                               asp-route-size="@filter?.Size"
+                                               asp-route-searchTerm="@filter?.SearchTerm"
+                                               asp-route-sortBy="@filter?.SortBy"
+                                               asp-route-sortOrder="@filter?.SortOrder"
+                                               tabindex="-1">
+                                                <i class="bi bi-chevron-left"></i>
+                                            </a>
+                                        </li>
+                                        @for (int i = 0; i < applications.Pages; i++)
+                                        {
+                                            <li class="page-item @(i == applications.Index ? "active" : "")">
+                                                <a class="page-link"
+                                                   asp-action="Index"
+                                                   asp-route-index="@i"
+                                                   asp-route-size="@filter?.Size"
+                                                   asp-route-searchTerm="@filter?.SearchTerm"
+                                                   asp-route-sortBy="@filter?.SortBy"
+                                                   asp-route-sortOrder="@filter?.SortOrder">
+                                                    @(i + 1)
+                                                </a>
+                                            </li>
+                                        }
+                                        <li class="page-item @(applications.Index >= applications.Pages - 1 ? "disabled" : "")">
+                                            <a class="page-link"
+                                               asp-action="Index"
+                                               asp-route-index="@(applications.Index + 1)"
+                                               asp-route-size="@filter?.Size"
+                                               asp-route-searchTerm="@filter?.SearchTerm"
+                                               asp-route-sortBy="@filter?.SortBy"
+                                               asp-route-sortOrder="@filter?.SortOrder">
+                                                <i class="bi bi-chevron-right"></i>
+                                            </a>
+                                        </li>
+
                                     </ul>
                                 </nav>
                             </div>

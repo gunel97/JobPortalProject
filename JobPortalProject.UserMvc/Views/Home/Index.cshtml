@@ -4,6 +4,10 @@
     var addresses = model.Addresses;
     var companies = model.Companies;
     var jobs = model.Jobs;
+    var companyCount = model.ActiveCompanyCount;
+    var candidateCount = model.CandidateCount;
+    var jobCount = model.ActiveJobCount;
+    var newjobCount = model.NewJobCount;
     var jobCategoryItems = model.JobCategoryListItems;
 }
 @inject StringLocalizerManager localizer;
@@ -15,7 +19,6 @@
             <div class="col-lg-12">
                 <div class="hero-content">
                     <h1>Your Career’s <span>Opportunity.</span></h1>
-                    <p><span>2400</span> Peoples are daily search in this portal, <span>100</span> user added job portal!</p>
                     <div class="counter-area">
                         <div class="row g-lg-4 g-md-5 gy-5 justify-content-center">
                             <div class="col-lg-3 col-sm-6">
@@ -27,7 +30,7 @@
                                         <p>Live Jobs</p>
                                         <div class="d-flex align-items-center gap-2">
                                             <h3 class="odometer">
-                                                20223
+                                                @jobCount
                                             </h3>
                                         </div>
                                     </div>
@@ -42,7 +45,7 @@
                                         <p>Companies</p>
                                         <div class="d-flex align-items-center gap-2">
                                             <h3 class="odometer">
-                                                804
+                                                @companyCount
                                             </h3>
                                             <span>+</span>
                                         </div>
@@ -58,7 +61,7 @@
                                         <p>Candidates</p>
                                         <div class="d-flex align-items-center gap-2">
                                             <h3 class="odometer">
-                                                500
+                                                @candidateCount
                                             </h3>
                                             <span>+</span>
                                         </div>
@@ -74,7 +77,7 @@
                                         <p>New Jobs</p>
                                         <div class="d-flex align-items-center gap-2">
                                             <h3 class="odometer">
-                                                102
+                                                @newjobCount
                                             </h3>
                                             <span>+</span>
                                         </div>

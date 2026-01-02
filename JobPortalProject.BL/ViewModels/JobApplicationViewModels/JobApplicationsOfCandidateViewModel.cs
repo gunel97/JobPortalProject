@@ -1,5 +1,6 @@
 ﻿using JobPortalProject.BL.ViewModels.CandidateViewModels;
 using JobPortalProject.BL.ViewModels.JobViewModels;
+using JobPortalProject.BL.ViewModels.Pagination;
 using JobPortalProject.BL.ViewModels.ResumeViewModels;
 using JobPortalProject.DA.DataContext.Enums;
 using System;
@@ -29,6 +30,22 @@ namespace JobPortalProject.BL.ViewModels.JobApplicationViewModels
         public DateTime JobCreatedAt { get; set; }
         public DateTime AppliedAt { get; set; }
         public string? Status { get; set; }
+    }
+
+    public class JobApplicationsOfCandidateFilterViewModel
+    {
+        public string? SearchTerm { get; set; }
+        public string SortBy { get; set; } = "PostedDate";
+        public string SortOrder { get; set; } = "desc";
+        public int Index { get; set; } = 0;
+        public int Size { get; set; } = 5;
+    }
+
+    public class AppliedJobsOfCandidatePageViewModel
+    {
+        public JobApplicationsOfCandidateFilterViewModel? Filter { get; set; }
+        public PagedResultModel<JobApplicationsOfCandidateViewModel> JobApplicationsModels { get; set; } = null!;
+        public CandidateDashboardViewModel? Dashboard { get; set; }
     }
 
     public class ApplicantOfJobViewModel
@@ -65,9 +82,5 @@ namespace JobPortalProject.BL.ViewModels.JobApplicationViewModels
 
     }
 
-    public class AppliedJobsOfCandidatePageViewModel
-    {
-        public List<JobApplicationsOfCandidateViewModel> JobApplicationsModels { get; set; } = [];
-        public CandidateDashboardViewModel? Dashboard { get; set; }
-    }
+   
 }

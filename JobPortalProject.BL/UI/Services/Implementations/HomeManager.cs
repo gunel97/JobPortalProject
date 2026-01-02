@@ -39,12 +39,12 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             var jobs = await _jobService.GetAllJobsAsync();
             var jobModels = jobs.ToList();
             var jobCategoryListItems = await _jobCategoryService.GetJobCategorySelectListItems(language.Id);
-            var companies = await _companyService.GetAllAsync(
+            var companies = await _companyService.GetAllAsync(predicate: x=>x.IsAccountApproved && !x.IsDeleted,
                                              include: c => c
                                              .Include(c => c.Jobs)
                                              .Include(ct => ct.CompanyTranslations!
                                              .Where(c => c.LanguageId == language.Id)));
-
+            var candidates = await _candidateService.GetAllAsync(predicate: x => x.Resume != null && !x.IsDeleted);
             foreach (var job in jobModels)
             {
                 if (await _jobApplicationService.CheckIfJobApplied(job.Id))
@@ -65,9 +65,13 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             {
                 JobCategories = jobCategories.Where(x => x.JobIds.Any()).ToList(),
                 Addresses = addressesByCities.ToList(),
-                Companies = companies.ToList(),
-                Jobs = jobModels.Where(x=>!x.Expired).OrderByDescending(j => j.CreatedAt).Take(6).ToList(),
-                JobCategoryListItems=jobCategoryListItems
+                Companies = companies.OrderByDescending(x=>x.LastPostedJob).Take(6).ToList(),
+                CandidateCount=candidates.Count(),
+                ActiveCompanyCount = companies.Count(),
+                ActiveJobCount = jobModels.Where(x => !x.Expired && x.IsActive).Count(),
+                NewJobCount = jobModels.Where(x => !x.Expired && x.IsActive && x.CreatedAt > DateTime.UtcNow.AddDays(-10)).Count(),
+                Jobs = jobModels.Where(x => !x.Expired && x.IsActive).OrderByDescending(j => j.CreatedAt).Take(6).ToList(),
+                JobCategoryListItems = jobCategoryListItems
             };
 
             return homeViewModel;

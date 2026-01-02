@@ -220,7 +220,6 @@
                                                 { "SortOrder", filter.SortOrder ?? "" }
                                                 };
 
-                            // Add multi-select arrays
                             for (int i = 0; i < filter.CategoryIds.Count; i++)
                             {
                                 routeData[$"CategoryIds[{i}]"] = filter.CategoryIds[i].ToString();
@@ -250,11 +249,9 @@
         </form>
     </div>
 </div>
-<!-- ========== Job Listing e nd============= -->
 
     <script>
         console.log("test");
-        // Vanilla JavaScript Salary Range Sliders
         const minSlider = document.getElementById('minSlider');
         const maxSlider = document.getElementById('maxSlider');
         const minDisplay = document.getElementById('minDisplay');
@@ -265,13 +262,11 @@
         const sliderValue2 = document.getElementById('slider-range-value2');
         const filterForm = document.getElementById('filterForm');
 
-        // Update displays when sliders move
         if (minSlider && maxSlider) {
             minSlider.addEventListener('input', function() {
                 let minVal = parseInt(this.value);
                 let maxVal = parseInt(maxSlider.value);
 
-                // Ensure min doesn't exceed max
                 if (minVal > maxVal) {
                     minVal = maxVal;
                     this.value = minVal;
@@ -286,7 +281,6 @@
                 let maxVal = parseInt(this.value);
                 let minVal = parseInt(minSlider.value);
 
-                // Ensure max doesn't go below min
                 if (maxVal < minVal) {
                     maxVal = minVal;
                     this.value = maxVal;
@@ -297,7 +291,6 @@
                 maxInput.value = maxVal;
             });
 
-            // Submit form when user releases slider
             minSlider.addEventListener('change', function() {
                 document.getElementById('Index').value = 0;
                 filterForm.submit();
@@ -309,7 +302,6 @@
             });
         }
 
-        // Preset salary range function
         function setSalaryRange(min, max) {
             if (minSlider && maxSlider) {
                 minSlider.value = min;

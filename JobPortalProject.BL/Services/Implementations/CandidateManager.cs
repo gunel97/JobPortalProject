@@ -68,6 +68,7 @@ namespace JobPortalProject.BL.Services.Implementations
             var languageSelected = await _cookieService.GetLanguageAsync();
             var candidate = await GetCandidate();
             var languages = await _languageService.GetAllAsync();
+            var imageUrl = "";
 
             var empty = new List<LanguageViewModel>();
             var ready = new List<LanguageViewModel>();
@@ -94,10 +95,14 @@ namespace JobPortalProject.BL.Services.Implementations
                         empty.Add(language);
                     }
                 }
+
+                imageUrl = candidate.Resume.PersonalInfo.ImageUrl;
             }
 
             var model = new CandidateDashboardViewModel
             {
+                CandidateId= candidate.Id,
+                ImageUrl=imageUrl,
                 UserName = candidate.AppUser!.UserName,
                 ResumeId = resumeId,
                 EmptyLanguages = empty,

@@ -1,5 +1,5 @@
 ﻿ @model CompanyDashboardViewModel;
- @inject StringLocalizerManager localizer;
+
 <!-- ========== Dashboard Area end============= -->
 <div class="dashboard-area company-dashboard pt-120 mb-120">
     <div class="container">
@@ -25,15 +25,6 @@
                                 }
                             </div>
                         </div>
-
-@*                         <div class="action-btn-group">
-                            <ul>
-                                @foreach(var language in Model.Languages)
-                                {
-                                    <li><a asp-controller="company" asp-action="editCompanyProfile" asp-route-selectedLanguageId="@language.Id"><span><img src="@language.IconUrl" alt=""></span><span><img src="~/images/icon/edit2.svg" alt=""></span>@localizer.GetValue("editProfile")</a></li>
-                                }
-                            </ul>
-                        </div> *@
                     </div>
 
                     <div class="counter-area">
@@ -47,7 +38,7 @@
                                         <p>Total Applied</p>
                                         <div class="d-flex align-items-center">
                                             <h3 class="odometer">
-                                                30
+                                                @Model.TotalApplicantCount
                                             </h3>
                                             <span>+</span>
                                         </div>
@@ -60,10 +51,10 @@
                                         <img src="~/images/icon/save-job.svg" alt="image">
                                     </div>
                                     <div class="coundown">
-                                        <p>Live Jobs</p>
+                                        <p>Active Jobs</p>
                                         <div class="d-flex align-items-center">
                                             <h3 class="odometer">
-                                                80
+                                                @Model.ActiveJobCount
                                             </h3>
                                             <span>+</span>
                                         </div>
@@ -76,10 +67,10 @@
                                         <img src="~/images/icon/pending-icon.svg" alt="image">
                                     </div>
                                     <div class="coundown">
-                                        <p>Pending Job</p>
+                                        <p>Interview</p>
                                         <div class="d-flex align-items-center">
                                             <h3 class="odometer">
-                                                120
+                                                @Model.WaitingInterviewCount
                                             </h3>
                                             <span>+</span>
                                         </div>
@@ -92,76 +83,10 @@
                                         <img src="~/images/icon/closed-icon.svg" alt="image">
                                     </div>
                                     <div class="coundown">
-                                        <p>Closed Jobs</p>
+                                        <p>Accepted</p>
                                         <div class="d-flex align-items-center">
                                             <h3 class="odometer">
-                                                900
-                                            </h3>
-                                            <span>+</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row g-4 justify-content-cente">
-                            <div class="col-lg-3 col-sm-6">
-                                <div class="counter-single">
-                                    <div class="counter-icon">
-                                        <img src="~/images/icon/total-view-icon.svg" alt="image">
-                                    </div>
-                                    <div class="coundown">
-                                        <p>Total View</p>
-                                        <div class="d-flex align-items-center">
-                                            <h3 class="odometer">
-                                                2500
-                                            </h3>
-                                            <span>+</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-sm-6">
-                                <div class="counter-single two">
-                                    <div class="counter-icon">
-                                        <img src="~/images/icon/follow-icon.svg" alt="image">
-                                    </div>
-                                    <div class="coundown">
-                                        <p>Our Followers</p>
-                                        <div class="d-flex align-items-center">
-                                            <h3 class="odometer">
-                                                250
-                                            </h3>
-                                            <span>+</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-sm-6">
-                                <div class="counter-single three">
-                                    <div class="counter-icon">
-                                        <img src="~/images/icon/highlight-icon.svg" alt="image">
-                                    </div>
-                                    <div class="coundown">
-                                        <p>Highlighted Jobs</p>
-                                        <div class="d-flex align-items-center">
-                                            <h3 class="odometer">
-                                                150
-                                            </h3>
-                                            <span>+</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-sm-6">
-                                <div class="counter-single five">
-                                    <div class="counter-icon">
-                                        <img src="~/images/icon/featured-icon.svg" alt="image">
-                                    </div>
-                                    <div class="coundown">
-                                        <p>Our Followers</p>
-                                        <div class="d-flex align-items-center">
-                                            <h3 class="odometer">
-                                                500
+                                                @Model.TotalAcceptedCount
                                             </h3>
                                             <span>+</span>
                                         </div>
@@ -171,308 +96,65 @@
                         </div>
                     </div>
 
-                    <div class="new-applied-job-area">
-                        <h5>New Applied List:</h5>
-                        <div class="table-wrapper2">
-                            <table class="eg-table table category-table mb-0">
-                                <tbody>
-                                    <tr>
-                                        <td data-label="Candidate Name">
-                                            <div class="employee-info">
-                                                <div class="employee-img">
-                                                    <img src="~/images/bg/employee-img1.png" alt="">
-                                                </div>
-                                                <div class="employee-content">
-                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Mr. Willium Jacson</button>
-                                                    <!-- Modal -->
-                                                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-hidden="true">
-                                                        <div class="modal-dialog">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <div class="button-groups">
-                                                                        <ul>
-                                                                            <li>
-                                                                                <button class="primary-bg"><img src="~/images/icon/pdf2.svg" alt=""> Download PDF</button>
-                                                                                <button><img src="~/images/icon/shortlist2.svg" alt=""> Shortlist</button>
-                                                                                <button class="red-bg"><img src="~/images/icon/reject2.svg" alt=""> reject</button>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </div>
-                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <div class="row justify-content-center">
-                                                                        <div class="col-lg-12">
-                                                                            <div class="resume-area">
-                                                                                <div class="row g-4 mb-40">
-                                                                                    <div class="col-lg-6">
-                                                                                        <div class="author-area">
-                                                                                            <div class="author-img">
-                                                                                                <img src="~/images/bg/resume-author.png" alt="">
-                                                                                            </div>
-                                                                                            <div class="name-degination">
-                                                                                                <h4>Mr. Jacoline Frankly</h4>
-                                                                                                <span>UI/UX Engineer</span>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="col-lg-6">
-                                                                                        <div class="contact-area">
-                                                                                            <h4>Contact Info</h4>
-                                                                                            <ul>
-                                                                                                <li>Phone:<a href="#">+880-177 443 5455 <span><img src="~/images/icon/phone-5.svg" alt=""></span></a></li>
-                                                                                                <li>Email:<a href="#"><span class="__cf_email__" data-cfemail="f29b9c949db2978a939f829e97dc919d9f">[email&#160;protected]</span> <span><img src="~/images/icon/envlop-5.svg" alt=""></span></a></li>
-                                                                                                <li>Website:<a href="#">www.infositeexample.com <span><img src="~/images/icon/web-5.svg" alt=""></span></a></li>
-                                                                                            </ul>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-lg-12">
-                                                                                    <div class="single-information-area">
-                                                                                        <div class="section-title">
-                                                                                            <h6>Career Objective</h6>
-                                                                                            <div class="dash"></div>
-                                                                                        </div>
-                                                                                        <div class="description">
-                                                                                            <p>I'm a passionate UI/UX designer and can bring innovative ideas & concepts to life for client-based design projects. I have more than 3 years of design experience in digital/e-commerce. I experienced at tackle various needs from landing page designs, web app interfaces. I have skills in User Experience Design (UXD), user-centered Design, Interaction and Visual Design for websites, applications, web, and mobile products, wireframes, mock-ups, qualitative and quantitative user studies, usability analysis, and informal usability audits.</p>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-lg-12">
-                                                                                    <div class="single-information-area">
-                                                                                        <div class="section-title">
-                                                                                            <h6>Personal Information</h6>
-                                                                                            <div class="dash"></div>
-                                                                                        </div>
-                                                                                        <div class="row g-4">
-                                                                                            <div class="col-lg-6 devaider1 position-relative">
-                                                                                                <div class="informations">
-                                                                                                    <ul>
-                                                                                                        <li><span>Father’s Name:</span>  Mr. Norman Frankly</li>
-                                                                                                        <li><span>Date of Birth:</span>  03 January,1998</li>
-                                                                                                        <li><span>Nationality:</span>  Bangladeshi</li>
-                                                                                                        <li><span>Marital Status:</span>  Unmarried</li>
-                                                                                                        <li><span>Height:</span>  5’ 5’’</li>
-                                                                                                        <li><span>Blood Group:</span>  O ve+</li>
-                                                                                                        <li><span>Permanent Address:</span>  Village: Mirpur-12 Block-C, Thana: Pallavi, District: Dhaka, Division: Dhaka</li>
-                                                                                                    </ul>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-lg-6 pl-40">
-                                                                                                <div class="informations d-flex justify-content-end">
-                                                                                                    <ul>
-                                                                                                        <li><span>Mother’s Name:</span>  Mrs. Macoline Frankly</li>
-                                                                                                        <li><span>National ID:</span>  88 9919 6712 8762</li>
-                                                                                                        <li><span>Religion:</span>  Islam</li>
-                                                                                                        <li><span>Gender:</span>  Male</li>
-                                                                                                        <li><span>Weight:</span>  75 KG</li>
-                                                                                                        <li><span>Height:</span>  5’ 5’’</li>
-                                                                                                        <li><span>Present Address:</span>  Village: Mirpur DOSH, Block-C, Avenue-02, Thana: Pallavi, District: Dhaka, Division: Dhaka.</li>
-                                                                                                    </ul>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-lg-12">
-                                                                                    <div class="single-information-area">
-                                                                                        <div class="section-title">
-                                                                                            <h6>Educational Qualification</h6>
-                                                                                            <div class="dash"></div>
-                                                                                        </div>
-
-                                                                                        <div class="educational-qualification mb-30">
-                                                                                            <div class="passing-year">
-                                                                                                <p><span>01.</span>April, 2016- May, 2020</p>
-                                                                                                <span></span>
-                                                                                            </div>
-                                                                                            <div class="education-dt">
-                                                                                                <h6>Royals Republic Science & Technology University</h6>
-                                                                                                <ul>
-                                                                                                    <li><span>Education Level:</span> Graduation</li>
-                                                                                                    <li><span>My Major:</span> Bachelor Degree In CSE</li>
-                                                                                                    <li><span>Result/GPA:</span> 3.75/4.00</li>
-                                                                                                </ul>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div class="educational-qualification">
-                                                                                            <div class="passing-year">
-                                                                                                <p><span>02.</span>June, 2014- April, 2016</p>
-                                                                                                <span></span>
-                                                                                            </div>
-                                                                                            <div class="education-dt">
-                                                                                                <h6>International Collegiate School & College</h6>
-                                                                                                <ul>
-                                                                                                    <li><span>Education Level:</span> HSC</li>
-                                                                                                    <li><span>My Major:</span> Science</li>
-                                                                                                    <li><span>Result/GPA:</span> 4.96/5.00</li>
-                                                                                                </ul>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-lg-12">
-                                                                                    <div class="single-information-area">
-                                                                                        <div class="section-title">
-                                                                                            <h6>Career Application</h6>
-                                                                                            <div class="dash"></div>
-                                                                                        </div>
-                                                                                        <div class="row g-4 ">
-                                                                                            <div class="col-lg-6 devaider1 position-relative">
-                                                                                                <div class="informations">
-                                                                                                    <ul>
-                                                                                                        <li><span>Current Job Place:</span>  Norland Tech of Industry</li>
-                                                                                                        <li><span>Position:</span>  UI/UX Engineer</li>
-                                                                                                        <li><span>Experiences:</span>  3 Years</li>
-                                                                                                    </ul>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-lg-6 pl-40">
-                                                                                                <div class="informations">
-                                                                                                    <ul>
-                                                                                                        <li><span>Current Salary:</span>  30000/=</li>
-                                                                                                        <li><span>Expected Salary:</span>  40000/=</li>
-                                                                                                        <li><span>Available:</span>  Full Time</li>
-                                                                                                    </ul>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-lg-12">
-                                                                                    <div class="single-information-area">
-                                                                                        <div class="section-title">
-                                                                                            <h6>Professionals Information</h6>
-                                                                                            <div class="dash"></div>
-                                                                                        </div>
-
-                                                                                        <div class="educational-qualification mb-30">
-                                                                                            <div class="passing-year">
-                                                                                                <p><span>01.</span>April, 2021- May, 2022</p>
-                                                                                                <span></span>
-                                                                                            </div>
-                                                                                            <div class="education-dt">
-                                                                                                <h6>Bistro.Tech Group of Industry</h6>
-                                                                                                <p class="position"><span>Position:</span> UI/UX Engineer ( Full-Time)</p>
-                                                                                                <div class="responsibility">
-                                                                                                    <h6>Responsibility:</h6>
-                                                                                                    <ul>
-                                                                                                        <li>Creating high quality landing pages optimized for client website brands.</li>
-                                                                                                        <li>Creating e-commerce interfaces, design enhancements, and overall improved user experience of existing sites</li>
-                                                                                                    </ul>
-                                                                                                </div>
-
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div class="educational-qualification">
-                                                                                            <div class="passing-year">
-                                                                                                <p><span>02.</span>April, 2022- Continuing</p>
-                                                                                                <span></span>
-                                                                                            </div>
-                                                                                            <div class="education-dt">
-                                                                                                <h6>Norland Tech of Industry</h6>
-                                                                                                <p class="position"><span>Position:</span> UI/UX Engineer ( Full-Time)</p>
-                                                                                                <div class="responsibility">
-                                                                                                    <h6>Responsibility:</h6>
-                                                                                                    <ul>
-                                                                                                        <li>Creating high quality landing pages optimized for client website brands.</li>
-                                                                                                        <li>Creating e-commerce interfaces, design enhancements, and overall improved user experience of existing sites</li>
-                                                                                                    </ul>
-                                                                                                </div>
-
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-lg-12">
-                                                                                    <div class="single-information-area">
-                                                                                        <div class="section-title">
-                                                                                            <h6>Special Skills</h6>
-                                                                                            <div class="dash"></div>
-                                                                                        </div>
-                                                                                        <div class="tag-area">
-                                                                                            <ul>
-                                                                                                <li>Web Development,</li>
-                                                                                                <li>UI/UX Designer,</li>
-                                                                                                <li>React Development.</li>
-                                                                                            </ul>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-lg-12">
-                                                                                    <div class="single-information-area">
-                                                                                        <div class="section-title">
-                                                                                            <h6>Social Network</h6>
-                                                                                            <div class="dash"></div>
-                                                                                        </div>
-                                                                                        <div class="social-area">
-                                                                                            <ul>
-                                                                                                <li><a href="https://www.facebook.com/">Facebook</a></li>
-                                                                                                <li><a href="https://twitter.com/">Twitter</a></li>
-                                                                                                <li><a href="https://www.linkedin.com/">Linkedin</a></li>
-                                                                                                <li><a href="https://www.pinterest.com/">Pinterest</a></li>
-                                                                                                <li><a href="https://dribbble.com/">Dribbble</a></li>
-                                                                                                <li><a href="https://www.behance.net/">Behance</a></li>
-                                                                                            </ul>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-lg-12">
-                                                                                    <div class="declaration-area">
-                                                                                        <h6>Declaration & Authentication-</h6>
-                                                                                        <p>I do hereby declare that the information given above is true of my knowledge.</p>
-                                                                                    </div>
-                                                                                    <div class="gratitude-area">
-                                                                                        <span>Yours Faithful,</span>
-                                                                                        <h6>Jacoline Frankly</h6>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <div class="button-groups">
-                                                                        <ul>
-                                                                            <li>
-                                                                                <button class="primary-bg"><img src="~/images/icon/pdf2.svg" alt=""> Download PDF</button>
-                                                                                <button><img src="~/images/icon/shortlist2.svg" alt=""> Shortlist</button>
-                                                                                <button class="red-bg"><img src="~/images/icon/reject2.svg" alt=""> reject</button>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                        </div>
+                    @if (Model.Applicants.Any()) 
+                    {
+                        <div class="new-applied-job-area">
+                            <h5>Latest Applications List:</h5>
+                            <div class="table-wrapper2">
+                                <table class="eg-table table job-list-table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Candidate</th>
+                                            <th>Job</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    @foreach (var item in Model.Applicants)
+                                    {
+                                        <tr>
+                                            <td data-label="Candidate Name">
+                                                <div class="employee-info">
+                                                    <div class="employee-img">
+                                                        <img src="@item.ImageUrl" alt="">
                                                     </div>
-                                                    <span><img src="~/images/icon/company-2.svg" alt="">Internation Colliegate University</span>
-                                                    <p><span>Applied On:</span> 02 April, 2023</p>
+                                                    <div class="employee-content">
+                                                        <h5>@item.CandidateName</h5>
+                                                        <p><img src="~/images/icon/calender2.svg" alt=""><span>    Applied:   </span>@item.AppliedAt.Date.ToShortDateString()</p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td data-label="Carrer Summary">
-                                            <div class="carrer-summary">
-                                                <h6>Colliegate Ltd <span>(Teaching Assistant)</span></h6>
-                                                <ul>
-                                                    <li><span>Experience:</span> 2+ Years</li>
-                                                    <li><span>Salary:</span> $800/ Per Month</li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                        <td data-label="Actions">
-                                            <div class="action-btn-group">
-                                                <ul>
-                                                    <li><button><img src="~/images/icon/shortlist-icon.svg" alt=""> Shortlist</button></li>
-                                                    <li><button class="reject"><img src="~/images/icon/rejected-icon.svg" alt=""> Rejected</button></li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                            </td>
+                                            <td data-label="Carrer Summary">
+                                                <div class="carrer-summary">
+                                                    <h5>@item.JobTitle</h5>
+                                                    <p><img src="~/images/icon/calender2.svg" alt=""><span>    Posted:  </span> @item.PostedAt.Date.ToShortDateString()</p>
+                                                    <p><img src="~/images/icon/calender2.svg" alt=""><span>    Expire:  </span> @item.ExpireAt.Date.ToShortDateString()</p>
+                                                    
+                                                </div>
+                                            </td>
+                                            <td data-label="Actions">
+                                                <div class="action-btn-group">
+                                                    <ul>
+                                                        <li>
+                                                            <a class="primry-btn-2 lg-btn" href="/job/applicants/@item.JobId">
+                                                                View Job Applicants
+                                                                <svg width="15" height="13" viewBox="0 0 15 13" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path d="M10.1367 0H4.86329C4.66914 0 4.51173 0.151188 4.51173 0.337662V1.79366H1.43168C0.642247 1.79363 0 2.41049 0 3.16868V11.6249C0 12.3831 0.642247 13 1.43168 13H13.5683C14.3578 13 15 12.3831 15 11.6249V3.16868C15 2.41049 14.3578 1.79363 13.5683 1.79363H10.4883V0.337662C10.4883 0.15116 10.3309 0 10.1367 0ZM5.21485 0.675325H9.78518V1.79366H5.21485V0.675325ZM13.5683 12.3247H1.43168C1.02996 12.3247 0.703126 12.0108 0.703126 11.625V5.31469L5.6836 7.11899V8.14608C5.6836 8.33255 5.84102 8.48374 6.03517 8.48374H8.96486C9.15901 8.48374 9.31642 8.33255 9.31642 8.14608V7.11899L14.2969 5.31472V11.625C14.2969 12.0108 13.9701 12.3247 13.5683 12.3247ZM6.38673 7.80841V6.79543H8.6133V7.80841H6.38673ZM14.2969 3.16868V4.59294L9.3108 6.39926C9.28191 6.24073 9.13821 6.1201 8.96486 6.1201H6.03517C5.86182 6.1201 5.71812 6.2407 5.68923 6.39926L0.703126 4.59297V3.16868C0.703126 2.78284 1.02993 2.46896 1.43168 2.46896H13.5683C13.9701 2.46896 14.2969 2.78284 14.2969 3.16868ZM13.4071 11.0443C13.4071 11.2308 13.2497 11.382 13.0555 11.382H10.1697C9.97558 11.382 9.81816 11.2308 9.81816 11.0443C9.81816 10.8578 9.97558 10.7067 10.1697 10.7067H13.0555C13.2497 10.7067 13.4071 10.8578 13.4071 11.0443ZM1.89337 3.67202C1.89337 3.48555 2.05079 3.33436 2.24494 3.33436H4.09064C4.28479 3.33436 4.44221 3.48555 4.44221 3.67202C4.44221 3.8585 4.28479 4.00968 4.09064 4.00968H2.24494C2.05079 4.00968 1.89337 3.8585 1.89337 3.67202Z"></path>
+                                                                </svg>
+                                                            </a>
+                                                      </li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                               
+                                </table>
+                            </div>
                         </div>
-                    </div>
+                    }
+    
+     
+
                 </div>
 
             </div>

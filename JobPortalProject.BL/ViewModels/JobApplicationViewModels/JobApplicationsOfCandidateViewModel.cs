@@ -70,6 +70,21 @@ namespace JobPortalProject.BL.ViewModels.JobApplicationViewModels
         public DateTime JobExpireDate { get; set; }
     }
 
+    public class ApplicantOfCompanyViewModel
+    {
+        public int ApplicationId { get; set; }
+        public int CandidateId { get; set; }
+        public int JobId { get; set; }
+        public string? CandidateName { get; set; }
+        public string? JobTitle { get; set; }
+        public DateTime BirthDateOfCandidate { get; set; }
+        public DateTime AppliedAt { get; set; }
+        public DateTime ExpireAt { get; set; }
+        public DateTime PostedAt { get; set; }
+        public string? Status { get; set; }
+        public string? ImageUrl { get; set; }
+    }
+
     public class JobApplicationCreateViewModel
     {
         public int CandidateId { get; set; }

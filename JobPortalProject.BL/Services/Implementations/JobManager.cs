@@ -378,7 +378,6 @@ namespace JobPortalProject.BL.Services.Implementations
             return false;
         }
 
-
         private Expression<Func<Job, bool>> BuildPredicate(JobFilterViewModel filter, int languageId)
         {
             Expression<Func<Job, bool>> predicate = x => !x.IsDeleted && x.IsActive &&

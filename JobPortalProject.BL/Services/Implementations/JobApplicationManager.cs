@@ -8,6 +8,7 @@ using JobPortalProject.BL.ViewModels.Pagination;
 using JobPortalProject.DA.DataContext.Entities;
 using JobPortalProject.DA.DataContext.Enums;
 using JobPortalProject.DA.Repositories.Contracts;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using System.Linq.Expressions;
@@ -198,6 +199,42 @@ namespace JobPortalProject.BL.Services.Implementations
                 return false;
 
             return true;
+        }
+
+        public async Task<List<ApplicantOfCompanyViewModel>> GetApplicantsOfCompany(int companyId)
+        {
+            var language = await _cookieService.GetLanguageAsync();
+            var jobApplications = await Repository.GetAllAsync(predicate: x => x.JobStatus != (JobApplicationStatus)5 && !x.IsDeleted,
+                include: x => x
+                .Include(x => x.Job).ThenInclude(x => x.JobTranslations.Where(t => t.LanguageId == language.Id))
+                .Include(x => x.Job).ThenInclude(x => x.Company).ThenInclude(x => x.CompanyTranslations.Where(t => t.LanguageId == language.Id))
+                .Include(x=>x.Candidate).ThenInclude(x=>x.Resume).ThenInclude(x=>x.Translations.Where(t=>t.LanguageId==language.Id))
+                .Include(x=>x.Candidate).ThenInclude(x=>x.Resume).ThenInclude(x=>x.PersonalInfo).ThenInclude(x=>x.Translations.Where(t=>t.LanguageId==language.Id)));
+
+            var models = new List<ApplicantOfCompanyViewModel>();
+
+            foreach(var application in jobApplications)
+            {
+                var model = new ApplicantOfCompanyViewModel
+                {
+                    ApplicationId = application.Id,
+                    CandidateId = application.CandidateId,
+                    JobId = application.JobId,
+                    JobTitle = application.Job.JobTranslations.FirstOrDefault().Title,
+                    CandidateName = application.Candidate.Resume.PersonalInfo.Translations.FirstOrDefault().FirstName + " " +
+                    application.Candidate.Resume.PersonalInfo.Translations.FirstOrDefault().LastName,
+                    BirthDateOfCandidate=application.Candidate.Resume.PersonalInfo.BirthDate,
+                    AppliedAt=application.CreatedAt,
+                    ExpireAt=application.Job.ExpirationDate,
+                    PostedAt=application.Job.CreatedAt,
+                    Status=application.JobStatus.ToString(),
+                    ImageUrl=application.Candidate.Resume.PersonalInfo.ImageUrl
+                };
+
+                models.Add(model);
+            }
+
+            return models;
         }
 
         public async Task<ApplicantOfJobViewModel> MapToApplicantsOfJobViewModel(JobApplication entity)

@@ -1,4 +1,5 @@
-﻿using JobPortalProject.BL.ViewModels.LanguageViewModels;
+﻿using JobPortalProject.BL.ViewModels.JobApplicationViewModels;
+using JobPortalProject.BL.ViewModels.LanguageViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,11 @@ namespace JobPortalProject.BL.UI.ViewModels
         public string? Name { get; set; }
         public string? LogoUrl { get; set; }
         public bool IsAccountActive { get; set; }
+        public int ActiveJobCount { get; set; }
+        public int TotalApplicantCount { get; set; }
+        public int WaitingInterviewCount { get; set; }
+        public int TotalAcceptedCount { get; set; }
         public List<LanguageViewModel> Languages { get; set; } = [];
+        public List<ApplicantOfCompanyViewModel> Applicants { get; set; } = [];
     }
 }

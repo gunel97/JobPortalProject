@@ -204,7 +204,6 @@
                     </div>
                     <div class="job-type-apply">
                         <div class="apply-btn">
-                            @* @if (appliedJobs.Any() && appliedJobs.Contains(job.Id)) *@
                             @if(job.IsApplied==true)
                             {
                                 <a asp-controller="candidate" asp-action="appliedJobs"><span><img src="~/images/icon/apply-ellipse.svg" alt=""></span>Applied</a>

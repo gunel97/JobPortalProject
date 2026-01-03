@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Desktop\CodeAcademy\Mailing-master\Mailing-master\Mailing.csproj" />
     <ProjectReference Include="..\JobPortalProject.DA\JobPortalProject.DA.csproj" />
   </ItemGroup>
 

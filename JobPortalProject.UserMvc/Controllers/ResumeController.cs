@@ -1,8 +1,10 @@
 ﻿using JobPortalProject.BL.Services.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JobPortalProject.UserMvc.Controllers
 {
+    [Authorize(Roles = "Candidate, Company")]
     public class ResumeController : Controller
     {
         private readonly IResumePdfService _resumePdfService;
@@ -39,7 +41,6 @@ namespace JobPortalProject.UserMvc.Controllers
             }
         }
 
-        // Action to preview PDF in browser
         [HttpGet]
         public async Task<IActionResult> PreviewPdf(int id, int languageId)
         {

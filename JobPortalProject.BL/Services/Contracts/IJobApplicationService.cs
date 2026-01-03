@@ -6,6 +6,7 @@ namespace JobPortalProject.BL.Services.Contracts
 {
     public interface IJobApplicationService:ICrudService<JobApplication, JobApplicationsOfCandidateViewModel,JobApplicationCreateViewModel, JobApplicationUpdateViewModel>
     {
+        public Task<string> CheckJobStatus(int jobId);
         public Task<List<ApplicantOfCompanyViewModel>> GetApplicantsOfCompany(int companyId);
         public Task<List<JobApplicationsOfCandidateViewModel>> GetAppliedJobModelsOfCandidate(int candidateId);
         public Task<PagedResultModel<JobApplicationsOfCandidateViewModel>> GetPagedAppliedJobsOfCandidate(JobApplicationsOfCandidateFilterViewModel filter, int candidateId);

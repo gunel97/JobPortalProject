@@ -3,6 +3,7 @@ using JobPortalProject.BL.UI.Services.Abstracts;
 using JobPortalProject.BL.ViewModels.JobExtraBenefitViewModels;
 using JobPortalProject.BL.ViewModels.JobResponsibilityViewModels;
 using JobPortalProject.BL.ViewModels.JobViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
@@ -13,6 +14,7 @@ using Microsoft.IdentityModel.Tokens.Experimental;
 
 namespace JobPortalProject.UserMvc.Controllers
 {
+    [Authorize(Roles = "Company")]
     public class JobController : Controller
     {
         private readonly IJobService _jobService;
@@ -32,6 +34,7 @@ namespace JobPortalProject.UserMvc.Controllers
             _jobApplicationService = jobApplicationService;
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Index(JobFilterViewModel filter)
         {
             var jobListingViewModel = await _jobListingService.GetPagedJobListingViewModel(filter);
@@ -39,12 +42,14 @@ namespace JobPortalProject.UserMvc.Controllers
             return View(jobListingViewModel);
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult ClearFilters()
         {
             return RedirectToAction(nameof(Index));
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Details(string id)
         {
             int jobId = int.Parse(id.Split('-').Last());
@@ -60,6 +65,7 @@ namespace JobPortalProject.UserMvc.Controllers
             return View(job);
         }
 
+        
         public async Task<IActionResult> JobList()
         {
             var companyId = await _companyService.GetCompanyIdOfUser();

@@ -7,6 +7,7 @@ using JobPortalProject.BL.ViewModels.CompanyViewModels;
 using JobPortalProject.BL.ViewModels.JobApplicationViewModels;
 using JobPortalProject.BL.ViewModels.JobExtraBenefitViewModels;
 using JobPortalProject.BL.ViewModels.WorkingFieldViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace JobPortalProject.UserMvc.Controllers
 {
+    [Authorize(Roles = "Company")]
     public class CompanyController: Controller
     {
         private readonly ICompanyDetailsService _companyDetailsService;
@@ -22,15 +24,13 @@ namespace JobPortalProject.UserMvc.Controllers
         private readonly ICompanyDashboardService _companyDashboardService;
         private readonly ICookieService _cookieService;
         private readonly IWorkingFieldService _workingFieldService;
-        private readonly IWorkingFieldTranslationService _workingFieldTranslationService;
         private readonly IAddressService _addressService;
         private readonly ICompanySocialService _companySocialService;
-        private readonly IJobApplicationService _jobApplicationService;
 
         public CompanyController(ICompanyDetailsService companyDetailsService, ICompanyListingService companyListingService,
             ICompanyService companyService, ICompanyDashboardService companyDashboardService, ICookieService cookieService,
-            IWorkingFieldService workingFieldService, IWorkingFieldTranslationService workingFieldTranslationService,
-            IAddressService addressService, ICompanySocialService companySocialService, IJobApplicationService jobApplicationService)
+            IWorkingFieldService workingFieldService,
+            IAddressService addressService, ICompanySocialService companySocialService)
         {
             _companyDetailsService = companyDetailsService;
             _companyListingService = companyListingService;
@@ -38,12 +38,11 @@ namespace JobPortalProject.UserMvc.Controllers
             _companyDashboardService = companyDashboardService;
             _cookieService = cookieService;
             _workingFieldService = workingFieldService;
-            _workingFieldTranslationService = workingFieldTranslationService;
             _addressService = addressService;
             _companySocialService = companySocialService;
-            _jobApplicationService = jobApplicationService;
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Index(CompanyFilterViewModel filter)
         {
             var model = await _companyListingService.GetListsAsync(filter);
@@ -51,6 +50,7 @@ namespace JobPortalProject.UserMvc.Controllers
             return View(model);
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Details(string id)
         {
             int companyId = int.Parse(id.Split('-').Last());
@@ -71,6 +71,7 @@ namespace JobPortalProject.UserMvc.Controllers
 
             return View(model);
         }
+
         public IActionResult Settings()
         {
             return View();

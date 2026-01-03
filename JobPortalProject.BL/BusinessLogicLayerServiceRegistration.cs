@@ -5,6 +5,8 @@ using JobPortalProject.BL.Services.Contracts;
 using JobPortalProject.BL.Services.Implementations;
 using JobPortalProject.BL.UI.Services.Abstracts;
 using JobPortalProject.BL.UI.Services.Implementations;
+using Mailing;
+using Mailing.MailKitImplementations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.DependencyInjection;
@@ -89,11 +91,7 @@ namespace JobPortalProject.BL
             services.AddScoped<IResumePdfService, ResumePdfService>();
             services.AddScoped<FileService>();
             services.AddScoped<AuthSeeder>();
-
-            services.AddScoped<ISidebarLanguageService, SidebarLanguageManager>();
-            services.AddScoped<IJobCategoryIndexService, JobCategoryIndexManager>();
-            services.AddScoped<ICompanyTypeIndexService, CompanyTypeIndexManager>();
-            services.AddScoped<ICountryIndexService, CountryIndexManager>();
+            services.AddScoped<IMailService, MailKitMailService>();
             services.AddScoped<ICityIndexService, CityIndexManager>();
             services.AddScoped<IUserIndexService, UserIndexManager>();
 

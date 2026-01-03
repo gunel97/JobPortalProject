@@ -32,6 +32,11 @@ namespace JobPortalProject.BL.Services.Implementations
             _resumeService = resumeService;
         }
 
+        public async Task<string> CheckJobStatus(int jobId)
+        {
+            var application = await Repository.GetAsync(predicate: x => x.JobId == jobId);
+            return application!.JobStatus.ToString();
+        }
         public async Task<bool> CheckIfJobApplied(int jobId)
         {
             var candidate = await _candidateService.GetCandidate();

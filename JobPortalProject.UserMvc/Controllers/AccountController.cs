@@ -3,6 +3,8 @@ using JobPortalProject.BL.UI.Services.Abstracts;
 using JobPortalProject.BL.UI.Services.Implementations;
 using JobPortalProject.BL.UI.ViewModels;
 using JobPortalProject.BL.ViewModels.UserViewModels;
+using Mailing;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -14,12 +16,14 @@ namespace JobPortalProject.UserMvc.Controllers
         private readonly ICompanyService _companyService;
         private readonly IUserService _userService;
         private readonly ICookieService _cookieService;
+        private readonly IMailService _mailService;
 
-        public AccountController(IUserService userService, ICompanyService companyService, ICookieService cookieService)
+        public AccountController(IUserService userService, ICompanyService companyService, ICookieService cookieService, IMailService mailService)
         {
             _userService = userService;
             _companyService = companyService;
             _cookieService = cookieService;
+            _mailService = mailService;
         }
 
         public IActionResult Index()
@@ -135,6 +139,7 @@ namespace JobPortalProject.UserMvc.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [Authorize(Roles = "Candidate, Company")]
         public async Task<IActionResult> Logout()
         {
             await _userService.LogOutAsync();
@@ -142,6 +147,7 @@ namespace JobPortalProject.UserMvc.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [Authorize(Roles ="Candidate, Company")]
         [HttpPost]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
@@ -166,6 +172,77 @@ namespace JobPortalProject.UserMvc.Controllers
 
             await _userService.LogOutAsync();
             return RedirectToAction("Login", "Account");
+        }
+
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        public IActionResult ForgotPasswordResult()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                ModelState.AddModelError("", "Email is required");
+
+                return View();
+            }
+
+            var result = await _userService.CheckUserByEmail(email);
+            if(!result)
+            {
+                ModelState.AddModelError("", "User not found");
+
+                return View();
+            }
+
+            var resetToken = await _userService.GetResetPasswordToken(email);
+            var resetLink = Url.Action("ResetPassword", "Account", new { email, resetToken },
+                Request.Scheme, Request.Host.ToString());
+
+            _mailService.SendMail(new Mail
+            {
+                ToEmail = email,
+                Subject = "Reset Password Job Portal",
+                TextBody = resetLink
+            });
+
+            return View(nameof(ForgotPasswordResult));
+        }
+        
+        public IActionResult ResetPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var userResult = await _userService.CheckUserByEmail(model.Email);
+            if (!userResult)
+                return NotFound();
+
+            var result = await _userService.ResetPassword(model);
+
+            if (!result.Succeeded)
+            {
+                foreach (var item in result.Errors)
+                {
+                    ModelState.AddModelError("", item.Description);
+                }
+                return View(model);
+            }
+
+            return RedirectToAction(nameof(Login));
         }
     }
 }

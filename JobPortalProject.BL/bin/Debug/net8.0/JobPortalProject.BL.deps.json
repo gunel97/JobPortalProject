@@ -11,6 +11,7 @@
           "AutoMapper": "15.1.0",
           "CloudinaryDotNet": "1.27.8",
           "JobPortalProject.DA": "1.0.0",
+          "Mailing": "1.0.0",
           "Microsoft.AspNetCore.Http": "2.3.0",
           "Microsoft.AspNetCore.Identity": "2.3.1",
           "Microsoft.AspNetCore.Localization": "2.3.0",
@@ -80,6 +81,14 @@
           }
         }
       },
+      "BouncyCastle.Cryptography/2.2.1": {
+        "runtime": {
+          "lib/net6.0/BouncyCastle.Cryptography.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.2.1.47552"
+          }
+        }
+      },
       "CloudinaryDotNet/1.27.8": {
         "dependencies": {
           "Newtonsoft.Json": "13.0.3",
@@ -90,6 +99,17 @@
           "lib/netstandard2.0/CloudinaryDotNet.dll": {
             "assemblyVersion": "1.27.8.0",
             "fileVersion": "1.27.8.0"
+          }
+        }
+      },
+      "MailKit/3.1.1": {
+        "dependencies": {
+          "MimeKit": "4.1.0"
+        },
+        "runtime": {
+          "lib/net6.0/MailKit.dll": {
+            "assemblyVersion": "3.1.0.0",
+            "fileVersion": "3.1.1.0"
           }
         }
       },
@@ -710,7 +730,7 @@
           "System.Security.Cryptography.Encoding": "4.3.0",
           "System.Security.Cryptography.X509Certificates": "4.3.0",
           "System.Text.Encoding": "4.3.0",
-          "System.Text.Encoding.CodePages": "6.0.0",
+          "System.Text.Encoding.CodePages": "7.0.0",
           "System.Text.Encoding.Extensions": "4.3.0",
           "System.Threading": "4.3.0",
           "System.Threading.Tasks": "4.3.0",
@@ -767,7 +787,7 @@
           "System.Runtime.Caching": "6.0.0",
           "System.Security.Cryptography.Cng": "5.0.0",
           "System.Security.Principal.Windows": "5.0.0",
-          "System.Text.Encoding.CodePages": "6.0.0",
+          "System.Text.Encoding.CodePages": "7.0.0",
           "System.Text.Encodings.Web": "8.0.0"
         },
         "runtime": {
@@ -1320,6 +1340,20 @@
             "assetType": "runtime",
             "assemblyVersion": "6.0.0.0",
             "fileVersion": "6.0.21.52210"
+          }
+        }
+      },
+      "MimeKit/4.1.0": {
+        "dependencies": {
+          "BouncyCastle.Cryptography": "2.2.1",
+          "System.Runtime.CompilerServices.Unsafe": "6.0.0",
+          "System.Security.Cryptography.Pkcs": "8.0.1",
+          "System.Text.Encoding.CodePages": "7.0.0"
+        },
+        "runtime": {
+          "lib/net6.0/MimeKit.dll": {
+            "assemblyVersion": "4.1.0.0",
+            "fileVersion": "4.1.0.0"
           }
         }
       },
@@ -2172,11 +2206,7 @@
           "System.Runtime": "4.3.1"
         }
       },
-      "System.Text.Encoding.CodePages/6.0.0": {
-        "dependencies": {
-          "System.Runtime.CompilerServices.Unsafe": "6.0.0"
-        }
-      },
+      "System.Text.Encoding.CodePages/7.0.0": {},
       "System.Text.Encoding.Extensions/4.3.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.1.1",
@@ -2336,6 +2366,20 @@
             "fileVersion": "1.0.0.0"
           }
         }
+      },
+      "Mailing/1.0.0": {
+        "dependencies": {
+          "MailKit": "3.1.1",
+          "Microsoft.Extensions.Configuration.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Configuration.Binder": "8.0.0",
+          "MimeKit": "4.1.0"
+        },
+        "runtime": {
+          "Mailing.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
       }
     }
   },
@@ -2366,12 +2410,26 @@
       "path": "azure.identity/1.11.4",
       "hashPath": "azure.identity.1.11.4.nupkg.sha512"
     },
+    "BouncyCastle.Cryptography/2.2.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-A6Zr52zVqJKt18ZBsTnX0qhG0kwIQftVAjLmszmkiR/trSp8H+xj1gUOzk7XHwaKgyREMSV1v9XaKrBUeIOdvQ==",
+      "path": "bouncycastle.cryptography/2.2.1",
+      "hashPath": "bouncycastle.cryptography.2.2.1.nupkg.sha512"
+    },
     "CloudinaryDotNet/1.27.8": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-K2PPU5SLn0SJ+62OOC5Wr3pCuk1ezLnKmgY/6A53bM6Ysvr27utKMZ8NTvJOG3eU1G8vykNQyhOKO4/shXDl1Q==",
       "path": "cloudinarydotnet/1.27.8",
       "hashPath": "cloudinarydotnet.1.27.8.nupkg.sha512"
+    },
+    "MailKit/3.1.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-NprdMF0ABNWOqQUuqz45X5YkJK6f3vtYwwvqR6nGVdmrZ7HkahNbSATpOZ5Rj3W1cgDGf/iD8vs/oCyZ4wUO7g==",
+      "path": "mailkit/3.1.1",
+      "hashPath": "mailkit.3.1.1.nupkg.sha512"
     },
     "Microsoft.AspNetCore.Antiforgery/2.3.0": {
       "type": "package",
@@ -3066,6 +3124,13 @@
       "path": "microsoft.win32.systemevents/6.0.0",
       "hashPath": "microsoft.win32.systemevents.6.0.0.nupkg.sha512"
     },
+    "MimeKit/4.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-JUIaZfYybdRcyt1wgPo1e2j4aI3Rp8USKpxka1WImUs17+2X3Xl0sDJYfbzFchJ46qZeSvIwL+/aAjxPtFsm4A==",
+      "path": "mimekit/4.1.0",
+      "hashPath": "mimekit.4.1.0.nupkg.sha512"
+    },
     "Newtonsoft.Json/13.0.3": {
       "type": "package",
       "serviceable": true,
@@ -3654,12 +3719,12 @@
       "path": "system.text.encoding/4.3.0",
       "hashPath": "system.text.encoding.4.3.0.nupkg.sha512"
     },
-    "System.Text.Encoding.CodePages/6.0.0": {
+    "System.Text.Encoding.CodePages/7.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-ZFCILZuOvtKPauZ/j/swhvw68ZRi9ATCfvGbk1QfydmcXBkIWecWKn/250UH7rahZ5OoDBaiAudJtPvLwzw85A==",
-      "path": "system.text.encoding.codepages/6.0.0",
-      "hashPath": "system.text.encoding.codepages.6.0.0.nupkg.sha512"
+      "sha512": "sha512-LSyCblMpvOe0N3E+8e0skHcrIhgV2huaNcjUUEa8hRtgEAm36aGkRoC8Jxlb6Ra6GSfF29ftduPNywin8XolzQ==",
+      "path": "system.text.encoding.codepages/7.0.0",
+      "hashPath": "system.text.encoding.codepages.7.0.0.nupkg.sha512"
     },
     "System.Text.Encoding.Extensions/4.3.0": {
       "type": "package",
@@ -3774,6 +3839,11 @@
       "hashPath": "system.xml.xpath.xdocument.4.3.0.nupkg.sha512"
     },
     "JobPortalProject.DA/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Mailing/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

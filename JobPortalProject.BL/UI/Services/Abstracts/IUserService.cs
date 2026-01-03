@@ -14,6 +14,9 @@ namespace JobPortalProject.BL.UI.Services.Abstracts
 {
     public interface IUserService
     {
+        public Task<IdentityResult> ResetPassword(ResetPasswordViewModel model);
+        public Task<string> GetResetPasswordToken(string email);
+        public Task<bool> CheckUserByEmail(string email);
         public Task<IdentityResult> Register(UserRegisterViewModel model);
         public Task<PagedResultModel<UserViewModel>> GetUsers(UserFilterViewModel filter);
         public Task<IdentityResult> RegisterCompanyAsync(CompanyRegisterViewModel model);

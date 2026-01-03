@@ -1,4 +1,5 @@
-﻿using JobPortalProject.BL.Services.Contracts;
+﻿using CloudinaryDotNet;
+using JobPortalProject.BL.Services.Contracts;
 using JobPortalProject.BL.UI.Services.Abstracts;
 using JobPortalProject.BL.UI.ViewModels;
 using JobPortalProject.BL.ViewModels.CandidateViewModels;
@@ -36,6 +37,29 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             _candidateService = candidateManager;
         }
 
+        public async Task<IdentityResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            var result = await _userManager.ResetPasswordAsync(user!, model.ResetToken, model.NewPassword);
+
+            return result;
+        }
+
+        public async Task<bool> CheckUserByEmail(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+                return false;
+            else
+                return true;
+        }
+
+        public async Task<string> GetResetPasswordToken(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            var resetPasswordToken = await _userManager.GeneratePasswordResetTokenAsync(user!);
+            return resetPasswordToken;
+        }
 
         public async Task<PagedResultModel<UserViewModel>> GetUsers(UserFilterViewModel filter)
         {

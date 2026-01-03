@@ -8,16 +8,15 @@ using JobPortalProject.BL.ViewModels.ExperienceViewModels;
 using JobPortalProject.BL.ViewModels.JobApplicationViewModels;
 using JobPortalProject.BL.ViewModels.PersonalInfoViewModels;
 using JobPortalProject.BL.ViewModels.ProfileViewModels;
-using JobPortalProject.DA.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.Identity.Client;
-using System.Threading.Tasks;
 
 namespace JobPortalProject.UserMvc.Controllers
 {
+    [Authorize(Roles ="Candidate")]
     public class CandidateController : Controller
     { 
         private readonly ICandidateService _candidateService;

@@ -1,5 +1,6 @@
 ﻿using AspNetCoreGeneratedDocument;
 using JobPortalProject.BL.Services.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JobPortalProject.UserMvc.Controllers
@@ -20,6 +21,7 @@ namespace JobPortalProject.UserMvc.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Candidate")]
         [HttpPost]
         public async Task<IActionResult> Cancel(int id)
         {
@@ -49,6 +51,7 @@ namespace JobPortalProject.UserMvc.Controllers
             }
         }
 
+        [Authorize(Roles ="Company")]
         public async Task<IActionResult> Reject(int jobId, int candidateId)
         {
             var result = await _jobApplicationService.RejectJobApplication(jobId, candidateId);
@@ -61,6 +64,7 @@ namespace JobPortalProject.UserMvc.Controllers
             return RedirectToAction(nameof(JobController.Applicants), nameof(JobController).Replace("Controller", ""), new { id = jobId });
         }
 
+        [Authorize(Roles ="Company")]
         public async Task<IActionResult> Accept(int jobId, int candidateId)
         {
             var result = await _jobApplicationService.AcceptJobApplication(jobId, candidateId);
@@ -73,6 +77,7 @@ namespace JobPortalProject.UserMvc.Controllers
             return RedirectToAction(nameof(JobController.Applicants), nameof(JobController).Replace("Controller", ""), new { id = jobId });
         }
 
+        [Authorize(Roles ="Company")]
         public async Task<IActionResult> Interview(int jobId, int candidateId)
         {
             var result = await _jobApplicationService.InterviewJobApplication(jobId, candidateId);
@@ -85,6 +90,7 @@ namespace JobPortalProject.UserMvc.Controllers
             return RedirectToAction(nameof(JobController.Applicants), nameof(JobController).Replace("Controller", ""), new { id = jobId });
         }
 
+        [Authorize(Roles ="Candidate")]
         [HttpPost]
         public async Task<IActionResult> Apply(int id)
         {

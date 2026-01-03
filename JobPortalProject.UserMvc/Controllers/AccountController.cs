@@ -27,11 +27,6 @@ namespace JobPortalProject.UserMvc.Controllers
             return View();
         }
 
-        public IActionResult Register()
-        {
-            return View();
-        }
-
         public async Task<IActionResult> RegisterCompany()
         {
             var model = await _userService.GetCompanyRegisterViewModel();
@@ -79,7 +74,6 @@ namespace JobPortalProject.UserMvc.Controllers
         public IActionResult RegisterCandidate()
         {
             var model = new UserRegisterViewModel();
-
             return View(model);
         }
 

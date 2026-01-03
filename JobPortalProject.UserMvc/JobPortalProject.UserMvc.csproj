@@ -18,8 +18,4 @@
     <ProjectReference Include="..\JobPortalProject.DA\JobPortalProject.DA.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Views\Shared\Components\Footer\" />
-  </ItemGroup>
-
 </Project>

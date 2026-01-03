@@ -1994,6 +1994,14 @@
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
+        },
+        "resources": {
+          "az/JobPortalProject.BL.resources.dll": {
+            "locale": "az"
+          },
+          "en-US/JobPortalProject.BL.resources.dll": {
+            "locale": "en-US"
+          }
         }
       },
       "JobPortalProject.DA/1.0.0": {

@@ -13,8 +13,8 @@
                     <div class="register-tab">
                         <nav>
                             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Candidate</button>
-                                <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Company</button>
+                                <a class="nav-link" id="nav-home-tab" asp-controller="account" asp-action="registerCandidate">Candidate</a>
+                                <button class="nav-link active" id="nav-profile-tab" type="button">Company</button>
                             </div>
                         </nav>
                         <div class="tab-content" id="nav-tabContent">
@@ -102,17 +102,7 @@
                                                 <button class="primry-btn-2" type="submit">Sign Up</button>
                                             </div>
                                         </div>
-                                        <h6>Already have an account? <a href="login.html"> Login</a> Here</h6>
-                                        <div class="login-difarent-way">
-                                            <div class="row g-4">
-                                                <div class="col-md-6">
-                                                    <a href="https://myaccount.google.com/"><img src="~/images/icon/google1.svg" alt="">Log in with Google</a>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <a href="https://www.facebook.com/"><img src="~/images/icon/facebook1.svg" alt="">Log in with Facebook</a>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <h6>Already have an account? <a asp-controller="account" asp-action="login"> Login</a> Here</h6>
                                     </div>
                                 </form>
                             </div>

@@ -107,6 +107,16 @@
                                 }
                             </tbody>
                         </table>
+                        @{
+                            var routeData = new Dictionary<string, string>
+                                                {
+                                                { "size", applications.Size.ToString() },
+                                                { "SortBy", filter.SortBy ?? "" },
+                                                { "SortOrder", filter.SortOrder ?? "" }
+                                                };
+
+                            ViewData["RouteData"] = routeData;
+                        }
                         <div class="pagination-table-info">
                             <div class="table-info">
                                 @{
@@ -116,51 +126,7 @@
                                 }
                                 <span>@startRecord - @endRecord Results Showing In @applications.Count Jobs</span>
                             </div>
-
-                            <div class="pagination-area">
-                                <nav aria-label="...">
-                                    <ul class="pagination">
-                                        <li class="page-item @(applications.Index == 0 ? "disabled" : "")">
-                                            <a class="page-link"
-                                               asp-action="Index"
-                                               asp-route-index="@(applications.Index - 1)"
-                                               asp-route-size="@filter?.Size"
-                                               asp-route-searchTerm="@filter?.SearchTerm"
-                                               asp-route-sortBy="@filter?.SortBy"
-                                               asp-route-sortOrder="@filter?.SortOrder"
-                                               tabindex="-1">
-                                                <i class="bi bi-chevron-left"></i>
-                                            </a>
-                                        </li>
-                                        @for (int i = 0; i < applications.Pages; i++)
-                                        {
-                                            <li class="page-item @(i == applications.Index ? "active" : "")">
-                                                <a class="page-link"
-                                                   asp-action="Index"
-                                                   asp-route-index="@i"
-                                                   asp-route-size="@filter?.Size"
-                                                   asp-route-searchTerm="@filter?.SearchTerm"
-                                                   asp-route-sortBy="@filter?.SortBy"
-                                                   asp-route-sortOrder="@filter?.SortOrder">
-                                                    @(i + 1)
-                                                </a>
-                                            </li>
-                                        }
-                                        <li class="page-item @(applications.Index >= applications.Pages - 1 ? "disabled" : "")">
-                                            <a class="page-link"
-                                               asp-action="Index"
-                                               asp-route-index="@(applications.Index + 1)"
-                                               asp-route-size="@filter?.Size"
-                                               asp-route-searchTerm="@filter?.SearchTerm"
-                                               asp-route-sortBy="@filter?.SortBy"
-                                               asp-route-sortOrder="@filter?.SortOrder">
-                                                <i class="bi bi-chevron-right"></i>
-                                            </a>
-                                        </li>
-
-                                    </ul>
-                                </nav>
-                            </div>
+                            <partial name="_PaginationPartial" model="@applications" />            
                         </div>
                     </div>
 

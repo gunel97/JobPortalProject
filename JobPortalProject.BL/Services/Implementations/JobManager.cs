@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 using Microsoft.AspNetCore.Mvc.Internal;
 using System.Threading.Tasks;
+using JobPortalProject.BL.UI.ViewModels;
 
 namespace JobPortalProject.BL.Services.Implementations
 {
@@ -111,23 +112,29 @@ namespace JobPortalProject.BL.Services.Implementations
             return await base.UpdateAsync(id, model);
         }
 
-        public async Task<List<JobViewModel>> GetAllJobsOfCompanyAsync(int companyId)
+        public async Task<PagedResultModel<JobViewModel>> GetAllJobsOfCompanyAsync(JobFilterViewModel filter, int companyId)
         {
-            var language = await _cookieService.GetLanguageAsync();
+            var pagedJobs = await GetPagedJobsAsync(filter);
+            var jobsOfCompany = pagedJobs.Items.Where(x => x.CompanyId == companyId).ToList();
+            pagedJobs.Items = jobsOfCompany;
 
-            var jobs = await Repository.GetAllAsync(predicate: x => x.CompanyId == companyId && !x.IsDeleted,
-                include: x => x
-                .Include(x=>x.JobApplications)
-                .Include(t => t.JobTranslations.Where(x => x.LanguageId == language.Id)));
-            var jobViewModels = new List<JobViewModel>();
+            return pagedJobs;
+        }
 
-            foreach(var job in jobs)
+        public async Task<PagedJobsOfCompanyViewModel> GetPagedJobsOfCompanyModel(JobFilterViewModel filter, int companyId)
+        {
+            filter ??= new JobFilterViewModel();
+            if (filter.Index < 0) filter.Index = 0;
+            if (filter.Size <= 0) filter.Size = 10;
+
+            var pagedJobsOfCompany = await GetAllJobsOfCompanyAsync(filter, companyId);
+            var model = new PagedJobsOfCompanyViewModel
             {
-                var model = await MapToJobViewModel(job, language.Id);
-                jobViewModels.Add(model);
-            }
+                Jobs = pagedJobsOfCompany,
+                Filter = filter
+            };
 
-            return jobViewModels;
+            return model;
         }
 
         public async Task<List<JobViewModel>> GetActiveJobsOfCompanyAsync(int companyId)
@@ -401,13 +408,18 @@ namespace JobPortalProject.BL.Services.Implementations
         private Func<IQueryable<Job>, IOrderedQueryable<Job>> BuildOrderBy(JobFilterViewModel filter, int languageId)
         {
             var sortBy = filter.SortBy?.ToLower() ?? "posteddate";
-            var sortOrder = filter.SortOrder?.ToLower() ?? "desc";
+            var sortOrder = "desc"; // default
 
+            // Handle compound sort values (e.g., "Title_asc")
             if (sortBy.Contains('_'))
             {
                 var parts = sortBy.Split('_');
-                sortBy = parts[0];      
-                sortOrder = parts[1];   
+                sortBy = parts[0];
+                sortOrder = parts[1];
+            }
+            else if (!string.IsNullOrEmpty(filter.SortOrder))
+            {
+                sortOrder = filter.SortOrder.ToLower();
             }
 
             return queryable =>
@@ -415,17 +427,29 @@ namespace JobPortalProject.BL.Services.Implementations
                 IOrderedQueryable<Job> ordered = sortBy switch
                 {
                     "title" => sortOrder == "asc"
-                    ? queryable.OrderBy(x => x.JobTranslations.Where(t => t.LanguageId == languageId)
-                    .Select(t => t.Title).FirstOrDefault())
-                    : queryable.OrderByDescending(x => x.JobTranslations.Where(t => t.LanguageId == languageId)
-                    .Select(t => t.Title).FirstOrDefault()),
+                        ? queryable.OrderBy(x => x.JobTranslations
+                            .Where(t => t.LanguageId == languageId)
+                            .Select(t => t.Title)
+                            .FirstOrDefault())
+                        : queryable.OrderByDescending(x => x.JobTranslations
+                            .Where(t => t.LanguageId == languageId)
+                            .Select(t => t.Title)
+                            .FirstOrDefault()),
+
+                    "applicants" => sortOrder == "asc"
+                        ? queryable.OrderBy(x => x.JobApplications.Count)
+                        : queryable.OrderByDescending(x => x.JobApplications.Count),
+
                     "salary" => sortOrder == "asc"
-                    ? queryable.OrderBy(x => x.MinSalary)
-                    : queryable.OrderByDescending(x => x.MaxSalary),
+                        ? queryable.OrderBy(x => x.MinSalary)
+                        : queryable.OrderByDescending(x => x.MaxSalary),
+
+                    // Default: sort by posted date
                     _ => sortOrder == "asc"
-                    ? queryable.OrderBy(x => x.CreatedAt)
-                    : queryable.OrderByDescending(x => x.CreatedAt)
+                        ? queryable.OrderBy(x => x.CreatedAt)
+                        : queryable.OrderByDescending(x => x.CreatedAt)
                 };
+
                 return ordered;
             };
         }

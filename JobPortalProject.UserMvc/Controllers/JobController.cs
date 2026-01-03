@@ -66,10 +66,10 @@ namespace JobPortalProject.UserMvc.Controllers
         }
 
         
-        public async Task<IActionResult> JobList()
+        public async Task<IActionResult> JobList(JobFilterViewModel filter)
         {
             var companyId = await _companyService.GetCompanyIdOfUser();
-            var model = await _jobService.GetAllJobsOfCompanyAsync(companyId);
+            var model = await _jobService.GetPagedJobsOfCompanyModel(filter, companyId);
 
             return View(model);
         }

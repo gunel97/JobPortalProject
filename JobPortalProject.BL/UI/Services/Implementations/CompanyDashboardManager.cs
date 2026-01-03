@@ -47,7 +47,7 @@ namespace JobPortalProject.BL.UI.Services.Implementations
                 TotalApplicantCount=applicants.Count(),
                 TotalAcceptedCount=applicants.Where(x=>x.Status==((JobApplicationStatus)3).ToString()).Count(),
                 WaitingInterviewCount=applicants.Where(x=>x.Status==((JobApplicationStatus)2).ToString()).Count(),
-                Applicants= applicants,
+                Applicants= applicants.OrderByDescending(x=>x.AppliedAt).Take(5).ToList(),
                 ActiveJobCount=jobs.Where(x=>!x.Expired).Count()
             };
 

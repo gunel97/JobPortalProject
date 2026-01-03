@@ -1,4 +1,9 @@
-﻿@model List<JobViewModel>
+﻿@{
+    PagedJobsOfCompanyViewModel model = Model;
+    var jobs = model.Jobs;
+    var filter = model.Filter;
+}
+
 <div class="dashboard-area company-dashboard pt-120 mb-120">
     <div class="container">
         <div class="row">
@@ -15,42 +20,39 @@
                             <a class="primry-btn-2" asp-controller="job" asp-action="create">Create Job Post</a>
                         </div>
                     </div>
-                    <div class="table-filter-area mb-30">
-                        <form>
+                   
+                    <div class="table-filter-area mb-30">      
+                         <form asp-action="jobList" method="get" id="filterForm">
                             <div class="form-wrap style-2 style-3">
                                 <div class="form-inner">
                                     <div class="input-area">
                                         <img src="~/images/icon/search-2.svg" alt="">
-                                        <input type="text" id="jobtitle" name="jobtitle" placeholder="Search by job title">
+                                        <input type="text"
+                                               name="SearchTerm"
+                                               value="@filter?.SearchTerm"
+                                               placeholder="Search by job title">
                                     </div>
                                 </div>
                                 <button class="primry-btn-1" type="submit">Search</button>
                             </div>
-
-                            <div class="form-wrap style-3">
-                                <div class="form-inner">
-                                    <div class="input-area">
-                                        <img src="~/images/icon/calender2.svg" alt="">
-                                        <input type="text" id="datepicker11" placeholder="Search by date">
-                                    </div>
-                                </div>
-                            </div>
                             <div class="form-wrap">
                                 <div class="form-inner">
-                                    <p>Show er page</p>
+                                    <p></p>
                                     <div class="select-area">
-                                        <select class="select1">
-                                            <option>05</option>
-                                            <option>10</option>
-                                            <option>15</option>
-                                            <option>20</option>
+                                        <select class="select1" name="SortBy" id="sortBySelect" onchange="document.getElementById('filterForm').submit()">
+                                            <option value="PostedDate" selected=@(filter?.SortBy == "PostedDate")>Sort By (Created At)</option>
+                                            <option value="Title_asc" selected=@(filter?.SortBy == "Title_asc")>Title (A-Z)</option>
+                                            <option value="Title_desc" selected=@(filter?.SortBy == "Title_desc")>Title (Z-A)</option>
+                                            <option value="Applicants_asc" selected=@(filter?.SortBy == "Applicants_asc")>Applicant Count (asc.)</option>
+                                            <option value="Applicants_desc" selected=@(filter?.SortBy == "Applicants_desc")>Applicant Count (desc.)</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
-
-
-                        </form>
+                            <input type="hidden" name="Index" id="Index" value="@filter?.Index" />
+                            <input type="hidden" name="Size" value="@filter?.Size" />
+                            <input type="hidden" name="SortOrder" value="@filter?.SortOrder" />
+                            </form>
                     </div>
                     <table class="eg-table table job-list-table mb-0">
                         <thead>
@@ -64,7 +66,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var job in Model)
+                            @if(jobs.Items.Any()){
+                            @foreach (var job in jobs.Items)
                             {
                                 <tr id=@("jobListRow"+job.Id)>
                                     <td data-label="Job Title">
@@ -136,13 +139,37 @@
                                     </td>
                                 </tr>
                             }
-                        </tbody>
+                        }
+                        
+                    </tbody>
                     </table>
                     <div class="pagination-table-info">
                         <div class="table-info">
-                            <span>06 Results Showing In 20 Jobs</span>
+                                @if (jobs.Count == 0)
+                                {
+                                    <p class="show-item">No jobs found.</p>
+                                }
+                                @if (jobs.Count > 0)
+                                {
+                                    <p class="show-item">Showing results @((jobs.Index * jobs.Size) + 1) - @Math.Min((jobs.Index + 1) * jobs.Size, jobs.Count) from @jobs.Count jobs</p>
+                                }
                         </div>
-                        <div class="pagination-area">
+
+                        @{
+                            var routeData = new Dictionary<string, string>
+                                                {
+                                                { "size", jobs.Size.ToString() },
+                                                { "SortBy", filter?.SortBy ?? "" },
+                                                { "SortOrder", filter?.SortOrder ?? "" }
+                                                };
+
+                            ViewData["RouteData"] = routeData;
+                        }
+
+                        <partial name="_PaginationPartial" model="@jobs" />
+
+                        
+                        @* <div class="pagination-area">
                             <nav aria-label="...">
                                 <ul class="pagination">
                                     <li class="page-item disabled">
@@ -154,7 +181,7 @@
                                     <li class="page-item"><a class="page-link" href="#"></a></li>
                                 </ul>
                             </nav>
-                        </div>
+                        </div> *@
                     </div>
                 </div>
             </div>

@@ -10,7 +10,7 @@ namespace JobPortalProject.BL.UI.ViewModels
     {
         public List<SelectListItem> JobCategoryListItems { get; set; } = [];
         public List<JobCategoryViewModel> JobCategories { get; set; } = [];
-        public List<AddressViewModel> Addresses { get; set; } = [];
+        public IEnumerable<IGrouping<string?, AddressViewModel>> Addresses { get; set; } = [];
         public List<CompanyViewModel> Companies { get; set; } = [];
         public List<JobViewModel> Jobs {  get; set; } = [];
         public int ActiveJobCount { get; set; }

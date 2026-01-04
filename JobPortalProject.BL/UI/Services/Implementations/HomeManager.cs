@@ -35,7 +35,7 @@ namespace JobPortalProject.BL.UI.Services.Implementations
         {
             var language = await _cookieService.GetLanguageAsync();
             
-            var addresses =await  _addressService.GetAllAsync();
+            var addresses =await  _addressService.GetAllAsync(predicate: x=>x.Company!=null);
             var jobs = await _jobService.GetAllJobsAsync();
             var jobModels = jobs.ToList();
             var jobCategoryListItems = await _jobCategoryService.GetJobCategorySelectListItems(language.Id);
@@ -59,12 +59,13 @@ namespace JobPortalProject.BL.UI.Services.Implementations
                                                 .Where(j => j.LanguageId == language.Id))
                                                 );
 
-            var addressesByCities = addresses.DistinctBy(a => a.City!.Name!);
+            var addressesByCities = addresses.DistinctBy(a => a.CityName!);
+            var addressesCitiesGroup = addresses.GroupBy(a => a.CityName).ToList();
 
             var homeViewModel = new HomeViewModel
             {
                 JobCategories = jobCategories.Where(x => x.JobIds.Any()).ToList(),
-                Addresses = addressesByCities.ToList(),
+                Addresses = addressesCitiesGroup,
                 Companies = companies.OrderByDescending(x=>x.LastPostedJob).Take(6).ToList(),
                 CandidateCount=candidates.Count(),
                 ActiveCompanyCount = companies.Count(),

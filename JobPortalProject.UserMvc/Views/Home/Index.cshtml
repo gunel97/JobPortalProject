@@ -10,7 +10,6 @@
     var newjobCount = model.NewJobCount;
     var jobCategoryItems = model.JobCategoryListItems;
 }
-@inject StringLocalizerManager localizer;
 
     <!-- ========== Hero One Start============= -->
 <div class="hero1">
@@ -107,6 +106,7 @@
     </div>
 </div>
 <!-- ========== Hero One end============= -->
+@if(jobCategories.Any()){
 <!-- ========== Home Four Category Start============= -->
 <div class="home4-category-area pt-120 mb-120" id="home4-category">
     <div class="container">
@@ -153,6 +153,8 @@
     </div>
 </div>
 <!-- ========== Home Four Category End============= -->
+}
+@if(jobs.Any()){
 <!-- ========== Home1 Featured Start============= -->
 <div class="home1-featured-area mb-120">
     <div class="container">
@@ -168,7 +170,7 @@
             </div>
         </div>
         <div class="row g-4">
-            @foreach (var job in jobs)
+            @foreach (var job in jobs ?? [])
             {
                 <div class="col-xl-4 col-lg-6">
                     <div class="feature-card">
@@ -221,6 +223,7 @@
     </div>
 </div>
 <!-- ========== Home1 Featured end============= -->
+}
 <!-- ========== Home1 Work Process Start============= -->
 <div class="home1-work-process mb-120">
     <div class="container">
@@ -281,6 +284,7 @@
     </div>
 </div>
 <!-- ========== Home1 Work Process end============= -->
+@if(addresses.Any()){
 <!-- ========== Home1 Location Start============= -->
 <div class="home1-location-area mb-120">
     <div class="container">
@@ -303,16 +307,16 @@
         <div class="row">
             <div class="swiper location-slider">
                 <div class="swiper-wrapper">
-                     @foreach (var address in addresses ?? [])
+                     @foreach (var addressGroup in addresses ?? [])
                     {
                         <div class="swiper-slide">
                             <div class="location-card">
                                 <div class="location-img">
-                                    <img class="img-fluid" src="@address.City!.CoverPhotoUrl" alt="">
+                                    <img class="img-fluid" src="@addressGroup.FirstOrDefault()?.City?.CoverPhotoUrl" alt="">
                                 </div>
                                 <div class="location-content text-center">
-                                    <h5><a href="job-listing1.html"><img src="~/images/icon/location.svg" alt="">@address.City!.Name, @address.City.Country!.Name</a></h5>
-                                    <p>Job Available: <span>2934</span></p>
+                                    <h5><a asp-controller="company" asp-action="index" asp-route-CityIds="@addressGroup.FirstOrDefault()?.City.Id"><img src="~/images/icon/location.svg" alt="">@addressGroup.FirstOrDefault()?.CityName, @addressGroup.FirstOrDefault()?.CountryName</a></h5>
+                                    <p>Companies: <span>@addressGroup.Count()</span></p>
                                 </div>
                             </div>
                         </div>
@@ -323,6 +327,8 @@
     </div>
 </div>
 <!-- ========== Home1 Location end============= -->
+}
+@if(companies.Any()){
 <!-- ========== Home1 Top Recruiters area Start============= -->
 <div class="home1-top-recruiters mb-120">
     <div class="container">
@@ -367,6 +373,7 @@
         </div>
 </div>
 </div>
+}
 <br/>
 <br/>
 <!-- ========== Home1 Top Recruiters area end============= -->

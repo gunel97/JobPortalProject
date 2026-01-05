@@ -69,6 +69,8 @@ namespace JobPortalProject.UserMvc.Controllers
             var isActive = await _companyService.IsCompanyActive();
             model.IsAccountActive = isActive;
 
+            if (model == null)
+                return NotFound();
             return View(model);
         }
 
@@ -81,6 +83,8 @@ namespace JobPortalProject.UserMvc.Controllers
         {
             var language = await _cookieService.GetLanguageAsync();
             var model = await _companyService.GetCompanyUpdateViewModelAsync();
+            if (model == null)
+                return NotFound();
 
             return View(model);
         }
@@ -91,7 +95,8 @@ namespace JobPortalProject.UserMvc.Controllers
             if (!ModelState.IsValid)
             {
                 model = await _companyService.GetCompanyUpdateViewModelAsync();
-
+                if (model == null)
+                    return NotFound();
                 return View(model);
             }
 
@@ -189,6 +194,8 @@ namespace JobPortalProject.UserMvc.Controllers
         public async Task<IActionResult> AddTranslation()
         {
             var model = await _companyService.GetAddTranslationToExistedCompanyViewModel(2);
+            if (model == null)
+                return NotFound();
             return PartialView("_AddTranslationModalPartial", model);
         }
 

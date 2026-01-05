@@ -14,6 +14,8 @@ namespace JobPortalProject.BL.UI.ViewModels
         public string? Name { get; set; }
         public string? LogoUrl { get; set; }
         public bool IsAccountActive { get; set; }
+        public bool IsMembershipActive { get; set; }
+        public DateTime? MembershipExpiresAt { get; set; }
         public int ActiveJobCount { get; set; }
         public int TotalApplicantCount { get; set; }
         public int WaitingInterviewCount { get; set; }

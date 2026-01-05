@@ -16,6 +16,8 @@ namespace JobPortalProject.UserMvc
         {
             var builder = WebApplication.CreateBuilder(args);
 
+
+            builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
             builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
@@ -40,6 +42,7 @@ namespace JobPortalProject.UserMvc
                 options.Lockout.MaxFailedAccessAttempts = 3;
             }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
+            builder.Services.AddScoped<IMembershipService, MembershipManager>();
 
             FilePathConstants.CompanyImagePath = "CompanyImages";
             FilePathConstants.WorkingFieldImagePath = "WorkingFieldImages";

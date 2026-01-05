@@ -8,4 +8,11 @@
         doctoral=4
     }
 
+    public enum PaymentStatus
+    {
+        Pending,
+        Paid, 
+        Failed,
+        Cancelled
+    }
 }

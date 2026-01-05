@@ -1,0 +1,12 @@
+﻿@{
+    ViewData["Title"] = "Payment Failed";
+}
+
+<div class="container mt-5 text-center">
+    <div class="text-danger mb-3">
+        <i class="bi bi-exclamation-triangle-fill" style="font-size: 4rem;"></i>
+    </div>
+    <h2>Payment Verification Failed</h2>
+    <p>We could not verify your payment status with Stripe. Please contact support if you were charged.</p>
+    <a asp-action="Dashboard" class="btn btn-primary mt-3">Return to Dashboard</a>
+</div>

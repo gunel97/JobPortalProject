@@ -2,6 +2,7 @@
 using JobPortalProject.BL.Constants;
 using JobPortalProject.BL.Services.Contracts;
 using JobPortalProject.BL.UI.Services.Abstracts;
+using JobPortalProject.BL.UI.ViewModels;
 using JobPortalProject.BL.ViewModels.AddressViewModels;
 using JobPortalProject.BL.ViewModels.CompanySocialViewModels;
 using JobPortalProject.BL.ViewModels.CompanyViewModels;
@@ -14,6 +15,7 @@ using JobPortalProject.DA.Repositories.Contracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using MimeKit.Cryptography;
 using System.Linq.Expressions;
 using System.Security.Claims;
 
@@ -51,6 +53,26 @@ namespace JobPortalProject.BL.Services.Implementations
             _socialMediaService = socialMediaService;
         }
 
+        public async Task<CheckoutViewModel> GetCheckoutViewModelAsync()
+        {
+            
+            var company = await GetCompanyOfUser();
+            var language = await _cookieService.GetLanguageAsync();
+
+            if (company == null || company.AppUser==null)
+                return null!;
+
+            var model = new CheckoutViewModel
+            {
+                FullName = company.AppUser.FirstName + " " + company.AppUser.LastName,
+                CompanyName = company.CompanyTranslations.FirstOrDefault(x => x.LanguageId == language.Id).Name,
+                Phone=company.PrimaryPhone,
+                Email=company.CompanyEmail,
+            };
+
+            return model;
+        }
+
         public async Task<int> GetCompanyIdOfUser()
         {
             var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -71,7 +93,8 @@ namespace JobPortalProject.BL.Services.Implementations
             var company = await Repository.GetAsync(predicate: x => x.AppUserId == userId,
                 include: x => x.Include(x => x.CompanyTranslations)
                 .Include(x => x.WorkingFields).ThenInclude(x => x.Translations)
-                .Include(x => x.Addresses).ThenInclude(x => x.AddressTranslations));
+                .Include(x => x.Addresses).ThenInclude(x => x.AddressTranslations)
+                .Include(x=>x.AppUser));
 
             return company!;
         }
@@ -124,7 +147,6 @@ namespace JobPortalProject.BL.Services.Implementations
                 PrimaryPhone = company.PrimaryPhone,
                 SecondaryPhone = company.SecondaryPhone,
                 CoverPhotoUrl = company.CoverPhotoUrl,
-                MainAddressId=company.Addresses.FirstOrDefault(x=>x.IsMainAddress).Id,
                 LogoUrl = company.LogoUrl,
                 CompanyTypeId = company.CompanyTypeId,
                 CompanyTypeList = companyTypeSelectListItems,
@@ -150,6 +172,15 @@ namespace JobPortalProject.BL.Services.Implementations
                     IconUrl = x.SocialMedia.IconUrl
                 }).ToList()
             };
+
+            if(company.Addresses.Any())
+            {
+                foreach(var address in company.Addresses)
+                {
+                    if (address.IsMainAddress)
+                        companyUpdateViewModel.MainAddressId = address.Id;
+                }
+            }
 
             foreach (var translation in companyUpdateViewModel.CompanyTranslations)
             {

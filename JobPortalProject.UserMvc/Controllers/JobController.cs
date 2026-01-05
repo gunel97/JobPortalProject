@@ -3,6 +3,7 @@ using JobPortalProject.BL.UI.Services.Abstracts;
 using JobPortalProject.BL.ViewModels.JobExtraBenefitViewModels;
 using JobPortalProject.BL.ViewModels.JobResponsibilityViewModels;
 using JobPortalProject.BL.ViewModels.JobViewModels;
+using JobPortalProject.UserMvc.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -74,9 +75,13 @@ namespace JobPortalProject.UserMvc.Controllers
             return View(model);
         }
 
+        [RequiresMembership]
         public async Task<IActionResult> Create()
         {
-            var model = await _jobService.GetJobCreateViewModelAsync(19);
+            var companyId = await _companyService.GetCompanyIdOfUser();
+            var model = await _jobService.GetJobCreateViewModelAsync(companyId);
+            if (model == null)
+                return NotFound();
 
             return View(model);
         }
@@ -84,16 +89,17 @@ namespace JobPortalProject.UserMvc.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(JobCreateViewModel model)
         {
+            var companyId = await _companyService.GetCompanyIdOfUser();
             if (!ModelState.IsValid)
             {
-                model = await _jobService.GetJobCreateViewModelAsync(19);
+                model = await _jobService.GetJobCreateViewModelAsync(companyId);
                 return View(model);
             }
 
-            var result = await _jobService.CreateJob(19, model);
+            var result = await _jobService.CreateJob(companyId, model);
             if (!result)
             {
-                model = await _jobService.GetJobCreateViewModelAsync(19);
+                model = await _jobService.GetJobCreateViewModelAsync(companyId);
                 return View(model);
             }
 

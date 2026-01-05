@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -160,6 +161,10 @@ namespace JobPortalProject.DA.DataContext.Entities
         public CompanyType? CompanyType { get; set; }
         public string AppUserId { get; set; } = null!;
         public AppUser? AppUser { get; set; }
+        public List<Order> Orders { get; set; } = [];
+        public DateTime? MembershipExpiresAt { get; set; }
+        [NotMapped]
+        public bool IsMembershipActive => MembershipExpiresAt.HasValue && MembershipExpiresAt.Value > DateTime.UtcNow;
     }
 
     public class Candidate:TimeStample
@@ -345,7 +350,6 @@ namespace JobPortalProject.DA.DataContext.Entities
     {
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
-        //public int? CompanyId { get; set; }
         public Company? Company { get; set; } 
         public Candidate? Candidate { get; set; }
     }
@@ -413,6 +417,18 @@ namespace JobPortalProject.DA.DataContext.Entities
         public int CandidateId { get; set; }
         public Candidate? Candidate { get; set; }
         public JobApplicationStatus JobStatus { get; set; } 
+    }
+
+    public class Order:Entity
+    {
+        public int CompanyId { get; set; }
+        public Company? Company { get; set; }
+        public decimal Amount { get; set; }
+        public string Currency { get; set; } = "usd";
+        public PaymentStatus Status { get; set;}
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public string? StripeSessionId { get; set; } 
+        public string? StripePaymentIntentId { get; set; }
     }
 
 }

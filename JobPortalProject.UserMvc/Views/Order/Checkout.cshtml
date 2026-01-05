@@ -1,0 +1,110 @@
+﻿ @model CheckoutViewModel
+  <!-- ========== Inner Banner Start============= -->
+<div class="inner-banner">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="banner-content text-center">
+                    <h1>Checkout Page</h1>
+                    <span></span>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Checkout Page</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ========== Inner Banner end============= -->
+<!-- ========== Contact Pages Start============= -->
+<div class="checkout-pages-area pt-120 mb-120">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="checkout-form form-wrapper">
+                    <form asp-action="Buy" asp-controller="Order" method="post">
+                        <div class="title-and-coupon">
+                            <div class="title">
+                                <h5>Company Information:</h5>
+                            </div>
+                        </div>
+                        <div class="row mb-20">
+                            <div class="col-md-6">
+                                <div class="form-inner mb-25">
+                                    <label for="name">Full Name</label>
+                                    <div class="input-area">
+                                        <img src="~/images/icon/user-2.svg" alt="">
+                                        <label type="text" id="name" name="name" placeholder="Mr. Jackson Mile">@Model.FullName</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-inner mb-25">
+                                    <label for="companyname">Company Name</label>
+                                    <div class="input-area">
+                                        <img src="~/images/icon/company-2.svg" alt="">
+                                        <label type="text" id="companyname" name="name" placeholder="Elite Hangstroman">@Model.CompanyName</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-inner mb-25">
+                                    <label for="phonenumber">Phone</label>
+                                    <div class="input-area">
+                                        <img src="~/images/icon/phone-2.svg" alt="">
+                                        <label type="text" id="phonenumber" name="phonenumber" placeholder="+880-17 *** *** **">@Model.Phone</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-inner mb-25">
+                                    <label for="email3">Email</label>
+                                    <div class="input-area">
+                                        <img src="~/images/icon/email-2.svg" alt="">
+                                        <label type="text" id="email3" name="email" placeholder="info@example.com">@Model.Email</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-4 mb-60">
+                            <div class="col-lg-6">
+                                <div class="total-payment-area">
+                                    <div class="payment-title">
+                                        <h5>Total Payment</h5>
+                                    </div>
+                                    <div class="payment-value">
+                                        <h3>$30/ <span>Only</span></h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="payment-mathord">
+                                    <div class="payment-title">
+                                        <h5>Payment Granted :</h5>
+                                    </div>
+                                    <ul>
+                                        <li><img src="~/images/bg/payment-method-01.png" alt=""></li>
+                                        <li><img src="~/images/bg/payment-method-02.png" alt=""></li>
+                                        <li><img src="~/images/bg/payment-method-03.png" alt=""></li>
+                                        <li><img src="~/images/bg/payment-method-04.png" alt=""></li>
+                                        <li><img src="~/images/bg/payment-method-05.png" alt=""></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="payment-and-support">
+                            <div class="payment-btn">
+                                <button class="primry-btn-2 w-unset" type="submit">Pay Now</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ========== Contact Pages End============= -->

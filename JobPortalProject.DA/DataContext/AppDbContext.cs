@@ -52,6 +52,7 @@ namespace JobPortalProject.DA.DataContext
         public DbSet<Education> Educations { get; set; }=null!;
         public DbSet<EducationTranslation> EducationTranslations { get; set; } = null!;
         public DbSet<JobApplication> JobApplications { get; set; }=null!;
+        public DbSet<Order> Orders { get; set; } = null!;
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -22,6 +22,25 @@
                                 {
                                 <p>Your profile is not active</p>
                                 <p>To activate your profile, fill the information about your company.</p>
+                                } 
+                                else{
+                                @if (Model.IsMembershipActive)
+                                {
+                                    <p>Your membership is active.</p>
+                                        @if (Model.MembershipExpiresAt.HasValue)
+                                        {
+                                        <p>Expire Date: @Model.MembershipExpiresAt.Value.Date.ToShortDateString()</p>
+                                         }
+                                    
+                                }
+                                else
+                                {
+                                 <p>Your membership is not active.<a asp-controller="order" asp-action="checkout">Click here to pay.</a></p>
+                                    @if (Model.MembershipExpiresAt.HasValue)
+                                    {
+                                        <p>Expired At: @Model.MembershipExpiresAt.Value.Date.ToShortDateString()</p>
+                                    }
+                                }
                                 }
                             </div>
                         </div>

@@ -28,8 +28,10 @@ namespace JobPortalProject.BL.ViewModels.CompanyViewModels
         public string? PrimaryPhone { get; set; }
         public string? SecondaryPhone { get; set; }
         public bool IsAccountActive { get; set; }
+        public bool IsMembershipActive { get; set; }
         public DateTime MemberSince { get; set; }
         public DateTime LastPostedJob {  get; set; }
+        public DateTime? MembershipExpiresAt { get; set; }
         public AddressViewModel MainAddress { get; set; } = null!;
         public List<AddressViewModel> Addresses { get; set; } = [];
         public List<WorkingFieldViewModel> WorkingFields { get; set; } = [];

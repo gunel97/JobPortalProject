@@ -92,8 +92,14 @@ namespace JobPortalProject.BL
             services.AddScoped<FileService>();
             services.AddScoped<AuthSeeder>();
             services.AddScoped<IMailService, MailKitMailService>();
+
+            //Admin
+            services.AddScoped<ISidebarLanguageService, SidebarLanguageManager>();
+            services.AddScoped<ICompanyTypeIndexService, CompanyTypeIndexManager>();
             services.AddScoped<ICityIndexService, CityIndexManager>();
             services.AddScoped<IUserIndexService, UserIndexManager>();
+            services.AddScoped<IJobCategoryIndexService, JobCategoryIndexManager>();
+            services.AddScoped<ICountryIndexService, CountryIndexManager>();
 
             return services;
         }

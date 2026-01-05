@@ -10,6 +10,7 @@ namespace JobPortalProject.BL.Services.Contracts
 {
     public interface ICompanyService : ICrudService<Company, CompanyViewModel, CompanyCreateViewModel, CompanyUpdateViewModel>
     {
+        public Task<CheckoutViewModel> GetCheckoutViewModelAsync();
         public Task<CompanyUpdateViewModel> GetCompanyUpdateViewModelAsync();
         public Task<CompanyTranslationEditPageViewModel> GetCompanyTranslationEditPageAsync(int languageId);
         public Task<bool> UpdateCompanyTranslation(CompanyTranslationEditPageViewModel model);

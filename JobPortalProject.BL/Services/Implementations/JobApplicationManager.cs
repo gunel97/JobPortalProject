@@ -209,7 +209,8 @@ namespace JobPortalProject.BL.Services.Implementations
         public async Task<List<ApplicantOfCompanyViewModel>> GetApplicantsOfCompany(int companyId)
         {
             var language = await _cookieService.GetLanguageAsync();
-            var jobApplications = await Repository.GetAllAsync(predicate: x => x.JobStatus != (JobApplicationStatus)5 && !x.IsDeleted,
+            var jobApplications = await Repository.GetAllAsync(
+                predicate: x => x.JobStatus != (JobApplicationStatus)5 && !x.IsDeleted && x.Job.CompanyId==companyId,
                 include: x => x
                 .Include(x => x.Job).ThenInclude(x => x.JobTranslations.Where(t => t.LanguageId == language.Id))
                 .Include(x => x.Job).ThenInclude(x => x.Company).ThenInclude(x => x.CompanyTranslations.Where(t => t.LanguageId == language.Id))

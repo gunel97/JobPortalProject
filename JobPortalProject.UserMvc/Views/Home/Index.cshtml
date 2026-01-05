@@ -349,7 +349,14 @@
                             <div class="recruters-card">
                                 <div class="company-area">
                                     <div class="logo">
-                                        <img src="@item?.LogoUrl" alt="">
+                                        @if(item?.LogoUrl==null)
+                                        {
+                                                <img src="https://ui-avatars.com/api/?name=@item?.Name&background=random" alt="@item?.Name avatar" />
+                                        }
+                                        @if (item?.LogoUrl != null)
+                                        {
+                                            <img src="@item?.LogoUrl" alt="@item?.Name">
+                                        }
                                     </div>
                                     <div class="name-location">
                                         <h5><a asp-controller="company" asp-action="details" asp-route-id="@item?.DetailsUrl">@item?.Name</a></h5>

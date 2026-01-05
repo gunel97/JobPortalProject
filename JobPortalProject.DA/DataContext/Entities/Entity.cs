@@ -352,6 +352,7 @@ namespace JobPortalProject.DA.DataContext.Entities
         public string? LastName { get; set; }
         public Company? Company { get; set; } 
         public Candidate? Candidate { get; set; }
+        public bool IsDeleted { get; set; }
     }
 
     public class Country : TimeStample

@@ -63,39 +63,26 @@ namespace JobPortalProject.BL.UI.Services.Implementations
 
         public async Task<PagedResultModel<UserViewModel>> GetUsers(UserFilterViewModel filter)
         {
-            // 1. Build Predicate and OrderBy
             Expression<Func<AppUser, bool>> predicate = BuildPredicate(filter);
             Func<IQueryable<AppUser>, IOrderedQueryable<AppUser>> orderBy = BuildOrderBy(filter);
 
-            // 2. Prepare the Query
             var query = _userManager.Users.AsQueryable();
 
-            // 3. Apply Filtering
             query = query.Where(predicate);
 
-            // 4. Apply Sorting
             if (orderBy != null)
             {
                 query = orderBy(query);
             }
 
-            // 5. Get Count for Pagination
             var totalCount = await query.CountAsync();
 
-            // 6. Get the Paged Data
-            var users = await query
-                .Skip(filter.Index * filter.Size)
-                .Take(filter.Size)
-                .ToListAsync();
+            var users = await query.Skip(filter.Index * filter.Size).Take(filter.Size).ToListAsync();
 
-            // 7. Map to ViewModel
             var userModels = new List<UserViewModel>();
 
             foreach (var user in users)
             {
-                // NOTE: Role filtering "!= SuperAdmin" is best done in the database, 
-                // but since GetUserRoleAsync is an async helper, we do it here. 
-                // Ideally, you should filter this in the SQL query above using .Where() if possible.
                 var role = await GetUserRoleAsync(user.UserName);
 
                 if (role != "SuperAdmin")
@@ -113,15 +100,12 @@ namespace JobPortalProject.BL.UI.Services.Implementations
                 }
             }
 
-            // 8. Return Result
-
             var Users = new PagedResultModel<UserViewModel>
             {
                 Items = userModels,
                 Index = filter.Index,
                 Size = filter.Size,
                 Count = totalCount,
-                // Calculate pages: Ceiling(Total / Size)
                 Pages = (int)Math.Ceiling(totalCount / (double)filter.Size)
             };
 
@@ -203,9 +187,10 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             var user = await _userManager.FindByNameAsync(model.Username);
 
             if (user == null)
-            {
                 return SignInResult.Failed;
-            }
+
+            if (user.IsDeleted)
+                return SignInResult.Failed;
 
             var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, true);
 
@@ -379,8 +364,13 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             var user = _httpContextAccessor.HttpContext?.User;
             if (user == null)
                 return null!;
+            return await _userManager.GetUserAsync(user)!;
+        }
 
-            return await _userManager.GetUserAsync(user);
+        public async Task DeactivateUser (AppUser user)
+        {
+            user.IsDeleted = true;
+            await _userManager.UpdateAsync(user);
         }
 
     }

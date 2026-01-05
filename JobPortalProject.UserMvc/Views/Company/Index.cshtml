@@ -165,7 +165,14 @@
                                 <div class="company-list-card1">
                                     <div class="company-area">
                                         <div class="logo">
-                                            <img src="@company?.LogoUrl" alt="">
+                                            @if (company?.LogoUrl == null)
+                                            {
+                                                <img src="https://ui-avatars.com/api/?name=@company?.Name&background=random" alt="@company?.Name avatar" />
+                                            }
+                                            @if (company?.LogoUrl != null)
+                                            {
+                                                <img src="@company?.LogoUrl" alt="@company?.Name">
+                                            }
                                         </div>
                                         <div class="company-content">
                                             <div class="company-details">

@@ -139,6 +139,7 @@ namespace JobPortalProject.UserMvc.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+
         [Authorize(Roles = "Candidate, Company")]
         public async Task<IActionResult> Logout()
         {
@@ -158,14 +159,14 @@ namespace JobPortalProject.UserMvc.Controllers
         public async Task<IActionResult> ChangePassword(AccountSettingsViewModel model)
         {
             if (!ModelState.IsValid)
-                return View("Settings", model);
+                return View(nameof(Settings), model);
 
             var user = await _userService.GetCurrentUserAsync();
             if (user == null)
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction(nameof(Login));
 
             if (model.ChangePasswordModel == null)
-                return View("Settings", model);
+                return View(nameof(Settings), model);
 
             var result = await _userService.ChangePasswordAsync(user, model.ChangePasswordModel);
 
@@ -180,7 +181,7 @@ namespace JobPortalProject.UserMvc.Controllers
             }
 
             await _userService.LogOutAsync();
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction(nameof(Login));
         }
 
         [Authorize(Roles ="Candidate, Company")]
@@ -188,27 +189,27 @@ namespace JobPortalProject.UserMvc.Controllers
         public async Task<IActionResult> ChangeEmail(AccountSettingsViewModel model)
         {
             if (!ModelState.IsValid)
-                return View("Settings", model);
+                return View(nameof(Settings), model);
 
             var user = await _userService.GetCurrentUserAsync();
             if (user == null)
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction(nameof(Login));
 
             if (model.ChangeEmailModel == null)
-                return View("Settings", model);
+                return View(nameof(Settings), model);
 
             var existingUserWithNewEmail = await _userService.GetUserByEmailAsync(model.ChangeEmailModel.NewEmail);
             if (existingUserWithNewEmail != null && existingUserWithNewEmail.Id != user.Id)
             {
                 ModelState.AddModelError(model.ChangeEmailModel.NewEmail, "This email address is already taken.");
-                return View("Settings", model);
+                return View(nameof(Settings), model);
             }
 
             var checkPasswordResult = await _userService.CheckPasswordAsync(user, model.ChangeEmailModel.CurrentPasswordForEmail);
             if(!checkPasswordResult)
             {
                 ModelState.AddModelError("", "Password is not correct");
-                return View("Settings", model);
+                return View(nameof(Settings), model);
             }
 
             var result = await _userService.ChangeEmailAsync(user, model.ChangeEmailModel);
@@ -220,7 +221,7 @@ namespace JobPortalProject.UserMvc.Controllers
                     ModelState.AddModelError("", item.Description);
                 }
 
-                return View("Settings", model);
+                return View(nameof(Settings), model);
             }
 
             return RedirectToAction("Dashboard", "Company");
@@ -294,6 +295,35 @@ namespace JobPortalProject.UserMvc.Controllers
                 return View(model);
             }
 
+            return RedirectToAction(nameof(Login));
+        }
+
+        [Authorize(Roles = "Candidate, Company")]
+        [HttpPost]
+        public async Task<IActionResult> DeleteAccount(AccountSettingsViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(nameof(Settings), model);
+            }
+
+            var user = await _userService.GetCurrentUserAsync();
+            if (user == null)
+                return RedirectToAction(nameof(Login));
+
+            if (model.DeleteAccount == null)
+                return View(nameof(Settings), model);
+
+            var checkPasswordResult = await _userService.CheckPasswordAsync(user, model.DeleteAccount.CurrentPasswordForDelete);
+            if (!checkPasswordResult)
+            {
+                ModelState.AddModelError("", "Password is not correct");
+                return View(nameof(Settings), model);
+            }
+
+            await _userService.DeactivateUser(user);
+
+            await _userService.LogOutAsync();
             return RedirectToAction(nameof(Login));
         }
     }

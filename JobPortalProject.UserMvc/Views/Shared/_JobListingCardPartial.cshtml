@@ -5,7 +5,14 @@
             <div class="job-list-content">
                 <div class="company-area">
                     <div class="logo">
-                        <img src="@Model.CompanyLogoUrl" alt="">
+                        @if (Model.CompanyLogoUrl == null)
+                        {
+                            <img src="https://ui-avatars.com/api/?name=@Model.CompanyName&background=random" alt="@Model.CompanyName avatar" />
+                        }
+                        @if (Model.CompanyLogoUrl != null)
+                        {
+                            <img src="@Model.CompanyLogoUrl" alt="@Model.CompanyName">
+                        }
                     </div>
                     <div class="company-details">
                         <div class="name-location">

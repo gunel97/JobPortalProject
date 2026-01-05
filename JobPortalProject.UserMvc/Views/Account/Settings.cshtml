@@ -53,7 +53,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div asp-validation-summary="ModelOnly"></div>
                                 <div class="col-md-12 pt-50">
                                     <div class="form-inner">
                                         <button class="primry-btn-2 lg-btn w-unset" type="submit">Update Change</button>
@@ -102,7 +101,7 @@
                             </div>
                         </div>
                         </form>
-                        <form>
+                        <form asp-controller="account" asp-action="deleteAccount" method="post">
                             <div class="privacy-security-area">
                                 <div class="row">
                                     <div class="col-lg-12">
@@ -118,15 +117,15 @@
                                                 <label for="password2">Current Password*</label>
                                                 <div class="input-area">
                                                     <img src="~/images/icon/lock-2.svg" alt="">
-                                                    <input asp-for="ChangeEmailModel.CurrentPasswordForEmail" id="password2" placeholder="Current password" />
+                                                    <input asp-for="DeleteAccount.CurrentPasswordForDelete" id="password2" placeholder="Current password" />
                                                     <i class="bi bi-eye-slash" id="togglePassword2"></i>
-                                                    <span asp-validation-for="ChangeEmailModel.CurrentPasswordForEmail"></span>
+                                                    <span asp-validation-for="DeleteAccount.CurrentPasswordForDelete"></span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div asp-validation-summary="ModelOnly"></div>
                                             <div class="delete-btn">
-                                                <button type="reset">Delete Account</button>
+                                                <button type="submit">Delete Account</button>
                                             </div>
                                         </div>
                                     </div>

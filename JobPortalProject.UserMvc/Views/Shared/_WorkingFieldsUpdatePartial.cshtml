@@ -1,12 +1,7 @@
 ﻿@model CompanyTranslationEditPageViewModel
 
 
-@if (Model.WorkingFieldUpdateViewModels.Any())
-{
-    <div class="section-title2">
-        <h5>Working Areas:</h5>
-        <div class="dash"></div>
-    </div>
+
        @for (int i = 0; i < Model.WorkingFieldUpdateViewModels.Count; i++)
         {
             <input asp-for="WorkingFieldUpdateViewModels[i].WorkingFieldId"
@@ -59,4 +54,3 @@
             </div>
             <br />
         }
-}

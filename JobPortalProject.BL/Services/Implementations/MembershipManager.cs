@@ -1,5 +1,9 @@
 ﻿using JobPortalProject.BL.Services.Contracts;
 using JobPortalProject.BL.Settings;
+using JobPortalProject.BL.UI.Services.Abstracts;
+using JobPortalProject.BL.UI.ViewModels;
+using JobPortalProject.BL.ViewModels.JobViewModels;
+using JobPortalProject.BL.ViewModels.Pagination;
 using JobPortalProject.DA.DataContext;
 using JobPortalProject.DA.DataContext.Entities;
 using JobPortalProject.DA.DataContext.Enums;
@@ -11,6 +15,7 @@ using Stripe.Checkout;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -80,7 +85,6 @@ namespace JobPortalProject.BL.Services.Implementations
             return session.Url;
         }
 
-
         public async Task<bool> ProcessPaymentSuccessAsync(string sessionId)
         {
             var service = new Stripe.Checkout.SessionService();
@@ -124,5 +128,6 @@ namespace JobPortalProject.BL.Services.Implementations
             }
             return false;
         }
+
     }
 }

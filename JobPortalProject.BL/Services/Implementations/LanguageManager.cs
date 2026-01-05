@@ -55,6 +55,7 @@ namespace JobPortalProject.BL.Services.Implementations
 
             return await base.UpdateAsync(id, model);
         }
+
         public override async Task<LanguageViewModel> CreateAsync(LanguageCreateViewModel model)
         {
             if (model.IconFile != null)

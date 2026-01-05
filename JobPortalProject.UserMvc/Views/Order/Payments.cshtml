@@ -1,0 +1,62 @@
+﻿@{
+    OrderPagedViewModel model = Model;
+    var filter = model.Filter;
+    var orders = model.Orders;
+}
+
+   <!-- ========== Dashboard Area end============= -->
+<div class="dashboard-area company-dashboard pt-120 mb-120">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 mb-50">
+               <partial name="_SidebarPartial" />
+            </div>
+            <div class="col-lg-12">
+                <div class="table-wrapper2">
+                    <div class="title-and-btn">
+                        <div class="title">
+                            <h4>Plan & Invoice List:</h4>
+                        </div>
+                    </div>
+                    <table class="eg-table table plan-invoice-table mb-0">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th class="text-center">Payment Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (orders.Items.Any())
+                            {
+                                @foreach (var order in orders.Items)
+                                {
+                                    <tr class="style-2">
+                                        <td data-label="Date">@order.CreatedAt.Date.ToShortDateString()</td>
+                                        <td data-label="Amount">$@order.Amount</td>
+                                        <td data-label="Payment Status" class="text-center">@localizer.GetValue(order.Status.ToString())</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                    <div class="pagination-table-info">
+                        <div class="table-info">
+                            @if (orders.Count == 0)
+                            {
+                                <p class="show-item">No jobs found.</p>
+                            }
+                            @if (orders.Count > 0)
+                            {
+                                <p class="show-item">Showing results @((orders.Index * orders.Size) + 1) - @Math.Min((orders.Index + 1) * orders.Size, orders.Count) from @orders.Count jobs</p>
+                            }
+                        </div>
+                        <partial name="_PaginationPartial" model="@orders" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========== Dashboard Area end============= -->

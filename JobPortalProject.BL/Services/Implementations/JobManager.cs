@@ -112,22 +112,13 @@ namespace JobPortalProject.BL.Services.Implementations
             return await base.UpdateAsync(id, model);
         }
 
-        public async Task<PagedResultModel<JobViewModel>> GetAllJobsOfCompanyAsync(JobFilterViewModel filter, int companyId)
-        {
-            var pagedJobs = await GetPagedJobsAsync(filter);
-            var jobsOfCompany = pagedJobs.Items.Where(x => x.CompanyId == companyId).ToList();
-            pagedJobs.Items = jobsOfCompany;
-
-            return pagedJobs;
-        }
-
         public async Task<PagedJobsOfCompanyViewModel> GetPagedJobsOfCompanyModel(JobFilterViewModel filter, int companyId)
         {
             filter ??= new JobFilterViewModel();
             if (filter.Index < 0) filter.Index = 0;
             if (filter.Size <= 0) filter.Size = 10;
 
-            var pagedJobsOfCompany = await GetAllJobsOfCompanyAsync(filter, companyId);
+            var pagedJobsOfCompany = await GetPagedJobsOfCompanyAsync(filter, companyId);
             var model = new PagedJobsOfCompanyViewModel
             {
                 Jobs = pagedJobsOfCompany,
@@ -260,6 +251,45 @@ namespace JobPortalProject.BL.Services.Implementations
             return jobViewModels;
         }
 
+        public async Task<PagedResultModel<JobViewModel>> GetPagedJobsOfCompanyAsync(JobFilterViewModel filter, int companyId)
+        {
+            var language = await _cookieService.GetLanguageAsync();
+            Expression<Func<Job, bool>> predicate = BuildPredicateSelectedCompany(filter, language.Id, companyId);
+            Func<IQueryable<Job>, IOrderedQueryable<Job>> orderBy = BuildOrderBy(filter, language.Id);
+            var pagedJobs = await Repository.GetPagedListAsync(predicate: predicate,
+                orderBy: orderBy,
+                include: x => x
+                .Include(x => x.JobApplications)
+                .Include(x => x.JobTranslations.Where(t => t.LanguageId == language.Id))
+                .Include(x => x.JobCategory!).ThenInclude(x => x.JobCategoryTranslations.Where(t => t.LanguageId == language.Id))
+                .Include(x => x.Responsibilities).ThenInclude(t => t.JobResponsibilityTranslations.Where(x => x.LanguageId == language.Id))
+                .Include(x => x.MainDuties).ThenInclude(t => t.JobMainDutyTranslations.Where(x => x.LanguageId == language.Id))
+                .Include(x => x.ExtraBenefits).ThenInclude(t => t.JobExtraBenefitTranslations.Where(x => x.LanguageId == language.Id))
+                .Include(x => x.Company!).ThenInclude(t => t.CompanyTranslations.Where(x => x.LanguageId == language.Id))
+                .Include(x => x.Address!).ThenInclude(x => x.AddressTranslations.Where(x => x.LanguageId == language.Id))
+                .Include(x => x.Address).ThenInclude(x => x.City).ThenInclude(x => x.CityTranslations)
+                .Include(x => x.Address).ThenInclude(x => x.City).ThenInclude(x => x.Country).ThenInclude(x => x.Translations)
+                , index: filter.Index, size: filter.Size);
+
+            var jobViewModels = new List<JobViewModel>();
+            foreach (var item in pagedJobs.Items)
+            {
+                var model = await MapToJobViewModel(item, language.Id);
+                jobViewModels.Add(model);
+            }
+
+            var pagedJobModels = new PagedResultModel<JobViewModel>
+            {
+                Items = jobViewModels,
+                Index = pagedJobs.Index,
+                Size = pagedJobs.Size,
+                Count = pagedJobs.Count,
+                Pages = pagedJobs.Pages,
+            };
+
+            return pagedJobModels;
+        }
+
         public async Task<PagedResultModel<JobViewModel>> GetPagedJobsAsync(JobFilterViewModel filter)
         {
             var language = await _cookieService.GetLanguageAsync();
@@ -383,6 +413,26 @@ namespace JobPortalProject.BL.Services.Implementations
                 return true;
 
             return false;
+        }
+
+        private Expression<Func<Job, bool>> BuildPredicateSelectedCompany(JobFilterViewModel filter, int languageId, int companyId)
+        {
+            Expression<Func<Job, bool>> predicate = x => !x.IsDeleted && x.IsActive && x.CompanyId == companyId &&
+            x.ExpirationDate > DateTime.UtcNow &&
+            (string.IsNullOrEmpty(filter.SearchTerm) ||
+            x.JobTranslations.Any(t => t.LanguageId == languageId && (t.Title.Contains(filter.SearchTerm) ||
+            t.Description.Contains(filter.SearchTerm))) ||
+            x.Company.CompanyTranslations.Any(t => t.LanguageId == languageId && t.Name.Contains(filter.SearchTerm))) &&
+            ((!filter.MinSalary.HasValue || x.MaxSalary >= filter.MinSalary.Value) &&
+            (!filter.MaxSalary.HasValue || x.MinSalary <= filter.MaxSalary.Value) &&
+            (filter.CategoryIds == null || filter.CategoryIds.Count == 0 ||
+            filter.CategoryIds.Contains(x.JobCategoryId)) &&
+            (filter.JobTypeIds == null || filter.JobTypeIds.Count == 0 ||
+            filter.JobTypeIds.Contains((int)x.JobType)) &&
+            (filter.GenderIds == null || filter.GenderIds.Count == 0 ||
+            filter.GenderIds.Contains((int)x.Gender)));
+
+            return predicate;
         }
 
         private Expression<Func<Job, bool>> BuildPredicate(JobFilterViewModel filter, int languageId)

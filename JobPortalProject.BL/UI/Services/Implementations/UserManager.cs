@@ -256,6 +256,7 @@ namespace JobPortalProject.BL.UI.Services.Implementations
                 {
                     AppUserId=user.Id,
                     CompanyTypeId=model.CompanyTypeId,
+                    MemberSince=DateTime.UtcNow
                 };
 
                 var company = await _companyService.CreateAsync(companyModel);
@@ -352,9 +353,25 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             return company;
         }
 
+        public async Task<bool> CheckPasswordAsync(AppUser user, string password)
+        {
+          return await _userManager.CheckPasswordAsync(user, password);
+        }
+
         public async Task<IdentityResult> ChangePasswordAsync(AppUser user, ChangePasswordViewModel model)
         {
             return await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+        }
+
+        public async Task<IdentityResult> ChangeEmailAsync(AppUser user, ChangeEmailViewModel model)
+        {
+            return await _userManager.SetEmailAsync(user, model.NewEmail);
+        }
+
+        public async Task<AppUser> GetUserByEmailAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            return user!;
         }
 
         public async Task<AppUser> GetCurrentUserAsync()

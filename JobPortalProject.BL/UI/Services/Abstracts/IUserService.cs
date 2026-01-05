@@ -14,6 +14,9 @@ namespace JobPortalProject.BL.UI.Services.Abstracts
 {
     public interface IUserService
     {
+        public Task<bool> CheckPasswordAsync(AppUser user, string password);
+        public Task<IdentityResult> ChangeEmailAsync(AppUser user, ChangeEmailViewModel model);
+        public Task<AppUser> GetUserByEmailAsync(string email);
         public Task<IdentityResult> ResetPassword(ResetPasswordViewModel model);
         public Task<string> GetResetPasswordToken(string email);
         public Task<bool> CheckUserByEmail(string email);

@@ -1,11 +1,8 @@
 ﻿using JobPortalProject.BL.Services.Contracts;
 using JobPortalProject.BL.UI.Services.Abstracts;
-using JobPortalProject.BL.UI.ViewModels;
 using JobPortalProject.BL.ViewModels.AddressViewModels;
 using JobPortalProject.BL.ViewModels.CompanySocialViewModels;
 using JobPortalProject.BL.ViewModels.CompanyViewModels;
-using JobPortalProject.BL.ViewModels.JobApplicationViewModels;
-using JobPortalProject.BL.ViewModels.JobExtraBenefitViewModels;
 using JobPortalProject.BL.ViewModels.WorkingFieldViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -50,6 +47,12 @@ namespace JobPortalProject.UserMvc.Controllers
             return View(model);
         }
 
+        public IActionResult Payments()
+        {
+
+            return View();
+        }
+
         [AllowAnonymous]
         public async Task<IActionResult> Details(string id)
         {
@@ -74,10 +77,7 @@ namespace JobPortalProject.UserMvc.Controllers
             return View(model);
         }
 
-        public IActionResult Settings()
-        {
-            return View();
-        }
+
 
         public async Task<IActionResult> EditCompanyProfile()
         {
@@ -153,7 +153,38 @@ namespace JobPortalProject.UserMvc.Controllers
                 return Json(new
                 {
                     success = true,
+                    workingFieldCount = model.WorkingFieldUpdateViewModels.Count(),
                     workingFieldHtml
+                });
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteCompanySocial(int id)
+        {
+            var companyId = _companyService.GetCompanyIdOfUser();
+            var social = await _companySocialService.GetByIdAsync(id);
+            if (social == null)
+                return BadRequest();
+
+            var deleted = await _companySocialService.DeleteAsync(id);
+            if (deleted)
+            {
+                var model = await _companyService.GetCompanyUpdateViewModelAsync();
+                if (model == null)
+                    return NotFound();
+
+                var companySocialHtml = await RenderPartialViewToString("_CompanySocialsPartial", model);
+
+                return Json(new
+                {
+                    success = true,
+                    addressCount = model.CompanySocialUpdateViewModels.Count(),
+                    companySocialHtml
                 });
             }
             else
@@ -182,6 +213,7 @@ namespace JobPortalProject.UserMvc.Controllers
                 return Json(new
                 {
                     success = true,
+                    addressCount = model.AddressUpdateViewModels.Count(),
                     addressHtml
                 });
             }
@@ -279,7 +311,7 @@ namespace JobPortalProject.UserMvc.Controllers
                 return RedirectToAction(nameof(EditCompanyProfile), companyUpdateModel);
             }
 
-            TempData["Success"] = "Address added successfully!";
+            TempData["Success"] = "Social media address added successfully!";
             TempData["CloseModal"] = "true";
             return RedirectToAction("EditCompanyProfile", companyUpdateModel);
         }

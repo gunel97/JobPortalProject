@@ -1,4 +1,6 @@
 ﻿using JobPortalProject.BL.Services.Contracts;
+using JobPortalProject.BL.ViewModels.JobViewModels;
+using JobPortalProject.BL.ViewModels.OrderViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -10,11 +12,13 @@ namespace JobPortalProject.UserMvc.Controllers
     {
         private readonly IMembershipService _membershipService;
         private readonly ICompanyService _companyService;
+        private readonly IOrderService _orderService;
 
-        public OrderController(IMembershipService membershipService, ICompanyService companyService)
+        public OrderController(IMembershipService membershipService, ICompanyService companyService, IOrderService orderService)
         {
             _membershipService = membershipService;
             _companyService = companyService;
+            _orderService = orderService;
         }
 
         public async Task<IActionResult> Checkout()
@@ -40,6 +44,25 @@ namespace JobPortalProject.UserMvc.Controllers
             bool result = await _membershipService.ProcessPaymentSuccessAsync(session_id);
 
             return result ? View("Success") : View("Error");
+        }
+
+        [Authorize(Roles ="Company")]
+        public async Task<IActionResult> Payments(OrderFilterViewModel filter)
+        {
+            var companyId = await _companyService.GetCompanyIdOfUser();
+
+            filter ??= new OrderFilterViewModel();
+            if (filter.Index < 0) filter.Index = 0;
+            if (filter.Size <= 0) filter.Size = 10;
+            var orders = await _orderService.GetPagedOrdersOfCompanyAsync(filter, companyId);
+
+            var model = new OrderPagedViewModel
+            {
+                Filter = filter,
+                Orders = orders
+            };
+
+            return View(model);
         }
     }
 }

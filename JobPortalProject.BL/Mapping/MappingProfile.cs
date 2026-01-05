@@ -14,6 +14,7 @@ using JobPortalProject.BL.ViewModels.JobExtraBenefitViewModels;
 using JobPortalProject.BL.ViewModels.JobResponsibilityViewModels;
 using JobPortalProject.BL.ViewModels.JobViewModels;
 using JobPortalProject.BL.ViewModels.LanguageViewModels;
+using JobPortalProject.BL.ViewModels.OrderViewModels;
 using JobPortalProject.BL.ViewModels.PersonalInfoViewModels;
 using JobPortalProject.BL.ViewModels.ResumeViewModels;
 using JobPortalProject.BL.ViewModels.SocialMediaViewModels;
@@ -214,6 +215,10 @@ namespace JobPortalProject.BL.Mapping
             CreateMap<JobApplication, JobApplicationsOfCandidateViewModel>().ReverseMap();
             CreateMap<JobApplication, JobApplicationCreateViewModel>().ReverseMap();
             CreateMap<JobApplication, JobApplicationUpdateViewModel>().ReverseMap();
+
+            CreateMap<Order, OrderViewModel>().ReverseMap();
+            CreateMap<Order, OrderCreateViewModel>().ReverseMap();
+            CreateMap<Order, OrderUpdateViewModel>().ReverseMap();
 
         }
     }

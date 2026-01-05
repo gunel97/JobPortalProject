@@ -2,14 +2,7 @@
 using JobPortalProject.BL.UI.Services.Abstracts;
 using JobPortalProject.BL.UI.ViewModels;
 using JobPortalProject.BL.ViewModels.JobViewModels;
-using JobPortalProject.DA.DataContext.Enums;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens.Experimental;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JobPortalProject.BL.UI.Services.Implementations
 {
@@ -20,16 +13,14 @@ namespace JobPortalProject.BL.UI.Services.Implementations
         private readonly ICookieService _cookieService;
         private readonly IEnumService _enumService;
         private readonly IJobApplicationService _jobApplicationService;
-        private readonly ICandidateService _candidateService;
 
-        public JobListingManager(IJobService jobService, IJobCategoryService jobCategoryService, ICookieService cookieService, IEnumService enumService, IJobApplicationService jobApplicationService, ICandidateService candidateService)
+        public JobListingManager(IJobService jobService, IJobCategoryService jobCategoryService, ICookieService cookieService, IEnumService enumService, IJobApplicationService jobApplicationService)
         {
             _jobService = jobService;
             _jobCategoryService = jobCategoryService;
             _cookieService = cookieService;
             _enumService = enumService;
             _jobApplicationService = jobApplicationService;
-            _candidateService = candidateService;
         }
 
         public async Task<PagedJobListingViewModel> GetPagedJobListingViewModel(JobFilterViewModel filter)

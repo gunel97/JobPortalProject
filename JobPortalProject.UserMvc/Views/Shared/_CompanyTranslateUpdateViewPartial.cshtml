@@ -23,9 +23,19 @@
             <span asp-validation-for="CompanyTranslationUpdateViewModel.Description"></span>
     </div>
 </div>
-<div id="workingFieldRow" class="row">
-    <partial name="_WorkingFieldsUpdatePartial" model="@Model" />
-</div>
+@if (Model.WorkingFieldUpdateViewModels.Any())
+{
+    <div id="workingFieldsMainRow" class="row">
+        <div class="section-title2">
+            <h5>Working Areas:</h5>
+            <div class="dash"></div>
+        </div>
+        <div id="workingFieldRow" class="row">
+            <partial name="_WorkingFieldsUpdatePartial" model="@Model" />
+        </div>
+    </div>
+}
+
 
 <div id="addressRow" class="row">
     <partial name="_AddressUpdatePartial" model="@Model" />

@@ -117,8 +117,10 @@
                                         </li>
                                     }
                                         <li><span>Member Since:</span> @company?.MemberSince!.Date.ToShortDateString()</li>
-                                        <li><span>Company size:</span> @company?.CompanySize People.</li>                                       
-                                        <li><span>Last Job Posted:</span> @company?.LastPostedJob!.Date.ToShortDateString()</li> 
+                                        <li><span>Company size:</span> @company?.CompanySize People.</li>      
+                                        @if(company.LastPostedJob.HasValue){
+                                        <li><span>Last Job Posted:</span> @company?.LastPostedJob.Value.Date.ToShortDateString()</li> 
+                                        }
                                     </ul>
                                 </div>
                                 <a class="primry-btn-2 lg-btn" href="job-listing1.html">Job Available: @company?.ActiveJobCount</a>
@@ -127,17 +129,20 @@
                     </div>
                 </div>
             </div>
+        @if (jobs.Any())
+        {
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title">
                         <h4>Latest Jobs:</h4>
                     </div>
-                        @foreach (var job in jobs)
-                        {
-                             <partial name="_JobListingCardPartial" model="@job" />
-                        }                
+                    @foreach (var job in jobs)
+                    {
+                        <partial name="_JobListingCardPartial" model="@job" />
+                    }                
                 </div>
             </div>
+            }
         </div>
     </div>
     <!-- ========== Job Details end============= -->

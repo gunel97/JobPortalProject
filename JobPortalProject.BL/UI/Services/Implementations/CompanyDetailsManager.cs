@@ -69,12 +69,19 @@ namespace JobPortalProject.BL.UI.Services.Implementations
                 }
 
             }
+
+            var allJobs = (await _jobService.GetAllAsync(predicate: x => x.CompanyId == company.Id && !x.IsDeleted && x.IsActive))
+                .ToList();
+            if (allJobs.Any()) {
+                company.LastPostedJob = allJobs.OrderByDescending(x => x.CreatedAt).Take(1).FirstOrDefault().CreatedAt;
+            }
+                
             var companyDetailsViewModel = new CompanyDetailsViewModel
             {
                 Company = company,
                 CompanySocials = companySocials.ToList(),
                 ActiveJobs = activeJobModels.OrderBy(x=>x.CreatedAt).Take(5).ToList(),
-                //Website = website
+                
             };
 
             return companyDetailsViewModel;

@@ -1,0 +1,143 @@
+﻿@model AccountSettingsViewModel
+
+<div class="dashboard-area company-dashboard pt-120 mb-120">
+    <div class="container">
+        <div class="row g-lg-4 gy-5 mb-90">
+            <div class="col-lg-12 mb-50">
+                <partial name="_SidebarPartial" />
+            </div>
+            <div class="col-lg-12">
+                <div class="form-wrapper">
+                    <form asp-controller="account" asp-action="changePassword" method="post" class="profile-form">
+                        <div class="section-title2">
+                            <h5 class="d-flex align-items-baseline gap-1"><img src="~/images/icon/profile-settings.svg" alt=""> Profile Settings </h5>
+                        </div>
+                        <div class="change-password-area mb-40">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="info-title">
+                                        <h6>Change Your Password</h6>
+                                        <div class="dash"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-inner mb-25">
+                                        <label for="password2">Current Password*</label>
+                                        <div class="input-area">
+                                            <img src="~/images/icon/lock-2.svg" alt="">
+                                            <input asp-for="ChangePasswordModel.CurrentPassword" id="password2" placeholder="Current Password" />
+                                            <i class="bi bi-eye-slash" id="togglePassword2"></i>
+                                            <span asp-validation-for="ChangePasswordModel.CurrentPassword"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-inner mb-25">
+                                        <label for="password">New Password*</label>
+                                        <div class="input-area">
+                                            <img src="~/images/icon/lock-2.svg" alt="">
+                                            <input asp-for="ChangePasswordModel.NewPassword" id="password" placeholder="Password">
+                                            <i class="bi bi-eye-slash" id="togglePassword"></i>
+                                            <span asp-validation-for="ChangePasswordModel.NewPassword"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-inner mb-25">
+                                        <label for="password2">Confirm Password*</label>
+                                        <div class="input-area">
+                                            <img src="~/images/icon/lock-2.svg" alt="">
+                                            <input asp-for="ChangePasswordModel.ConfirmPassword" id="password2" placeholder="Confirm Password" />
+                                            <i class="bi bi-eye-slash" id="togglePassword2"></i>
+                                            <span asp-validation-for="ChangePasswordModel.ConfirmPassword"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div asp-validation-summary="ModelOnly"></div>
+                                <div class="col-md-12 pt-50">
+                                    <div class="form-inner">
+                                        <button class="primry-btn-2 lg-btn w-unset" type="submit">Update Change</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </form>
+                    <form asp-controller="account" asp-action="changeEmail" method="post">
+                        <div class="change-password-area mb-40">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="info-title">
+                                        <h6>Change Your Email</h6>
+                                        <div class="dash"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-inner mb-25">
+                                        <label for="password2">Account Email*</label>
+                                        <div class="input-area">
+                                            <img src="~/images/icon/lock-2.svg" alt="">
+                                            <input asp-for="ChangeEmailModel.NewEmail" id="password2" placeholder="Email" />
+                                            <i class="bi bi-eye-slash" id="togglePassword2"></i>
+                                            <span asp-validation-for="ChangeEmailModel.NewEmail"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-inner mb-25">
+                                        <label for="password2">Current Password*</label>
+                                        <div class="input-area">
+                                            <img src="~/images/icon/lock-2.svg" alt="">
+                                            <input asp-for="ChangeEmailModel.CurrentPasswordForEmail" id="password2" placeholder="Current password" />
+                                            <i class="bi bi-eye-slash" id="togglePassword2"></i>
+                                            <span asp-validation-for="ChangeEmailModel.CurrentPasswordForEmail"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div asp-validation-summary="ModelOnly"></div>
+                                <div class="col-md-12 pt-50">
+                                    <div class="form-inner">
+                                        <button class="primry-btn-2 lg-btn w-unset" type="submit">Save Email</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </form>
+                        <form>
+                            <div class="privacy-security-area">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="info-title">
+                                            <h6>Delete Account</h6>
+                                            <div class="dash"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="single-permission align-items-start">
+                                        <div class="col-md-6">
+                                            <div class="form-inner mb-25">
+                                                <label for="password2">Current Password*</label>
+                                                <div class="input-area">
+                                                    <img src="~/images/icon/lock-2.svg" alt="">
+                                                    <input asp-for="ChangeEmailModel.CurrentPasswordForEmail" id="password2" placeholder="Current password" />
+                                                    <i class="bi bi-eye-slash" id="togglePassword2"></i>
+                                                    <span asp-validation-for="ChangeEmailModel.CurrentPasswordForEmail"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div asp-validation-summary="ModelOnly"></div>
+                                            <div class="delete-btn">
+                                                <button type="reset">Delete Account</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>                      
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

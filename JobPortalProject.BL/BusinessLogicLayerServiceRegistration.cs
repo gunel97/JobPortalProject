@@ -83,6 +83,8 @@ namespace JobPortalProject.BL
             services.AddScoped<ICompanyListingService, CompanyListingManager>();
             services.AddScoped<ICompanyDashboardService, CompanyDashboardManager>();
 
+            services.AddScoped<IOrderService, OrderManager>();
+
             services.AddSingleton<StringLocalizerManager>();
             services.AddScoped<ICloudinaryService, CloudinaryManager>();
             services.AddScoped<ICookieService, CookieManager>();

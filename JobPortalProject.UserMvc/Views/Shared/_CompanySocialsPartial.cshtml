@@ -1,0 +1,25 @@
+﻿@model CompanyUpdateViewModel
+
+@if (Model.CompanySocialUpdateViewModels.Any())
+{
+    @for (int i = 0; i < Model.CompanySocialUpdateViewModels.Count; i++)
+    {
+        <div class="col-md-6" id="socialRow${@Model.CompanySocialUpdateViewModels[i].Id}">
+            <div class="form-inner mb-25">
+                <label for="facebook">@Model.CompanySocialUpdateViewModels[i].Title</label>
+                <div class="input-area">
+                    <img src="@Model.CompanySocialUpdateViewModels[i].IconUrl" alt="">
+                    <input asp-for="CompanySocialUpdateViewModels[i].AddressUrl" id="facebook" placeholder="https://example-facebook.com/">
+                    <input asp-for="CompanySocialUpdateViewModels[i].Id" value="@Model.CompanySocialUpdateViewModels[i].Id" type="hidden" />
+                </div>
+
+                <div class="add-row">
+                    <button onclick="deleteSocial(@Model.CompanySocialUpdateViewModels[i].Id)"
+                            type="button" class="remove-work-area-row remove">
+                        Remove social media address
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+}

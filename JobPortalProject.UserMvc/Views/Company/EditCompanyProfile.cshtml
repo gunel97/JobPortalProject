@@ -1,5 +1,5 @@
 ﻿@model CompanyUpdateViewModel
-@inject StringLocalizerManager localizer;
+
  <!-- ========== Edit Area end============= -->
 <div class="dashboard-area company-dashboard pt-120 mb-120">
     <div class="container">
@@ -59,7 +59,7 @@
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="info-title">
-                                                <h6>Phone & Email & Web</h6>
+                                                <h6>Phone & Email</h6>
                                                 <div class="dash"></div>
                                             </div>
                                         </div>
@@ -90,21 +90,22 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        @for (int i = 0; i < Model.CompanySocialUpdateViewModels.Count; i++)
-                                        {
-                                            <div class="col-md-6">
-                                                <div class="form-inner mb-25">
-                                                    <label for="facebook">@Model.CompanySocialUpdateViewModels[i].Title</label>
-                                                    <div class="input-area">
-                                                        <img src="@Model.CompanySocialUpdateViewModels[i].IconUrl" alt="">
-                                                        <input asp-for="CompanySocialUpdateViewModels[i].AddressUrl" id="facebook" placeholder="https://example-facebook.com/">
-                                                        <input asp-for="CompanySocialUpdateViewModels[i].Id" value="@Model.CompanySocialUpdateViewModels[i].Id" type="hidden" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        }
                                     </div>
                                 </div>
+                                @if (Model.CompanySocialUpdateViewModels.Any())
+                                {
+                                    <div id="socialsMainRow" class="phone-email-area">
+                                        <div class="col-lg-12">
+                                            <div class="info-title">
+                                                <h6>Social media addresses</h6>
+                                                <div class="dash"></div>
+                                            </div>
+                                        </div>
+                                        <div id="socialsRow" class="row">
+                                            <partial name="_CompanySocialsPartial" model="@Model" />
+                                        </div>
+                                    </div>
+                                }
                                 <div class="col-lg-12">
                                     <div class="section-title2">
                                         <h5>Company Image:</h5>
@@ -424,6 +425,7 @@ function deleteWorkingField(id, languageId) {
     console.log(id);
     console.log(languageId);
     var row = document.getElementById('workingFieldRow');
+    var mainRow = document.getElementById('workingFieldsMainRow');
 
     fetch(`/company/deleteWorkingField?id=${id}&languageId=${languageId}`, {
         method: 'POST'
@@ -433,6 +435,31 @@ function deleteWorkingField(id, languageId) {
             console.log(data);
             row.innerHTML = "";
             row.innerHTML = data.workingFieldHtml;
+            if(data.workingFieldCount==0){
+                mainRow.innerHTML="";
+                console.log(mainRow.innerHTML);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+};
+
+function deleteSocial(id) {
+    console.log(id);
+    console.log("test remove social address");
+    var row = document.getElementById('socialsRow');
+    var mainRow = document.getElementById('socialsMainRow');
+
+    fetch(`/company/deleteCompanySocial?id=${id}`, {
+        method: 'POST'
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            row.innerHTML = "";
+            row.innerHTML = data.companySocialHtml;
+            if(data.addressCount==0){
+                mainRow.innerHTML="";
+            }
         })
         .catch(error => console.error('Error:', error));
 };

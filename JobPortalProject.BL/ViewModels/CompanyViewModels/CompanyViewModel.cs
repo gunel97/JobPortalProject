@@ -30,7 +30,7 @@ namespace JobPortalProject.BL.ViewModels.CompanyViewModels
         public bool IsAccountActive { get; set; }
         public bool IsMembershipActive { get; set; }
         public DateTime MemberSince { get; set; }
-        public DateTime LastPostedJob {  get; set; }
+        public DateTime? LastPostedJob {  get; set; }
         public DateTime? MembershipExpiresAt { get; set; }
         public AddressViewModel MainAddress { get; set; } = null!;
         public List<AddressViewModel> Addresses { get; set; } = [];
@@ -53,6 +53,7 @@ namespace JobPortalProject.BL.ViewModels.CompanyViewModels
         public string? AppUserId { get; set; }
         public bool IsAccountApproved { get; set; } = false;
         public int CompanyTypeId { get; set; }
+        public DateTime MemberSince { get; set; } = DateTime.UtcNow;
     }
 
     public class CompanyUpdateViewModel

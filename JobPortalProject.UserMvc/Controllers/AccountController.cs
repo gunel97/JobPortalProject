@@ -147,18 +147,27 @@ namespace JobPortalProject.UserMvc.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [Authorize(Roles = "Candidate, Company")]
+        public IActionResult Settings()
+        {
+            return View();
+        }
+
         [Authorize(Roles ="Candidate, Company")]
         [HttpPost]
-        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        public async Task<IActionResult> ChangePassword(AccountSettingsViewModel model)
         {
             if (!ModelState.IsValid)
-                return RedirectToAction("Settings", "Company");
+                return View("Settings", model);
 
             var user = await _userService.GetCurrentUserAsync();
             if (user == null)
                 return RedirectToAction("Login", "Account");
 
-            var result = await _userService.ChangePasswordAsync(user, model);
+            if (model.ChangePasswordModel == null)
+                return View("Settings", model);
+
+            var result = await _userService.ChangePasswordAsync(user, model.ChangePasswordModel);
 
             if (!result.Succeeded)
             {
@@ -172,6 +181,49 @@ namespace JobPortalProject.UserMvc.Controllers
 
             await _userService.LogOutAsync();
             return RedirectToAction("Login", "Account");
+        }
+
+        [Authorize(Roles ="Candidate, Company")]
+        [HttpPost]
+        public async Task<IActionResult> ChangeEmail(AccountSettingsViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View("Settings", model);
+
+            var user = await _userService.GetCurrentUserAsync();
+            if (user == null)
+                return RedirectToAction("Login", "Account");
+
+            if (model.ChangeEmailModel == null)
+                return View("Settings", model);
+
+            var existingUserWithNewEmail = await _userService.GetUserByEmailAsync(model.ChangeEmailModel.NewEmail);
+            if (existingUserWithNewEmail != null && existingUserWithNewEmail.Id != user.Id)
+            {
+                ModelState.AddModelError(model.ChangeEmailModel.NewEmail, "This email address is already taken.");
+                return View("Settings", model);
+            }
+
+            var checkPasswordResult = await _userService.CheckPasswordAsync(user, model.ChangeEmailModel.CurrentPasswordForEmail);
+            if(!checkPasswordResult)
+            {
+                ModelState.AddModelError("", "Password is not correct");
+                return View("Settings", model);
+            }
+
+            var result = await _userService.ChangeEmailAsync(user, model.ChangeEmailModel);
+
+            if (!result.Succeeded)
+            {
+                foreach (var item in result.Errors)
+                {
+                    ModelState.AddModelError("", item.Description);
+                }
+
+                return View("Settings", model);
+            }
+
+            return RedirectToAction("Dashboard", "Company");
         }
 
         public IActionResult ForgotPassword()

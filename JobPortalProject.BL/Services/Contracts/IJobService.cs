@@ -14,7 +14,6 @@ namespace JobPortalProject.BL.Services.Contracts
         public Task<IEnumerable<JobViewModel>> GetAllWithLanguageAsync(int languageId);
         public Task<JobCreateViewModel> GetJobCreateViewModelAsync(int companyId);
         public Task<bool> CreateJob(int companyId, JobCreateViewModel model);
-        public Task<PagedResultModel<JobViewModel>> GetAllJobsOfCompanyAsync(JobFilterViewModel filter, int companyId);
         public Task<IEnumerable<JobViewModel>> GetAllJobsAsync();
         public Task<JobUpdateViewModel> GetUpdateViewModel(int jobId);
         public Task<bool> SoftDeleteJob(int id);

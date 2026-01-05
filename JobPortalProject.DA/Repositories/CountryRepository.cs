@@ -8,5 +8,9 @@ namespace JobPortalProject.DA.Repositories
     {
         public CountryRepository(AppDbContext context) : base(context) { }
     }
+    public class OrderRepository : EfCoreRepositoryAsync<Order>, IOrderRepository
+    {
+        public OrderRepository(AppDbContext context) : base(context) { }
+    }
 
 }

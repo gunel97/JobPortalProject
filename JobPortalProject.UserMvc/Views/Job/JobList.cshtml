@@ -92,20 +92,23 @@
                                                 </h5>
                                             }
                                             <p><img src="~/images/icon/calender2.svg" alt=""><span>Deadline:</span>@job.ExpirationDate!.Value.ToShortDateString()</p>
-                                            <div class="form-check form-switch">
-                                                <input asp-for="@job.IsActive" class="form-check-input" 
-                                                type="checkbox" id="flexSwitchCheckDefault1"
-                                                onchange="deactivateJob(@job.Id, this)">
-                                                @if (job.IsActive)
+                                                @if (job.ApplicationCount == 0)
                                                 {
-                                                    <span id=@("checkboxText"+job.Id)>Active</span>
-                                                }
-                                                @if (!job.IsActive)
-                                                {
-                                                    <span id=@("checkboxText"+job.Id)>Deactive</span>
+                                                    <div class="form-check form-switch">
+                                                        <input asp-for="@job.IsActive" class="form-check-input" 
+                                                        type="checkbox" id="flexSwitchCheckDefault1"
+                                                        onchange="deactivateJob(@job.Id, this)">
+                                                        @if (job.IsActive)
+                                                        {
+                                                            <span id=@("checkboxText"+job.Id)>Active</span>
+                                                        }
+                                                        @if (!job.IsActive)
+                                                        {
+                                                            <span id=@("checkboxText"+job.Id)>Deactive</span>
+                                                        }
+                                                    </div>
                                                 }
                                             </div>
-                                        </div>
                                     </td>
                                     <td data-label="Applications">
                                         <span class="total-number">@job.ApplicationCount</span>
@@ -133,8 +136,12 @@
                                                         </a>
                                                     </li>
                                                 }
-                                                <li><button onclick="deleteJob(@job.Id)" class="reject"><img src="~/images/icon/rejected-icon.svg" alt="">Remove</button></li>                                              
-                                            </ul>
+                                                <li><button onclick="deleteJob(@job.Id)" class="reject"><img src="~/images/icon/rejected-icon.svg" alt="">Remove</button></li>      
+                                                    @foreach(var emptyLang in job.EmptyLanguages)
+                                                    {
+                                                        <li><button class="primry-btn-2 eg-btn sky--btn"><img src="@emptyLang.IconUrl" alt="">Add Translation</button></li>
+                                                    }
+                                                </ul>
                                         </div>
                                     </td>
                                 </tr>

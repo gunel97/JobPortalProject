@@ -77,8 +77,6 @@ namespace JobPortalProject.UserMvc.Controllers
             return View(model);
         }
 
-
-
         public async Task<IActionResult> EditCompanyProfile()
         {
             var language = await _cookieService.GetLanguageAsync();

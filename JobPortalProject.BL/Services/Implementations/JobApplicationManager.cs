@@ -221,23 +221,26 @@ namespace JobPortalProject.BL.Services.Implementations
 
             foreach(var application in jobApplications)
             {
-                var model = new ApplicantOfCompanyViewModel
+                if (application.Job!=null && application.Job.JobTranslations.Count() != 0)
                 {
-                    ApplicationId = application.Id,
-                    CandidateId = application.CandidateId,
-                    JobId = application.JobId,
-                    JobTitle = application.Job.JobTranslations.FirstOrDefault().Title,
-                    CandidateName = application.Candidate.Resume.PersonalInfo.Translations.FirstOrDefault().FirstName + " " +
-                    application.Candidate.Resume.PersonalInfo.Translations.FirstOrDefault().LastName,
-                    BirthDateOfCandidate=application.Candidate.Resume.PersonalInfo.BirthDate,
-                    AppliedAt=application.CreatedAt,
-                    ExpireAt=application.Job.ExpirationDate,
-                    PostedAt=application.Job.CreatedAt,
-                    Status=application.JobStatus.ToString(),
-                    ImageUrl=application.Candidate.Resume.PersonalInfo.ImageUrl
-                };
+                    var model = new ApplicantOfCompanyViewModel
+                    {
+                        ApplicationId = application.Id,
+                        CandidateId = application.CandidateId,
+                        JobId = application.JobId,
+                        JobTitle = application.Job.JobTranslations.FirstOrDefault().Title,
+                        CandidateName = application.Candidate.Resume.PersonalInfo.Translations.FirstOrDefault().FirstName + " " +
+                        application.Candidate.Resume.PersonalInfo.Translations.FirstOrDefault().LastName,
+                        BirthDateOfCandidate = application.Candidate.Resume.PersonalInfo.BirthDate,
+                        AppliedAt = application.CreatedAt,
+                        ExpireAt = application.Job.ExpirationDate,
+                        PostedAt = application.Job.CreatedAt,
+                        Status = application.JobStatus.ToString(),
+                        ImageUrl = application.Candidate.Resume.PersonalInfo.ImageUrl
+                    };
 
-                models.Add(model);
+                    models.Add(model);
+                }
             }
 
             return models;

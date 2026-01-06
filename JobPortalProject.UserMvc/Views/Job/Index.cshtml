@@ -51,8 +51,9 @@
                             <h5 class="job-widget-title">Job Category</h5>
                             <div class="checkbox-container">
                                 <ul>
-                                    @foreach (var category in jobCategories)
+                                    @foreach (var category in jobCategories ?? [])
                                     {
+                                        @if(category.JobIds.Count()!=0){
                                         <li>
                                             <label class="containerss">
                                                 <input type="checkbox"
@@ -65,6 +66,7 @@
                                                 <span class="qty">(@category.JobIds.Count())</span>
                                             </label>
                                         </li>
+                                        }
                                     }
                                 </ul>
 

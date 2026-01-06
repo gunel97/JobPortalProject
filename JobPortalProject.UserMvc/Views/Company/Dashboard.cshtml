@@ -145,7 +145,7 @@
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    @foreach (var item in Model.Applicants)
+                                    @foreach (var item in Model.Applicants ?? [])
                                     {
                                         <tr>
                                             <td data-label="Candidate Name">

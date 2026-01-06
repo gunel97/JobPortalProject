@@ -35,6 +35,8 @@ namespace JobPortalProject.BL.ViewModels.CompanyViewModels
         public AddressViewModel MainAddress { get; set; } = null!;
         public List<AddressViewModel> Addresses { get; set; } = [];
         public List<WorkingFieldViewModel> WorkingFields { get; set; } = [];
+        public List<LanguageViewModel> ReadyLanguages { get; set; } = [];
+        public List<LanguageViewModel> EmptyLanguages { get; set; } = [];
     }
 
     public class CompanyFilterViewModel

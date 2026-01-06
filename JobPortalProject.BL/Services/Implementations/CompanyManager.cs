@@ -53,6 +53,38 @@ namespace JobPortalProject.BL.Services.Implementations
             _socialMediaService = socialMediaService;
         }
 
+        public async Task<List<CompanyViewModel>> GetAllCompaniesAsync()
+        {
+            var language = await _cookieService.GetLanguageAsync();
+            var languages = await _languageService.GetAllAsync();
+            int languageId = language.Id;
+
+            var companies = await Repository.GetAllAsync(
+                predicate: x => !x.IsDeleted,
+                include: x => x.Include(x=>x.CompanyTranslations.Where(t=>t.LanguageId==language.Id))
+                .Include(x=>x.Jobs));
+
+            var companyViewModels = new List<CompanyViewModel>();
+
+            foreach (var company in companies)
+            {
+                if (company.CompanyTranslations.Count() != 0)
+                {
+                    var model = Mapper.Map<CompanyViewModel>(company);
+                    foreach (var lang in languages)
+                    {
+                        if (company.CompanyTranslations.FirstOrDefault(x => x.LanguageId == language.Id) != null)
+                            model.ReadyLanguages.Add(lang);
+                        else
+                            model.EmptyLanguages.Add(lang);
+                    }
+                    companyViewModels.Add(model);
+                }
+            }
+
+            return companyViewModels;
+        }
+
         public async Task<CheckoutViewModel> GetCheckoutViewModelAsync()
         {
             
@@ -457,6 +489,7 @@ namespace JobPortalProject.BL.Services.Implementations
         public async Task<PagedResultModel<CompanyViewModel>> GetPagedCompaniesAsync(CompanyFilterViewModel filter)
         {
             var language = await _cookieService.GetLanguageAsync();
+            var languages = await _languageService.GetAllAsync();
             var predicate = BuildPredicate(filter, language.Id);
             var orderBy = BuildOrderBy(filter, language.Id);
             var pagedCompanies = await Repository.GetPagedListAsync(predicate: predicate,
@@ -471,19 +504,29 @@ namespace JobPortalProject.BL.Services.Implementations
                 size: filter.Size);
 
             var companyModels = new List<CompanyViewModel>();
-            foreach(var item in pagedCompanies.Items)
+            foreach (var item in pagedCompanies.Items)
             {
-                var model = Mapper.Map<CompanyViewModel>(item);
-                
-                companyModels.Add(model);
-            }               
+                if (item.CompanyTranslations.Count() != 0)
+                {
+                    var model = Mapper.Map<CompanyViewModel>(item);
+
+                    foreach (var lang in languages)
+                    {
+                        if (item.CompanyTranslations.FirstOrDefault(x => x.LanguageId == lang.Id) == null)
+                            model.EmptyLanguages.Add(lang);
+                        else
+                            model.ReadyLanguages.Add(lang);
+                    }
+                    companyModels.Add(model);
+                }
+            }
 
             var pagedCompanyModels = new PagedResultModel<CompanyViewModel>
             {
                 Items = companyModels,
                 Index = pagedCompanies.Index,
                 Size = pagedCompanies.Size,
-                Count = pagedCompanies.Count,
+                Count = companyModels.Count(),
                 Pages = pagedCompanies.Pages
             };
 

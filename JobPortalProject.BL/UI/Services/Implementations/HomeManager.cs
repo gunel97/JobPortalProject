@@ -1,6 +1,8 @@
 ﻿using JobPortalProject.BL.Services.Contracts;
 using JobPortalProject.BL.UI.Services.Abstracts;
 using JobPortalProject.BL.UI.ViewModels;
+using JobPortalProject.DA.DataContext.Entities;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -39,25 +41,25 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             var jobs = await _jobService.GetAllJobsAsync();
             var jobModels = jobs.ToList();
             var jobCategoryListItems = await _jobCategoryService.GetJobCategorySelectListItems(language.Id);
-            var companies = await _companyService.GetAllAsync(predicate: x=>x.IsAccountApproved && !x.IsDeleted,
-                                             include: c => c
-                                             .Include(c => c.Jobs)
-                                             .Include(ct => ct.CompanyTranslations!
-                                             .Where(c => c.LanguageId == language.Id)));
+            var companies = await _companyService.GetAllCompaniesAsync();
             var candidates = await _candidateService.GetAllAsync(predicate: x => x.Resume != null && !x.IsDeleted);
             foreach (var job in jobModels)
             {
                 if (await _jobApplicationService.CheckIfJobApplied(job.Id))
                     job.IsApplied = true;
-            }         
+            }
 
-            var jobCategories = await _jobCategoryService.GetAllAsync(
-                                                predicate: x => !x.IsDeleted,
-                                                include: c => c
-                                                .Include(x=>x.Jobs)
-                                                .Include(ct => ct.JobCategoryTranslations!
-                                                .Where(j => j.LanguageId == language.Id))
-                                                );
+            var jobCategories = await _jobCategoryService.GetAllAsync(predicate: x => x.Jobs.Count != 0,
+               include: x => x
+               .Include(x => x.JobCategoryTranslations.Where(x => x.LanguageId == language.Id))
+               .Include(x => x.Jobs).ThenInclude(x => x.JobTranslations.Where(t => t.LanguageId == language.Id))
+               );
+            var listItems = new List<SelectListItem>();
+            foreach(var jobCategory in jobCategories)
+            {
+                if (jobCategory.JobIds.Count() != 0)
+                    listItems.Add(new SelectListItem(jobCategory.Name, jobCategory.Id.ToString()));
+            }
 
             var addressesByCities = addresses.DistinctBy(a => a.CityName!);
             var addressesCitiesGroup = addresses.GroupBy(a => a.CityName).ToList();
@@ -66,13 +68,13 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             {
                 JobCategories = jobCategories.Where(x => x.JobIds.Any()).ToList(),
                 Addresses = addressesCitiesGroup,
-                Companies = companies.OrderByDescending(x=>x.LastPostedJob).Take(6).ToList(),
+                Companies = companies.OrderByDescending(x=>x.LastPostedJob).Take(10).ToList(),
                 CandidateCount=candidates.Count(),
                 ActiveCompanyCount = companies.Count(),
                 ActiveJobCount = jobModels.Where(x => !x.Expired && x.IsActive).Count(),
                 NewJobCount = jobModels.Where(x => !x.Expired && x.IsActive && x.CreatedAt > DateTime.UtcNow.AddDays(-10)).Count(),
-                Jobs = jobModels.Where(x => !x.Expired && x.IsActive).OrderByDescending(j => j.CreatedAt).Take(6).ToList(),
-                JobCategoryListItems = jobCategoryListItems
+                Jobs = jobModels.OrderByDescending(j => j.CreatedAt).Take(6).ToList(),
+                JobCategoryListItems = listItems
             };
 
             return homeViewModel;

@@ -1,6 +1,7 @@
 ﻿using JobPortalProject.BL.ViewModels.AddressViewModels;
 using JobPortalProject.BL.ViewModels.JobExtraBenefitViewModels;
 using JobPortalProject.BL.ViewModels.JobResponsibilityViewModels;
+using JobPortalProject.BL.ViewModels.LanguageViewModels;
 using JobPortalProject.BL.ViewModels.Pagination;
 using JobPortalProject.DA.DataContext.Enums;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -46,6 +47,8 @@ namespace JobPortalProject.BL.ViewModels.JobViewModels
         public List<string> ExtraBenefits { get; set; } = [];
         public List<string> MainDuties { get; set; } = [];
         public List<string> CompanyImages { get; set; } = [];
+        public List<LanguageViewModel> ReadyLanguages { get; set; } = [];
+        public List<LanguageViewModel> EmptyLanguages { get; set; } = [];
     }
 
     public class JobFilterViewModel

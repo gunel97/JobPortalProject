@@ -39,7 +39,7 @@ namespace JobPortalProject.BL.UI.Services.Implementations
                                         predicate: x => !x.IsDeleted && x.CompanyTypeTranslations.Any() && x.Companies.Count!=0,
                                         include: x => x
                                         .Include(c => c.CompanyTypeTranslations.Where(ct => ct.LanguageId == language.Id))
-                                        .Include(c=>c.Companies));
+                                        .Include(c=>c.Companies).ThenInclude(c=>c.CompanyTranslations.Where(t=>t.LanguageId==language.Id)));
 
             var companyListingViewModel = new PagedCompanyListingViewModel
             {

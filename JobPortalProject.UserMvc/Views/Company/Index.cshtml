@@ -49,8 +49,9 @@
                             <h5 class="job-widget-title">Company Category</h5>
                             <div class="checkbox-container">
                                 <ul>
-                                    @foreach (var type in companyTypes)
+                                    @foreach (var type in companyTypes ?? [])
                                     {
+                                        @if(type.CompanyIds.Count()!=0){
                                         <li>
                                             <label class="containerss">
                                                 <input type="checkbox"
@@ -63,6 +64,7 @@
                                                 <span class="qty">(@type?.CompanyIds.Count())</span>
                                             </label>
                                         </li>
+                                        }
                                     }
                                 </ul>
 
@@ -76,6 +78,7 @@
                                 <ul>
                                      @foreach (var group in addressesCitiesGroup ?? [])
                                     {
+                                        @if(group.Count()!=0){
                                         var city = group.FirstOrDefault();
                                         <li>
                                             <label class="containerss">
@@ -89,6 +92,7 @@
                                                 <span class="qty">(@group.Count())</span>
                                             </label>
                                         </li>
+                                        }
                                     } 
                                 </ul>
 

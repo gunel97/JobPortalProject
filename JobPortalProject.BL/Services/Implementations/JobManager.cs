@@ -1,22 +1,23 @@
 ﻿using AutoMapper;
 using JobPortalProject.BL.Services.Contracts;
 using JobPortalProject.BL.UI.Services.Abstracts;
+using JobPortalProject.BL.UI.ViewModels;
 using JobPortalProject.BL.ViewModels.AddressViewModels;
 using JobPortalProject.BL.ViewModels.JobViewModels;
+using JobPortalProject.BL.ViewModels.Pagination;
 using JobPortalProject.DA.DataContext.Entities;
 using JobPortalProject.DA.DataContext.Enums;
-using JobPortalProject.BL.ViewModels.Pagination;
 using JobPortalProject.DA.Repositories.Contracts;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Internal;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Query;
-using System.Linq.Expressions;
-using Microsoft.AspNetCore.Mvc.Internal;
-using System.Threading.Tasks;
-using JobPortalProject.BL.UI.ViewModels;
 using MimeKit.Cryptography;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace JobPortalProject.BL.Services.Implementations
 {
@@ -119,6 +120,7 @@ namespace JobPortalProject.BL.Services.Implementations
             if (filter.Size <= 0) filter.Size = 10;
 
             var pagedJobsOfCompany = await GetPagedJobsOfCompanyAsync(filter, companyId);
+
             var model = new PagedJobsOfCompanyViewModel
             {
                 Jobs = pagedJobsOfCompany,
@@ -144,15 +146,11 @@ namespace JobPortalProject.BL.Services.Implementations
                 if (job.JobTranslations.Count() != 0)
                 {
                     var model = await MapToJobViewModel(job, language.Id);
-                    foreach (var lang in languages)
+                    foreach (var readyLang in model.ReadyLanguages)
                     {
-                        if (job.JobTranslations.FirstOrDefault(x => x.LanguageId == lang.Id) == null)
-
-                            model.EmptyLanguages.Add(lang);
-                        else
-                            model.ReadyLanguages.Add(lang);
+                        if (readyLang.Id == language.Id)
+                            jobViewModels.Add(model);
                     }
-                    jobViewModels.Add(model);
                 }
 
             }
@@ -285,7 +283,7 @@ namespace JobPortalProject.BL.Services.Implementations
                 orderBy: orderBy,
                 include: x => x
                 .Include(x => x.JobApplications)
-                .Include(x => x.JobTranslations.Where(t => t.LanguageId == language.Id))
+                .Include(x => x.JobTranslations)
                 .Include(x => x.JobCategory!).ThenInclude(x => x.JobCategoryTranslations.Where(t => t.LanguageId == language.Id))
                 .Include(x => x.Responsibilities).ThenInclude(t => t.JobResponsibilityTranslations.Where(x => x.LanguageId == language.Id))
                 .Include(x => x.MainDuties).ThenInclude(t => t.JobMainDutyTranslations.Where(x => x.LanguageId == language.Id))
@@ -299,18 +297,11 @@ namespace JobPortalProject.BL.Services.Implementations
             var jobViewModels = new List<JobViewModel>();
             foreach (var item in pagedJobs.Items)
             {
-                if (item.JobTranslations.Count() != 0)
+                var model = await MapToJobViewModel(item, language.Id);
+                foreach(var readyLang in model.ReadyLanguages)
                 {
-                    var model = await MapToJobViewModel(item, language.Id);
-
-                    foreach (var lang in languages)
-                    {
-                        if (item.JobTranslations.FirstOrDefault(x => x.LanguageId == lang.Id) == null)
-                            model.EmptyLanguages.Add(lang);
-                        else
-                            model.ReadyLanguages.Add(lang);
-                    }
-                    jobViewModels.Add(model);
+                    if (readyLang.Id == language.Id)
+                        jobViewModels.Add(model);
                 }
             }
 
@@ -336,7 +327,7 @@ namespace JobPortalProject.BL.Services.Implementations
             var pagedJobs = await Repository.GetPagedListAsync(predicate: predicate,
                 orderBy: orderBy,
                 include: x => x
-                .Include(x=>x.JobApplications)
+                .Include(x => x.JobApplications)
                 .Include(x => x.JobTranslations.Where(t => t.LanguageId == language.Id))
                 .Include(x => x.JobCategory!).ThenInclude(x => x.JobCategoryTranslations.Where(t => t.LanguageId == language.Id))
                 .Include(x => x.Responsibilities).ThenInclude(t => t.JobResponsibilityTranslations.Where(x => x.LanguageId == language.Id))
@@ -344,27 +335,20 @@ namespace JobPortalProject.BL.Services.Implementations
                 .Include(x => x.ExtraBenefits).ThenInclude(t => t.JobExtraBenefitTranslations.Where(x => x.LanguageId == language.Id))
                 .Include(x => x.Company!).ThenInclude(t => t.CompanyTranslations.Where(x => x.LanguageId == language.Id))
                 .Include(x => x.Address!).ThenInclude(x => x.AddressTranslations.Where(x => x.LanguageId == language.Id))
-                .Include(x=>x.Address).ThenInclude(x=>x.City).ThenInclude(x=>x.CityTranslations)
-                .Include(x=>x.Address).ThenInclude(x=>x.City).ThenInclude(x=>x.Country).ThenInclude(x=>x.Translations)
+                .Include(x => x.Address).ThenInclude(x => x.City).ThenInclude(x => x.CityTranslations)
+                .Include(x => x.Address).ThenInclude(x => x.City).ThenInclude(x => x.Country).ThenInclude(x => x.Translations)
                 , index: filter.Index, size: filter.Size);
 
             var jobViewModels = new List<JobViewModel>();
             foreach (var item in pagedJobs.Items)
             {
-                if (item.JobTranslations.Count() != 0)
+                var model = await MapToJobViewModel(item, language.Id);
+                foreach (var readyLang in model.ReadyLanguages)
                 {
-                    var model = await MapToJobViewModel(item, language.Id);
-                    foreach(var lang in languages)
-                    {
-                        if (item.JobTranslations.FirstOrDefault(x => x.LanguageId == lang.Id) == null)
-                            model.EmptyLanguages.Add(lang);
-                        else
-                            model.ReadyLanguages.Add(lang);
-                    }
-                    jobViewModels.Add(model);
+                    if (readyLang.Id == language.Id)
+                        jobViewModels.Add(model);
                 }
             }
-
             var pagedJobModels = new PagedResultModel<JobViewModel>
             {
                 Items = jobViewModels,
@@ -468,8 +452,6 @@ namespace JobPortalProject.BL.Services.Implementations
 
             return false;
         }
-
-        
 
         private Expression<Func<Job, bool>> BuildPredicateSelectedCompany(JobFilterViewModel filter, int languageId, int companyId)
         {
@@ -584,23 +566,23 @@ namespace JobPortalProject.BL.Services.Implementations
             bool expired = false ;
             if (await CheckHasExpired(jobEntity.Id))
                 expired = true;
-
+           
             var jobViewModel = new JobViewModel
             {
                 Id = jobEntity.Id,
-                Title = jobEntity.JobTranslations.FirstOrDefault()?.Title,
-                Description = jobEntity.JobTranslations.FirstOrDefault()?.Description,
-                RequiredExperience = jobEntity.JobTranslations.FirstOrDefault()?.RequiredExperience,
+                Title = jobEntity.JobTranslations.FirstOrDefault(x => x.LanguageId ==languageId)?.Title,
+                Description = jobEntity.JobTranslations.FirstOrDefault(x=>x.LanguageId==languageId)?.Description,
+                RequiredExperience = jobEntity.JobTranslations.FirstOrDefault(x => x.LanguageId == languageId)?.RequiredExperience,
                 VacancyCount = jobEntity.VacancyCount,
-                ApplicationCount=jobEntity.JobApplications.Where(x=>x.JobId==jobEntity.Id && x.JobStatus!=(JobApplicationStatus)5).Count(),
-                InterviewCount=jobEntity.JobApplications.Where(x=>x.JobId==jobEntity.Id && x.JobStatus==(JobApplicationStatus)2).Count(),
-                RejectedApplicationCount=jobEntity.JobApplications.Where(x=>x.JobId==jobEntity.Id && x.JobStatus==(JobApplicationStatus)4).Count(),
+                ApplicationCount = jobEntity.JobApplications.Where(x => x.JobId == jobEntity.Id && x.JobStatus != (JobApplicationStatus)5).Count(),
+                InterviewCount = jobEntity.JobApplications.Where(x => x.JobId == jobEntity.Id && x.JobStatus == (JobApplicationStatus)2).Count(),
+                RejectedApplicationCount = jobEntity.JobApplications.Where(x => x.JobId == jobEntity.Id && x.JobStatus == (JobApplicationStatus)4).Count(),
                 AcceptedApplicationCount = jobEntity.JobApplications.Where(x => x.JobId == jobEntity.Id && x.JobStatus == (JobApplicationStatus)3).Count(),
                 MinSalary = jobEntity.MinSalary,
                 MaxSalary = jobEntity.MaxSalary,
                 IsActive = jobEntity.IsActive,
                 ExpirationDate = jobEntity.ExpirationDate,
-                Expired=expired,
+                Expired = expired,
                 CreatedAt = jobEntity.CreatedAt,
                 JobCategoryId = jobEntity.JobCategoryId,
                 Gender = jobEntity.Gender.ToString(),
@@ -623,6 +605,23 @@ namespace JobPortalProject.BL.Services.Implementations
                                                   .Select(t => t.Value!)).Where(x => !string.IsNullOrWhiteSpace(x)).ToList(),
                 CompanyImages = jobEntity.Company!.CompanyImages.Select(x => x.ImageUrl).ToList()
             };
+
+            var languages = await _languageService.GetAllAsync();
+
+            foreach (var translation in jobEntity.JobTranslations)
+            {
+                foreach (var lang in languages)
+                {
+                    if (translation.LanguageId == lang.Id)
+                        jobViewModel.ReadyLanguages.Add(lang);
+                }
+            }
+
+            foreach(var lang in languages)
+            {
+                if (!jobViewModel.ReadyLanguages.Contains(lang))
+                    jobViewModel.EmptyLanguages.Add(lang);
+            }
 
             return jobViewModel;
         }

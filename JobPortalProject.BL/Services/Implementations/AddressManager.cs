@@ -35,6 +35,30 @@ namespace JobPortalProject.BL.Services.Implementations
             return addresses.ToList();
         }
 
+        public async Task<List<AddressViewModel>> GetCompaniesAddressesAsync(int languageId)
+        {
+            var addresses = await Repository.GetAllAsync(predicate: x => x.Company != null && x.Company.IsAccountApproved &&
+            !x.Company.IsDeleted && !x.IsDeleted,
+             include: x => x
+                        .Include(x=>x.Company).ThenInclude(x=>x.CompanyTranslations)
+                        .Include(at => at.AddressTranslations!.Where(at => at.LanguageId == languageId))
+                        .Include(a => a.City!).ThenInclude(c => c.CityTranslations!.Where(a => a.LanguageId == languageId))
+                        .Include(a => a.City!).ThenInclude(c => c.Country!).ThenInclude(ct => ct.Translations!
+                        .Where(a => a.LanguageId == languageId)));
+            var models = new List<AddressViewModel>();
+
+            foreach(var address in addresses)
+            {
+                if (address.AddressTranslations.Count()!=0)
+                {
+                    var model = Mapper.Map<AddressViewModel>(address);
+                    models.Add(model);
+                }
+            }
+
+            return models;
+        }
+
         public async Task<bool> CreateAddress(int companyId, AddressCreateViewModel model)
         {
             var addressesOfCompany = await GetByCompanyIdAsync(companyId);

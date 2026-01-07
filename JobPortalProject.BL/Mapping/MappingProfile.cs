@@ -91,8 +91,8 @@ namespace JobPortalProject.BL.Mapping
                 src.CompanyType.CompanyTypeTranslations.FirstOrDefault()!.Name))
                 .ForMember(x=>x.TranslationsCount, opt=> opt
                 .MapFrom(src=>src.CompanyTranslations.Count()))
-                .ForMember(x=>x.ActiveJobCount, opt=> opt
-                .MapFrom(src=>src.Jobs.Where(j=>j.IsActive && j.ExpirationDate>DateTime.UtcNow).Count()))
+                //.ForMember(x=>x.ActiveJobCount, opt=> opt
+                //.MapFrom(src=>src.Jobs.Where(j=>j.IsActive && j.ExpirationDate>DateTime.UtcNow).Count()))
                 .ReverseMap();
             CreateMap<Company, CompanyCreateViewModel>().ReverseMap();
             CreateMap<Company, CompanyUpdateViewModel>().ReverseMap();

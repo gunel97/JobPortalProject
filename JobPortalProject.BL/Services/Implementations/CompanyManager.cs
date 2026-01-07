@@ -61,8 +61,8 @@ namespace JobPortalProject.BL.Services.Implementations
 
             var companies = await Repository.GetAllAsync(
                 predicate: x => !x.IsDeleted,
-                include: x => x.Include(x=>x.CompanyTranslations.Where(t=>t.LanguageId==language.Id))
-                .Include(x=>x.Jobs));
+                include: x => x.Include(x=>x.CompanyTranslations)
+                .Include(x=>x.Jobs).ThenInclude(x=>x.JobTranslations));
 
             var companyViewModels = new List<CompanyViewModel>();
 
@@ -71,14 +71,35 @@ namespace JobPortalProject.BL.Services.Implementations
                 if (company.CompanyTranslations.Count() != 0)
                 {
                     var model = Mapper.Map<CompanyViewModel>(company);
+                    foreach (var translation in company.CompanyTranslations)
+                    {
+                        foreach (var lang in languages)
+                        {
+                            if (translation.LanguageId == lang.Id)
+                                model.ReadyLanguages.Add(lang);
+                        }
+                    }
+
                     foreach (var lang in languages)
                     {
-                        if (company.CompanyTranslations.FirstOrDefault(x => x.LanguageId == language.Id) != null)
-                            model.ReadyLanguages.Add(lang);
-                        else
+                        if (!model.ReadyLanguages.Contains(lang))
                             model.EmptyLanguages.Add(lang);
                     }
-                    companyViewModels.Add(model);
+
+                    model.ActiveJobCount = 0;
+                    foreach (var job in company.Jobs)
+                    {
+                        if (job.JobTranslations.FirstOrDefault(x => x.LanguageId == language.Id) != null && job.IsActive
+                           && !job.IsDeleted && job.ExpirationDate > DateTime.UtcNow)
+                            model.ActiveJobCount++;
+                    }
+
+
+                    foreach (var readyLang in model.ReadyLanguages)
+                    {
+                        if (readyLang.Id == language.Id)
+                            companyViewModels.Add(model);
+                    }
                 }
             }
 
@@ -495,29 +516,46 @@ namespace JobPortalProject.BL.Services.Implementations
             var pagedCompanies = await Repository.GetPagedListAsync(predicate: predicate,
                 orderBy: orderBy,
                 include: x => x
-                .Include(x=>x.Jobs)
-                .Include(x => x.CompanyTranslations.Where(t => t.LanguageId == language.Id))
-                .Include(x => x.Addresses.Where(a => a.IsMainAddress)).ThenInclude(x => x.AddressTranslations.Where(t => t.LanguageId == language.Id))
+                .Include(x=>x.Jobs).ThenInclude(x=>x.JobTranslations)
+                .Include(x => x.CompanyTranslations)
+                .Include(x => x.Addresses).ThenInclude(x => x.AddressTranslations.Where(t => t.LanguageId == language.Id))
                 .Include(x=>x.Addresses).ThenInclude(x=>x.City).ThenInclude(x=>x.CityTranslations.Where(t=>t.LanguageId==language.Id))
                 .Include(x=>x.Addresses).ThenInclude(x=>x.City).ThenInclude(x=>x.Country).ThenInclude(x=>x.Translations.Where(t=>t.LanguageId==language.Id)),
                 index: filter.Index,
                 size: filter.Size);
-
+            
             var companyModels = new List<CompanyViewModel>();
             foreach (var item in pagedCompanies.Items)
             {
-                if (item.CompanyTranslations.Count() != 0)
-                {
-                    var model = Mapper.Map<CompanyViewModel>(item);
+                var model = Mapper.Map<CompanyViewModel>(item);
 
-                    foreach (var lang in languages)
+                foreach(var translation in item.CompanyTranslations)
+                {
+                    foreach(var lang in languages)
                     {
-                        if (item.CompanyTranslations.FirstOrDefault(x => x.LanguageId == lang.Id) == null)
-                            model.EmptyLanguages.Add(lang);
-                        else
+                        if(translation.LanguageId==lang.Id)
                             model.ReadyLanguages.Add(lang);
                     }
-                    companyModels.Add(model);
+                }
+
+                foreach(var lang in languages)
+                {
+                    if(!model.ReadyLanguages.Contains(lang))
+                        model.EmptyLanguages.Add(lang);
+                }
+
+                model.ActiveJobCount = 0;
+                foreach(var job in item.Jobs)
+                {                   
+                    if (job.JobTranslations.FirstOrDefault(x => x.LanguageId == language.Id) != null && job.IsActive
+                       && !job.IsDeleted && job.ExpirationDate > DateTime.UtcNow)
+                        model.ActiveJobCount++;
+                }
+
+                foreach(var readyLang in model.ReadyLanguages)
+                {
+                    if(readyLang.Id==language.Id)
+                        companyModels.Add(model);
                 }
             }
 

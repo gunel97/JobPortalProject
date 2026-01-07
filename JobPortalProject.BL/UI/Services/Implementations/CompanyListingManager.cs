@@ -28,8 +28,9 @@ namespace JobPortalProject.BL.UI.Services.Implementations
         {
             var language = await _cookieService.GetLanguageAsync();
 
-            var addresses = await _addressService.GetAllAsync(predicate: x=>x.Company!=null);
-
+            //var addresses = await _addressService.GetAllAsync(predicate: x=>x.Company!=null && x.Company.IsAccountApproved
+            //&& !x.Company.IsDeleted && x.Company.CompanyTranslations.Where(t=>t.LanguageId==language.Id)!=null && x.CompanyId!=0);
+            var addresses = await _addressService.GetCompaniesAddressesAsync(language.Id);  
             var addressesByCities = addresses.DistinctBy(x => x.CityName).ToList();
             var addressesCitiesGroup = addresses.GroupBy(a => a.CityName).ToList();
 

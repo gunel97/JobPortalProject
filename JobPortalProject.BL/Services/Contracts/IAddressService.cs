@@ -7,6 +7,7 @@ namespace JobPortalProject.BL.Services.Contracts
     
     public interface IAddressService : ICrudService<Address, AddressViewModel, AddressCreateViewModel, AddressUpdateViewModel>
     {
+        public Task<List<AddressViewModel>> GetCompaniesAddressesAsync(int languageId);
         public Task<List<AddressUpdateViewModel>> GetAddressUpdateViewModels(int companyId, int selectedLanguageId);
         public Task<bool> UpdateAddressAsync(int languageId, int addressId, AddressUpdateViewModel model);
         public Task<List<SelectListItem>> GetAddressSelectListItems(int companyId, int languageId);

@@ -32,15 +32,17 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             var language = await _cookieService.GetLanguageAsync();
             var languages = await _languageService.GetAllAsync();
 
+            var jobCategories = await _jobCategoryService.GetAllAsync(predicate: x => x.Jobs.Count != 0 && !x.IsDeleted,
+            include: x => x
+            .Include(x => x.JobCategoryTranslations.Where(x => x.LanguageId == language.Id))
+            .Include(x => x.Jobs).ThenInclude(x => x.JobTranslations.Where(t => t.LanguageId == language.Id))
+            );
+
             filter ??= new JobFilterViewModel();
             if (filter.Index < 0) filter.Index = 0;
             if (filter.Size <= 0) filter.Size = 10;
             var pagedJobs = await _jobService.GetPagedJobsAsync(filter);
-            var jobCategories = await _jobCategoryService.GetAllAsync(predicate: x => x.Jobs.Count != 0,
-                include: x => x
-                .Include(x => x.JobCategoryTranslations.Where(x => x.LanguageId == language.Id))
-                .Include(x => x.Jobs).ThenInclude(x => x.JobTranslations.Where(t => t.LanguageId == language.Id))
-                );
+        
 
             var jobTypes = _enumService.GetJobTypeListItems();
             var genders = _enumService.GetGenderListItems();

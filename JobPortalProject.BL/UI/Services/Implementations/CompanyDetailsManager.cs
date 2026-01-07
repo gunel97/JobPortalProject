@@ -80,7 +80,7 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             {
                 Company = company,
                 CompanySocials = companySocials.ToList(),
-                ActiveJobs = activeJobModels.OrderBy(x=>x.CreatedAt).Take(5).ToList(),
+                ActiveJobs = activeJobModels.OrderBy(x=>x.CreatedAt).ToList(),
                 
             };
 

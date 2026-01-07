@@ -176,7 +176,14 @@
                     <div class="feature-card">
                     <div class="company-area">
                         <div class="logo">
-                            <img src="@job.CompanyLogoUrl" alt="">
+                            @if (job.CompanyLogoUrl == null)
+                            {
+                                <img src="https://ui-avatars.com/api/?name=@job.CompanyName&background=random" alt="@job.CompanyName avatar" />
+                            }
+                            @if (job.CompanyLogoUrl != null)
+                            {
+                                <img src="@job.CompanyLogoUrl" alt="@job.CompanyName">
+                            }
                         </div>
                         <div class="company-details">
                             <div class="name-location">
@@ -361,7 +368,7 @@
                                     <div class="name-location">
                                         <h5><a asp-controller="company" asp-action="details" asp-route-id="@item?.DetailsUrl">@item?.Name</a></h5>
                                         <p><img src="~/images/icon/location.svg" alt=""> @item?.MainAddress?.City?.Name, @item?.MainAddress?.City?.Country?.Name</p>
-                                        <p><img src="~/images/icon/person-2.svg" alt=""> @item?.CompanySize People</p>
+                                        <p><img src="~/images/icon/person-2.svg" alt=""> @item?.Addresses.Count() locations</p>
                                     </div>
                                 </div>
                                 <div class="job-details-vacancies">
@@ -369,7 +376,7 @@
                                         <a asp-controller="company" asp-action="details" asp-route-id="@item?.DetailsUrl" ><span><img src="~/images/icon/apply-ellipse.svg" alt=""></span>View Details</a>
                                     </div>
                                     <div class="vacancies">
-                                        <p>Active Jobs: <span>@item.ActiveJobCount</span></p>
+                                        <p>Active Jobs: <span>@item?.ActiveJobCount</span></p>
                                     </div>
                                 </div>
                             </div>

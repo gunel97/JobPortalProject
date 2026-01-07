@@ -183,6 +183,7 @@
                                                 <div class="name-location">
                                                     <h5><a asp-controller="company" asp-action="details" asp-route-id="@company?.DetailsUrl">@company?.Name</a></h5>
                                                     <p><img src="~/images/icon/location.svg" alt=""> @company?.MainAddress?.City?.Name, @company?.MainAddress?.City?.Country?.Name</p>
+                                                    <p><img src="~/images/icon/person-2.svg" alt=""> @company?.Addresses.Count() locations</p>
                                                 </div>
                                                 <div class="bookmark">
                                                     <i class="bi bi-bookmark-fill"></i>

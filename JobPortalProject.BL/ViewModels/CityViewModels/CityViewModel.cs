@@ -18,6 +18,7 @@ namespace JobPortalProject.BL.ViewModels.CityViewModels
         public string SortOrder { get; set; } = "desc";
         public int Size { get; set; } = 10;
         public int Index { get; set; } = 0;
+        public int? CountryId { get; set; }
     }
 
     public class CityPagedViewModel

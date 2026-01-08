@@ -3,17 +3,14 @@ using JobPortalProject.BL.ViewModels.Pagination;
 using JobPortalProject.BL.ViewModels.UserViewModels;
 using JobPortalProject.DA.DataContext.Entities;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JobPortalProject.BL.UI.Services.Abstracts
 {
     public interface IUserService
     {
+        public Task ActivateUser(AppUser user);
+        public Task<IdentityResult> DeleteUserAsync(AppUser user);
+        public Task<AppUser> GetUserByIdAsync(string id);
         public Task DeactivateUser(AppUser user);
         public Task<bool> CheckPasswordAsync(AppUser user, string password);
         public Task<IdentityResult> ChangeEmailAsync(AppUser user, ChangeEmailViewModel model);
@@ -22,7 +19,7 @@ namespace JobPortalProject.BL.UI.Services.Abstracts
         public Task<string> GetResetPasswordToken(string email);
         public Task<bool> CheckUserByEmail(string email);
         public Task<IdentityResult> Register(UserRegisterViewModel model);
-        public Task<PagedResultModel<UserViewModel>> GetUsers(UserFilterViewModel filter);
+        public Task<PagedResultModel<UserViewModel>> GetPagedUsers(UserFilterViewModel filter);
         public Task<IdentityResult> RegisterCompanyAsync(CompanyRegisterViewModel model);
         public Task<IdentityResult> RegisterCandidateAsync(UserRegisterViewModel model);
         public Task<CompanyRegisterViewModel> GetCompanyRegisterViewModel();

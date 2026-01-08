@@ -192,8 +192,10 @@ namespace JobPortalProject.BL.Services.Implementations
 
         private Expression<Func<City, bool>> BuildPredicate(CityFilterViewModel filter, int languageId)
         {
-            Expression<Func<City, bool>> predicate = x => string.IsNullOrEmpty(filter.SearchTerm) ||
-                x.CityTranslations.Any(t => t.LanguageId == languageId && (t.Name.Contains(filter.SearchTerm)));
+            Expression<Func<City, bool>> predicate = x => 
+                (string.IsNullOrEmpty(filter.SearchTerm) ||
+                x.CityTranslations.Any(t => t.LanguageId == languageId && t.Name.Contains(filter.SearchTerm))) &&
+                ((!filter.CountryId.HasValue || x.CountryId == filter.CountryId));
 
             return predicate;
         }

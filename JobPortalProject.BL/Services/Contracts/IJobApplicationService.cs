@@ -18,7 +18,7 @@ namespace JobPortalProject.BL.Services.Contracts
         public Task<bool> ApplyJob(int jobId, int candidateId);
         public Task<List<JobApplication>> GetAppliedJobsOfCandidate(int candidateId);
         public Task<AppliedJobsOfCandidatePageViewModel> GetAppliedJobsPageOfCandidateViewModel(JobApplicationsOfCandidateFilterViewModel filter, int candidateId);
-        public Task<List<JobApplication>> GetApplicantsOfJob(int jobId);
-        public Task<ApplicantsOfJobViewModel> GetApplicantsViewModel(int jobId);
+        public Task<PagedResultModel<ApplicantOfJobViewModel>> GetPagedApplicantsOfJob(int jobId, ApplicantsOfJobFilterViewModel filter);
+        public Task<ApplicantsOfJobPagedViewModel> GetPagedApplicantsViewModel(int jobId, ApplicantsOfJobFilterViewModel filter);
     }
 }

@@ -70,6 +70,25 @@ namespace JobPortalProject.BL.ViewModels.JobApplicationViewModels
         public DateTime JobExpireDate { get; set; }
     }
 
+    public class ApplicantsOfJobPagedViewModel
+    {
+        public PagedResultModel<ApplicantOfJobViewModel> Applications { get; set; } = null!;
+        public ApplicantsOfJobFilterViewModel? Filter { get; set; }
+        public JobViewModel Job { get; set; } = null!;
+        public string? JobTitle { get; set; }
+        public DateTime JobPostedDate { get; set; }
+        public DateTime JobExpireDate { get; set; }
+    }
+
+    public class ApplicantsOfJobFilterViewModel
+    {
+        public string? SearchTerm { get; set; }
+        public string SortBy { get; set; } = "AppliedAt";
+        public string SortOrder { get; set; } = "desc";
+        public int Index { get; set; } = 0;
+        public int Size { get; set; } = 10;
+    }
+
     public class ApplicantOfCompanyViewModel
     {
         public int ApplicationId { get; set; }

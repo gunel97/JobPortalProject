@@ -24,8 +24,9 @@ namespace JobPortalProject.BL.UI.Services.Implementations
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ICompanyTypeService _companyTypeService;
         private readonly ICandidateService _candidateService;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public UserManager(UserManager<AppUser> userManager, ICompanyTranslationService companyTranslationService, ICookieService cookieService, SignInManager<AppUser> signInManager, ICompanyService companyService, IHttpContextAccessor httpContextAccessor, ICompanyTypeService companyTypeService, ICandidateService candidateManager)
+        public UserManager(UserManager<AppUser> userManager, ICompanyTranslationService companyTranslationService, ICookieService cookieService, SignInManager<AppUser> signInManager, ICompanyService companyService, IHttpContextAccessor httpContextAccessor, ICompanyTypeService companyTypeService, ICandidateService candidateManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _companyTranslationService = companyTranslationService;
@@ -35,6 +36,13 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             _httpContextAccessor = httpContextAccessor;
             _companyTypeService = companyTypeService;
             _candidateService = candidateManager;
+            _roleManager = roleManager;
+        }
+
+        public async Task<IdentityResult> DeleteUserAsync(AppUser user)
+        {
+            var result = await _userManager.DeleteAsync(user);
+            return result;
         }
 
         public async Task<IdentityResult> ResetPassword(ResetPasswordViewModel model)
@@ -61,23 +69,41 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             return resetPasswordToken;
         }
 
-        public async Task<PagedResultModel<UserViewModel>> GetUsers(UserFilterViewModel filter)
+        public async Task<PagedResultModel<UserViewModel>> GetPagedUsers(UserFilterViewModel filter)
         {
             Expression<Func<AppUser, bool>> predicate = BuildPredicate(filter);
             Func<IQueryable<AppUser>, IOrderedQueryable<AppUser>> orderBy = BuildOrderBy(filter);
 
-            var query = _userManager.Users.AsQueryable();
+            IQueryable<AppUser> query;
+            IList<AppUser> roleUsers = null!;
+
+            if (!string.IsNullOrEmpty(filter.Role))
+            {
+                roleUsers = await _userManager.GetUsersInRoleAsync(filter.Role);
+                query = roleUsers.AsQueryable();
+            }
+            else
+            {
+                query = _userManager.Users.AsQueryable();
+            }
 
             query = query.Where(predicate);
-
             if (orderBy != null)
             {
                 query = orderBy(query);
             }
 
-            var totalCount = await query.CountAsync();
+            var totalCount = roleUsers != null ? query.Count() : await query.CountAsync();
 
-            var users = await query.Skip(filter.Index * filter.Size).Take(filter.Size).ToListAsync();
+            List<AppUser> users;
+            if (roleUsers != null)
+            {
+                users = query.Skip(filter.Index * filter.Size).Take(filter.Size).ToList();
+            }
+            else
+            {
+                users = await query.Skip(filter.Index * filter.Size).Take(filter.Size).ToListAsync();
+            }
 
             var userModels = new List<UserViewModel>();
 
@@ -94,7 +120,8 @@ namespace JobPortalProject.BL.UI.Services.Implementations
                         FirstName = user.FirstName,
                         LastName = user.LastName,
                         Email = user.Email,
-                        Role = role
+                        Role = role,
+                        IsDeleted=user.IsDeleted
                     };
                     userModels.Add(model);
                 }
@@ -110,68 +137,6 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             };
 
             return Users;
-        }
-
-        private Func<IQueryable<AppUser>, IOrderedQueryable<AppUser>> BuildOrderBy(UserFilterViewModel filter)
-        {
-            var sortBy = filter.SortBy?.ToLower().Trim() ?? "createdat";
-            var sortOrder = filter.SortOrder?.ToLower().Trim() ?? "desc";
-
-            return queryable =>
-            {
-                IOrderedQueryable<AppUser> ordered;
-
-                switch (sortBy)
-                {
-                    case "name":
-                        // Sort by First Name, then Last Name
-                        if (sortOrder == "asc")
-                        {
-                            ordered = queryable.OrderBy(x => x.FirstName).ThenBy(x => x.LastName);
-                        }
-                        else
-                        {
-                            ordered = queryable.OrderByDescending(x => x.FirstName).ThenByDescending(x => x.LastName);
-                        }
-                        break;
-
-                    case "username":
-                        ordered = sortOrder == "asc"
-                            ? queryable.OrderBy(x => x.UserName)
-                            : queryable.OrderByDescending(x => x.UserName);
-                        break;
-
-                    case "email":
-                        ordered = sortOrder == "asc"
-                            ? queryable.OrderBy(x => x.Email)
-                            : queryable.OrderByDescending(x => x.Email);
-                        break;
-
-                    case "createdat":
-                    default:
-                        // Assuming you have an Id or CreatedAt to sort by default
-                        ordered = sortOrder == "asc"
-                            ? queryable.OrderBy(x => x.Id)
-                            : queryable.OrderByDescending(x => x.Id);
-                        break;
-                }
-
-                return ordered;
-            };
-        }
-
-        private Expression<Func<AppUser, bool>> BuildPredicate(UserFilterViewModel filter)
-        {
-            var term = filter.SearchTerm?.ToLower().Trim();
-
-            Expression<Func<AppUser, bool>> predicate = x =>
-                string.IsNullOrEmpty(term) ||
-                (x.FirstName != null && x.FirstName.ToLower().Contains(term)) ||
-                (x.LastName != null && x.LastName.ToLower().Contains(term)) ||
-                (x.Email != null && x.Email.ToLower().Contains(term)) ||
-                (x.UserName != null && x.UserName.ToLower().Contains(term));
-
-            return predicate;
         }
 
         public async Task<string> GetUserRoleAsync(string username)
@@ -359,6 +324,11 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             return user!;
         }
 
+        public async Task<AppUser> GetUserByIdAsync(string id)
+        {
+            return (await _userManager.FindByIdAsync(id))!;
+        }
+
         public async Task<AppUser> GetCurrentUserAsync()
         {
             var user = _httpContextAccessor.HttpContext?.User;
@@ -369,9 +339,85 @@ namespace JobPortalProject.BL.UI.Services.Implementations
 
         public async Task DeactivateUser (AppUser user)
         {
+            if (user.IsDeleted)
+                return;
+
             user.IsDeleted = true;
             await _userManager.UpdateAsync(user);
         }
+
+        public async Task ActivateUser (AppUser user)
+        {
+            if (!user.IsDeleted)
+                return;
+            user.IsDeleted = false;
+            await _userManager.UpdateAsync(user);
+        }
+
+        //
+
+        private Func<IQueryable<AppUser>, IOrderedQueryable<AppUser>> BuildOrderBy(UserFilterViewModel filter)
+        {
+            var sortBy = filter.SortBy?.ToLower().Trim() ?? "createdat";
+            var sortOrder = filter.SortOrder?.ToLower().Trim() ?? "desc";
+
+            return queryable =>
+            {
+                IOrderedQueryable<AppUser> ordered;
+
+                switch (sortBy)
+                {
+                    case "name":
+                        if (sortOrder == "asc")
+                        {
+                            ordered = queryable.OrderBy(x => x.FirstName).ThenBy(x => x.LastName);
+                        }
+                        else
+                        {
+                            ordered = queryable.OrderByDescending(x => x.FirstName).ThenByDescending(x => x.LastName);
+                        }
+                        break;
+
+                    case "username":
+                        ordered = sortOrder == "asc"
+                            ? queryable.OrderBy(x => x.UserName)
+                            : queryable.OrderByDescending(x => x.UserName);
+                        break;
+
+                    case "email":
+                        ordered = sortOrder == "asc"
+                            ? queryable.OrderBy(x => x.Email)
+                            : queryable.OrderByDescending(x => x.Email);
+                        break;
+
+                    case "createdat":
+                    default:
+                        ordered = sortOrder == "asc"
+                            ? queryable.OrderBy(x => x.Id)
+                            : queryable.OrderByDescending(x => x.Id);
+                        break;
+                }
+
+                return ordered;
+            };
+        }
+
+        private Expression<Func<AppUser, bool>> BuildPredicate(UserFilterViewModel filter)
+        {
+            var term = filter.SearchTerm?.ToLower().Trim();
+
+            Expression<Func<AppUser, bool>> predicate = x =>
+                (string.IsNullOrEmpty(term) ||
+                (x.FirstName != null && x.FirstName.ToLower().Contains(term)) ||
+                (x.LastName != null && x.LastName.ToLower().Contains(term)) ||
+                (x.Email != null && x.Email.ToLower().Contains(term)) ||
+                (x.UserName != null && x.UserName.ToLower().Contains(term)))
+                && (!filter.IsActive.HasValue || (filter.IsActive.Value ? !x.IsDeleted : x.IsDeleted));
+
+            return predicate;
+        }
+
+
 
     }
 }

@@ -11,6 +11,7 @@ using JobPortalProject.DA.Repositories.Contracts;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.Internal;
+using System.ComponentModel.Design;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -118,17 +119,38 @@ namespace JobPortalProject.BL.Services.Implementations
             return pagedModel;
         }
       
-        public async Task<List<JobApplication>> GetApplicantsOfJob(int jobId)
+        public async Task<PagedResultModel<ApplicantOfJobViewModel>> GetPagedApplicantsOfJob(int jobId, ApplicantsOfJobFilterViewModel filter)
         {
             var language = await _cookieService.GetLanguageAsync();
             var languageId = language.Id;
-            var appliedJobs = await Repository.GetAllAsync(predicate: x => x.JobId == jobId && x.JobStatus != (JobApplicationStatus)5,
+            Expression<Func<JobApplication, bool>> predicate = BuildPredicateApplicantsOfJob(filter, language.Id, jobId);
+            Func<IQueryable<JobApplication>, IOrderedQueryable<JobApplication>> orderBy = BuildOrderByApplicantsOfJob(filter, language.Id);
+
+            var applications = await Repository.GetPagedListAsync(predicate: predicate,
+                orderBy:orderBy,
               include: x => x
               .Include(x => x.Candidate).ThenInclude(x => x.Resume).ThenInclude(x => x.PersonalInfo).ThenInclude(x => x.Translations.Where(t => t.LanguageId == languageId))
               .Include(x => x.Candidate).ThenInclude(x => x.Resume).ThenInclude(x => x.Educations).ThenInclude(x => x.Translations.Where(t => t.LanguageId == languageId))
-              .Include(x => x.Job).ThenInclude(x => x.JobTranslations.Where(t => t.LanguageId == languageId)));
+              .Include(x => x.Job).ThenInclude(x => x.JobTranslations.Where(t => t.LanguageId == languageId)),
+              index: filter.Index,
+              size: filter.Size);
 
-            return appliedJobs.ToList();
+            
+
+            var model = new PagedResultModel<ApplicantOfJobViewModel>
+            {
+                Index = applications.Index,
+                Size=applications.Size,
+                Count=applications.Items.Count(),
+                Pages=applications.Pages
+            };
+
+            foreach(var application in applications.Items)
+            {
+                model.Items.Add(await MapToApplicantsOfJobViewModel(application));
+            }
+
+            return model;
         }
 
         public async Task<bool> CancelJobApplication(int jobId, int candidateId)
@@ -246,9 +268,89 @@ namespace JobPortalProject.BL.Services.Implementations
             return models;
         }
 
-        public async Task<ApplicantOfJobViewModel> MapToApplicantsOfJobViewModel(JobApplication entity)
+        public async Task<ApplicantsOfJobPagedViewModel> GetPagedApplicantsViewModel(int jobId, ApplicantsOfJobFilterViewModel filter)
         {
-            if (entity.Candidate == null || entity.Candidate.Resume == null || entity.Candidate.Resume.PersonalInfo==null)
+            var job = await _jobService.GetByIdAsync(jobId);
+            if (job == null)
+                return null!;
+
+            filter ??= new ApplicantsOfJobFilterViewModel();
+            if (filter.Index < 0) filter.Index = 0;
+            if (filter.Size <= 0) filter.Size = 10;
+
+            var language = await _cookieService.GetLanguageAsync();
+            var applications = await GetPagedApplicantsOfJob(jobId, filter);
+
+            var model = new ApplicantsOfJobPagedViewModel();
+
+            model.JobTitle = job.Title;
+            if (job.CreatedAt.HasValue)
+                model.JobPostedDate = job.CreatedAt.Value;
+            if (job.ExpirationDate.HasValue)
+                model.JobExpireDate = job.ExpirationDate.Value;
+            model.Job = job;
+            model.Applications= applications;
+
+            return model;
+        }
+
+        public async Task<AppliedJobsOfCandidatePageViewModel> GetAppliedJobsPageOfCandidateViewModel(JobApplicationsOfCandidateFilterViewModel filter, int candidateId)
+        {
+            var dashboard = await _candidateService.GetDashboardViewModel();
+            var language = await _cookieService.GetLanguageAsync();
+            filter ??= new JobApplicationsOfCandidateFilterViewModel();
+            if (filter.Index < 0) filter.Index = 0;
+            if (filter.Size <= 0) filter.Size = 10;
+
+            var jobApplications = await GetPagedAppliedJobsOfCandidate(filter, candidateId);
+            var model = new AppliedJobsOfCandidatePageViewModel();
+            model.JobApplicationsModels = jobApplications;
+
+            model.Dashboard = dashboard;
+            model.Filter = filter;
+            return model;
+        }
+        //
+        private Func<IQueryable<JobApplication>, IOrderedQueryable<JobApplication>> BuildOrderByApplicantsOfJob(ApplicantsOfJobFilterViewModel filter, int languageId)
+        {
+            var sortBy = filter.SortBy?.ToLower() ?? "appliedat";
+            var sortOrder = filter.SortOrder?.ToLower() ?? "desc";
+
+            if (sortBy.Contains('_'))
+            {
+                var parts = sortBy.Split('_');
+                sortBy = parts[0];
+                sortOrder = parts[1];
+            }
+
+            return queryable =>
+            {
+                IOrderedQueryable<JobApplication> ordered = sortBy switch
+                {
+                    "appliedat" => sortOrder == "asc"
+                        ? queryable.OrderBy(x => x.CreatedAt)
+                        : queryable.OrderByDescending(x => x.CreatedAt),
+
+                    _ => sortOrder == "asc"
+                        ? queryable.OrderBy(x => x.CreatedAt)
+                        : queryable.OrderByDescending(x => x.CreatedAt)
+                };
+
+                return ordered;
+            };
+        }
+
+        private Expression<Func<JobApplication, bool>> BuildPredicateApplicantsOfJob(ApplicantsOfJobFilterViewModel filter, int languageId, int jobİd)
+        {
+            Expression<Func<JobApplication, bool>> predicate = x => !x.IsDeleted && x.JobId == jobİd && x.JobStatus!=(JobApplicationStatus)5;
+
+            return predicate;
+        }
+
+
+        private async Task<ApplicantOfJobViewModel> MapToApplicantsOfJobViewModel(JobApplication entity)
+        {
+            if (entity.Candidate == null || entity.Candidate.Resume == null || entity.Candidate.Resume.PersonalInfo==null || entity.Job==null)
                 return null!;
 
             var resume = await _resumeService.GetResume(entity.Candidate.Resume.Id);
@@ -264,9 +366,7 @@ namespace JobPortalProject.BL.Services.Implementations
                 entity.Candidate.Resume.PersonalInfo.Translations.FirstOrDefault()!.LastName,
                 CandidateImageUrl = entity.Candidate.Resume.PersonalInfo.ImageUrl,
                 CandidateBirthDate = entity.Candidate.Resume.PersonalInfo.BirthDate,
-                //JobPostedDate = entity.Job.CreatedAt,
                 ApplyDate = entity.CreatedAt,
-                //ExpireDate = entity.Job.ExpirationDate,
                 Status = entity.JobStatus.ToString(),
                 ResumeModel = resume,
             };
@@ -274,7 +374,7 @@ namespace JobPortalProject.BL.Services.Implementations
             return model;
         }
 
-        public JobApplicationsOfCandidateViewModel MapToJobApplicationsOfCandidateViewModel(JobApplication entity)
+        private JobApplicationsOfCandidateViewModel MapToJobApplicationsOfCandidateViewModel(JobApplication entity)
         {
             if (entity.Job.ExpirationDate < DateTime.Now)
                 entity.JobStatus=(JobApplicationStatus)6;
@@ -300,46 +400,6 @@ namespace JobPortalProject.BL.Services.Implementations
 
             return model;
         }
-
-        public async Task<ApplicantsOfJobViewModel> GetApplicantsViewModel(int jobId)
-        {
-            var language = await _cookieService.GetLanguageAsync();
-            var entities = await GetApplicantsOfJob(jobId);
-            var job = await _jobService.GetByIdAsync(jobId);
-            if (job == null)
-                return null!;
-            var model = new ApplicantsOfJobViewModel();
-            foreach (var entity in entities)
-            {
-                var application = await MapToApplicantsOfJobViewModel(entity);
-                model.Applications.Add(application);
-            }
-
-            model.JobTitle = job.Title;
-            if (job.CreatedAt.HasValue)
-                model.JobPostedDate = job.CreatedAt.Value;
-            if (job.ExpirationDate.HasValue)
-                model.JobExpireDate = job.ExpirationDate.Value;
-            return model;
-        }
-
-        public async Task<AppliedJobsOfCandidatePageViewModel> GetAppliedJobsPageOfCandidateViewModel( JobApplicationsOfCandidateFilterViewModel filter, int candidateId)
-        {
-            var dashboard = await _candidateService.GetDashboardViewModel();
-            var language = await _cookieService.GetLanguageAsync();
-            filter ??= new JobApplicationsOfCandidateFilterViewModel();
-            if (filter.Index < 0) filter.Index = 0;
-            if (filter.Size <= 0) filter.Size = 10;
-
-            var jobApplications = await GetPagedAppliedJobsOfCandidate(filter, candidateId);
-            var model = new AppliedJobsOfCandidatePageViewModel();
-            model.JobApplicationsModels = jobApplications;
-
-            model.Dashboard = dashboard;
-            model.Filter = filter;
-            return model;
-        }
-
 
         private Func<IQueryable<JobApplication>, IOrderedQueryable<JobApplication>> BuildOrderBy(JobApplicationsOfCandidateFilterViewModel filter, int languageId)
         {

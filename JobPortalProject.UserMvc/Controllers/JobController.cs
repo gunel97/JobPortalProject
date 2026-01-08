@@ -1,6 +1,7 @@
 ﻿using CloudinaryDotNet.Actions;
 using JobPortalProject.BL.Services.Contracts;
 using JobPortalProject.BL.UI.Services.Abstracts;
+using JobPortalProject.BL.ViewModels.JobApplicationViewModels;
 using JobPortalProject.BL.ViewModels.JobExtraBenefitViewModels;
 using JobPortalProject.BL.ViewModels.JobResponsibilityViewModels;
 using JobPortalProject.BL.ViewModels.JobViewModels;
@@ -320,13 +321,13 @@ namespace JobPortalProject.UserMvc.Controllers
             return RedirectToAction("Update", jobUpdateModel);
         }
 
-        public async Task<IActionResult> Applicants(int id)
+        public async Task<IActionResult> Applicants(int id, ApplicantsOfJobFilterViewModel filter)
         {
             var job = await _jobService.GetByIdAsync(id);
             if (job == null)
                 return NotFound();
 
-            var model = await _jobApplicationService.GetApplicantsViewModel(id);
+            var model = await _jobApplicationService.GetPagedApplicantsViewModel(id, filter);
             model.Job = job;
 
             return View(model);

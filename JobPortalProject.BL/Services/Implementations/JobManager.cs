@@ -631,26 +631,6 @@ namespace JobPortalProject.BL.Services.Implementations
             return false;
         }
 
-        private Expression<Func<Job, bool>> BuildPredicateSelectedCompany(JobFilterViewModel filter, int languageId, int companyId)
-        {
-            Expression<Func<Job, bool>> predicate = x => !x.IsDeleted && x.IsActive && x.CompanyId == companyId &&
-            x.ExpirationDate > DateTime.UtcNow &&
-            (string.IsNullOrEmpty(filter.SearchTerm) ||
-            x.JobTranslations.Any(t => t.LanguageId == languageId && (t.Title.Contains(filter.SearchTerm) ||
-            t.Description.Contains(filter.SearchTerm))) ||
-            x.Company.CompanyTranslations.Any(t => t.LanguageId == languageId && t.Name.Contains(filter.SearchTerm))) &&
-            ((!filter.MinSalary.HasValue || x.MaxSalary >= filter.MinSalary.Value) &&
-            (!filter.MaxSalary.HasValue || x.MinSalary <= filter.MaxSalary.Value) &&
-            (filter.CategoryIds == null || filter.CategoryIds.Count == 0 ||
-            filter.CategoryIds.Contains(x.JobCategoryId)) &&
-            (filter.JobTypeIds == null || filter.JobTypeIds.Count == 0 ||
-            filter.JobTypeIds.Contains((int)x.JobType)) &&
-            (filter.GenderIds == null || filter.GenderIds.Count == 0 ||
-            filter.GenderIds.Contains((int)x.Gender)));
-
-            return predicate;
-        }
-
         private Expression<Func<Job, bool>> BuildPredicateCompanyDashboard(JobFilterViewModel filter, int languageId, int companyId)
         {
             Expression<Func<Job, bool>> predicate = x => !x.IsDeleted && x.CompanyId == companyId &&

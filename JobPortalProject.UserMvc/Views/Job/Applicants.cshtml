@@ -1,5 +1,13 @@
-﻿ @model ApplicantsOfJobViewModel
- 
+﻿@{
+    ApplicantsOfJobPagedViewModel model = Model;
+    var applications = model.Applications.Items ?? [];
+    var filter = model.Filter ?? new ApplicantsOfJobFilterViewModel();
+
+    bool isAppliedAtSort = filter.SortBy.Equals("AppliedAt", StringComparison.OrdinalIgnoreCase);
+    string nextAppliedAtOrder = (isAppliedAtSort && filter.SortOrder == "asc") ? "desc" : "asc";
+}
+}
+
  <!-- ========== Job Details For conpany Start============= -->
 <div class="company-job-detaiils-page pt-120 mb-120">
     <div class="container">
@@ -167,7 +175,7 @@
                                                 </div>
                                                 <p><span>Job Description:</span> @Model.Job.Description</p>
                                                 <br>
-                                                @if(Model.Job.Responsibilities.Any()){
+                                                @if(Model.Job.Responsibilities.Count>0){
                                                 <p><span>Job Responsibility:</span></p>
                                                 <ul>
                                                     @foreach (var item in Model.Job.Responsibilities)
@@ -184,7 +192,7 @@
                                                 <ul>
                                                     <li>@Model.Job.RequiredExperience</li>
                                                 </ul>
-                                                @if(Model.Job.ExtraBenefits.Any())
+                                                @if(Model.Job.ExtraBenefits.Count>0)
                                                 {
                                                 <p><span>Extra Benefits:</span></p>
                                                 <ul>
@@ -209,7 +217,7 @@
                                                         <li><p><span class="title">Job Category:</span> @Model.Job.JobCategoryName</p></li>
                                                         <li><p><span class="title">Job Type:</span> @localizer.GetValue(Model.Job.JobType ?? "")</p></li>
                                                         <li><p><span class="title">Salary:</span> 40K-$78K/<span class="time">@localizer.GetValue(Model.Job.SalaryTypeDuration ?? "")</span></p></li>
-                                                        <li><p><span class="title">Deadline:</span> @Model.Job.ExpirationDate.Value.Date.ToShortDateString()</p></li>
+                                                        <li><p><span class="title">Deadline:</span> @Model.JobExpireDate.Date.ToShortDateString()</p></li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -228,14 +236,41 @@
                             <div class="table-wrapper2">
                                <table class="eg-table table category-table mb-0">
                                     <thead>
-                                        <tr>
-                                            <th>Candidate</th>
-                                            <th>Application Date</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
+                                    <tr>
+                                        <th>Candidate</th>
+                                        <th style="cursor: pointer;">
+                                            <a asp-action="applicants" 
+                                               asp-controller="job" 
+                                               asp-route-SortBy="AppliedAt"
+                                               asp-route-SortOrder="@nextAppliedAtOrder"
+                                               asp-route-SearchTerm="@filter.SearchTerm"
+                                               asp-route-size="@Model.Applications.Size"
+                                               style="color: inherit; text-decoration: none; display: flex; align-items: center; gap: 5px;">
+                
+                                                Application Date
+
+                                                @if (isAppliedAtSort)
+                                                {
+                                                    // Visual Indicator for Sort Direction
+                                                    if (filter.SortOrder == "asc")
+                                                    {
+                                                         <span>&#8593;</span> }
+                                                    else
+                                                    {
+                                                         <span>&#8595;</span> }
+                                                }
+                                                else 
+                                                {
+                                                    // Faded arrow to indicate it is sortable but not active
+                                                    <span style="opacity: 0.3;">&#8597;</span> 
+                                                }
+                                            </a>
+                                        </th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
                                     <tbody>
-                                        @foreach (var application in Model.Applications)
+                                        @foreach (var application in applications)
                                         {
                                             <tr>
                                                 <td data-label="Candidate Name">
@@ -279,21 +314,26 @@
                                 </table>
                                 <div class="pagination-table-info">
                                     <div class="table-info">
-                                        <span>06 Results Showing In 20 Jobs</span>
+                                        @if (model.Applications.Count == 0)
+                                        {
+                                            <p class="show-item">No application found.</p>
+                                        }
+                                        @if (model.Applications.Count > 0)
+                                        {
+                                            <p class="show-item">Showing results @((model.Applications.Index * model.Applications.Size) + 1) - @Math.Min((model.Applications.Index + 1) * model.Applications.Size, model.Applications.Count) from @Model.Applications.Count jobs</p>
+                                        }
                                     </div>
-                                    <div class="pagination-area">
-                                        <nav aria-label="...">
-                                            <ul class="pagination">
-                                                <li class="page-item disabled">
-                                                    <a class="page-link" href="#" tabindex="-1"></a>
-                                                </li>
-                                                <li class="page-item active" aria-current="page"><a class="page-link" href="#">01</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">02</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">03</a></li>
-                                                <li class="page-item"><a class="page-link" href="#"></a></li>
-                                            </ul>
-                                        </nav>
-                                    </div>
+                                    @{
+                                        var routeData = new Dictionary<string, string>
+                                                                        {
+                                                                        { "size", model.Applications.Size.ToString() },
+                                                                        { "SortBy", filter?.SortBy ?? "" },
+                                                                        { "SortOrder", filter?.SortOrder ?? "" }
+                                                                        };
+
+                                        ViewData["RouteData"] = routeData;
+                                    }
+                                    <partial name="_PaginationPartial" model="@Model.Applications" />
                                 </div>
                             </div>
                         </div>
@@ -304,7 +344,7 @@
     </div>
 </div>
 <!-- ========== Job Details For conpany End============= -->
-@foreach (var application in Model.Applications)
+@foreach (var application in applications)
 {
     <!-- Modal -->
     <div class="modal fade" id="candidateModal-@application.CandidateId" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

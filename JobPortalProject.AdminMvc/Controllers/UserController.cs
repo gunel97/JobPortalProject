@@ -38,5 +38,52 @@ namespace JobPortalProject.AdminMvc.Controllers
 
             return RedirectToAction(nameof(Index), indexModel);
         }
+
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (id == null)
+                return NotFound();
+            var user = await _userService.GetUserByIdAsync(id);
+            if (user == null)
+                return NotFound();
+
+            var result = await _userService.DeleteUserAsync(user);
+            if (result.Succeeded)
+                return RedirectToAction(nameof(Index));
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+                return View(nameof(Index));
+            }
+        }
+
+        public async Task<IActionResult> Deactivate(string id)
+        {
+            if (id == null)
+                return NotFound();
+            var user = await _userService.GetUserByIdAsync(id);
+            if (user == null)
+                return NotFound();
+
+            await _userService.DeactivateUser(user);
+            
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Activate(string id)
+        {
+            if (id == null)
+                return NotFound();
+            var user = await _userService.GetUserByIdAsync(id);
+            if (user == null)
+                return NotFound();
+
+            await _userService.ActivateUser(user);
+            
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

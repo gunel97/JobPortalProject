@@ -53,6 +53,41 @@ namespace JobPortalProject.BL.Services.Implementations
             _socialMediaService = socialMediaService;
         }
 
+        public async Task<List<LanguageViewModel>> GetReadyLanguagesOfCompany(int companyId)
+        {
+            var company = await Repository.GetAsync(predicate: x => x.Id == companyId,
+                include: x => x.Include(x => x.CompanyTranslations));
+            var languages = await _languageService.GetAllAsync();
+            var model = new List<LanguageViewModel>();
+            if (company != null && company.CompanyTranslations.Any())
+            {
+                foreach (var translation in company.CompanyTranslations)
+                {
+                    foreach (var language in languages)
+                    {
+                        if (translation.LanguageId == language.Id)
+                            model.Add(language);
+                    }
+                }
+            }
+
+            return model;
+        }
+
+        public async Task<List<LanguageViewModel>> GetEmptyLanguagesOfCompany(int companyId)
+        {
+            var languages = await _languageService.GetAllAsync();
+            var model = new List<LanguageViewModel>();
+            var readyLanguages = await GetReadyLanguagesOfCompany(companyId);
+            foreach(var language in languages)
+            {
+                if(!readyLanguages.Contains(language))
+                    model.Add(language);
+            }
+
+            return model;
+        }
+
         public async Task<List<CompanyViewModel>> GetAllCompaniesAsync()
         {
             var language = await _cookieService.GetLanguageAsync();
@@ -60,7 +95,7 @@ namespace JobPortalProject.BL.Services.Implementations
             int languageId = language.Id;
 
             var companies = await Repository.GetAllAsync(
-                predicate: x => !x.IsDeleted,
+                predicate: x => !x.IsDeleted && x.IsAccountApproved,
                 include: x => x.Include(x=>x.CompanyTranslations)
                 .Include(x=>x.Jobs).ThenInclude(x=>x.JobTranslations));
 

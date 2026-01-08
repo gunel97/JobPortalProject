@@ -94,6 +94,35 @@ namespace JobPortalProject.BL.ViewModels.JobViewModels
         public List<SelectListItem> AddressesList { get; set; } = [];
         public int JobCategoryId { get; set; }
         public List<SelectListItem> JobCategoriesList { get; set; } = [];
+        public JobTranslationCreateViewModel TranslationCreateViewModel { get; set; } =null!;
+        public List<JobResponsibilityCreateViewModel> Responsibilities { get; set; } = [];
+        public List<JobExtraBenefitCreateViewModel> ExtraBenefits { get; set; } = [];
+    }
+
+    public class JobCreateAllViewModel
+    {
+        public int VacancyCount { get; set; }
+        public int CompanyId { get; set; }
+        public double MinSalary { get; set; }
+        public double MaxSalary { get; set; }
+        public bool IsActive { get; set; }
+        public DateTime ExpirationDate { get; set; }
+        public int GenderId { get; set; }
+        public Gender Gender { get; set; }
+        public List<SelectListItem> GenderListItems { get; set; } = [];
+        public int JobTypeId { get; set; }
+        public JobType JobType { get; set; }
+        public List<SelectListItem> JobTypeListItems { get; set; } = [];
+        public int RequiredEducationTypeId { get; set; }
+        public EducationType RequiredEducationType { get; set; }
+        public List<SelectListItem> RequiredEducationTypeListItems { get; set; } = [];
+        public int SalaryTypeId { get; set; }
+        public SalaryTypeDuration SalaryType { get; set; }
+        public List<SelectListItem> SalaryTypeListItems { get; set; } = [];
+        public int AddressId { get; set; }
+        public List<SelectListItem> AddressesList { get; set; } = [];
+        public int JobCategoryId { get; set; }
+        public List<SelectListItem> JobCategoriesList { get; set; } = [];
         public List<JobTranslationCreateViewModel> TranslationCreateViewModels { get; set; } = [];
         public List<JobResponsibilityCreateViewModel> Responsibilities { get; set; } = [];
         public List<JobExtraBenefitCreateViewModel> ExtraBenefits { get; set; } = [];
@@ -150,5 +179,16 @@ namespace JobPortalProject.BL.ViewModels.JobViewModels
         public string? Description { get; set; }
         public string? RequiredExperience { get; set; }
         public string? LanguageIcon { get; set; }
+    }
+
+    public class AddTranslationToJobViewModel
+    {
+        public int JobId { get; set; }
+        public int LanguageId { get; set; }
+        public string? LanguageIcon { get; set; }
+        public string? ReadyLanguageIcon { get; set; }
+        public JobTranslationCreateViewModel TranslationCreateViewModel { get; set; } = null!;
+        public List<JobResponsibilityTranslationCreateViewModel> Responsibilities { get; set; } = [];
+        public List<JobExtraBenefitTranslationCreateViewModel> ExtraBenefits { get; set; } = [];
     }
 }

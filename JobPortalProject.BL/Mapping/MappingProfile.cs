@@ -89,8 +89,8 @@ namespace JobPortalProject.BL.Mapping
                 .ForMember(x => x.CategoryName, opt => opt
                 .MapFrom(src => src.CompanyType == null ? "" :
                 src.CompanyType.CompanyTypeTranslations.FirstOrDefault()!.Name))
-                .ForMember(x=>x.TranslationsCount, opt=> opt
-                .MapFrom(src=>src.CompanyTranslations.Count()))
+                .ForMember(x => x.TranslationsCount, opt => opt
+                .MapFrom(src => src.CompanyTranslations.Count()))
                 //.ForMember(x=>x.ActiveJobCount, opt=> opt
                 //.MapFrom(src=>src.Jobs.Where(j=>j.IsActive && j.ExpirationDate>DateTime.UtcNow).Count()))
                 .ReverseMap();

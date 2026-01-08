@@ -27,20 +27,18 @@ namespace JobPortalProject.BL.UI.Services.Implementations
         public async Task<PagedCompanyListingViewModel> GetListsAsync(CompanyFilterViewModel filter)
         {
             var language = await _cookieService.GetLanguageAsync();
+            var companyTypes = await _companyTypeService.GetAllAsync(
+                                       predicate: x => !x.IsDeleted && x.CompanyTypeTranslations.Any() && x.Companies.Count != 0,
+                                       include: x => x
+                                       .Include(c => c.CompanyTypeTranslations.Where(ct => ct.LanguageId == language.Id))
+                                       .Include(c => c.Companies).ThenInclude(c => c.CompanyTranslations.Where(t => t.LanguageId == language.Id)));
 
-            //var addresses = await _addressService.GetAllAsync(predicate: x=>x.Company!=null && x.Company.IsAccountApproved
-            //&& !x.Company.IsDeleted && x.Company.CompanyTranslations.Where(t=>t.LanguageId==language.Id)!=null && x.CompanyId!=0);
             var addresses = await _addressService.GetCompaniesAddressesAsync(language.Id);  
             var addressesByCities = addresses.DistinctBy(x => x.CityName).ToList();
             var addressesCitiesGroup = addresses.GroupBy(a => a.CityName).ToList();
 
-            var pagedCompanies = await _companyService.GetPagedCompaniesAsync(filter);
+             var pagedCompanies = await _companyService.GetPagedCompaniesAsync(filter);
 
-            var companyTypes = await _companyTypeService.GetAllAsync(
-                                        predicate: x => !x.IsDeleted && x.CompanyTypeTranslations.Any() && x.Companies.Count!=0,
-                                        include: x => x
-                                        .Include(c => c.CompanyTypeTranslations.Where(ct => ct.LanguageId == language.Id))
-                                        .Include(c=>c.Companies).ThenInclude(c=>c.CompanyTranslations.Where(t=>t.LanguageId==language.Id)));
 
             var companyListingViewModel = new PagedCompanyListingViewModel
             {

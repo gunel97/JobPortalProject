@@ -1,4 +1,5 @@
-﻿using JobPortalProject.BL.Services.Contracts;
+﻿using CloudinaryDotNet.Actions;
+using JobPortalProject.BL.Services.Contracts;
 using JobPortalProject.BL.UI.Services.Abstracts;
 using JobPortalProject.BL.ViewModels.JobExtraBenefitViewModels;
 using JobPortalProject.BL.ViewModels.JobResponsibilityViewModels;
@@ -24,8 +25,10 @@ namespace JobPortalProject.UserMvc.Controllers
         private readonly IJobExtraBenefitService _benefitService;
         private readonly IJobResponsibilityService _responsibilityService;
         private readonly IJobApplicationService _jobApplicationService;
+        private readonly ICookieService _cookieService;
+        private readonly IJobTranslationService _jobTranslationService;
 
-        public JobController(IJobService jobService, IJobListingService jobListingService, ICompanyService companyService, IJobExtraBenefitService benefitService, IJobResponsibilityService responsibilityService, IJobApplicationService jobApplicationService)
+        public JobController(IJobService jobService, IJobListingService jobListingService, ICompanyService companyService, IJobExtraBenefitService benefitService, IJobResponsibilityService responsibilityService, IJobApplicationService jobApplicationService, ICookieService cookieService, IJobTranslationService jobTranslationService)
         {
             _jobService = jobService;
             _jobListingService = jobListingService;
@@ -33,6 +36,8 @@ namespace JobPortalProject.UserMvc.Controllers
             _benefitService = benefitService;
             _responsibilityService = responsibilityService;
             _jobApplicationService = jobApplicationService;
+            _cookieService = cookieService;
+            _jobTranslationService = jobTranslationService;
         }
 
         [AllowAnonymous]
@@ -53,12 +58,13 @@ namespace JobPortalProject.UserMvc.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Details(string id)
         {
+            var language = await _cookieService.GetLanguageAsync();
             int jobId = int.Parse(id.Split('-').Last());
-
+            var jobTranslation = await _jobTranslationService.GetAsync(predicate: x => x.JobId == jobId && x.LanguageId == language.Id);
             var job = await _jobService.GetByIdAsync(jobId);
            
-            if (job == null)
-                return NotFound();
+            if (job == null || jobTranslation==null)
+                return View(nameof(NotFound));
 
             if (await _jobApplicationService.CheckIfJobApplied(jobId))
                 job.IsApplied = true;
@@ -66,19 +72,63 @@ namespace JobPortalProject.UserMvc.Controllers
             return View(job);
         }
 
-        public async Task<IActionResult> JobList(JobFilterViewModel filter)
+        public async Task<IActionResult> CreateJobTranslation(int jobId, int languageId)
         {
-            var companyId = await _companyService.GetCompanyIdOfUser();
-            var model = await _jobService.GetPagedJobsOfCompanyModel(filter, companyId);
+            var model = await _jobService.GetAddTranslationToJobViewModel(jobId, languageId);
+            if (model == null)
+                return View(nameof(NotFound));
 
             return View(model);
         }
 
-        [RequiresMembership]
-        public async Task<IActionResult> Create()
+        [HttpPost]
+        public async Task<IActionResult> CreateJobTranslation(AddTranslationToJobViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                model = await _jobService.GetAddTranslationToJobViewModel(model.JobId, model.LanguageId);
+                return View(model);
+            }
+
+            var result = await _jobService.AddTranslationToJob(model.JobId, model);
+            if(!result)
+            {
+                model = await _jobService.GetAddTranslationToJobViewModel(model.JobId, model.LanguageId);
+                return View(model);
+            }
+
+            var filter = new JobFilterViewModel();
+            var companyId = await _companyService.GetCompanyIdOfUser();
+            var jobListModel = await _jobService.GetPagedJobsOfCompanyModel(filter, companyId);
+            return View(nameof(JobList), jobListModel);
+        }
+
+        public async Task<IActionResult> JobList(JobFilterViewModel filter)
         {
             var companyId = await _companyService.GetCompanyIdOfUser();
-            var model = await _jobService.GetJobCreateViewModelAsync(companyId);
+            var model = await _jobService.GetPagedJobsOfCompanyModel(filter, companyId);
+            model.EmptyLanguages = await _companyService.GetEmptyLanguagesOfCompany(companyId);
+            model.ReadyLanguages =  await _companyService.GetReadyLanguagesOfCompany(companyId);
+            model.IsAccountActive = await _companyService.IsCompanyActive();
+            
+            return View(model);
+        }
+
+        [RequiresMembership]
+        public async Task<IActionResult> Create(int langId)
+        {
+            var companyId = await _companyService.GetCompanyIdOfUser();
+            var model = await _jobService.GetJobCreateViewModelAsync(companyId, langId);
+            if (model == null)
+                return NotFound();
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> CreateJobAll()
+        {
+            var companyId = await _companyService.GetCompanyIdOfUser();
+            var model = await _jobService.GetJobCreateAllViewModelAsync(companyId);
             if (model == null)
                 return NotFound();
 
@@ -86,23 +136,25 @@ namespace JobPortalProject.UserMvc.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(JobCreateViewModel model)
+        public async Task<IActionResult> CreateJobAll(JobCreateAllViewModel model)
         {
             var companyId = await _companyService.GetCompanyIdOfUser();
             if (!ModelState.IsValid)
             {
-                model = await _jobService.GetJobCreateViewModelAsync(companyId);
+                model = await _jobService.GetJobCreateAllViewModelAsync(companyId);
                 return View(model);
             }
 
-            var result = await _jobService.CreateJob(companyId, model);
+            var result = await _jobService.CreateJobAll(companyId, model);
             if (!result)
             {
-                model = await _jobService.GetJobCreateViewModelAsync(companyId);
+                model = await _jobService.GetJobCreateAllViewModelAsync(companyId);
                 return View(model);
             }
 
-            return RedirectToAction("Dashboard", "Company");
+            var filter = new JobFilterViewModel();
+            var jobListModel = await _jobService.GetPagedJobsOfCompanyModel(filter, companyId);
+            return View(nameof(JobList), jobListModel);
         }
 
         public async Task<IActionResult> Update(string id)

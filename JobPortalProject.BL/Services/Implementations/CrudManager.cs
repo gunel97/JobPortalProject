@@ -46,7 +46,7 @@ namespace JobPortalProject.BL.Services.Implementations
             return true;
         }
 
-        public async virtual Task<IEnumerable<TViewModel>> GetAllAsync(Expression<Func<TEntity, bool>>? predicate = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null, bool AsNoTracking = false)
+        public async virtual Task<IEnumerable<TViewModel>> GetAllAsync(Expression<Func<TEntity, bool>>? predicate = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null, bool AsNoTracking = true)
         {
             var entities = await Repository.GetAllAsync(predicate, orderBy, include, AsNoTracking);
 
@@ -55,7 +55,7 @@ namespace JobPortalProject.BL.Services.Implementations
             return viewModels;
         }
 
-        public async virtual Task<TViewModel> GetAsync(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null, bool AsNoTracking = false)
+        public async virtual Task<TViewModel> GetAsync(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null, bool AsNoTracking = true)
         {
             var entity = await Repository.GetAsync(predicate, include);
             var viewModel = Mapper.Map<TViewModel>(entity);

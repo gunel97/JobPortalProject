@@ -1,5 +1,6 @@
 ﻿using JobPortalProject.BL.ViewModels.JobApplicationViewModels;
 using JobPortalProject.BL.ViewModels.LanguageViewModels;
+using JobPortalProject.DA.DataContext.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,5 +23,7 @@ namespace JobPortalProject.BL.UI.ViewModels
         public int TotalAcceptedCount { get; set; }
         public List<LanguageViewModel> Languages { get; set; } = [];
         public List<ApplicantOfCompanyViewModel> Applicants { get; set; } = [];
+        public List<LanguageViewModel> ReadyLanguages { get; set; } = [];
+        public List<LanguageViewModel> EmptyLanguages { get; set; } = [];
     }
 }

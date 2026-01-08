@@ -36,7 +36,7 @@ namespace JobPortalProject.BL.UI.Services.Implementations
                 include: x => x.Include(c => c.CompanyTranslations.Where(ct => ct.LanguageId == selectedLanguage.Id)));
             var applicants = await _jobApplicationService.GetApplicantsOfCompany(company.Id);
             var jobs = await _jobService.GetActiveJobsOfCompanyAsync(company.Id);
-
+            
             var companyDashboardViewModel = new CompanyDashboardViewModel
             {
                 CompanyId=company.Id,
@@ -50,7 +50,9 @@ namespace JobPortalProject.BL.UI.Services.Implementations
                 Applicants= applicants.OrderByDescending(x=>x.AppliedAt).Take(5).ToList(),
                 ActiveJobCount=jobs.Where(x=>!x.Expired).Count(),
                 IsMembershipActive=company.IsMembershipActive,
-                MembershipExpiresAt=company.MembershipExpiresAt
+                MembershipExpiresAt=company.MembershipExpiresAt,
+                ReadyLanguages=await _companyService.GetReadyLanguagesOfCompany(company.Id),
+                EmptyLanguages=await _companyService.GetEmptyLanguagesOfCompany(company.Id)
             };
 
             return companyDashboardViewModel;

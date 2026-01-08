@@ -47,6 +47,9 @@ namespace JobPortalProject.BL.UI.Services.Implementations
                                             .Include(t => t.CompanyType!).ThenInclude(ct => ct.CompanyTypeTranslations!.Where(x => x.LanguageId == language.Id))
                                             .Include(w => w.WorkingFields).ThenInclude(wt => wt.Translations.Where(x => x.LanguageId == language.Id)));
 
+            if (company.TranslationsCount == 0)
+                return null!;
+
             var companySocials = await _companySocialService.GetAllAsync(
                                             predicate: x => !x.IsDeleted && x.CompanyId == id,
                                             include: x => x

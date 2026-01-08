@@ -2,6 +2,7 @@
 using JobPortalProject.BL.ViewModels.AddressViewModels;
 using JobPortalProject.BL.ViewModels.CompanyViewModels;
 using JobPortalProject.BL.ViewModels.JobViewModels;
+using JobPortalProject.BL.ViewModels.LanguageViewModels;
 using JobPortalProject.BL.ViewModels.Pagination;
 using JobPortalProject.BL.ViewModels.WorkingFieldViewModels;
 using JobPortalProject.DA.DataContext.Entities;
@@ -10,6 +11,8 @@ namespace JobPortalProject.BL.Services.Contracts
 {
     public interface ICompanyService : ICrudService<Company, CompanyViewModel, CompanyCreateViewModel, CompanyUpdateViewModel>
     {
+        public Task<List<LanguageViewModel>> GetReadyLanguagesOfCompany(int companyId);
+        public Task<List<LanguageViewModel>> GetEmptyLanguagesOfCompany(int companyId);
         public Task<List<CompanyViewModel>> GetAllCompaniesAsync();
         public Task<CheckoutViewModel> GetCheckoutViewModelAsync();
         public Task<CompanyUpdateViewModel> GetCompanyUpdateViewModelAsync();

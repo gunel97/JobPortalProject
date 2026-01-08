@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,7 +31,9 @@ namespace JobPortalProject.BL.ViewModels.JobResponsibilityViewModels
     {
         public int JobResponsibilityId { get; set; }
         public int LanguageId { get; set; }
-        public string Value { get; set; } = null!;
+        [Required(ErrorMessage = "Username is required")]
+        public string? Value { get; set; } 
+        public string? ReadyValue { get; set; }
     }
     public class JobResponsibilityTranslationUpdateViewModel
     {

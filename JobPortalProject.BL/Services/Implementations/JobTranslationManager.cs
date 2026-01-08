@@ -24,9 +24,7 @@ namespace JobPortalProject.BL.Services.Implementations
 
             var createdJobEntity = await Repository.AddAsync(jobTranslation);
             if (createdJobEntity == null)
-            {
-                return false;
-            }
+                return false;            
 
             return true;
         }

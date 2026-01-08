@@ -1,6 +1,7 @@
 ﻿using JobPortalProject.BL.ViewModels.JobResponsibilityViewModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,9 +32,11 @@ namespace JobPortalProject.BL.ViewModels.JobExtraBenefitViewModels
 
     public class JobExtraBenefitTranslationCreateViewModel
     {
+        public string? ReadyValue { get; set; }
         public int JobExtraBenefitId { get; set; }
         public int LanguageId { get; set; }
-        public string Value { get; set; } = null!;
+        [Required(ErrorMessage = "Extra Benefit translation is required")]
+        public string? Value { get; set; } 
     }
     public class JobExtraBenefitTranslationUpdateViewModel
     {

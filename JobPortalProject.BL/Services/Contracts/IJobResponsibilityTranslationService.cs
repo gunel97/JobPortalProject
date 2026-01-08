@@ -5,6 +5,7 @@ namespace JobPortalProject.BL.Services.Contracts
 {
     public interface IJobResponsibilityTranslationService : ICrudService<JobResponsibilityTranslation, JobResponsibilityTranslationViewModel, JobResponsibilityTranslationCreateViewModel, JobResponsibilityTranslationUpdateViewModel>
     {
+        public Task<bool> AddTranslationToResponsibility(JobResponsibilityTranslationCreateViewModel model);
     }
   
 }

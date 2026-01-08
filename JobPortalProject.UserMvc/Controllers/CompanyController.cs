@@ -60,6 +60,9 @@ namespace JobPortalProject.UserMvc.Controllers
 
             var companyDetailsViewModel = await _companyDetailsService.GetCompanyDetailsAsync(companyId);
 
+            if (companyDetailsViewModel == null)
+                return View(nameof(NotFound));
+
             if (companyDetailsViewModel.Company == null)
                 return NotFound();
 

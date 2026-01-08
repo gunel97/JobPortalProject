@@ -38,7 +38,7 @@ namespace JobPortalProject.DA.Repositories
             return entityEntry.Entity;
         }
 
-        public async virtual Task<IList<T>> GetAllAsync(Expression<Func<T, bool>>? predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null, bool AsNoTracking = false)
+        public async virtual Task<IList<T>> GetAllAsync(Expression<Func<T, bool>>? predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null, bool AsNoTracking = true)
         {
 
             IQueryable<T> queryable = DbContext.Set<T>();
@@ -60,7 +60,7 @@ namespace JobPortalProject.DA.Repositories
             return await DbContext.Set<T>().FindAsync(id);
         }
 
-        public async virtual Task<T?> GetAsync(Expression<Func<T, bool>> predicate, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null, bool AsNoTracking = false)
+        public async virtual Task<T?> GetAsync(Expression<Func<T, bool>> predicate, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null, bool AsNoTracking = true)
         {
             var query = DbContext.Set<T>().AsQueryable();
 

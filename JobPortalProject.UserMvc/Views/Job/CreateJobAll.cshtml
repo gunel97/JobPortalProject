@@ -1,4 +1,4 @@
-﻿@model JobCreateViewModel
+﻿@model JobCreateAllViewModel
 
 <!-- ========== Inner Banner Start============= -->
 <div class="inner-banner">
@@ -90,21 +90,21 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-inner mb-25">
-                                    <label >Salary Type*</label>
-                                            <div class="input-area">
-                                                <img src="~/images/icon/category-2.svg" alt="">
-                                                <select asp-items="Model.SalaryTypeListItems" asp-for="SalaryTypeId" class="select1">
-                                                </select>
-                                                <span asp-validation-for="SalaryTypeId"></span>
-                                            </div>
-                                            </div>
-                                            </div>
+                                    <label>Salary Type*</label>
+                                    <div class="input-area">
+                                        <img src="~/images/icon/category-2.svg" alt="">
+                                        <select asp-items="Model.SalaryTypeListItems" asp-for="SalaryTypeId" class="select1">
+                                        </select>
+                                        <span asp-validation-for="SalaryTypeId"></span>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-md-6">
                                 <div class="form-inner mb-25">
                                     <label>Min Salary*</label>
                                     <div class="input-area">
                                         <img src="~/images/icon/salary-2.svg" alt="">
-                                        <input asp-for="MinSalary"  placeholder="Min Salary">
+                                        <input asp-for="MinSalary" placeholder="Min Salary">
                                         <span asp-validation-for="MinSalary"></span>
                                     </div>
                                 </div>
@@ -129,19 +129,31 @@
                                     </div>
                                 </div>
                             </div>
-                                <div class="col-lg-12">
-                                    <div class="section-title2">
-                                        <h5>Job Details Translation <img src="@Model.TranslationCreateViewModel.LanguageIcon" alt=""> :</h5>
+                            @*                             <div class="col-md-6">
+                                <div class="form-inner mb-25">
+                                    <label >Vacancies*</label>
+                                    <div class="input-area">
+                                        <img src="~/images/icon/user-2.svg" alt="">
+                                        <input asp-for="VacancyCount" id="vacancies" placeholder="07 Person">
+                                        <span asp-validation-for="VacancyCount"></span>
                                     </div>
                                 </div>
-                                <input asp-for="TranslationCreateViewModel.LanguageId" 
-                                value="@Model.TranslationCreateViewModel.LanguageId" type="hidden" />
+                            </div> *@
+                            @for (int i = 0; i < Model.TranslationCreateViewModels.Count(); i++)
+                            {
+                                <div class="col-lg-12">
+                                    <div class="section-title2">
+                                        <h5>Job Details Translation <img src="@Model.TranslationCreateViewModels[i].LanguageIcon" alt=""> :</h5>
+                                    </div>
+                                </div>
+                                <input asp-for="TranslationCreateViewModels[i].LanguageId"
+                                       value="@Model.TranslationCreateViewModels[i].LanguageId" type="hidden" />
                                 <div class="col-md-6">
                                     <div class="form-inner mb-25">
                                         <label for="jobtitle">Job Title*</label>
                                         <div class="input-area">
                                             <img src="~/images/icon/company-2.svg" alt="">
-                                            <input asp-for="TranslationCreateViewModel.Title"  id="jobtitle" placeholder="Senior UI/UX Engineer">
+                                            <input asp-for="TranslationCreateViewModels[i].Title" id="jobtitle" placeholder="Senior UI/UX Engineer">
                                         </div>
                                     </div>
                                 </div>
@@ -150,7 +162,7 @@
                                         <label for="experiences">Experience Level*</label>
                                         <div class="input-area">
                                             <img src="~/images/icon/email-2.svg" alt="">
-                                            <input asp-for="TranslationCreateViewModel.RequiredExperience" id="experiences" placeholder="Type Experiences">
+                                            <input asp-for="TranslationCreateViewModels[i].RequiredExperience" id="experiences" placeholder="Type Experiences">
                                         </div>
                                     </div>
                                 </div>
@@ -159,52 +171,51 @@
                                         <label for="jobtitle">Job Description*</label>
                                         <div class="input-area">
                                             <img src="~/images/icon/company-2.svg" alt="">
-                                            <input asp-for="TranslationCreateViewModel.Description" id="description" placeholder="Senior UI/UX Engineer">
+                                            <input asp-for="TranslationCreateViewModels[i].Description" id="description" placeholder="Senior UI/UX Engineer">
                                         </div>
                                     </div>
                                 </div>
+                            }
 
                             <div class="row">
-                            <div class="col-lg-12">
-                                <div class="section-title2">
+                                <div class="col-lg-12">
+                                    <div class="section-title2">
                                         <h5 id="benefitTitle"></h5>
+                                    </div>
                                 </div>
-                            </div>
-                            <div id ="bContainer" class="col-md-12">
-
-                            </div>
-                            <div id="removeButtonBen" class="col-md-6">
-                                <br/>
-                            </div>
-                            <br/>
-                            <div class="col-md-12">
-                                <div class="form-inner">
-                                    <button onclick='addB(@Html.Raw(Json.Serialize(Model.TranslationCreateViewModel)))' class="primry-btn-2 lg-btn w-unset" type="button">Add Extra Benefits</button>
+                                <div id="bContainer" class="col-md-12">
                                 </div>
-                            </div>
-                            <br />
+                                <div id="removeButtonBen" class="col-md-6">
+                                    <br />
+                                </div>
+                                <br />
+                                <div class="col-md-12">
+                                    <div class="form-inner">
+                                        <button onclick='addB(@Html.Raw(Json.Serialize(Model.TranslationCreateViewModels)))' class="primry-btn-2 lg-btn w-unset" type="button">Add Extra Benefits</button>
+                                    </div>
+                                </div>
+                                <br />
                             </div>
                             <div class="row">
-                            <div class="col-lg-12">
-                                <div class="section-title2">
+                                <div class="col-lg-12">
+                                    <div class="section-title2">
                                         <h5 id="responsibilityTitle"></h5>
+                                    </div>
                                 </div>
-                            </div>
-                            <div id ="rContainer" class="col-md-12">
-                                    
-                            </div>
-                            <div id="removeButtonResp" class="col-md-6">
-                                <br/>
-                            </div>
-                            <br/>
-                            <div class="col-md-12">
-                                <div class="form-inner">
-                                    <button onclick='addR(@Html.Raw(Json.Serialize(Model.TranslationCreateViewModel)))' class="primry-btn-2 lg-btn w-unset" type="button">Add Job Responsibility</button>
+                                <div id="rContainer" class="col-md-12">
                                 </div>
+                                <div id="removeButtonResp" class="col-md-6">
+                                    <br />
+                                </div>
+                                <br />
+                                <div class="col-md-12">
+                                    <div class="form-inner">
+                                        <button onclick='addR(@Html.Raw(Json.Serialize(Model.TranslationCreateViewModels)))' class="primry-btn-2 lg-btn w-unset" type="button">Add Job Responsibility</button>
+                                    </div>
+                                </div>
+                                <br />
                             </div>
                             <br />
-                            </div>
-                            <br/>
                             <div class="col-md-12">
                                 <br />
                                 <div class="form-inner">
@@ -227,8 +238,8 @@
     const responsibilityTitle = document.getElementById("responsibilityTitle");
     const benefitTitle = document.getElementById("benefitTitle");
 
-    function addR(translation){
-        console.log(translation);
+    function addR(translations){
+        console.log(translations);
         console.log("test");
         const rContainer = document.getElementById("rContainer");
 
@@ -237,26 +248,28 @@
         divElementOfRespTranslations.className='col-md-12';
         divElementOfRespTranslations.id=`respRow${respIndex}`;
 
+        for(let i=0; i<translations.length; i++){
             const divElement =document.createElement('div');
             divElement.className='form-inner mb-25';
             var htmlTextR = `<label for="jobtitle">
-            Job Responsibility <img src="${translation.languageIcon}" alt=""> *</label>
+            Job Responsibility <img src="${translations[i].languageIcon}" alt=""> *</label>
                                 <div class="input-area">
                                     <img src="/images/icon/company-2.svg" alt="">
-                                    <input name="Responsibilities[${respIndex}].JobResponsibilityTranslations[0].Value" placeholder="Senior UI/UX Engineer">
-                                    <input type="hidden" name="Responsibilities[${respIndex}].JobResponsibilityTranslations[0].LanguageId" value="${translation.languageId}" />
+                                    <input name="Responsibilities[${respIndex}].JobResponsibilityTranslations[${i}].Value" placeholder="Senior UI/UX Engineer">
+                                    <input type="hidden" name="Responsibilities[${respIndex}].JobResponsibilityTranslations[${i}].LanguageId" value="${i + 1}" />
                                     </div>`;
             divElement.innerHTML+=htmlTextR;
             divElementOfRespTranslations.appendChild(divElement);
             console.log(htmlTextR);
-        
+        }
         respIndex++;
         rContainer.appendChild(divElementOfRespTranslations);
 
         removeButtonResp.innerHTML=`<div class="form-inner">
             <button onclick='removeResp()'  class="primry-btn-2 lg-btn w-unset" type="button">Remove </button>
             </div>`;
-            };
+
+    };
 
     function removeResp(){
         var testR = respIndex-1;
@@ -270,7 +283,7 @@
         }
     };
 
-    function addB(translation){
+    function addB(translations){
         const bContainer = document.getElementById("bContainer");
         benefitTitle.innerText="Job Extra Benefits:";
 
@@ -278,18 +291,19 @@
         divElementOfBenTranslations.className='col-md-12';
         divElementOfBenTranslations.id=`benRow${benIndex}`;
 
+        for(let i=0; i<translations.length; i++){
             const divElement =document.createElement('div');
             divElement.className='form-inner mb-25';
             var htmlTextB = `<label for="jobtitle">
-            Job Benefit <img src="${translation.languageIcon}" alt=""> *</label>
+            Job Benefit <img src="${translations[i].languageIcon}" alt=""> *</label>
                                 <div class="input-area">
                                     <img src="/images/icon/company-2.svg" alt="">
-                                    <input name="ExtraBenefits[${benIndex}].JobExtraBenefitTranslations[0].Value" placeholder="Senior UI/UX Engineer">
-                                    <input type="hidden" name="ExtraBenefits[${benIndex}].JobExtraBenefitTranslations[0].LanguageId" value="${translation.languageId}" />
+                                    <input name="ExtraBenefits[${benIndex}].JobExtraBenefitTranslations[${i}].Value" placeholder="Senior UI/UX Engineer">
+                                    <input type="hidden" name="ExtraBenefits[${benIndex}].JobExtraBenefitTranslations[${i}].LanguageId" value="${i + 1}" />
                                     </div>`;
             divElement.innerHTML+=htmlTextB;
             divElementOfBenTranslations.appendChild(divElement);
-        
+        };
 
         benIndex++;
         bContainer.appendChild(divElementOfBenTranslations);

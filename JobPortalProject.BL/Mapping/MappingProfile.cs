@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using JobPortalProject.BL.ViewModels.AddressViewModels;
+using JobPortalProject.BL.ViewModels.BioViewModels;
 using JobPortalProject.BL.ViewModels.CandidateViewModels;
 using JobPortalProject.BL.ViewModels.CityViewModels;
 using JobPortalProject.BL.ViewModels.CompanySocialViewModels;
@@ -14,6 +15,7 @@ using JobPortalProject.BL.ViewModels.JobExtraBenefitViewModels;
 using JobPortalProject.BL.ViewModels.JobResponsibilityViewModels;
 using JobPortalProject.BL.ViewModels.JobViewModels;
 using JobPortalProject.BL.ViewModels.LanguageViewModels;
+using JobPortalProject.BL.ViewModels.MainSocialViewModels;
 using JobPortalProject.BL.ViewModels.OrderViewModels;
 using JobPortalProject.BL.ViewModels.PersonalInfoViewModels;
 using JobPortalProject.BL.ViewModels.ResumeViewModels;
@@ -224,6 +226,13 @@ namespace JobPortalProject.BL.Mapping
             CreateMap<Order, OrderCreateViewModel>().ReverseMap();
             CreateMap<Order, OrderUpdateViewModel>().ReverseMap();
 
+            CreateMap<MainSocial, MainSocialViewModel>().ReverseMap();
+            CreateMap<MainSocial, MainSocialCreateViewModel>().ReverseMap();
+            CreateMap<MainSocial, MainSocialUpdateViewModel>().ReverseMap();
+
+            CreateMap<Bio, BioViewModel>().ReverseMap();
+            CreateMap<Bio, BioCreateViewModel>().ReverseMap();
+            CreateMap<Bio, BioUpdateViewModel>().ReverseMap();
         }
     }
 }

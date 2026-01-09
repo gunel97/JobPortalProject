@@ -52,8 +52,13 @@ namespace JobPortalProject.BL.Services.Implementations
                     await _cloudinaryService.DeleteImageAsync(language.IconPublicId);
                 }
             }
+            else
+            {
+                model.IconPublicId = language.IconPublicId;
+                model.IconUrl = language.IconUrl;
+            }
 
-            return await base.UpdateAsync(id, model);
+                return await base.UpdateAsync(id, model);
         }
 
         public override async Task<LanguageViewModel> CreateAsync(LanguageCreateViewModel model)
@@ -87,7 +92,6 @@ namespace JobPortalProject.BL.Services.Implementations
 
             await _cloudinaryService.DeleteImageAsync(language.IconPublicId);
             return true;
-
         }
 
 

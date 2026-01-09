@@ -45,6 +45,62 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             return result;
         }
 
+        public async Task<UserUpdateViewModel> GetUserUpdateViewModel(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null || user.UserName == null)
+                return null!;
+            var role = await GetUserRoleAsync(user.UserName);
+            var model = new UserUpdateViewModel
+            {
+                Id=userId,
+                FirstName = user.FirstName!,
+                LastName = user.LastName!,
+                Email = user.Email!,
+                Role = role,
+            };
+
+            return model;
+        }
+
+        public async Task<bool> UpdateUser(UserUpdateViewModel model)
+        {
+            var user = await _userManager.FindByIdAsync(model.Id);
+            if (user == null)
+                return false;
+
+            var userRoles = await _userManager.GetRolesAsync(user);
+            await _userManager.RemoveFromRolesAsync(user, userRoles);
+            var resultRole = await _userManager.AddToRoleAsync(user, model.Role);
+
+            if (!resultRole.Succeeded)
+                return false;
+
+            var resultEmail  = await _userManager.SetEmailAsync(user, model.Email);
+            if (!resultEmail.Succeeded)
+                return false;
+
+            if (model.ChangePassword != null)
+            {
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var changePasswordResult = await _userManager.ResetPasswordAsync(user, token, model.ChangePassword);
+                if (changePasswordResult.Succeeded)
+                {
+                    await _userManager.UpdateSecurityStampAsync(user);
+                }
+                else
+                    return false;
+            }
+
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+                return false;
+
+            return true;
+        }
+
         public async Task<IdentityResult> ResetPassword(ResetPasswordViewModel model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
@@ -121,7 +177,8 @@ namespace JobPortalProject.BL.UI.Services.Implementations
                         LastName = user.LastName,
                         Email = user.Email,
                         Role = role,
-                        IsDeleted=user.IsDeleted
+                        IsDeleted=user.IsDeleted,
+                        CreatedAt=user.CreatedAt
                     };
                     userModels.Add(model);
                 }
@@ -174,7 +231,8 @@ namespace JobPortalProject.BL.UI.Services.Implementations
                 UserName = model.Username,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-                Email = model.Email
+                Email = model.Email,
+                CreatedAt = DateTime.UtcNow,
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -193,7 +251,8 @@ namespace JobPortalProject.BL.UI.Services.Implementations
                 UserName = model.Username,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-                Email = model.Email
+                Email = model.Email,
+                CreatedAt= DateTime.UtcNow
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -251,7 +310,8 @@ namespace JobPortalProject.BL.UI.Services.Implementations
                 UserName = model.Username,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-                Email = model.Email
+                Email = model.Email,
+                CreatedAt=DateTime.UtcNow
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);

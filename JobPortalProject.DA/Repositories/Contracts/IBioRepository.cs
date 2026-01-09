@@ -2,5 +2,8 @@
 
 namespace JobPortalProject.DA.Repositories.Contracts
 {
-    public interface ISocialMediaRepository : IRepositoryAsync<SocialMedia> { }
+    public interface IBioRepository : IRepositoryAsync<Bio> { }
+
+
+
 }

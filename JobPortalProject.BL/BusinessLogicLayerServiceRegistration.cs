@@ -83,6 +83,9 @@ namespace JobPortalProject.BL
             services.AddScoped<ICompanyListingService, CompanyListingManager>();
             services.AddScoped<ICompanyDashboardService, CompanyDashboardManager>();
 
+            services.AddScoped<IBioService, BioManager>();
+            services.AddScoped<IMainSocialService, MainSocialManager>();
+
             services.AddScoped<IOrderService, OrderManager>();
 
             services.AddSingleton<StringLocalizerManager>();
@@ -102,6 +105,8 @@ namespace JobPortalProject.BL
             services.AddScoped<IUserIndexService, UserIndexManager>();
             services.AddScoped<IJobCategoryIndexService, JobCategoryIndexManager>();
             services.AddScoped<ICountryIndexService, CountryIndexManager>();
+            services.AddScoped<ICompanyAdminService, CompanyAdminManager>();
+            
 
             return services;
         }

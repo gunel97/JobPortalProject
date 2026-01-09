@@ -14,5 +14,6 @@ namespace JobPortalProject.BL.Constants
         public static string JobCategoryImagePath = "";
         public static string IconImagePath = "";
         public static string CityImagePath = "";
+        public static string LogoPath = "";
     }
 }

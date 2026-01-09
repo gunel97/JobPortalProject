@@ -1,0 +1,141 @@
+﻿@{
+    CompanyDetailsAdminViewModel model = Model;
+    var selectedLanguage = model.SelectedLanguage;
+    var detailsModel = model.Details;
+}
+
+<div id="main-content" class="h-full w-full bg-gray-50 relative overflow-y-auto lg:ml-64">
+    <main>
+
+        <br />
+        <div class="relative w-full max-w-2xl px-4 h-full md:h-auto">
+            <div class="bg-white rounded-lg shadow relative">
+                <div class="flex items-start justify-between p-5 border-b rounded-t">
+                    <h3 class="text-xl font-semibold">
+                        Company Details - <img src="@selectedLanguage?.IconUrl" />
+                    </h3>
+
+                </div>
+                <!-- Modal body -->
+                @if(detailsModel!=null && detailsModel.Company!=null){
+                <div class="p-6 space-y-6">
+                    <div class="grid grid-cols-6 gap-6">
+                        <div class="col-span-6 sm:col-span-3">
+                            <label id="product-name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
+                                    <b>Name:</b> @detailsModel.Company.Name
+                            </label>
+                        </div>
+                        <div class="col-span-6 sm:col-span-3">
+                            <label id="product-name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
+                                    <b>Type:</b>  @detailsModel.Company.CategoryName
+                            </label>
+                        </div>
+                        <div class="col-span-6 sm:col-span-3">
+                            <label id="product-name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
+                                    <b>IsAccountActive:</b> @detailsModel.Company.IsAccountActive
+                            </label>
+                        </div>
+                        <div class="col-span-6 sm:col-span-3">
+                            <label id="product-name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
+                                    <b>IsMembershipActive:</b> @detailsModel.Company.IsMembershipActive
+                            </label>
+                        </div>
+                        <div class="col-span-6 sm:col-span-3">
+                            <label id="product-name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
+                                <b>Logo</b>
+                                <img src="@detailsModel.Company.LogoUrl" />
+                            </label>
+                        </div>
+                        <div class="col-span-6 sm:col-span-3">
+                            <label id="product-name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
+                                <b>Cover Image</b>
+                                <img src="@detailsModel.Company.CoverPhotoUrl" />
+                            </label>
+                        </div>
+                        <div class="col-span-6 sm:col-span-3">
+                            <label id="product-name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
+                                    <b>Main Address:</b> @detailsModel.Company.MainAddress.CityName, @detailsModel.Company.MainAddress.CountryName
+                            </label>
+                        </div>
+                        <div class="col-span-6 sm:col-span-3">
+                            <label id="product-name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
+                                    <b>Member Since:</b> @detailsModel.Company.MemberSince.Date.ToShortDateString()
+                            </label>
+                        </div>
+                        @if (detailsModel.Company.LastPostedJob.HasValue)
+                        {
+                            <div class="col-span-6 sm:col-span-3">
+                                <label id="product-name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
+                                    <b>Last Posted Job:</b>  @detailsModel.Company.LastPostedJob.Value.Date.ToShortDateString()
+                                </label>
+                            </div>
+                        }
+                        @if (detailsModel.Company.MembershipExpiresAt.HasValue)
+                        {
+                            <div class="col-span-6 sm:col-span-3">
+                                <label id="product-name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
+                                    <b>Membership Expired:</b> @detailsModel.Company.MembershipExpiresAt.Value.ToShortDateString()
+                                </label>
+                            </div>
+                        }
+                        <div class="col-span-6 sm:col-span-3">
+                            <label id="product-name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
+                                <b>Total Job Count: </b> @Model.TotalJobCount
+                            </label>
+                        </div>
+                        <div class="col-span-6 sm:col-span-3">
+                            <label id="product-name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
+                                <b>Expired Job Count: </b> @Model.ExpiredJobCount
+                            </label>
+                        </div>
+                        <div class="col-span-6 sm:col-span-3">
+                            <label id="product-name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
+                                    <b>Active Job Count: </b> @detailsModel.ActiveJobs.Count()
+                            </label>
+                        </div>
+                        <div class="col-span-6 sm:col-span-3">
+                            <label id="product-name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
+                                    <b>Total Job Application Count: </b> @Model.TotalJobApplications
+                            </label>
+                        </div>
+                        <div class="col-span-6 sm:col-span-3">
+                            <label id="product-name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
+                                    <b>Accepted Job Application Count: </b> @Model.AcceptedJobApplications
+                            </label>
+                        </div>
+                    </div>
+                    <div class="p-6 border-t border-gray-200 rounded-b">
+                            @if (ViewBag.ListName == "userList")
+                            {
+                                <a asp-controller="user" asp-action="index"
+                                   asp-route-page="@ViewBag.Index" asp-route-role="@ViewBag.Role"
+                                class="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm inline-flex items-center px-3 py-2 text-center">
+                                    Back to list
+                                </a>
+                            }
+                            @if (ViewBag.ListName == "companyList")
+                            {
+                                <a asp-controller="company" asp-action="index" 
+                                asp-route-page="@ViewBag.Index"
+                                class="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm inline-flex items-center px-3 py-2 text-center">
+                                    Back to list
+                                </a>
+                            }
+                            @foreach(var language in detailsModel.ReadyLanguages ?? [])
+                            {
+                                @if (selectedLanguage!=null && language.Id != selectedLanguage.Id)
+                                {
+                                    <a asp-controller="company" asp-action="details" asp-route-id="@Model.UserId" 
+                                    asp-route-langId="@language.Id" asp-route-page="@ViewBag.Index"
+                                    asp-route-listName="@ViewBag.ListName" asp-route-role="@ViewBag.Role"
+                                    class="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm inline-flex items-center px-3 py-2 text-center">
+                                        View Details -  
+                                        <img src="@language.IconUrl"/>
+                                    </a>
+                                }
+                            }
+                        </div>
+                </div>
+                }
+            </div>
+        </div>

@@ -52,7 +52,7 @@ namespace JobPortalProject.AdminMvc.Controllers
             {
                 var role = await _userService.GetUserRoleAsync(model.Username);
 
-                if (role == "SuperAdmin" || role=="Admin")
+                if (role == "SuperAdmin" || role=="Admin" || role=="Editor")
                     return RedirectToAction("Index", "Home");
                 else
                 {

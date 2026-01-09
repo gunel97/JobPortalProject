@@ -62,7 +62,8 @@ namespace JobPortalProject.DA
             services.AddScoped<IExperienceTranslationRepository, ExperienceTranslationRepository>();
             services.AddScoped<IJobApplicationRepository, JobApplicationRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
-
+            services.AddScoped<IMainSocialRepository, MainSocialRepository>();
+            services.AddScoped<IBioRepository, BioRepository>();
 
             return services;
         }

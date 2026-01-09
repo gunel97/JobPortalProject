@@ -342,8 +342,10 @@ namespace JobPortalProject.DA.DataContext.Entities
     public class Bio : TimeStample
     {
         public string Phone { get; set; } = null!;
+        public string Email { get; set; } = null!;
         public string LogoPublicId { get; set; } = null!;
         public string LogoUrl { get; set; } = null!;
+
     }
 
     public class AppUser : IdentityUser
@@ -353,6 +355,7 @@ namespace JobPortalProject.DA.DataContext.Entities
         public Company? Company { get; set; } 
         public Candidate? Candidate { get; set; }
         public bool IsDeleted { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 
     public class Country : TimeStample

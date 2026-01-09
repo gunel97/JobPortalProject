@@ -18,17 +18,4 @@ namespace JobPortalProject.BL.Admin.ViewModels
         public List<string> Roles { get; set; } = [];
     }
 
-    public class CompanyPagedIndexViewModel
-    {
-        public CompanyUserFilterViewModel? Filter { get; set; }
-        public PagedResultModel<CompanyUserViewModel> Users { get; set; } = null!;
-        public List<LanguageViewModel> Languages { get; set; } = [];
-    }
-
-    public class CandidatePagedIndexViewModel
-    {
-        public CandidateUserFilterViewModel? Filter { get; set; }
-        public PagedResultModel<CandidateUserViewModel> Users { get; set; } = null!;
-        public List<LanguageViewModel> Languages { get; set; } = [];
-    }
 }

@@ -32,20 +32,18 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             _jobApplicationService = jobApplicationService;
         }
 
-        public async Task<CompanyDetailsViewModel> GetCompanyDetailsAsync(int id)
+        public async Task<CompanyDetailsViewModel> GetCompanyDetailsAsync(int id, int languageId)
         {
-            var language = await _cookieService.GetLanguageAsync();
-
             var addresses = await _addressService.GetAllAsync();
 
             var company = await _companyService.GetAsync(
                                             predicate: x => !x.IsDeleted && x.Id == id,
                                             include: x => x
-                                            .Include(ct => ct.CompanyTranslations!.Where(x => x.LanguageId == language.Id))
+                                            .Include(ct => ct.CompanyTranslations!.Where(x => x.LanguageId == languageId))
                                             .Include(x=>x.Jobs)
-                                            .Include(x=>x.Addresses).ThenInclude(x=>x.AddressTranslations.Where(x=>x.LanguageId==language.Id))
-                                            .Include(t => t.CompanyType!).ThenInclude(ct => ct.CompanyTypeTranslations!.Where(x => x.LanguageId == language.Id))
-                                            .Include(w => w.WorkingFields).ThenInclude(wt => wt.Translations.Where(x => x.LanguageId == language.Id)));
+                                            .Include(x=>x.Addresses).ThenInclude(x=>x.AddressTranslations.Where(x=>x.LanguageId==languageId))
+                                            .Include(t => t.CompanyType!).ThenInclude(ct => ct.CompanyTypeTranslations!.Where(x => x.LanguageId == languageId))
+                                            .Include(w => w.WorkingFields).ThenInclude(wt => wt.Translations.Where(x => x.LanguageId == languageId)));
 
             if (company.TranslationsCount == 0)
                 return null!;
@@ -55,7 +53,6 @@ namespace JobPortalProject.BL.UI.Services.Implementations
                                             include: x => x
                                             .Include(s => s.SocialMedia!));
 
-            //var website =  companySocials.FirstOrDefault(x => x.SocialMedia!.Title == "web");
             var jobs = await _jobService.GetActiveJobsOfCompanyAsync(company.Id);
             var activeJobModels = jobs.Where(x=>!x.Expired).ToList();
             var candidate = await _candidateService.GetCandidate();
@@ -70,7 +67,6 @@ namespace JobPortalProject.BL.UI.Services.Implementations
                     if (appliedIds.Contains(job.Id))
                         job.IsApplied = true;
                 }
-
             }
 
             var allJobs = (await _jobService.GetAllAsync(predicate: x => x.CompanyId == company.Id && !x.IsDeleted && x.IsActive))
@@ -78,13 +74,14 @@ namespace JobPortalProject.BL.UI.Services.Implementations
             if (allJobs.Any()) {
                 company.LastPostedJob = allJobs.OrderByDescending(x => x.CreatedAt).Take(1).FirstOrDefault().CreatedAt;
             }
-                
+
+            var readyLanguages = await _companyService.GetReadyLanguagesOfCompany(id);
             var companyDetailsViewModel = new CompanyDetailsViewModel
             {
                 Company = company,
                 CompanySocials = companySocials.ToList(),
                 ActiveJobs = activeJobModels.OrderBy(x=>x.CreatedAt).ToList(),
-                
+                ReadyLanguages=readyLanguages
             };
 
             return companyDetailsViewModel;

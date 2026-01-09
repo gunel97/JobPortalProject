@@ -57,8 +57,8 @@ namespace JobPortalProject.UserMvc.Controllers
         public async Task<IActionResult> Details(string id)
         {
             int companyId = int.Parse(id.Split('-').Last());
-
-            var companyDetailsViewModel = await _companyDetailsService.GetCompanyDetailsAsync(companyId);
+            var language = await _cookieService.GetLanguageAsync();
+            var companyDetailsViewModel = await _companyDetailsService.GetCompanyDetailsAsync(companyId, language.Id);
 
             if (companyDetailsViewModel == null)
                 return View(nameof(NotFound));

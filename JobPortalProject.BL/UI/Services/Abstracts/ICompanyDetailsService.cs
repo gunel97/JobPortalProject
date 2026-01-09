@@ -5,6 +5,6 @@ namespace JobPortalProject.BL.UI.Services.Abstracts
 {
     public interface ICompanyDetailsService
     {
-        Task<CompanyDetailsViewModel> GetCompanyDetailsAsync(int id);
+        Task<CompanyDetailsViewModel> GetCompanyDetailsAsync(int id, int languageId);
     }
 }

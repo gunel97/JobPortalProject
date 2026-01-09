@@ -8,6 +8,8 @@ namespace JobPortalProject.BL.UI.Services.Abstracts
 {
     public interface IUserService
     {
+        public Task<bool> UpdateUser(UserUpdateViewModel model);
+        public Task<UserUpdateViewModel> GetUserUpdateViewModel(string userId);
         public Task ActivateUser(AppUser user);
         public Task<IdentityResult> DeleteUserAsync(AppUser user);
         public Task<AppUser> GetUserByIdAsync(string id);

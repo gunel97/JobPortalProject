@@ -44,6 +44,7 @@ namespace JobPortalProject.AdminMvc
             FilePathConstants.JobCategoryImagePath = "JobCategoryImages";
             FilePathConstants.IconImagePath = "Icons";
             FilePathConstants.CityImagePath = "CityImages";
+            FilePathConstants.LogoPath = "LogoPath";
 
             var app = builder.Build();
 

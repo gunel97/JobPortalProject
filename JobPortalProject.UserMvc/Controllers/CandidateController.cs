@@ -78,16 +78,19 @@ namespace JobPortalProject.UserMvc.Controllers
         [HttpPost]
         public async Task<IActionResult> PersonalInfo(PersonalInfoCreateViewModel model) 
         {
-            var candidate = await _candidateService.GetCandidate();
-            if (candidate == null)
-                return BadRequest();
-            var resume = await _resumeService.CreateResume(candidate.Id);
             var dashboardModel = await _candidateService.GetDashboardViewModel();
-            model.DashboardModel = dashboardModel;
+            model.DashboardModel= dashboardModel;
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
+            var candidate = await _candidateService.GetCandidate();
+            if (candidate == null)
+                return BadRequest();
+            var resume = await _resumeService.CreateResume(candidate.Id);
+           
+            model.DashboardModel = dashboardModel;
+
 
             var result = await _personalInfoService.CreatePersonalInfo(model, resume.Id);
 

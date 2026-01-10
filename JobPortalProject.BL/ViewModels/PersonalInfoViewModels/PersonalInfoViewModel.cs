@@ -17,6 +17,7 @@ namespace JobPortalProject.BL.ViewModels.PersonalInfoViewModels
     {
         public int Id { get; set; }
         public int ResumeId { get; set; }
+        [Required(ErrorMessage ="Required firstname")]
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
         public string ImageUrl { get; set; }=null!;

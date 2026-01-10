@@ -76,7 +76,13 @@
                                                     <label for="datepicker11">Ending Period*</label>
                                                     <div class="input-area">
                                                         <img src="/images/icon/calender2.svg" alt="">
-                                                        <label>@Model.Models[i].EndDate.Date.ToShortDateString()</label>
+                                                        @if (Model.Models[i].EndDate.HasValue){
+                                                            <label>@Model.Models[i].EndDate.Value.Date.ToShortDateString()</label>
+                                                        }
+                                                        else
+                                                        {
+                                                            <label> - </label>
+                                                        }
                                                     </div>
                                                 </div>
                                             </div>`

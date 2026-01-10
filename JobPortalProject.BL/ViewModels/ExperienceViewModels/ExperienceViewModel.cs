@@ -19,7 +19,7 @@ namespace JobPortalProject.BL.ViewModels.ExperienceViewModels
         public string Responsibility { get; set; } = null!;
         public string Position { get; set; } = null!;
         public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
     }
 
     public class ExperienceCreateViewModel
@@ -31,7 +31,7 @@ namespace JobPortalProject.BL.ViewModels.ExperienceViewModels
 
         [DateGreaterThan("StartDate", ErrorMessage = "End date must be after start date")]
         [DataType(DataType.Date)]
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         public int ResumeId { get; set; }
         public ExperienceTranslationCreateViewModel Translation { get; set; } = null!;
@@ -46,7 +46,7 @@ namespace JobPortalProject.BL.ViewModels.ExperienceViewModels
 
         [DateGreaterThan("StartDate", ErrorMessage = "End date must be after start date")]
         [DataType(DataType.Date)]
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public List<ExperienceTranslationUpdateViewModel> Translations { get; set; } = [];
     }
 
@@ -63,7 +63,7 @@ namespace JobPortalProject.BL.ViewModels.ExperienceViewModels
 
         [DataType(DataType.Date)]
         [DateGreaterThan("StartDate", ErrorMessage = "End date must be after start date")]
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public List<ExperienceTranslationCreateViewModel> Translations { get; set; } = [];
     }
 

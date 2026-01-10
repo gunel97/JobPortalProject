@@ -259,7 +259,7 @@ namespace JobPortalProject.BL.Services.Implementations
                 await _personalInfoTranslationService.DeleteAsync(resultPersonalInfo.Id);
                 return false;
             }
-
+            var result = await _resumeTranslationService.Complete(resultResumeTranslation.ResumeId, languageId);
             return true;
 
         }
@@ -352,7 +352,7 @@ namespace JobPortalProject.BL.Services.Implementations
                 return false;
             }
 
-            await _resumeTranslationService.Complete(resultResumeTranslation.ResumeId, languageId);
+     
             return true;
         }
 

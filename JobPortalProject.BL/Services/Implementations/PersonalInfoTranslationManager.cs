@@ -11,5 +11,6 @@ namespace JobPortalProject.BL.Services.Implementations
         , IPersonalInfoTranslationService
     {
         public PersonalInfoTranslationManager(IRepositoryAsync<PersonalInfoTranslation> repository, IMapper mapper):base(repository, mapper) { }
+
     }
 }

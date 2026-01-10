@@ -62,7 +62,12 @@
                 {
                     <div class="educational-qualification mb-30">
                         <div class="passing-year">
-                            <p><span>@(i + 1).</span>@Model.Educations[i].StartDate.ToString("MMM yyyy") - @Model.Educations[i].EndDate.ToString("MMM yyyy") </p>
+                            @if(Model.Educations[i].EndDate.HasValue){
+                            <p><span>@(i + 1).</span>@Model.Educations[i].StartDate.ToString("MMM yyyy") - @Model.Educations[i].EndDate.Value.ToString("MMM yyyy") </p>
+                            }                
+                            else{
+                            <p><span>@(i + 1).</span>@Model.Educations[i].StartDate.ToString("MMM yyyy") -  -  </p>
+                            }
                             <span></span>
                         </div>
                         <div class="education-dt">
@@ -90,7 +95,12 @@
                 {
                     <div class="educational-qualification mb-30">
                         <div class="passing-year">
-                            <p><span>@(i + 1).</span>@Model.Experiences[i].StartDate.ToString("MMM yyyy") - @Model.Experiences[i].EndDate.ToString("MMM yyyy") </p>
+                            @if(Model.Experiences[i].EndDate.HasValue){
+                            <p><span>@(i + 1).</span>@Model.Experiences[i].StartDate.ToString("MMM yyyy") - @Model.Experiences[i].EndDate.Value.ToString("MMM yyyy") </p>
+                            }
+                            else{
+                            <p><span>@(i + 1).</span>@Model.Experiences[i].StartDate.ToString("MMM yyyy") - - </p>
+                            }
                             <span></span>
                         </div>
                         <div class="education-dt">

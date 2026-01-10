@@ -20,7 +20,7 @@ namespace JobPortalProject.BL.ViewModels.EducationViewModels
         public string MajorName { get; set; } = null!;
         public string EducationType { get; set; } = null!;
         public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
     }
 
     public class EducationCreateViewModel
@@ -36,7 +36,7 @@ namespace JobPortalProject.BL.ViewModels.EducationViewModels
         public DateTime StartDate { get; set; }
         [DateGreaterThan("StartDate", ErrorMessage = "End date must be after start date")]
         [DataType(DataType.Date)]
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
     }
 
     public class EducationAddViewModel
@@ -48,7 +48,7 @@ namespace JobPortalProject.BL.ViewModels.EducationViewModels
         public DateTime StartDate { get; set; }
         [DateGreaterThan("StartDate", ErrorMessage = "End date must be after start date")]
         [DataType(DataType.Date)]
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public List<EducationTranslationCreateViewModel> Translations { get; set; } = [];
     }
 
@@ -60,7 +60,7 @@ namespace JobPortalProject.BL.ViewModels.EducationViewModels
         public DateTime StartDate { get; set; }
         [DataType(DataType.Date)]
         [DateGreaterThan("StartDate", ErrorMessage = "End date must be after start date")]
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public List<EducationTranslationUpdateViewModel> Translations { get; set; } = [];
     }
 

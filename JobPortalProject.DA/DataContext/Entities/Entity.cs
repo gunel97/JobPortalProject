@@ -220,13 +220,14 @@ namespace JobPortalProject.DA.DataContext.Entities
         public Resume? Resume { get; set; }
         public int LanguageId { get; set; }
         public Language? Language {  get; set; }
+        public bool IsCompleted { get; set; }
 
     }
 
     public class Experience : TimeStample
     {
         public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public int ResumeId { get; set; }
         public Resume? Resume { get; set; }
         public List<ExperienceTranslation> Translations { get; set; } = [];
@@ -246,7 +247,7 @@ namespace JobPortalProject.DA.DataContext.Entities
     public class Education : TimeStample
     {
         public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public EducationType EducationType { get; set; }
         public int ResumeId { get; set; }
         public Resume? Resume { get; set; }

@@ -7,5 +7,6 @@ namespace JobPortalProject.BL.Services.Contracts
     {
         public Task<ResumeTranslationViewModel> Create(ResumeTranslationCreateViewModel model, int resumeId);
         public Task<bool> Update(ResumeTranslationUpdateViewModel model);
+        public Task<bool> Complete(int resumeId, int languageId);
     }
 }

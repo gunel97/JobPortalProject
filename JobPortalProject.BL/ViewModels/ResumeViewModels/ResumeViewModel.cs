@@ -37,6 +37,7 @@ namespace JobPortalProject.BL.ViewModels.ResumeViewModels
         public string? About { get; set; }
         public List<string> Languages { get; set; } = [];
         public List<string> Skills { get; set; } = [];
+        public bool IsCompleted { get; set; }
     }
 
     public class ResumeTranslationCreateViewModel

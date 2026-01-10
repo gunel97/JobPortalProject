@@ -184,14 +184,18 @@
                                                     }                                       
                                                 </ul>
                                                 }
+                                                @if(Model.Job.RequiredMinEducationType!=null){
                                                 <h6>Educational Requirements:</h6>
                                                 <ul>
                                                     <li>@localizer.GetValue(Model.Job.RequiredMinEducationType ?? "")</li>
                                                 </ul>
+                                                }
+                                                @if(Model.Job.RequiredExperience!=null){
                                                 <h6>Experiences:</h6>
                                                 <ul>
                                                     <li>@Model.Job.RequiredExperience</li>
                                                 </ul>
+                                                }
                                                 @if(Model.Job.ExtraBenefits.Count>0)
                                                 {
                                                 <p><span>Extra Benefits:</span></p>
@@ -354,21 +358,28 @@
                     @if (application.Status == "applied" || application.Status == "interview")
                     {
                         <div class="button-groups">
-                            <ul>
-                                <li>
+                            <ul style="display: flex; gap: 10px; list-style: none; padding: 0; margin: 0; flex-wrap: wrap;">
+                                <li style="display: inline-block;">
                                     <button class="primary-bg"><img src="~/images/icon/pdf2.svg" alt=""> Download PDF</button>
-                                    @if (application.Status != "interview")
-                                    {
+                                </li>
+                                @if (application.Status != "interview")
+                                {
+                                    <li style="display: inline-block;">
                                         <a asp-controller="jobApplication" asp-action="interview"
-                                        asp-route-jobId="@Model.Job.Id" asp-route-candidateId="@application.CandidateId"><img src="~/images/icon/shortlist2.svg" alt=""> Interview</a>
-                                    }
+                                           asp-route-jobId="@Model.Job.Id" asp-route-candidateId="@application.CandidateId"
+                                           class="primry-btn-2 eg-btn sky--btn">Interview</a>
+                                    </li>
+                                }
+                                <li style="display: inline-block;">
                                     <a asp-controller="jobApplication" asp-action="accept"
-                                    asp-route-jobId="@Model.Job.Id" asp-route-candidateId="@application.CandidateId">
-                                        <img src="~/images/icon/shortlist2.svg" alt="">  Accept
+                                       asp-route-jobId="@Model.Job.Id" asp-route-candidateId="@application.CandidateId" class="primry-btn-2 eg-btn sky--btn">
+                                         Accept
                                     </a>
+                                </li>
+                                <li style="display: inline-block;">
                                     <a asp-controller="jobApplication" asp-action="reject"
-                                    asp-route-jobId="@Model.Job.Id" asp-route-candidateId="@application.CandidateId"
-                                    class="red-bg"><img src="~/images/icon/reject2.svg" alt=""> Reject</a>
+                                       asp-route-jobId="@Model.Job.Id" asp-route-candidateId="@application.CandidateId"
+                                       class="primry-btn-2 eg-btn red--btn"><img src="~/images/icon/reject2.svg" alt=""> Reject</a>
                                 </li>
                             </ul>
                         </div>
@@ -385,7 +396,6 @@
                 <div class="modal-footer">
                 </div>
             </div>
-
         </div>
     </div>
 }

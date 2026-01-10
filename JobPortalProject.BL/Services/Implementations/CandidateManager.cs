@@ -86,17 +86,18 @@ namespace JobPortalProject.BL.Services.Implementations
                 resumeId = candidate.Resume.Id;
                 foreach (var translation in candidate.Resume.Translations)
                 {
-                    ready.Add(languages.FirstOrDefault(x => x.Id == translation.LanguageId)!);
+                    if (translation.IsCompleted)
+                        ready.Add(languages.FirstOrDefault(x => x.Id == translation.LanguageId)!);
                 }
                 foreach (var language in languages)
                 {
-                    if (!ready.Contains(language))
+                    if (!ready.Any(x => x.Id == language.Id))
                     {
                         empty.Add(language);
                     }
                 }
-
-                imageUrl = candidate.Resume.PersonalInfo.ImageUrl;
+                if (candidate.Resume.PersonalInfo != null)
+                    imageUrl = candidate.Resume.PersonalInfo.ImageUrl;
             }
 
             var model = new CandidateDashboardViewModel

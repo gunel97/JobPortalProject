@@ -38,9 +38,6 @@
                     </ul>
                 </div>
             </div>
-            <div class="bookmark">
-                <i class="bi bi-bookmark-fill"></i>
-            </div>
         </div>
         <div class="job-type-apply">
             <div class="job-type">
@@ -48,13 +45,16 @@
                 <span class="light-green">@localizer.GetValue(Model.Gender ?? "")</span>
             </div>
             <div class="apply-btn">
-                @if (Model.IsApplied)
+                   @if (User.Identity!.IsAuthenticated && User.IsInRole("Candidate"))
                 {
-                    <a asp-controller="candidate" asp-action="appliedJobs"><span><img src="~/images/icon/apply-ellipse.svg" alt=""></span>Applied</a>
-                }
-                else
-                {
-                    <a onclick="applyJob(@Model.Id, this)"><span><img src="~/images/icon/apply-ellipse.svg" alt=""></span>Apply Now</a>
+                    @if (Model.IsApplied)
+                    {
+                        <a asp-controller="candidate" asp-action="appliedJobs"><span><img src="~/images/icon/apply-ellipse.svg" alt=""></span>Applied</a>
+                    }
+                    else
+                    {
+                        <a onclick="applyJob(@Model.Id, this)"><span><img src="~/images/icon/apply-ellipse.svg" alt=""></span>Apply Now</a>
+                    }
                 }
             </div>
         </div>

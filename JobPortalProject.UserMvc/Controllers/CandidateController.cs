@@ -421,7 +421,7 @@ namespace JobPortalProject.UserMvc.Controllers
             if (deleted)
             {
                 var model = await _experienceService.GetExperienceUpdateViewModel();
-                var experienceHtml = await RenderPartialViewToString("_ExperienceUpdatePartial", model.Models);
+                var experienceHtml = await RenderPartialViewToString("_ExperienceUpdatePartial", model);
 
                 return Json(new
                 {

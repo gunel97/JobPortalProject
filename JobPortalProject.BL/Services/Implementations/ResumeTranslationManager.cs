@@ -33,6 +33,19 @@ namespace JobPortalProject.BL.Services.Implementations
             return resumeTranslationViewModel;
         }
 
+        public async Task<bool> Complete(int resumeId, int languageId)
+        {
+            var resumeTranslation = await Repository.GetAsync(predicate: x => x.ResumeId == resumeId && x.LanguageId == languageId);
+            if (resumeTranslation == null)
+                return false;
+            resumeTranslation.IsCompleted = true;
+           var result =  await Repository.UpdateAsync(resumeTranslation);
+            if (result == null)
+                return false;
+
+            return true;
+        }
+
         public async Task<bool> Update(ResumeTranslationUpdateViewModel model)
         {
             string[] languages = model.Languages.Split(',');

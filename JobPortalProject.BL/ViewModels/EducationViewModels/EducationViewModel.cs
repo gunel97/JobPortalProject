@@ -1,4 +1,5 @@
-﻿using JobPortalProject.BL.ViewModels.CandidateViewModels;
+﻿using JobPortalProject.BL.Attributes;
+using JobPortalProject.BL.ViewModels.CandidateViewModels;
 using JobPortalProject.DA.DataContext.Enums;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -26,10 +27,15 @@ namespace JobPortalProject.BL.ViewModels.EducationViewModels
     {
         public int IdForTranslation { get; set; }
         public int EducationTypeId { get; set; }
+        [Required(ErrorMessage ="Major name is Required")]
         public string? MajorName { get; set; }
+        [Required(ErrorMessage = "School name is Required")]
         public string? SchoolName { get; set; }
         public int LanguageId { get; set; }
+        [DataType(DataType.Date)]
         public DateTime StartDate { get; set; }
+        [DateGreaterThan("StartDate", ErrorMessage = "End date must be after start date")]
+        [DataType(DataType.Date)]
         public DateTime EndDate { get; set; }
     }
 
@@ -40,6 +46,7 @@ namespace JobPortalProject.BL.ViewModels.EducationViewModels
         public List<SelectListItem> EducationTypes { get; set; } = [];
         [DataType(DataType.Date)]
         public DateTime StartDate { get; set; }
+        [DateGreaterThan("StartDate", ErrorMessage = "End date must be after start date")]
         [DataType(DataType.Date)]
         public DateTime EndDate { get; set; }
         public List<EducationTranslationCreateViewModel> Translations { get; set; } = [];
@@ -52,6 +59,7 @@ namespace JobPortalProject.BL.ViewModels.EducationViewModels
         [DataType(DataType.Date)]
         public DateTime StartDate { get; set; }
         [DataType(DataType.Date)]
+        [DateGreaterThan("StartDate", ErrorMessage = "End date must be after start date")]
         public DateTime EndDate { get; set; }
         public List<EducationTranslationUpdateViewModel> Translations { get; set; } = [];
     }
@@ -69,7 +77,9 @@ namespace JobPortalProject.BL.ViewModels.EducationViewModels
     {
         public int EducationId { get; set; }
         public int LanguageId { get; set; }
+        [Required (ErrorMessage ="School name is required")]
         public string? SchoolName { get; set; }
+        [Required(ErrorMessage = "Major name is required")]
         public string? MajorName { get; set; }
     }
 
@@ -79,7 +89,9 @@ namespace JobPortalProject.BL.ViewModels.EducationViewModels
         public int Id { get; set; }
         public int EducationId { get; set; }
         public int LanguageId { get; set; }
+        [Required(ErrorMessage = "School name is required")]
         public string SchoolName { get; set; } = null!;
+        [Required(ErrorMessage = "Major name is required")]
         public string MajorName { get; set; } = null!;
     }
 

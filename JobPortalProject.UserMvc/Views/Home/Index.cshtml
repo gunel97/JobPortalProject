@@ -190,9 +190,6 @@
                                 <h5><a asp-controller="job" asp-action="details" asp-route-id="@job.DetailsUrl">@job.Title</a></h5>
                                 <p>@localizer.GetValue(job.JobType ?? "")</p>
                             </div>
-                            <div class="bookmark">
-                                <i class="bi bi-bookmark"></i>
-                            </div>
                         </div>
                     </div>
                     <div class="job-discription">
@@ -213,13 +210,15 @@
                     </div>
                     <div class="job-type-apply">
                         <div class="apply-btn">
-                            @if(job.IsApplied==true)
-                            {
-                                <a asp-controller="candidate" asp-action="appliedJobs"><span><img src="~/images/icon/apply-ellipse.svg" alt=""></span>Applied</a>
-                            }
-                            else
-                            {
-                                <a onclick="applyJob(@job.Id, this)"><span><img src="~/images/icon/apply-ellipse.svg" alt=""></span>Apply Now</a>
+                            @if(User.Identity!.IsAuthenticated && User.IsInRole("Candidate")){
+                                @if(job.IsApplied==true)
+                                {
+                                    <a asp-controller="candidate" asp-action="appliedJobs"><span><img src="~/images/icon/apply-ellipse.svg" alt=""></span>Applied</a>
+                                }
+                                else
+                                {
+                                    <a onclick="applyJob(@job.Id, this)"><span><img src="~/images/icon/apply-ellipse.svg" alt=""></span>Apply Now</a>
+                                }
                             }
                         </div>
                     </div>

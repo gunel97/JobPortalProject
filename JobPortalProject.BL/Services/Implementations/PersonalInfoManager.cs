@@ -341,6 +341,7 @@ namespace JobPortalProject.BL.Services.Implementations
                 About = model.resumeTranslationModel.About,
                 Languages = model.resumeTranslationModel.Languages,
                 Skills = model.resumeTranslationModel.Skills,
+                
             };
 
             var resultResumeTranslation = await _resumeTranslationService.Create(resumeTranslationCreateViewModel, candidate.Resume.Id);
@@ -351,6 +352,7 @@ namespace JobPortalProject.BL.Services.Implementations
                 return false;
             }
 
+            await _resumeTranslationService.Complete(resultResumeTranslation.ResumeId, languageId);
             return true;
         }
 

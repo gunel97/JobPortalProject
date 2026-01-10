@@ -28,6 +28,7 @@ namespace JobPortalProject.BL.Admin.Services.Implementations
             _jobApplicationService = jobApplicationService;
         }
 
+
         public async Task<CompanyDetailsAdminViewModel> GetDetailsAdminViewModel(string userId, int languageId)
         {
             var user = await _userService.GetUserByIdAsync(userId);

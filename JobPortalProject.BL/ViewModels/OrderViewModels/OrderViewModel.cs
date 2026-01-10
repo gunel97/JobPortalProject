@@ -6,6 +6,7 @@ namespace JobPortalProject.BL.ViewModels.OrderViewModels
 
     public class OrderViewModel
     {
+        public int Id { get; set; }
         public DateTime CreatedAt { get; set; }
         public PaymentStatus Status { get; set; } 
         public decimal Amount { get; set; }
@@ -25,6 +26,7 @@ namespace JobPortalProject.BL.ViewModels.OrderViewModels
         public string SortOrder { get; set; } = "desc";
         public int Index { get; set; } = 0;
         public int Size { get; set; } = 10;
+        public PaymentStatus? Status { get; set; }
     }
 
     public class OrderCreateViewModel { }

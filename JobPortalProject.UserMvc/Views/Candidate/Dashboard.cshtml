@@ -10,7 +10,18 @@
                 <div class="dashboard-inner">
                     <div class="author-area">
                         <div class="author-img">
-                            <img src="@Model.ImageUrl" alt="">
+                            @if (string.IsNullOrEmpty(Model.ImageUrl))
+                            {
+                                <img src="https://ui-avatars.com/api/?name=@Model.UserName&background=random&rounded=true"
+                                     alt="@Model.UserName avatar"
+                                     style="border-radius: 50%; object-fit: cover;" />
+                            }
+                            else
+                            {
+                                <img src="@Model.ImageUrl"
+                                     alt="@Model.UserName"
+                                     style="border-radius: 50%; object-fit: cover;" />
+                            }
                         </div>
                         <div class="author-content">
                             <span>Hello, @Model.UserName</span>
@@ -37,7 +48,14 @@
                                             <td data-label="Job Title">
                                                 <div class="company-info">
                                                     <div class="logo">
-                                                        <img src="@item.CompanyLogo" alt="">
+                                                            @if (item.CompanyLogo == null)
+                                                            {
+                                                                <img src="https://ui-avatars.com/api/?name=@item.CompanyName&background=random" alt="@item.CompanyName avatar" />
+                                                            }
+                                                            @if (item.CompanyLogo != null)
+                                                            {
+                                                                <img src="@item.CompanyLogo" alt="@item.CompanyName">
+                                                            }
                                                     </div>
                                                     <div class="company-details">
                                                         <div class="top">

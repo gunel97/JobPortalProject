@@ -67,5 +67,15 @@ namespace JobPortalProject.BL.Services.Implementations
 
             return jobApplicationStatusItems;
         }
+
+        public List<SelectListItem> GetPaymentStatusListItems()
+        {
+            var paymentStatusItems =new List<SelectListItem>();
+            var paymentStatuses = Enum.GetValues(typeof(PaymentStatus)).Cast<PaymentStatus>().ToList();
+            paymentStatuses.ForEach(x => paymentStatusItems.Add(
+            new SelectListItem(_localizer.GetValue(x.ToString()), ((int)x).ToString())));
+
+            return paymentStatusItems;
+        }
     }
 }

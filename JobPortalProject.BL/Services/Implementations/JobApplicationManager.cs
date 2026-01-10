@@ -71,13 +71,21 @@ namespace JobPortalProject.BL.Services.Implementations
 
         public async Task<List<JobApplicationsOfCandidateViewModel>> GetAppliedJobModelsOfCandidate(int candidateId)
         {
+            var language = await _cookieService.GetLanguageAsync();
             var jobApplicationEntities = await GetAppliedJobsOfCandidate(candidateId);
             var models = new List<JobApplicationsOfCandidateViewModel>();
 
-            foreach(var entity in jobApplicationEntities)
+            if (jobApplicationEntities.Any() && jobApplicationEntities.Count() > 0)
             {
-                var model = MapToJobApplicationsOfCandidateViewModel(entity);
-                models.Add(model);
+                foreach (var entity in jobApplicationEntities)
+                {
+                    if (entity.Job!=null && entity.Job.JobTranslations.Any(x => x.LanguageId ==language.Id)) 
+                    {
+                        var model = MapToJobApplicationsOfCandidateViewModel(entity);
+                        if (model != null)
+                            models.Add(model);
+                    }
+                }
             }
 
             return models;
@@ -103,8 +111,12 @@ namespace JobPortalProject.BL.Services.Implementations
             var models = new List<JobApplicationsOfCandidateViewModel>();
             foreach(var item in pagedJobApplications.Items)
             {
-                var model = MapToJobApplicationsOfCandidateViewModel(item);
-                models.Add(model);
+                if (item.Job != null && item.Job.JobTranslations.Any(x => x.LanguageId == language.Id))
+                {
+                    var model = MapToJobApplicationsOfCandidateViewModel(item);
+                    if (model != null)
+                        models.Add(model);
+                }
             }
 
             var pagedModel = new PagedResultModel<JobApplicationsOfCandidateViewModel>
@@ -112,7 +124,7 @@ namespace JobPortalProject.BL.Services.Implementations
                 Items = models,
                 Index = pagedJobApplications.Index,
                 Size = pagedJobApplications.Size,
-                Count = pagedJobApplications.Count,
+                Count = models.Count,
                 Pages = pagedJobApplications.Pages,
             };
 
@@ -376,6 +388,9 @@ namespace JobPortalProject.BL.Services.Implementations
 
         private JobApplicationsOfCandidateViewModel MapToJobApplicationsOfCandidateViewModel(JobApplication entity)
         {
+            if (entity.Job == null || !entity.Job.JobTranslations.Any() || entity.Job.Company==null)
+                return null!;
+
             if (entity.Job.ExpirationDate < DateTime.Now)
                 entity.JobStatus=(JobApplicationStatus)6;
 
@@ -386,8 +401,8 @@ namespace JobPortalProject.BL.Services.Implementations
                 CompanyId=entity.Job.CompanyId,
                 CandidateId = entity.CandidateId,
                 JobTitle = entity.Job.JobTranslations.FirstOrDefault()!.Title,
-                JobAddress = entity.Job.Address.City.CityTranslations.FirstOrDefault()!.Name + ", " +
-                entity.Job.Address.City.Country.Translations.FirstOrDefault()!.Name,
+                JobAddress = entity.Job.Address?.City?.CityTranslations.FirstOrDefault()!.Name + ", " +
+                entity.Job.Address?.City?.Country?.Translations.FirstOrDefault()!.Name,
                 CompanyName = entity.Job.Company.CompanyTranslations.FirstOrDefault()!.Name,
                 CompanyLogo=entity.Job.Company.LogoUrl,
                 MinSalary = entity.Job.MinSalary,

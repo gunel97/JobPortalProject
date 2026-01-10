@@ -106,7 +106,7 @@ namespace JobPortalProject.BL
             services.AddScoped<IJobCategoryIndexService, JobCategoryIndexManager>();
             services.AddScoped<ICountryIndexService, CountryIndexManager>();
             services.AddScoped<ICompanyAdminService, CompanyAdminManager>();
-            
+            services.AddScoped<IOrderIndexService, OrderIndexManager>();
 
             return services;
         }

@@ -15,6 +15,4 @@ namespace JobPortalProject.BL.Admin.ViewModels
         public PagedResultModel<CompanyTypeViewModel> CompanyTypes { get; set; } = null!;
         public List<LanguageViewModel> Languages { get; set; } = [];
     }
-
-
 }

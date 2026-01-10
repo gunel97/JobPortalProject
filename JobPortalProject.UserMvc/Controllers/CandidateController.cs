@@ -44,8 +44,10 @@ namespace JobPortalProject.UserMvc.Controllers
             var model = await _candidateService.GetDashboardViewModel();
             var candidate = await _candidateService.GetCandidate();
             var applications = await _jobApplicationService.GetAppliedJobModelsOfCandidate(model.CandidateId);
-            model.Applications = applications.OrderByDescending(x=>x.AppliedAt).Take(5).ToList();
-
+            if (applications.Count() > 0)
+            {
+                model.Applications = applications.OrderByDescending(x => x.AppliedAt).Take(5).ToList();
+            }
             return View(model);
         }
 

@@ -13,6 +13,6 @@ namespace JobPortalProject.BL.Services.Contracts
         public List<SelectListItem> GetGenderListItems();
         public List<SelectListItem> GetSalaryTypeListItems();
         public List<SelectListItem> GetEducationTypeListItems();
-
+        public List<SelectListItem> GetPaymentStatusListItems();
     }
 }

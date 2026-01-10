@@ -352,7 +352,7 @@ namespace JobPortalProject.BL.Services.Implementations
                 return false;
             }
 
-     
+            await _resumeTranslationService.Complete( candidate.Resume.Id,languageId);
             return true;
         }
 

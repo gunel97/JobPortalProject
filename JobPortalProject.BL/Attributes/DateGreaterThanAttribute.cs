@@ -36,4 +36,6 @@ namespace JobPortalProject.BL.Attributes
             return ValidationResult.Success;
         }
     }
+
+
 }

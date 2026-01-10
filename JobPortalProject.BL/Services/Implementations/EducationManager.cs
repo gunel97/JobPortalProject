@@ -160,7 +160,8 @@ namespace JobPortalProject.BL.Services.Implementations
                     LanguageId = languageId,
                     StartDate = education.StartDate,
                     EndDate = education.EndDate,
-                    EducationTypeId = (int)education.EducationType
+                    EducationTypeId = (int)education.EducationType,
+                    EducationType=education.EducationType
                 };
 
                 models.Add(model);

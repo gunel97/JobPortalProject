@@ -55,7 +55,12 @@ namespace JobPortalProject.BL.Services.Implementations
                     model.CoverPhotoUrl = result.Url;
                 }
             }
-            return await base.UpdateAsync(id, model);
+            else
+            {
+                model.CoverPhotoUrl = city.CoverPhotoUrl;
+                model.CoverPhotoPublicId=city.CoverPhotoPublicId;
+            }
+                return await base.UpdateAsync(id, model);
         }
 
         public async Task<CityUpdateViewModel> GetUpdateViewModel(int id)

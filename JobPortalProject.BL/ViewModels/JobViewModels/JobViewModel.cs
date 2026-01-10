@@ -1,4 +1,5 @@
-﻿using JobPortalProject.BL.ViewModels.AddressViewModels;
+﻿using JobPortalProject.BL.Attributes;
+using JobPortalProject.BL.ViewModels.AddressViewModels;
 using JobPortalProject.BL.ViewModels.JobExtraBenefitViewModels;
 using JobPortalProject.BL.ViewModels.JobResponsibilityViewModels;
 using JobPortalProject.BL.ViewModels.LanguageViewModels;
@@ -7,6 +8,7 @@ using JobPortalProject.DA.DataContext.Enums;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -74,9 +76,18 @@ namespace JobPortalProject.BL.ViewModels.JobViewModels
     {
         public int VacancyCount { get; set; }
         public int CompanyId { get; set; }
+        [Range(0, int.MaxValue, ErrorMessage = "Please enter a valid non-negative number")]
         public double MinSalary { get; set; }
+
+        [GreaterThan("MinSalary", ErrorMessage = "Max Salary must be greater than Min Salary.")]
+        [Range(0, int.MaxValue, ErrorMessage = "Please enter a valid non-negative number")]
         public double MaxSalary { get; set; }
+
         public bool IsActive { get; set; }
+
+        [Required]
+        [DataType(DataType.Date)]
+        [FutureDate(ErrorMessage = "The expiration date must be later than today.")]
         public DateTime ExpirationDate { get; set; }
         public int GenderId { get; set; }
         public Gender Gender { get; set; }
@@ -103,9 +114,17 @@ namespace JobPortalProject.BL.ViewModels.JobViewModels
     {
         public int VacancyCount { get; set; }
         public int CompanyId { get; set; }
+        [Range(0, int.MaxValue, ErrorMessage = "Please enter a valid non-negative number")]
         public double MinSalary { get; set; }
+
+        [GreaterThan("MinSalary", ErrorMessage = "Max Salary must be greater than Min Salary.")]
+        [Range(0, int.MaxValue, ErrorMessage = "Please enter a valid non-negative number")]
         public double MaxSalary { get; set; }
         public bool IsActive { get; set; }
+
+        [Required]
+        [DataType(DataType.Date)]
+        [FutureDate(ErrorMessage = "The expiration date must be later than today.")]
         public DateTime ExpirationDate { get; set; }
         public int GenderId { get; set; }
         public Gender Gender { get; set; }
@@ -133,9 +152,20 @@ namespace JobPortalProject.BL.ViewModels.JobViewModels
         public int Id { get; set; }
         public int VacancyCount { get; set; }
         public int CompanyId { get; set; }
+
+        [Range(0, int.MaxValue, ErrorMessage = "Please enter a valid non-negative number")]
         public double MinSalary { get; set; }
+
+
+        [GreaterThan("MinSalary", ErrorMessage = "Max Salary must be greater than Min Salary.")]
+        [Range(0, int.MaxValue, ErrorMessage = "Please enter a valid non-negative number")]
         public double MaxSalary { get; set; }
+
+        [Required]
+        [DataType(DataType.Date)] 
+        [FutureDate(ErrorMessage = "The expiration date must be later than today.")]
         public DateTime ExpirationDate { get; set; }
+
         public int GenderId { get; set; }
         public Gender Gender { get; set; }
         public List<SelectListItem> GenderListItems { get; set; } = [];

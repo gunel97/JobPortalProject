@@ -27,6 +27,7 @@ namespace JobPortalProject.BL.ViewModels.EducationViewModels
     {
         public int IdForTranslation { get; set; }
         public int EducationTypeId { get; set; }
+        public EducationType EducationType { get; set; }
         [Required(ErrorMessage ="Major name is Required")]
         public string? MajorName { get; set; }
         [Required(ErrorMessage = "School name is Required")]

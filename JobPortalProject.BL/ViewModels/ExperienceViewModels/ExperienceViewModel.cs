@@ -24,8 +24,7 @@ namespace JobPortalProject.BL.ViewModels.ExperienceViewModels
 
     public class ExperienceCreateViewModel
     {
-        [Required(ErrorMessage ="Company name is required.")]
-        public string? ExistedCompanyName { get; set; }
+        public string? CompanyName { get; set; }
         [DataType(DataType.Date)]
         public DateTime StartDate { get; set; }
 

@@ -126,6 +126,29 @@ namespace JobPortalProject.UserMvc.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Create(JobCreateViewModel model)
+        {
+           
+            var companyId = await _companyService.GetCompanyIdOfUser();
+            if (!ModelState.IsValid)
+            {
+                model = await _jobService.GetJobCreateViewModelAsync(companyId, model.TranslationCreateViewModel.LanguageId);
+                return View(model);
+            }
+
+            var result = await _jobService.CreateJob(companyId, model);
+            if (!result)
+            {
+                model = await _jobService.GetJobCreateViewModelAsync(companyId, model.TranslationCreateViewModel.LanguageId);
+                return View(model);
+            }
+
+            var filter = new JobFilterViewModel();
+            var jobListModel = await _jobService.GetPagedJobsOfCompanyModel(filter, companyId);
+            return View(nameof(JobList), jobListModel);
+        }
+
         public async Task<IActionResult> CreateJobAll()
         {
             var companyId = await _companyService.GetCompanyIdOfUser();

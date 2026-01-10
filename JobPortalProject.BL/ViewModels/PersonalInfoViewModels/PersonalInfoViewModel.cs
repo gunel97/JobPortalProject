@@ -1,4 +1,5 @@
-﻿using JobPortalProject.BL.ViewModels.AddressViewModels;
+﻿using JobPortalProject.BL.Attributes;
+using JobPortalProject.BL.ViewModels.AddressViewModels;
 using JobPortalProject.BL.ViewModels.CandidateViewModels;
 using JobPortalProject.BL.ViewModels.ResumeViewModels;
 using JobPortalProject.DA.DataContext.Enums;
@@ -45,6 +46,7 @@ namespace JobPortalProject.BL.ViewModels.PersonalInfoViewModels
         public string? ImagePublicId { get; set; }
         [Required(ErrorMessage = "Birth Date is required")]
         [DataType(DataType.Date)]
+        [PastDate(ErrorMessage = "Minimum age is 16.")]
         public DateTime BirthDate { get; set; }
         public CandidateDashboardViewModel? DashboardModel { get; set; }
     }

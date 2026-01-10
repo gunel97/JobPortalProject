@@ -167,7 +167,10 @@ namespace JobPortalProject.UserMvc.Controllers
             }
             var result = await _personalInfoService.CreateProfileTranslation(model.LanguageId, model);
             if (result)
+            {
+
                 return RedirectToAction(nameof(EducationTranslation), new { languageId = model.LanguageId });
+            }
             else
                 return View(model);
         }

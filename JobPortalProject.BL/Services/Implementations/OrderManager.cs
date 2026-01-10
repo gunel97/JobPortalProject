@@ -125,6 +125,49 @@ namespace JobPortalProject.BL.Services.Implementations
             return pagedOrderModels;
         }
 
+        public async Task<List<OrderIndexViewModel>> GetAllOrderIndexViewModel()
+        {
+            var orders = await Repository.GetAllAsync(include: x => x.Include(x => x.Company).ThenInclude(x => x.CompanyTranslations));
+            var models = new List<OrderIndexViewModel>();
+
+            foreach(var order in orders)
+            {
+                if (order.Company != null)
+                {
+                    var model = await MapToOrderIndexViewModel(order);
+                    models.Add(model);
+                }
+            }
+
+            return models;
+        }
+
+        public async Task<OrderIndexViewModel> MapToOrderIndexViewModel(Order item)
+        {
+            var language = await _cookieService.GetLanguageAsync();
+            var model = new OrderIndexViewModel
+            {
+                Id = item.Id,
+                CreatedAt = item.CreatedAt,
+                Status = item.Status,
+                Amount = item.Amount,
+            };
+            if (item.Company != null)
+            {
+                var translation = item.Company.CompanyTranslations.FirstOrDefault(x => x.LanguageId == language.Id);
+                if (translation != null)
+                    model.CompanyName = translation.Name;
+                else
+                {
+                    translation = item.Company.CompanyTranslations.FirstOrDefault();
+                    if (translation != null)
+                        model.CompanyName = translation.Name;
+                }
+            }
+
+            return model;
+        }
+
         private Func<IQueryable<Order>, IOrderedQueryable<Order>> BuildOrderBy(OrderFilterViewModel filter)
         {
             var sortBy = filter.SortBy?.ToLower() ?? "createdat";

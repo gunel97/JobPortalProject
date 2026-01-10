@@ -1,5 +1,7 @@
 using System.Diagnostics;
+using System.Threading.Tasks;
 using JobPortalProject.AdminMvc.Models;
+using JobPortalProject.BL.Admin.Services.Abstracts;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JobPortalProject.AdminMvc.Controllers
@@ -7,15 +9,18 @@ namespace JobPortalProject.AdminMvc.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IIndexService _indexService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IIndexService indexService)
         {
             _logger = logger;
+            _indexService = indexService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var model = await _indexService.GetIndexViewModel();
+            return View(model);
         }
 
         public IActionResult Privacy()

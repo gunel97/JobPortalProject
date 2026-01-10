@@ -7,6 +7,8 @@ namespace JobPortalProject.BL.Services.Contracts
 {
     public interface IOrderService : ICrudService<Order, OrderViewModel, OrderCreateViewModel, OrderUpdateViewModel>
     {
+        public Task<List<OrderIndexViewModel>> GetAllOrderIndexViewModel();
+        public Task<OrderIndexViewModel> MapToOrderIndexViewModel(Order item);
         public Task<PagedResultModel<OrderViewModel>> GetPagedOrdersOfCompanyAsync(OrderFilterViewModel filter, int companyId);
         public Task<PagedResultModel<OrderViewModel>> GetPagedOrdersAsync(OrderFilterViewModel filter);
         public Task<PagedResultModel<OrderIndexViewModel>> GetPagedOrdersAdminAsync(OrderFilterViewModel filter);

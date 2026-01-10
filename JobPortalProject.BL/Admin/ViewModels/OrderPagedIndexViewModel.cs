@@ -16,7 +16,7 @@ namespace JobPortalProject.BL.Admin.ViewModels
         public PagedResultModel<OrderIndexViewModel> Orders { get; set; } = null!;
         public List<LanguageViewModel> Languages { get; set; } = [];
         public OrderFilterViewModel? Filter { get; set; }
-        public List<SelectListItem> PaymentStatuses { get; set; }
+        public List<SelectListItem> PaymentStatuses { get; set; }= [];
     }
 
     public class OrderIndexViewModel

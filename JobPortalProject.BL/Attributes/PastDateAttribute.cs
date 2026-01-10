@@ -13,7 +13,7 @@ namespace JobPortalProject.BL.Attributes
 
             if (value is DateTime date)
             {
-                if (date >= DateTime.Now)
+                if (date >= DateTime.Now.AddYears(-16))
                 {
                     return new ValidationResult(ErrorMessage ?? "Minimum age is 16.");
                 }
